@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">KIDS APP</string>
+    <string name="app_title" translatable="false">KIDS APP</string>
+    <string name="app_ea">Грайся та розвивайся</string>
+
+    <string name="btn_order" translatable="false">Звіт</string>
+    <string name="btn_calendar" translatable="false">Майстер класи</string>
+    <string name="btn_team" translatable="false">Календар</string>
+    <string name="btn_requisites" translatable="false">Витрати</string>
+
+    <string name="title_activity_events" translatable="false">Повідомлення</string>
+
+    <string name="title_activity_user" translatable="false">Особистий кабінет</string>
+
+    <string name="action_settings">Налаштування</string>
+    <string name="title_activity_login" translatable="false">Ласкаво просимо</string>
+
+    <string name="action_sign_in_short">Реєстрація</string>
+    <string name="email" translatable="false">Електронна скринька</string>
+    <string name="minimum_password" translatable="false">Пароль за короткий. Мінімальна довжина 6 символів!</string>
+    <string name="auth_failed" translatable="false">Не вдається ввійти! Перевірте, будь ласка, правильність введених даних</string>
+    <string name="change_email" translatable="false">Змінити електронну скриньку</string>
+    <string name="change_password" translatable="false">Змінити пароль</string>
+    <string name="send_password_reset_email" translatable="false">Відправити лист відновленння</string>
+    <string name="remove_user" translatable="false">Видалити користувача</string>
+    <string name="new_pass" translatable="false">Новий пароль</string>
+    <string name="hint_email" translatable="false">Електронна скринька</string>
+    <string name="hint_password" translatable="false">Пароль</string>
+    <string name="hint_name" translatable="false">І"'"мя</string>
+    <string name="btn_login" translatable="false">ВВІЙТИ</string>
+    <string name="btn_link_to_register" translatable="false">Не зареєстровані? Зареєструватись прямо зараз!</string>
+    <string name="btn_link_to_login" translatable="false">Вже зареєстрований. Хочу ввійти!</string>
+
+    <string name="title_activity_reset_password" translatable="false">Відновлення паролю</string>
+    <string name="btn_forgot_password" translatable="false">Забули свій пароль?</string>
+    <string name="btn_reset_password" translatable="false">Відновити пароль</string>
+    <string name="hint_new_email" translatable="false">Нова електронна скринька</string>
+    <string name="btn_change" translatable="false">Змінити</string>
+    <string name="btn_send" translatable="false">Відправити</string>
+    <string name="btn_remove" translatable="false">Видалити</string>
+    <string name="btn_sign_out" translatable="false">Вийти</string>
+    <string name="lbl_forgot_password" translatable="false">Забули пароль?</string>
+    <string name="forgot_password_msg" translatable="false">Нам необхідно Ваша електронна скринька щоб відправити інструкцію по відновленню.</string>
+    <string name="btn_logout" translatable="false">Вийти з аккаунта</string>
+    <string name="title_activity_user_settings" translatable="false">Settings</string>
+    <string name="toast_user_created" translatable="false">Готово. Ввійдіть з допомогою Вашого Email: </string>
+    <string name="title_activity_signup" translatable="false">Реєстрація</string>
+    <string name="title_activity_settings" translatable="false">Ваш аккаунт</string>
+    <string name="action_logout">Вийти</string>
+    <string name="dialog_logout_title" translatable="false">Вийти з аккаунта</string>
+    <string name="dialog_logout_message" translatable="false"> Ви впевнені що бажаєте вийти з аккаунта?\n
+        Доступ до Вашої Карти клієнта та отримання повідомлень не можливе без авторизації.</string>
+    <string name="hint_phone" translatable="false">Телефон</string>
+    <string name="hint_last_name">Прізвище</string>
+    <string name="hint_second_name" translatable="false">По батькові</string>
+    <string name="edit_date_birth" translatable="false">Дата народження</string>
+    <string name="btn_savechanges" translatable="false">Зберегти зміни</string>
+    <string name="hint_notification" translatable="false">Сповіщення</string>
+    <string name="toast_data_updated">Зміни збережено!</string>
+    <string name="hint_language">Мова</string>
+    <string name="hint_double_press">Натисніть ще раз аби вийти з додатку</string>
+    <string name="btn_news">Новини</string>
+    <string name="btn_about">Про Компанію</string>
+    <string name="btn_contacts">Набрати: 098 1990 655</string>
+    <string name="title_activity_order">Мої замовлення</string>
+    <string name="title_activity_team">Наша команда</string>
+    <string name="title_activity_calendar">Календар подій</string>
+    <string name="title_activity_req">Реквізити</string>
+    <string name="btn_fb">Ми в Facebook</string>
+    <string name="btn_inst">Ми в Instagram</string>
+    <string name="phone" translatable="false">tel:0681990655</string>
+
+
+</resources>
