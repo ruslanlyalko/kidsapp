@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,8 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".UserActivity"
+        <activity
+            android:name=".UserActivity"
             android:label="@string/title_activity_user"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -33,7 +34,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.MainActivity" />
         </activity>
-
         <activity
             android:name=".ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
@@ -60,6 +60,15 @@
                 android:value="com.example.android.kidsapp.MainActivity" />
         </activity>
 
+        <activity
+            android:name=".ZvitActivity"
+            android:label="@string/title_activity_zvit"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.MainActivity" />
+        </activity>
 
     </application>
 

@@ -199,7 +199,7 @@
 
                 <!-- Left Top Button -->
                 <Button
-                    android:id="@+id/button_order"
+                    android:id="@+id/button_zvit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
@@ -208,7 +208,7 @@
                     android:drawableTop="@drawable/ic_order"
                     android:paddingBottom="15dp"
                     android:paddingTop="32dp"
-                    android:text="@string/button_order" />
+                    android:text="@string/button_zvit" />
 
                 <View
                     android:layout_width="1dp"

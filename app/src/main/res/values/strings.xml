@@ -1,14 +1,47 @@
 <resources>
     <string name="app_name">KIDS APP</string>
 
+
+
+    <!-- LOGIN -->
+    <string name="title_activity_login">Ласкаво просимо</string>
+    <string name="toast_minimum_password">Пароль за короткий. Мінімальна довжина 6 символів!</string>
+    <string name="toast_auth_failed">Не вдається ввійти! Перевірте, будь ласка, правильність введених даних</string>
+    <string name="button_login">ВВІЙТИ</string>
+    <string name="button_forgot_password">Забули свій пароль?</string>
+    <string name="button_link_to_register">Не зареєстровані? Зареєструватись прямо зараз!</string>
+
+    <!-- RESET PASS -->
+    <string name="title_activity_reset_password">Відновлення паролю</string>
+    <string name="text_forgot_password">Забули пароль?</string>
+    <string name="text_forgot_password1">Нам необхідно Ваша електронна скринька щоб відправити інструкцію по відновленню.</string>
+    <string name="toast_user_created">"Готово. Ввійдіть з допомогою Вашого Email: "</string>
+    <string name="button_reset_password">Відновити пароль</string>
+
+
+    <!-- SIGN UP-->
+    <string name="title_activity_signup">Реєстрація</string>
+    <string name="button_sign_up">Зареєструватись</string>
+
+    <!-- HINTS-->
+
+    <string name="hint_last_name">Прізвище</string>
+    <string name="hint_first_name">І"'"мя</string>
+    <string name="hint_second_name">По батькові</string>
+    <string name="hint_email">Електронна скринька</string>
+    <string name="hint_phone">Телефон</string>
+    <string name="hint_date_birth">Дата народження</string>
+    <string name="hint_password">Пароль</string>
+
+
     <!-- MAIN -->
-    <string name="app_title" >KIDS APP</string>
+    <string name="app_title">KIDS APP</string>
     <string name="app_motto">Грайся та розвивайся</string>
 
-    <string name="button_order" >Звіт</string>
-    <string name="button_calendar" >Майстер класи</string>
-    <string name="button_team" >Календар</string>
-    <string name="button_requisites" >Витрати</string>
+    <string name="button_zvit">Звіт</string>
+    <string name="button_calendar">Майстер класи</string>
+    <string name="button_team">Календар</string>
+    <string name="button_requisites">Витрати</string>
 
     <string name="hint_double_press">Натисніть ще раз аби вийти з додатку</string>
     <string name="button_news">Новини</string>
@@ -16,10 +49,10 @@
     <string name="button_contacts">Набрати: 098 1990 655</string>
     <string name="button_fb">Ми в Facebook</string>
     <string name="button_inst">Ми в Instagram</string>
-    <string name="phone" >tel:0681990655</string>
+    <string name="phone">tel:0681990655</string>
 
     <!-- USER -->
-    <string name="title_activity_user" >Особистий кабінет</string>
+    <string name="title_activity_user">Особистий кабінет</string>
     <string name="text_days">"Робочих\nднів"</string>
     <string name="text_money">Оборот</string>
     <string name="text_master">Майстер\nклас</string>
@@ -28,49 +61,22 @@
     <string name="action_settings">Налаштування</string>
 
     <!-- USER SETTINGS-->
-    <string name="title_activity_settings" >Ваш аккаунт</string>
-    <string name="button_save_changes" >Зберегти зміни</string>
+    <string name="title_activity_settings">Ваш аккаунт</string>
+    <string name="button_save_changes">Зберегти зміни</string>
     <string name="toast_data_updated">Зміни збережено!</string>
     <string name="action_logout">Вийти</string>
-    <string name="dialog_logout_title" >Вийти з аккаунта</string>
-    <string name="dialog_logout_message" > Ви впевнені що бажаєте вийти з аккаунта?\n
+    <string name="dialog_logout_title">Вийти з аккаунта</string>
+    <string name="dialog_logout_message"> Ви впевнені що бажаєте вийти з аккаунта?\n
         Доступ до Вашої Карти клієнта та отримання повідомлень не можливе без авторизації.</string>
-    <string name="button_logout" >Вийти з аккаунта</string>
-
+    <string name="button_logout">Вийти з аккаунта</string>
 
     <!-- EVENTS -->
+    <string name="title_activity_events">Повідомлення</string>
 
-    <string name="title_activity_events" >Повідомлення</string>
-
-
-    <!-- LOGIN -->
-    <string name="title_activity_login" >Ласкаво просимо</string>
-    <string name="toast_minimum_password" >Пароль за короткий. Мінімальна довжина 6 символів!</string>
-    <string name="toast_auth_failed" >Не вдається ввійти! Перевірте, будь ласка, правильність введених даних</string>
-    <string name="button_login" >ВВІЙТИ</string>
-    <string name="button_forgot_password" >Забули свій пароль?</string>
-    <string name="button_link_to_register" >Не зареєстровані? Зареєструватись прямо зараз!</string>
-
-    <!-- RESET PASS -->
-    <string name="title_activity_reset_password" >Відновлення паролю</string>
-    <string name="text_forgot_password" >Забули пароль?</string>
-    <string name="text_forgot_password1" >Нам необхідно Ваша електронна скринька щоб відправити інструкцію по відновленню.</string>
-    <string name="toast_user_created" >"Готово. Ввійдіть з допомогою Вашого Email: "</string>
-    <string name="button_reset_password">Відновити пароль</string>
-
-
-    <!-- SIGN UP-->
-    <string name="title_activity_signup" >Реєстрація</string>
-    <string name="button_sign_up">Зареєструватись</string>
-
-    <!-- HINTS-->
-
-    <string name="hint_last_name">Прізвище</string>
-    <string name="hint_first_name" >І"'"мя</string>
-    <string name="hint_second_name" >По батькові</string>
-    <string name="hint_email" >Електронна скринька</string>
-    <string name="hint_phone" >Телефон</string>
-    <string name="hint_date_birth" >Дата народження</string>
-    <string name="hint_password" >Пароль</string>
+    <!-- ZVIT -->
+    <string name="title_activity_zvit">Звіт</string>
+    <string name="text_room">Кімната: 0 грн</string>
+    <string name="text_birth">Дні Народження: 0 грн</string>
+    <string name="button_save">Зберегти звіт</string>
 
 </resources>

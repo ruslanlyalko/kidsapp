@@ -149,7 +149,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:textAlignment="textEnd">
+                    android:textAlignment="textEnd"
+                    android:enabled="false">
 
                 </EditText>
 
@@ -161,6 +162,15 @@
                     android:text="@string/hint_email" />
             </FrameLayout>
         </LinearLayout>
+
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="-30dp"
+            android:visibility="gone" />
 
 
         <!-- Save button -->
@@ -179,14 +189,6 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:text="@string/button_save_changes"
                 android:textColor="@color/colorWhite" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:visibility="gone" />
 
         </RelativeLayout>
 

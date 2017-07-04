@@ -18,8 +18,16 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="30dp"
             android:src="@mipmap/ic_launcher" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="-30dp"
+            android:visibility="gone" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -121,14 +129,6 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:text="@string/button_sign_up"
                 android:textColor="@color/colorWhite" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:visibility="gone" />
 
         </RelativeLayout>
 

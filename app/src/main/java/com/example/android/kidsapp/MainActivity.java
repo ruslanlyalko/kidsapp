@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String FB_LINK = "https://www.fb.com/snoopyagency";
     private static final String INST_LINK = "https://www.instagram.com/snoopyagency";
 
-    Button buttonUser, buttonEvents, buttonOrder, buttonCalendar, buttonTeam, buttonRequisites, buttonSwipe, buttonFB, buttonInst, buttonCall;
+    Button buttonUser, buttonEvents, buttonZvit, buttonCalendar, buttonTeam, buttonRequisites, buttonSwipe, buttonFB, buttonInst, buttonCall;
     TextView textSnoopy, textLink, textLinkDetails;
     SwipeLayout swipeLayout;
 
@@ -85,11 +85,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // Main Buttons
-        buttonOrder.setOnClickListener(new View.OnClickListener() {
+        buttonZvit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Intent intent = new Intent(MainActivity.this, OrderActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, ZvitActivity.class);
+                startActivity(intent);
             }
         });
         buttonCalendar.setOnClickListener(new View.OnClickListener() {
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
 
         buttonUser = (Button) findViewById(R.id.button_user);
         buttonEvents = (Button) findViewById(R.id.button_events);
-        buttonOrder = (Button) findViewById(R.id.button_order);
+        buttonZvit = (Button) findViewById(R.id.button_zvit);
         buttonCalendar = (Button) findViewById(R.id.button_calendar);
         buttonTeam = (Button) findViewById(R.id.button_team);
         buttonRequisites = (Button) findViewById(R.id.button_requisites);

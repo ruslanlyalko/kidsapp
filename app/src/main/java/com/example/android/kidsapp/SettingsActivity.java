@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -45,6 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     Button buttonLogout, buttonSaveChanges;
     EditText inputEmail, inputFirstName, inputSecondName, inputLastName, inputPhone, inputBDay;
+    ProgressBar progressBar;
 
     private Calendar mBirthDay = Calendar.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -76,6 +78,7 @@ public class SettingsActivity extends AppCompatActivity {
         inputBDay = (EditText) findViewById(R.id.text_bday);
         buttonSaveChanges = (Button) findViewById(R.id.button_save_changes);
         buttonLogout = (Button) findViewById(R.id.button_logout);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         // OnClickListeners for buttons
         buttonLogout.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +122,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void saveChanges() {
 
+        progressBar.setVisibility(View.VISIBLE);
+
         final String firstName = inputFirstName.getText().toString().trim();
         final String secondName = inputSecondName.getText().toString().trim();
         final String lastName = inputLastName.getText().toString().trim();
@@ -144,6 +149,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Toast.makeText(SettingsActivity.this, R.string.toast_data_updated, Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }

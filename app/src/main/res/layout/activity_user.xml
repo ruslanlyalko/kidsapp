@@ -15,6 +15,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
             android:padding="8dp">
 
             <!-- USER DATA -->
@@ -23,6 +24,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginRight="8dp"
                 android:src="@android:drawable/ic_menu_gallery" />
 
             <TextView
@@ -31,11 +33,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:layout_toRightOf="@+id/image_user"
-
                 android:text=""
                 android:textAlignment="textStart"
                 android:textAllCaps="true"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorWhite"
                 android:textSize="26sp" />
 
             <TextView
@@ -44,9 +45,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_user_name"
                 android:layout_toRightOf="@+id/image_user"
-
                 android:text=""
-                android:textAlignment="textStart" />
+                android:textAlignment="textStart"
+                android:textColor="@color/colorBg" />
 
             <TextView
                 android:id="@+id/text_user_phone"
@@ -54,9 +55,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_user_email"
                 android:layout_toRightOf="@+id/image_user"
-
                 android:text=""
-                android:textAlignment="textStart" />
+                android:textAlignment="textStart"
+                android:textColor="@color/colorBg" />
 
             <TextView
                 android:id="@+id/textUserExpireience"
@@ -64,13 +65,15 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_user_phone"
                 android:layout_toRightOf="@+id/image_user"
-                android:text="" />
+                android:text=""
+                android:textColor="@color/colorBg" />
 
             <ProgressBar
                 android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:visibility="gone" />
 
         </RelativeLayout>
@@ -250,10 +253,11 @@
 
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/text_bonus" />
+                android:text="@string/text_bonus"
+                android:textAlignment="center" />
 
             <TextView
                 android:layout_width="60dp"
@@ -292,7 +296,7 @@
                 android:layout_alignParentEnd="true"
                 android:text="4128\nгрн"
                 android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
                 android:textSize="28sp" />
 
 
