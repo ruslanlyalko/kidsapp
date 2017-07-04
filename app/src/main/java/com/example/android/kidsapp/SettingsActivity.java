@@ -41,13 +41,12 @@ import java.util.Map;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private final String TAG = "SettingActivity.java";
+    private static final String TAG = SettingsActivity.class.getSimpleName();
 
-    Calendar mBirthDay = Calendar.getInstance();
-
-    Button btnLogout, btnSaveChanges;
+    Button buttonLogout, buttonSaveChanges;
     EditText inputEmail, inputFirstName, inputSecondName, inputLastName, inputPhone, inputBDay;
 
+    private Calendar mBirthDay = Calendar.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference mDatabaseRefCurrentUser;
@@ -69,28 +68,24 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void initializeReferences() {
         // References
-        inputFirstName = (EditText) findViewById(R.id.firstName);
-        inputSecondName = (EditText) findViewById(R.id.secondName);
-        inputLastName = (EditText) findViewById(R.id.lastName);
-        inputPhone = (EditText) findViewById(R.id.phone);
-        inputEmail = (EditText) findViewById(R.id.email);
-        inputBDay = (EditText) findViewById(R.id.bday);
-        btnSaveChanges = (Button) findViewById(R.id.btnSaveChanges);
-        btnLogout = (Button) findViewById(R.id.btnLogout);
-
-        // Focus settings
-        inputEmail.setNextFocusDownId(R.id.btnSaveChangesFrame);
-        findViewById(R.id.btnSaveChangesFrame).requestFocus();
+        inputFirstName = (EditText) findViewById(R.id.text_first_name);
+        inputSecondName = (EditText) findViewById(R.id.text_second_name);
+        inputLastName = (EditText) findViewById(R.id.text_last_name);
+        inputPhone = (EditText) findViewById(R.id.text_phone);
+        inputEmail = (EditText) findViewById(R.id.text_email);
+        inputBDay = (EditText) findViewById(R.id.text_bday);
+        buttonSaveChanges = (Button) findViewById(R.id.button_save_changes);
+        buttonLogout = (Button) findViewById(R.id.button_logout);
 
         // OnClickListeners for buttons
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logout();
 
             }
         });
-        btnSaveChanges.setOnClickListener(new View.OnClickListener() {
+        buttonSaveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveChanges();
@@ -108,7 +103,6 @@ public class SettingsActivity extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.US);
 
                 inputBDay.setText(sdf.format(mBirthDay.getTime()));
-                findViewById(R.id.btnSaveChangesFrame).requestFocus();
             }
         };
 

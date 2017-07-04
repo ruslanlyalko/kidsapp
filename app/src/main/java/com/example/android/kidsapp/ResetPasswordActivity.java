@@ -66,9 +66,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
     }
 
     private void initializeReferences() {
-        inputEmail = (EditText) findViewById(R.id.email);
-        btnReset = (Button) findViewById(R.id.btn_reset_password);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        inputEmail = (EditText) findViewById(R.id.text_email);
+        btnReset = (Button) findViewById(R.id.button_reset_password);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
     }
 

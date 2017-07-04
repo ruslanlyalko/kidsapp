@@ -141,14 +141,14 @@ public class SignupActivity extends AppCompatActivity {
 
     private void initializeReferences() {
         btnSignUp = (Button) findViewById(R.id.sign_up_button);
-        inputFirstName = (EditText) findViewById(R.id.firstName);
-        inputSecondName= (EditText) findViewById(R.id.secondName);
-        inputLastName = (EditText) findViewById(R.id.lastName);
-        inputPhone = (EditText) findViewById(R.id.phone);
-        inputEmail = (EditText) findViewById(R.id.email);
-        inputPassword = (EditText) findViewById(R.id.password);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
+        inputFirstName = (EditText) findViewById(R.id.text_first_name);
+        inputSecondName= (EditText) findViewById(R.id.text_second_name);
+        inputLastName = (EditText) findViewById(R.id.text_last_name);
+        inputPhone = (EditText) findViewById(R.id.text_phone);
+        inputEmail = (EditText) findViewById(R.id.text_email);
+        inputPassword = (EditText) findViewById(R.id.text_password);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        btnResetPassword = (Button) findViewById(R.id.button_reset_password);
     }
 
     @Override

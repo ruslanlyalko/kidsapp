@@ -31,12 +31,11 @@ import com.example.android.kidsapp.utils.Constants;
 
 public class UserActivity extends AppCompatActivity {
 
-    private final String TAG = "UserActivity.java";
+    private static final String TAG = UserActivity.class.getSimpleName();
 
-    ProgressBar progressBar;
-    TextView textUserName;
-    TextView textUserEmail;
-    ImageView userImage;
+    ProgressBar progressBar, progressDays;
+    TextView textUserName, textUserEmail, textUserPhone;
+    ImageView imageUser;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -60,10 +59,12 @@ public class UserActivity extends AppCompatActivity {
     }
 
     private void initializeReferences() {
-        textUserName = (TextView) findViewById(R.id.textUserName);
-        textUserEmail = (TextView) findViewById(R.id.textUserEmail);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        userImage = (ImageView) findViewById(R.id.userImage);
+        textUserName = (TextView) findViewById(R.id.text_user_name);
+        textUserEmail = (TextView) findViewById(R.id.text_user_email);
+        textUserPhone = (TextView) findViewById(R.id.text_user_phone);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressDays = (ProgressBar) findViewById(R.id.progress_days);
+        imageUser = (ImageView) findViewById(R.id.image_user);
     }
 
     private void initializeCurrentUserData() {
@@ -80,7 +81,8 @@ public class UserActivity extends AppCompatActivity {
                     User user = dataSnapshot.getValue(User.class);
 
                     textUserName.setText(user.getUserFirstName() + " " + user.getUserLastName());
-                    textUserEmail.setText(user.getUserEmail() + "   " + user.getUserPhone());
+                    textUserEmail.setText(user.getUserEmail());
+                    textUserPhone.setText(user.getUserPhone());
                     progressBar.setVisibility(View.GONE);
 
                 }
@@ -101,7 +103,12 @@ public class UserActivity extends AppCompatActivity {
             Glide.with(this /* context */)
                     .using(new FirebaseImageLoader())
                     .load(storageReference)
-                    .into(userImage);
+                    .into(imageUser);
+            //
+
+            progressDays.setMax(20);
+            progressDays.setProgress(8);
+
 
         } else {
             Log.w(TAG, "Error. User is not logged in");

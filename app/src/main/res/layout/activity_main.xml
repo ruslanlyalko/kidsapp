@@ -10,58 +10,58 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingTop="4dp"
         android:background="@color/colorPrimary"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="4dp">
 
         <Button
-            android:id="@+id/btnUser"
+            android:id="@+id/button_user"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:paddingTop="10dp"
             android:background="?android:attr/selectableItemBackground"
-            android:drawableTop="@drawable/ic_user1"/>
+            android:drawableTop="@drawable/ic_user1"
+            android:paddingTop="10dp" />
 
         <Button
-            android:id="@+id/btnEvents"
+            android:id="@+id/button_events"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:paddingTop="10dp"
             android:background="?android:attr/selectableItemBackground"
-            android:drawableTop="@drawable/ic_event1"/>
+            android:drawableTop="@drawable/ic_event1"
+            android:paddingTop="10dp" />
 
         <TextView
-            android:id="@+id/txtLink"
+            android:id="@+id/text_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@id/btnUser"
-            android:layout_toLeftOf="@id/btnEvents"
             android:layout_marginTop="8dp"
+            android:layout_toLeftOf="@id/button_events"
+            android:layout_toRightOf="@id/button_user"
             android:maxLines="1"
+            android:text=""
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:text=""/>
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/txtLinkDetails"
+            android:id="@+id/text_link_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/btnUser"
-            android:layout_toLeftOf="@id/btnEvents"
-            android:layout_below="@id/txtLink"
+            android:layout_below="@id/text_link"
+            android:layout_toLeftOf="@id/button_events"
+            android:layout_toRightOf="@id/button_user"
             android:maxLines="1"
+            android:text=""
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:text=""/>
+            android:textColor="@color/colorWhite" />
 
         <TextView
-            android:id="@+id/txtSnoopy"
+            android:id="@+id/text_snoopy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -88,7 +88,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
-            android:text="@string/app_ea"
+            android:text="@string/app_motto"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -113,72 +113,72 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/gradient"/>
+                android:background="@drawable/gradient" />
 
             <Button
-                android:id="@+id/btn1"
+                android:id="@+id/button_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="@string/btn_about" />
+                android:text="@string/button_about" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/gradient"/>
+                android:background="@drawable/gradient" />
 
             <Button
-                android:id="@+id/btn2"
+                android:id="@+id/button_2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="@string/btn_news" />
+                android:text="@string/button_news" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/gradient"/>
+                android:background="@drawable/gradient" />
 
             <Button
-                android:id="@+id/btnCall"
+                android:id="@+id/button_call"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="@string/btn_contacts" />
+                android:text="@string/button_contacts" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/gradient"/>
+                android:background="@drawable/gradient" />
 
             <Button
-                android:id="@+id/btnFb"
+                android:id="@+id/button_fb"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="@string/btn_fb" />
+                android:text="@string/button_fb" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/gradient"/>
+                android:background="@drawable/gradient" />
 
             <Button
-                android:id="@+id/btnInst"
+                android:id="@+id/button_inst"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="@string/btn_inst" />
+                android:text="@string/button_inst" />
 
         </LinearLayout>
 
@@ -199,34 +199,34 @@
 
                 <!-- Left Top Button -->
                 <Button
-                    android:id="@+id/btnOrder"
+                    android:id="@+id/button_order"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
                     android:layout_weight="1"
-                    android:paddingTop="32dp"
-                    android:paddingBottom="15dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableTop="@drawable/ic_order"
-                    android:text="@string/btn_order" />
+                    android:paddingBottom="15dp"
+                    android:paddingTop="32dp"
+                    android:text="@string/button_order" />
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/gradient_v"/>
+                    android:background="@drawable/gradient_v" />
 
                 <!-- Right Top Button -->
                 <Button
-                    android:id="@+id/btnCalendar"
+                    android:id="@+id/button_calendar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
                     android:layout_weight="1"
-                    android:paddingTop="32dp"
-                    android:paddingBottom="15dp"
                     android:background="?android:attr/selectableItemBackground"
-                    android:drawableTop="@drawable/ic_calendar"
-                    android:text="@string/btn_calendar" />
+                    android:drawableTop="@drawable/ic_team"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="32dp"
+                    android:text="@string/button_calendar" />
 
             </LinearLayout>
 
@@ -243,16 +243,16 @@
 
                 <!-- Left Bottom Button -->
                 <Button
-                    android:id="@+id/btnTeam"
+                    android:id="@+id/button_team"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
                     android:layout_weight="1"
-                    android:paddingTop="32dp"
-                    android:paddingBottom="15dp"
                     android:background="?android:attr/selectableItemBackground"
-                    android:drawableTop="@drawable/ic_team"
-                    android:text="@string/btn_team" />
+                    android:drawableTop="@drawable/ic_calendar"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="32dp"
+                    android:text="@string/button_team" />
 
 
                 <View
@@ -262,17 +262,16 @@
 
                 <!-- Right Bottom Button -->
                 <Button
-                    android:id="@+id/btnRequisites"
+                    android:id="@+id/button_requisites"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
                     android:layout_weight="1"
-                    android:paddingTop="32dp"
-                    android:paddingBottom="15dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableTop="@drawable/ic_req"
-                    android:text="@string/btn_requisites" />
-
+                    android:paddingBottom="15dp"
+                    android:paddingTop="32dp"
+                    android:text="@string/button_requisites" />
             </LinearLayout>
 
             <View
@@ -286,7 +285,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btnSwipe"
+                    android:id="@+id/button_swipe"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="?android:attr/selectableItemBackground"

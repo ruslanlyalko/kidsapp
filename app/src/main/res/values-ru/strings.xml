@@ -1,21 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Snoopy EA</string>
-    <string name="action_logout">Вийти</string>
-    <string name="action_settings">Налаштування</string>
-    <string name="action_sign_in_short">Реєстрація</string>
-    <string name="app_ea">ОРГАНІЗАЦІЯ СВЯТ</string>
-    <string name="toast_data_updated">Зміни збережено!</string>
-    <string name="hint_last_name" translatable="false">Фамилия</string>
-    <string name="hint_language">Язык</string>
-    <string name="hint_double_press">Натисніть ще раз аби вийти з додатку</string>
-    <string name="btn_news">Новини</string>
-    <string name="btn_about">Про Компанію</string>
-    <string name="btn_contacts">Контакти</string>
-    <string name="title_activity_order">Мої замовлення</string>
-    <string name="title_activity_team">Наша команда</string>
-    <string name="title_activity_calendar">Календар подій</string>
-    <string name="title_activity_req">Реквізити</string>
-    <string name="btn_fb">Ми в Facebook</string>
-    <string name="btn_inst">Ми в Instagram</string>
+
 </resources>

@@ -16,19 +16,19 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String FB_LINK = "https://www.fb.com/snoopyagency" ;
-    private static final String INST_LINK = "https://www.instagram.com/snoopyagency" ;
+    private static final String FB_LINK = "https://www.fb.com/snoopyagency";
+    private static final String INST_LINK = "https://www.instagram.com/snoopyagency";
 
-    Button btnUser, btnEvents, btnOrder, btnCalendar, btnTeam, btnRequisites, btnSwipe, btnFB, btnInst, btnCall;
-    TextView txtSnoopy, txtLink, getTxtLinkDetails;
+    Button buttonUser, buttonEvents, buttonOrder, buttonCalendar, buttonTeam, buttonRequisites, buttonSwipe, buttonFB, buttonInst, buttonCall;
+    TextView textSnoopy, textLink, textLinkDetails;
     SwipeLayout swipeLayout;
 
-    boolean doubleBackToExitPressedOnce = false;
-    boolean swipeOpened = false;
+    boolean mDoubleBackToExitPressedOnce = false;
+    boolean mSwipeOpened = false;
 
     //private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-    private boolean linkActive = false;
+    private boolean mLinkActive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,72 +42,71 @@ public class MainActivity extends AppCompatActivity {
         mDatabase.setPersistenceEnabled(true);
 
 
-        txtSnoopy.setOnClickListener(new View.OnClickListener() {
+        textSnoopy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (linkActive) {
-                    txtSnoopy.setText("KIDS APP");
-                    linkActive = false;
-                    txtLink.setText("");
-                    getTxtLinkDetails.setText("");
+                if (mLinkActive) {
+                    mLinkActive = false;
+                    textLink.setText("");
+                    textLinkDetails.setText("");
                 } else {
-                    txtSnoopy.setText("КІДС АПП");
-                    linkActive = true;
-                    txtLink.setText("Відвідайте нашу сторінку у ФБ!");
-                    getTxtLinkDetails.setText("Докладніше >");
+                    mLinkActive = true;
+                    textLink.setText("Відвідайте нашу сторінку у ФБ!");
+                    textLinkDetails.setText("Докладніше >");
                 }
             }
         });
 
-        txtLink.setOnClickListener(new View.OnClickListener() {
+        textLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(linkActive) openBrowser(FB_LINK);
+                if (mLinkActive) openBrowser(FB_LINK);
             }
         });
-        getTxtLinkDetails.setOnClickListener(new View.OnClickListener() {
+        textLinkDetails.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {if(linkActive) openBrowser(FB_LINK);
+            public void onClick(View v) {
+                if (mLinkActive) openBrowser(FB_LINK);
             }
         });
 
 
         // User & Events buttons
-        btnUser.setOnClickListener(new View.OnClickListener() {
+        buttonUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
-        btnEvents.setOnClickListener(new View.OnClickListener() {
+        buttonEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             //   startActivity(new Intent(MainActivity.this, EventsActivity.class));
+                //   startActivity(new Intent(MainActivity.this, EventsActivity.class));
             }
         });
         // Main Buttons
-        btnOrder.setOnClickListener(new View.OnClickListener() {
+        buttonOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Intent intent = new Intent(MainActivity.this, OrderActivity.class);
+                // Intent intent = new Intent(MainActivity.this, OrderActivity.class);
                 //startActivity(intent);
             }
         });
-        btnCalendar.setOnClickListener(new View.OnClickListener() {
+        buttonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
                 //startActivity(intent);
             }
         });
-        btnTeam.setOnClickListener(new View.OnClickListener() {
+        buttonTeam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(MainActivity.this, TeamActivity.class);
                 //startActivity(intent);
             }
         });
-        btnRequisites.setOnClickListener(new View.OnClickListener() {
+        buttonRequisites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(MainActivity.this, ReqActivity.class);
@@ -120,22 +119,22 @@ public class MainActivity extends AppCompatActivity {
         swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
             @Override
             public void onStartOpen(SwipeLayout layout) {
-                btnSwipe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_down, 0, 0);
+                buttonSwipe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_down, 0, 0);
             }
 
             @Override
             public void onOpen(SwipeLayout layout) {
-                swipeOpened = true;
+                mSwipeOpened = true;
             }
 
             @Override
             public void onStartClose(SwipeLayout layout) {
-                btnSwipe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_up, 0, 0);
+                buttonSwipe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_up, 0, 0);
             }
 
             @Override
             public void onClose(SwipeLayout layout) {
-                swipeOpened = false;
+                mSwipeOpened = false;
             }
 
             @Override
@@ -149,10 +148,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnSwipe.setOnClickListener(new View.OnClickListener() {
+        buttonSwipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (swipeOpened)
+                if (mSwipeOpened)
                     swipeLayout.close();
                 else
                     swipeLayout.open();
@@ -162,21 +161,21 @@ public class MainActivity extends AppCompatActivity {
 
         //
 
-        btnFB.setOnClickListener(new View.OnClickListener() {
+        buttonFB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openBrowser(FB_LINK);
             }
         });
 
-        btnInst.setOnClickListener(new View.OnClickListener() {
+        buttonInst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openBrowser(INST_LINK);
             }
         });
 
-        btnCall.setOnClickListener(new View.OnClickListener() {
+        buttonCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
@@ -199,20 +198,20 @@ public class MainActivity extends AppCompatActivity {
      * Set references to Buttons etc
      */
     private void initializeReferences() {
-        txtSnoopy = (TextView) findViewById(R.id.txtSnoopy);
-        txtLink = (TextView) findViewById(R.id.txtLink);
-        getTxtLinkDetails = (TextView) findViewById(R.id.txtLinkDetails);
+        textSnoopy = (TextView) findViewById(R.id.text_snoopy);
+        textLink = (TextView) findViewById(R.id.text_link);
+        textLinkDetails = (TextView) findViewById(R.id.text_link_details);
 
-        btnUser = (Button) findViewById(R.id.btnUser);
-        btnEvents = (Button) findViewById(R.id.btnEvents);
-        btnOrder = (Button) findViewById(R.id.btnOrder);
-        btnCalendar = (Button) findViewById(R.id.btnCalendar);
-        btnTeam = (Button) findViewById(R.id.btnTeam);
-        btnRequisites = (Button) findViewById(R.id.btnRequisites);
-        btnSwipe = (Button) findViewById(R.id.btnSwipe);
-        btnInst= (Button) findViewById(R.id.btnInst);
-        btnFB= (Button) findViewById(R.id.btnFb);
-        btnCall= (Button) findViewById(R.id.btnCall);
+        buttonUser = (Button) findViewById(R.id.button_user);
+        buttonEvents = (Button) findViewById(R.id.button_events);
+        buttonOrder = (Button) findViewById(R.id.button_order);
+        buttonCalendar = (Button) findViewById(R.id.button_calendar);
+        buttonTeam = (Button) findViewById(R.id.button_team);
+        buttonRequisites = (Button) findViewById(R.id.button_requisites);
+        buttonSwipe = (Button) findViewById(R.id.button_swipe);
+        buttonInst = (Button) findViewById(R.id.button_inst);
+        buttonFB = (Button) findViewById(R.id.button_fb);
+        buttonCall = (Button) findViewById(R.id.button_call);
         swipeLayout = (SwipeLayout) findViewById(R.id.godfather);
 
     }
@@ -223,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
+        if (mDoubleBackToExitPressedOnce) {
             super.onBackPressed();
             // TODO (kostul) close application completely
             int pid = android.os.Process.myPid();
@@ -232,21 +231,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Swipe down
-        if (swipeOpened) {
+        if (mSwipeOpened) {
             swipeLayout.close();
-            swipeOpened = false;
+            mSwipeOpened = false;
             return;
         }
 
         // Close app after twice click on Back button
-        doubleBackToExitPressedOnce = true;
+        mDoubleBackToExitPressedOnce = true;
         Toast.makeText(this, R.string.hint_double_press, Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce = false;
+                mDoubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }
