@@ -29,43 +29,17 @@
             android:layout_marginTop="-30dp"
             android:visibility="gone" />
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/text_last_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_last_name"
-                android:inputType="textPersonName"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
-        </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/text_first_name"
+                android:id="@+id/text_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_first_name"
-                android:inputType="textPersonName"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/text_second_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_second_name"
                 android:inputType="textPersonName"
                 android:textColor="@android:color/black"
                 android:textColorHint="@android:color/black" />

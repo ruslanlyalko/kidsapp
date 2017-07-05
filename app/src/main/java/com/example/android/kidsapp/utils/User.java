@@ -8,19 +8,13 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class User {
-    public String userFirstName;
-    public String userSecondName;
-    public String userLastName;
+    public String userName;
     public String userPhone;
     public String userEmail;
     public String userBDay;
 
-
-
-    public User(String userFirstName, String userSecondName, String userLastName, String userPhone, String userEmail, String bDay) {
-        this.userFirstName = userFirstName;
-        this.userSecondName = userSecondName;
-        this.userLastName = userLastName;
+    public User(String userName, String userPhone, String userEmail, String bDay) {
+        this.userName = userName;
         this.userPhone = userPhone;
         this.userEmail = userEmail;
         this.userBDay = bDay;
@@ -35,20 +29,13 @@ public class User {
         return userBDay;
     }
 
-    public String getUserSecondName() {
-        return userSecondName;
-    }
-
-    public String getUserLastName() {
-        return userLastName;
-    }
 
     public String getUserPhone() {
         return userPhone;
     }
 
-    public String getUserFirstName() {
-        return this.userFirstName;
+    public String getUserName() {
+        return this.userName;
     }
 
     public String getUserEmail() {
@@ -58,9 +45,7 @@ public class User {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("userFirstName", userFirstName);
-        result.put("userSecondName", userSecondName);
-        result.put("userLastName", userLastName);
+        result.put("userFirstName", userName);
         result.put("userPhone", userPhone);
         result.put("userEmail", userEmail);
         result.put("userBDay", userBDay);

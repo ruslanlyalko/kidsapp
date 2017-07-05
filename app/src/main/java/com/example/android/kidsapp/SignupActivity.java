@@ -25,7 +25,7 @@ import com.example.android.kidsapp.utils.Constants;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private EditText inputEmail, inputPassword, inputFirstName, inputSecondName, inputLastName, inputPhone;
+    private EditText inputEmail, inputPassword,  inputName, inputPhone;
     private Button btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
     private FirebaseAuth mFirebaseAuth;
@@ -69,16 +69,14 @@ public class SignupActivity extends AppCompatActivity {
     *
      */
     private void signUp() {
-        final String firstName = inputFirstName.getText().toString().trim();
-        final String secondName = inputSecondName.getText().toString().trim();
-        final String lastName = inputLastName.getText().toString().trim();
+        final String name = inputName.getText().toString().trim();
         final String phone = inputPhone.getText().toString().trim();
         final String email = inputEmail.getText().toString().trim();
         final String password = inputPassword.getText().toString().trim();
 
-        if (TextUtils.isEmpty(firstName) || TextUtils.isEmpty(secondName) || TextUtils.isEmpty(lastName)) {
+        if (TextUtils.isEmpty(name) ) {
             //Toast.makeText(getApplicationContext(), "Enter name!", Toast.LENGTH_SHORT).show();
-            inputFirstName.setError("Enter name!");
+            inputName.setError("Enter name!");
             return;
         }
         if (TextUtils.isEmpty(phone)) {
@@ -87,15 +85,15 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+            inputEmail.setError("Enter email!");
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+            inputPassword.setError("Enter password!");
             return;
         }
         if (password.length() < 6) {
-            Toast.makeText(getApplicationContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
+            inputPassword.setError( "Password too short, enter minimum 6 characters!");
             return;
         }
 
@@ -111,13 +109,13 @@ public class SignupActivity extends AppCompatActivity {
                         // signed in user can be handled in the listener.
                         if (task.isSuccessful()) {
                             UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(firstName+" "+lastName)
+                                    .setDisplayName(name)
                                     .build();
                             mFirebaseAuth.getCurrentUser().updateProfile(profileUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     String uId = mFirebaseAuth.getCurrentUser().getUid();
-                                    createUserData(firstName, secondName,lastName,phone, email, uId);
+                                    createUserData(name,phone, email, uId);
                                     Toast.makeText(SignupActivity.this, R.string.toast_user_created +" "+ email , Toast.LENGTH_SHORT).show();
 
                                     onBackPressed();
@@ -133,17 +131,15 @@ public class SignupActivity extends AppCompatActivity {
     }
 
 
-    private void createUserData(String name, String secondName, String lastName, String phone, String email, String uId) {
+    private void createUserData(String name, String phone, String email, String uId) {
         mDatabaseRefCurrentUser = mFirebaseDatabase.getReference(Constants.FIREBASE_REF_USERS).child(uId);
-        User user = new User(name, secondName, lastName, phone, email,"01.06.1991");
+        User user = new User(name, phone, email,"01.06.1991");
         mDatabaseRefCurrentUser.setValue(user);
     }
 
     private void initializeReferences() {
         btnSignUp = (Button) findViewById(R.id.sign_up_button);
-        inputFirstName = (EditText) findViewById(R.id.text_first_name);
-        inputSecondName= (EditText) findViewById(R.id.text_second_name);
-        inputLastName = (EditText) findViewById(R.id.text_last_name);
+        inputName = (EditText) findViewById(R.id.text_name);
         inputPhone = (EditText) findViewById(R.id.text_phone);
         inputEmail = (EditText) findViewById(R.id.text_email);
         inputPassword = (EditText) findViewById(R.id.text_password);

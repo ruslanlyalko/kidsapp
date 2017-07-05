@@ -4,8 +4,8 @@
     tools:context="com.example.android.snoopyea.ui.UserActivity">
 
 <item
-        android:id="@+id/action_logout"
-        android:icon="@drawable/ic_logout"
+        android:id="@+id/action_add"
+        android:icon="@drawable/ic_action_add"
         android:title="@string/action_logout"
         app:showAsAction="ifRoom"/>
 

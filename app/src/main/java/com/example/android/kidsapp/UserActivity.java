@@ -1,7 +1,11 @@
 package com.example.android.kidsapp;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,13 +14,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,14 +40,24 @@ import com.google.firebase.storage.StorageReference;
 import com.example.android.kidsapp.utils.User;
 import com.example.android.kidsapp.utils.Constants;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 
 public class UserActivity extends AppCompatActivity {
 
     private static final String TAG = UserActivity.class.getSimpleName();
 
-    ProgressBar progressBar, progressDays;
-    TextView textUserName, textUserEmail, textUserPhone;
     ImageView imageUser;
+    EditText inputName, inputEmail, inputPhone, inputBDay;
+    // ProgressBar progressBar;
+
+    private Calendar mBirthDay = Calendar.getInstance();
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -56,31 +76,88 @@ public class UserActivity extends AppCompatActivity {
         // Set btn's, text's references and onClickListener's
         initializeReferences();
 
+        final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                mBirthDay.set(Calendar.YEAR, year);
+                mBirthDay.set(Calendar.MONTH, monthOfYear);
+                mBirthDay.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.US);
+
+                inputBDay.setText(sdf.format(mBirthDay.getTime()));
+            }
+        };
+
+        // Pop up the Date Picker after user clicked on editText
+        inputBDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(UserActivity.this, dateSetListener,
+                        mBirthDay.get(Calendar.YEAR), mBirthDay.get(Calendar.MONTH),
+                        mBirthDay.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
         initializeCurrentUserData();
-
-        Spinner spinner = (Spinner) findViewById(R.id.spinner_month);
-
-//        spinner.setPrompt("Червень");
-
-        /*        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.month_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-*/
     }
 
     private void initializeReferences() {
-        textUserName = (TextView) findViewById(R.id.text_user_name);
-        textUserEmail = (TextView) findViewById(R.id.text_user_email);
-        textUserPhone = (TextView) findViewById(R.id.text_user_phone);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        progressDays = (ProgressBar) findViewById(R.id.progress_days);
-        imageUser = (ImageView) findViewById(R.id.image_user);
+
+        inputName = (EditText) findViewById(R.id.text_name);
+        inputPhone = (EditText) findViewById(R.id.text_phone);
+        inputEmail = (EditText) findViewById(R.id.text_email);
+        inputBDay = (EditText) findViewById(R.id.text_bday);
+    }
+
+    private void saveChanges() {
+
+//        progressBar.setVisibility(View.VISIBLE);
+
+        final String name = inputName.getText().toString().trim();
+        final String phone = inputPhone.getText().toString().trim();
+        final String email = inputEmail.getText().toString().trim();
+        final String bday = inputBDay.getText().toString().trim();
+
+        final String tname = inputName.getTag().toString().trim();
+        final String tphone = inputPhone.getTag().toString().trim();
+        final String temail = inputEmail.getTag().toString().trim();
+        final String tbday = inputBDay.getTag().toString().trim();
+
+
+        User user = new User(name, phone, email, bday);
+
+        Map<String, Object> userValue = user.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        boolean needUpdate = false;
+        if (!name.equals(tname)) {
+            childUpdates.put("userName", name);
+            needUpdate = true;
+        }
+        if (!phone.equals(tphone)) {
+            childUpdates.put("userPhone", phone);
+            needUpdate = true;
+        }
+        if (!bday.equals(tbday)) {
+            childUpdates.put("userBDay", bday);
+            needUpdate = true;
+        }
+        if (needUpdate)
+            mDatabaseRefCurrentUser.updateChildren(childUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Toast.makeText(UserActivity.this, R.string.toast_data_updated, Toast.LENGTH_SHORT).show();
+                    // progressBar.setVisibility(View.GONE);
+                }
+            });
+
+        // TODO update Email!
+
     }
 
     private void initializeCurrentUserData() {
-
-        progressBar.setVisibility(View.VISIBLE);
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
@@ -91,40 +168,61 @@ public class UserActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User user = dataSnapshot.getValue(User.class);
 
-                    textUserName.setText(user.getUserFirstName() + " " + user.getUserLastName());
-                    textUserEmail.setText(user.getUserEmail());
-                    textUserPhone.setText(user.getUserPhone());
-                    progressBar.setVisibility(View.GONE);
+                    inputName.setText(user.getUserName());
+                    inputName.setTag(user.getUserName());
 
+                    inputPhone.setText(user.getUserPhone());
+                    inputPhone.setTag(user.getUserPhone());
+
+                    inputEmail.setText(user.getUserEmail());
+                    inputEmail.setTag(user.getUserEmail());
+
+                    inputBDay.setText(user.getUserBDay());
+                    inputBDay.setTag(user.getUserBDay());
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+
+                    Date dt = new Date();
+                    try {
+                        dt = sdf.parse(user.getUserBDay());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    mBirthDay.setTime(dt);
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    textUserName.setText("");
-                    textUserEmail.setText("");
-                    progressBar.setVisibility(View.GONE);
+
                     Log.w(TAG, "Failed to load data. " + databaseError.toException());
                 }
             };
 
-            // Download user profile image from STORAGE
-            StorageReference storageReference = mStorage.getReference(Constants.FIREBASE_STORAGE_PICTURES)
-                    .child("default_profile_picture.png");
-
-            Glide.with(this /* context */)
-                    .using(new FirebaseImageLoader())
-                    .load(storageReference)
-                    .into(imageUser);
-            //
-
-            progressDays.setMax(20);
-            progressDays.setProgress(8);
-
-
+            mDatabaseRefCurrentUser.addValueEventListener(mUserListener);
         } else {
             Log.w(TAG, "Error. User is not logged in");
             onDestroy();
         }
+    }
+
+    private void logout() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.dialog_logout_title)
+                .setMessage(R.string.dialog_logout_message)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        mAuth.signOut();
+                        onBackPressed();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                //alert icon if we need
+                //.setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     @Override
@@ -160,33 +258,19 @@ public class UserActivity extends AppCompatActivity {
         }
 
         switch (id) {
-            case R.id.action_settings: {
-                // User chose the "Settings" item, show the app settings UI...
-                startActivityForResult(new Intent(UserActivity.this, SettingsActivity.class), 0);
+            case R.id.action_logout: {
+                logout();
             }
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {
-            return;
-        }
-        boolean needLogout = data.getBooleanExtra(Constants.EXTRA_NEED_LOGOUT, false);
-        if (needLogout) {
-            // After Log Out open Login Activity and finish this activity
-            // to avoid user press Back and return to UserActivity without logged in
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        }
-    }
-
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        saveChanges();
         overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
     }
 }
