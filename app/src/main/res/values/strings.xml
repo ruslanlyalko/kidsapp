@@ -73,7 +73,7 @@
     <string name="title_activity_events">Повідомлення</string>
 
     <!-- ZVIT -->
-    <string name="title_activity_zvit">Звіт (05.07)</string>
+    <string name="title_activity_zvit">Звіт (Сьогодні)</string>
     <string name="text_room">Кімната: 0 грн</string>
     <string name="text_birth">Дні Народження: 0 грн</string>
     <string name="button_save">Зберегти звіт</string>
@@ -92,6 +92,8 @@
 
     <!-- NOTIFICATION-->
     <string name="title_activity_notification">Повідомлення</string>
+    <string name="text_total">Загалом: 1570 ГРН</string>
+    <string name="text_mk">Майстер клас: 500грн</string>
 
 
     <string-array name="month_array">
