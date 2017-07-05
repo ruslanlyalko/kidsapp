@@ -14,198 +14,90 @@
         android:orientation="vertical"
         android:showDividers="middle">
 
-        // ROOM
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp">
 
-            <TextView
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_action_vyruchka" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="24dp"
-                android:paddingTop="20dp"
-                android:text="@string/text_room"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/margin_medium"
-                android:paddingRight="@dimen/margin_medium">
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="2"
-                    android:text="20 ГРН"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="x"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-
-                <EditText
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:inputType="number"
-                    android:text="0"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="="
-                    android:textAlignment="center"
+                    android:layout_marginTop="16dp"
+                    android:text="Кімната"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:text="0 ГРН"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:text="Всього"
+                    android:textColor="@color/colorBlack" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="1000 ГРН"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="32sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:text="60 грн * 5 = 300 ГРН"
+                    android:textColor="@color/colorBlack" />
+
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="30"
+                    android:progress="5" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:text="40 грн * 10 = 400 ГРН"
+                    android:textColor="@color/colorBlack" />
+
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="30"
+                    android:progress="10" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:text="20 грн * 15 = 300 ГРН"
+                    android:textColor="@color/colorBlack" />
+
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="30"
+                    android:progress="15" />
 
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/margin_medium"
-                android:paddingRight="@dimen/margin_medium">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="2"
-                    android:text="40 ГРН"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="x"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:inputType="number"
-                    android:text="0"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="="
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:text="0 ГРН"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/margin_medium"
-                android:paddingRight="@dimen/margin_medium">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="2"
-                    android:text="60 ГРН"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="x"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:inputType="number"
-                    android:text="0"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="="
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:text="0 ГРН"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-
-            </LinearLayout>
-
 
         </LinearLayout>
 
-
-        // BIRTHDAY
+ 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -379,10 +271,9 @@
                 android:textAllCaps="true"
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp" />
-                android:textSize="16sp" />
+            android:textSize="16sp" />
 
         </LinearLayout>
-
 
 
     </LinearLayout>
