@@ -27,14 +27,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_name" />
+                android:src="@drawable/ic_action_vyruchka" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,7 +59,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="4dp"
                     android:text="1570 ГРН"
                     android:textColor="@color/colorBlack"
                     android:textSize="32sp" />
@@ -70,8 +68,8 @@
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:max="2000"
-                    android:progress="1000" />
+                    android:max="20"
+                    android:progress="5" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -97,7 +95,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_marginLeft="90dp"
+                        android:layout_marginLeft="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -106,6 +104,25 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="День народження"
+                            android:textColor="@color/colorBlack" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="540 грн" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="МК"
                             android:textColor="@color/colorBlack" />
 
                         <TextView
