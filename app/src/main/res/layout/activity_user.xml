@@ -78,6 +78,14 @@
 
         </RelativeLayout>
 
+
+        <Spinner
+            android:id="@+id/spinner_month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:entries="@array/month_array" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -131,6 +139,7 @@
                 android:textSize="20sp" />
 
         </RelativeLayout>
+
 
         <View
             android:layout_width="match_parent"

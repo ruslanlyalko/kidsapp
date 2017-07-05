@@ -59,7 +59,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.MainActivity" />
         </activity>
-
         <activity
             android:name=".ZvitActivity"
             android:label="@string/title_activity_zvit"
@@ -69,6 +68,43 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.MainActivity" />
         </activity>
+        <activity
+            android:name=".CalendarActivity"
+            android:label="@string/title_activity_calendar"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.MainActivity" />
+        </activity>
+        <activity
+            android:name=".MkActivity"
+            android:label="@string/title_activity_mk"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.MainActivity" />
+        </activity>
+        <activity
+            android:name=".VytActivity"
+            android:label="@string/title_activity_vyt"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.MainActivity" />
+        </activity>
+        <activity
+            android:name=".NotificationActivity"
+            android:label="@string/title_activity_notification"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.MainActivity" />
+        </activity>
+
 
     </application>
 

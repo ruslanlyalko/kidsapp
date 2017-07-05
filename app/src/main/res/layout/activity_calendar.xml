@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.kidsapp.ZvitActivity">
+    tools:context="com.example.android.kidsapp.CalendarActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,12 +12,28 @@
         android:orientation="vertical"
         android:padding="8dp">
 
+        // CALENDAR
+
+        <CalendarView
+            android:id="@+id/calendar_d"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:maxDate="08/01/2017"
+            android:minDate="06/01/2017" />
+
+
         // ROOM
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/gradient" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
+            android:padding="8dp"
             android:paddingLeft="8dp"
             android:text="@string/text_room"
             android:textAllCaps="true"
@@ -43,13 +59,6 @@
                     android:textAlignment="center"
                     android:textSize="16sp" />
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:text="+"
-                    android:textSize="16sp" />
-
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -57,14 +66,6 @@
                     android:text="0"
                     android:textAlignment="center"
                     android:textSize="16sp" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:text="-"
-                    android:textSize="16sp" />
-
 
             </LinearLayout>
 
@@ -82,13 +83,6 @@
                     android:textAlignment="center"
                     android:textSize="16sp" />
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:text="+"
-                    android:textSize="16sp" />
-
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -96,14 +90,6 @@
                     android:text="0"
                     android:textAlignment="center"
                     android:textSize="16sp" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:text="-"
-                    android:textSize="16sp" />
-
 
             </LinearLayout>
 
@@ -121,13 +107,6 @@
                     android:textAlignment="center"
                     android:textSize="16sp" />
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:text="+"
-                    android:textSize="16sp" />
-
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -136,29 +115,21 @@
                     android:textAlignment="center"
                     android:textSize="16sp" />
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:text="-"
-                    android:textSize="16sp" />
-
 
             </LinearLayout>
 
         </LinearLayout>
 
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@drawable/gradient" />
+
         // BIRTH
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
             android:padding="8dp"
             android:paddingLeft="8dp"
             android:text="@string/text_birth"
@@ -185,26 +156,12 @@
                     android:textAlignment="center"
                     android:textSize="16sp" />
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:text="+"
-                    android:textSize="16sp" />
-
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:text="0"
                     android:textAlignment="center"
-                    android:textSize="16sp" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:text="-"
                     android:textSize="16sp" />
 
 
@@ -224,26 +181,12 @@
                     android:textAlignment="center"
                     android:textSize="16sp" />
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:text="+"
-                    android:textSize="16sp" />
-
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:text="0"
                     android:textAlignment="center"
-                    android:textSize="16sp" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:text="-"
                     android:textSize="16sp" />
 
 
@@ -263,13 +206,6 @@
                     android:textAlignment="center"
                     android:textSize="16sp" />
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:text="+"
-                    android:textSize="16sp" />
-
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -277,17 +213,7 @@
                     android:text="0"
                     android:textAlignment="center"
                     android:textSize="16sp" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:text="-"
-                    android:textSize="16sp" />
-
-
             </LinearLayout>
-
 
         </LinearLayout>
 

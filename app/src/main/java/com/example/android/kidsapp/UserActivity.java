@@ -9,8 +9,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -56,6 +58,15 @@ public class UserActivity extends AppCompatActivity {
 
         initializeCurrentUserData();
 
+        Spinner spinner = (Spinner) findViewById(R.id.spinner_month);
+
+//        spinner.setPrompt("Червень");
+
+        /*        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.month_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+*/
     }
 
     private void initializeReferences() {

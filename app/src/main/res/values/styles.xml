@@ -19,6 +19,10 @@
         <item name="android:windowFullscreen">false</item>
     </style>
 
+    <style name="LightThemeSelector" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+
+    </style>
 
 </resources>
 

@@ -205,8 +205,8 @@
                     android:layout_margin="1dp"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:drawableTop="@drawable/ic_order"
-                    android:paddingBottom="15dp"
+                    android:drawableTop="@drawable/ic_zvit"
+                    android:paddingBottom="16dp"
                     android:paddingTop="32dp"
                     android:text="@string/button_zvit" />
 
@@ -217,13 +217,13 @@
 
                 <!-- Right Top Button -->
                 <Button
-                    android:id="@+id/button_calendar"
+                    android:id="@+id/button_mk"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:drawableTop="@drawable/ic_team"
+                    android:drawableTop="@drawable/ic_mk"
                     android:paddingBottom="15dp"
                     android:paddingTop="32dp"
                     android:text="@string/button_calendar" />
@@ -243,14 +243,14 @@
 
                 <!-- Left Bottom Button -->
                 <Button
-                    android:id="@+id/button_team"
+                    android:id="@+id/button_calendar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableTop="@drawable/ic_calendar"
-                    android:paddingBottom="15dp"
+                    android:paddingBottom="16dp"
                     android:paddingTop="32dp"
                     android:text="@string/button_team" />
 
@@ -262,14 +262,14 @@
 
                 <!-- Right Bottom Button -->
                 <Button
-                    android:id="@+id/button_requisites"
+                    android:id="@+id/button_vyt"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:drawableTop="@drawable/ic_req"
-                    android:paddingBottom="15dp"
+                    android:drawableTop="@drawable/ic_vyt"
+                    android:paddingBottom="16dp"
                     android:paddingTop="32dp"
                     android:text="@string/button_requisites" />
             </LinearLayout>
@@ -289,7 +289,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="?android:attr/selectableItemBackground"
-                    android:drawableTop="@drawable/ic_up"
+                    android:drawableTop="@drawable/ic_up2"
                     android:paddingTop="14dp" />
 
             </LinearLayout>

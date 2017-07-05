@@ -2,7 +2,6 @@
     <string name="app_name">KIDS APP</string>
 
 
-
     <!-- LOGIN -->
     <string name="title_activity_login">Ласкаво просимо</string>
     <string name="toast_minimum_password">Пароль за короткий. Мінімальна довжина 6 символів!</string>
@@ -49,7 +48,7 @@
     <string name="button_contacts">Набрати: 098 1990 655</string>
     <string name="button_fb">Ми в Facebook</string>
     <string name="button_inst">Ми в Instagram</string>
-    <string name="phone">tel:0681990655</string>
+    <string name="phone_call">tel:0681990655</string>
 
     <!-- USER -->
     <string name="title_activity_user">Особистий кабінет</string>
@@ -74,9 +73,40 @@
     <string name="title_activity_events">Повідомлення</string>
 
     <!-- ZVIT -->
-    <string name="title_activity_zvit">Звіт</string>
+    <string name="title_activity_zvit">Звіт (05.07)</string>
     <string name="text_room">Кімната: 0 грн</string>
     <string name="text_birth">Дні Народження: 0 грн</string>
     <string name="button_save">Зберегти звіт</string>
+
+    <!-- CALENDAR -->
+    <string name="title_activity_calendar">Календар</string>
+
+
+    <!-- M K -->
+    <string name="title_activity_mk">Майстер класи</string>
+
+
+    <!-- Vyt -->
+    <string name="title_activity_vyt">Витрати (1245 грн)</string>
+
+
+    <!-- NOTIFICATION-->
+    <string name="title_activity_notification">Повідомлення</string>
+
+
+    <string-array name="month_array">
+        <item>Січень</item>
+        <item>Лютий</item>
+        <item>Березень</item>
+        <item>Квітень</item>
+        <item>Травень</item>
+        <item>Червень</item>
+        <item>Липень</item>
+        <item>Серпень</item>
+        <item>Вересень</item>
+        <item>Жовтень</item>
+        <item>Листопад</item>
+        <item>Грудень</item>
+    </string-array>
 
 </resources>

@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String FB_LINK = "https://www.fb.com/snoopyagency";
     private static final String INST_LINK = "https://www.instagram.com/snoopyagency";
 
-    Button buttonUser, buttonEvents, buttonZvit, buttonCalendar, buttonTeam, buttonRequisites, buttonSwipe, buttonFB, buttonInst, buttonCall;
+    Button buttonUser, buttonEvents, buttonZvit, buttonCalendar, buttonMk, buttonVyt, buttonSwipe, buttonFB, buttonInst, buttonCall;
     TextView textSnoopy, textLink, textLinkDetails;
     SwipeLayout swipeLayout;
 
@@ -95,31 +95,39 @@ public class MainActivity extends AppCompatActivity {
         buttonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
+                startActivity(intent);
             }
         });
-        buttonTeam.setOnClickListener(new View.OnClickListener() {
+        buttonMk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(MainActivity.this, TeamActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, MkActivity.class);
+                startActivity(intent);
             }
         });
-        buttonRequisites.setOnClickListener(new View.OnClickListener() {
+        buttonVyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(MainActivity.this, ReqActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, VytActivity.class);
+                startActivity(intent);
             }
         });
+        buttonEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         // Swipe
         swipeLayout.setSwipeEnabled(false);
         swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
             @Override
             public void onStartOpen(SwipeLayout layout) {
-                buttonSwipe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_down, 0, 0);
+                buttonSwipe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_down2, 0, 0);
             }
 
             @Override
@@ -129,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStartClose(SwipeLayout layout) {
-                buttonSwipe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_up, 0, 0);
+                buttonSwipe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_up2, 0, 0);
             }
 
             @Override
@@ -206,8 +214,9 @@ public class MainActivity extends AppCompatActivity {
         buttonEvents = (Button) findViewById(R.id.button_events);
         buttonZvit = (Button) findViewById(R.id.button_zvit);
         buttonCalendar = (Button) findViewById(R.id.button_calendar);
-        buttonTeam = (Button) findViewById(R.id.button_team);
-        buttonRequisites = (Button) findViewById(R.id.button_requisites);
+        buttonMk = (Button) findViewById(R.id.button_mk);
+        buttonVyt = (Button) findViewById(R.id.button_vyt);
+
         buttonSwipe = (Button) findViewById(R.id.button_swipe);
         buttonInst = (Button) findViewById(R.id.button_inst);
         buttonFB = (Button) findViewById(R.id.button_fb);
