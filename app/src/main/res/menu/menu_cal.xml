@@ -4,9 +4,9 @@
     tools:context="com.example.android.snoopyea.ui.UserActivity">
 
 <item
-        android:id="@+id/action_add"
-        android:icon="@drawable/ic_action_add"
-        android:title="@string/action_add"
+        android:id="@+id/action_edit"
+        android:icon="@drawable/ic_action_edit_dark"
+        android:title="@string/action_edit"
         app:showAsAction="ifRoom"/>
 
 </menu>

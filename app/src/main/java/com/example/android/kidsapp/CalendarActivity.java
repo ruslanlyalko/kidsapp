@@ -3,6 +3,8 @@ package com.example.android.kidsapp;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.CalendarView;
 
@@ -33,6 +35,14 @@ public class CalendarActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_cal, menu);
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -41,6 +51,14 @@ public class CalendarActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         }
+
+        switch (id) {
+            case R.id.action_edit: {
+                //todo edit zvit
+            }
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }

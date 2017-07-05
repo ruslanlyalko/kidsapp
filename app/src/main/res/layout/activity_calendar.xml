@@ -24,66 +24,103 @@
             android:maxDate="08/01/2017"
             android:minDate="06/01/2017" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="24dp"
-            android:paddingTop="20dp"
-            android:text="@string/text_room"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:paddingLeft="24dp"
-            android:paddingTop="20dp"
-            android:text="@string/text_birth"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="24dp"
-            android:paddingTop="20dp"
-            android:text="@string/text_mk"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="24dp"
-            android:paddingTop="20dp"
-            android:text="@string/text_total"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp" />
-
-        <!-- Save button -->
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="@color/colorAccent"
-            android:focusable="true">
+            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/button_login"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_name" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="?android:attr/selectableItemBackground"
-                android:focusable="true"
-                android:text="@string/button_save"
-                android:textColor="@color/colorWhite" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:orientation="vertical">
 
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:text="Виручка"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:text="Всього"
+                    android:textColor="@color/colorBlack" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
+                    android:text="1570 ГРН"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="32sp" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar2"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="2000"
+                    android:progress="1000" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Кімната"
+                            android:textColor="@color/colorBlack" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="500 грн" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_marginLeft="90dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="День народження"
+                            android:textColor="@color/colorBlack" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="540 грн" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 

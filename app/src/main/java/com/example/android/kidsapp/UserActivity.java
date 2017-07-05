@@ -209,19 +209,17 @@ public class UserActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.dialog_logout_title)
                 .setMessage(R.string.dialog_logout_message)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton("Вийти", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         mAuth.signOut();
                         onBackPressed();
                     }
                 })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // do nothing
                     }
                 })
-                //alert icon if we need
-                //.setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
 
