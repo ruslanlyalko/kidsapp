@@ -7,6 +7,7 @@ public class Constants {
      */
     public static final String FIREBASE_REF_USERS ="USERS";
     public static final String FIREBASE_REF_REPORTS ="REPORTS";
+    public static final String [] MONTH = {"СІЧ","ЛЮТ","БЕР","КВІ","ТРА","ЧЕР","ЛИП","СЕР","ВЕР","ЖОВ","ЛИС","ГРУ"};
 
     /**
      * Firebase STORAGE

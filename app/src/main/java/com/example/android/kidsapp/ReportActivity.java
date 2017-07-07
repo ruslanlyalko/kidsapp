@@ -41,7 +41,7 @@ public class ReportActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabaseRefCurrentUser;
     private ValueEventListener mUserListener;
-    private String mTodayStr;
+    private String mDateStr, mActivityTitle, mUId;
 
 
     TextView textRoom60, textRoom40, textRoom20, textRoomTotal;
@@ -63,8 +63,26 @@ public class ReportActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
         setContentView(R.layout.activity_report);
 
-        Calendar today = Calendar.getInstance();
-        mTodayStr = today.get(Calendar.DAY_OF_MONTH) + "" + (today.get(Calendar.MONTH) + 1) + "" + today.get(Calendar.YEAR);
+        Bundle bundle = getIntent().getExtras();
+
+        if (bundle != null) {
+            String date = bundle.getString("date");
+            mDateStr = date;
+
+            String id = bundle.getString("uId");
+            mUId = id;
+
+
+            mActivityTitle = getResources().getString(R.string.title_activity_zvit) + " " + date.replace("201", "1") + "";
+        } else {
+            mUId = mAuth.getCurrentUser().getUid();
+            Calendar today = Calendar.getInstance();
+            mDateStr = today.get(Calendar.DAY_OF_MONTH) + "-" + (today.get(Calendar.MONTH) + 1) + "-" + today.get(Calendar.YEAR);
+
+            mActivityTitle = getResources().getString(R.string.title_activity_zvit) + " "
+                    + today.get(Calendar.DAY_OF_MONTH) + " "
+                    + Constants.MONTH[today.get(Calendar.MONTH)];
+        }
 
         initRef();
 
@@ -74,6 +92,7 @@ public class ReportActivity extends AppCompatActivity {
 
         initSeeks();
     }
+
 
     private void initRef() {
 
@@ -352,15 +371,15 @@ public class ReportActivity extends AppCompatActivity {
 
 
     private void loadReport() {
-        final String uId = mAuth.getCurrentUser().getUid();
+        final String userName = mAuth.getCurrentUser().getDisplayName();
 
-        mDatabase.getReference(Constants.FIREBASE_REF_REPORTS).child(uId).child(mTodayStr)
+        mDatabase.getReference(Constants.FIREBASE_REF_REPORTS).child(mDateStr).child(mUId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         mReport = dataSnapshot.getValue(Report.class);
                         if (mReport == null) {
-                            mReport = new Report(uId, mTodayStr);
+                            mReport = new Report(mUId, userName, mDateStr);
                         }
                         updateRoomTotal();
                         updateBdayTotal();
@@ -377,8 +396,7 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void saveReport() {
-        String uId = mAuth.getCurrentUser().getUid();
-        mDatabase.getReference(Constants.FIREBASE_REF_REPORTS).child(uId).child(mTodayStr)
+        mDatabase.getReference(Constants.FIREBASE_REF_REPORTS).child(mDateStr).child(mUId)
                 .setValue(mReport).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -396,6 +414,11 @@ public class ReportActivity extends AppCompatActivity {
             }
         })
         ;
+        mDatabase.getReference(Constants.FIREBASE_REF_USERS)
+                .child(mUId)
+                .child(Constants.FIREBASE_REF_REPORTS)
+                .child(mDateStr)
+                .setValue(mReport);
     }
 
 
@@ -445,9 +468,9 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     void updateTitel() {
-        String activityName = getResources().getString(R.string.title_activity_zvit);
+
         mReport.total = (mReport.totalRoom + mReport.totalBday + mReport.totalMk);
-        setTitle(activityName + " (" + mReport.total + " ГРН)");
+        setTitle(mActivityTitle + " (" + mReport.total + " ГРН)");
     }
 
     void updateSeekBars() {

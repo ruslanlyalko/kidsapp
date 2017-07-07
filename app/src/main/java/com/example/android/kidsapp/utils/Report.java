@@ -3,6 +3,7 @@ package com.example.android.kidsapp.utils;
 public class Report {
 
     public String userId;
+    public String userName;
     public String date;
     public String mmRef;
 
@@ -29,14 +30,16 @@ public class Report {
 
     }
 
-    public Report(String userId, String date) {
+    public Report(String userId, String userName, String date) {
         this.userId = userId;
+        this.userName = userName;
         this.date = date;
         this.mmRef = " ";
     }
 
-    public Report(String userId, String date, String mmRef, int total, int totalRoom, int totalBday, int totalMk, int r60, int r40, int r20, int b50, int b25, int bMk, int mk1, int mk2, int mkt1, int mkt2) {
+    public Report(String userId, String userName, String date, String mmRef, int total, int totalRoom, int totalBday, int totalMk, int r60, int r40, int r20, int b50, int b25, int bMk, int mk1, int mk2, int mkt1, int mkt2) {
         this.userId = userId;
+        this.userName = userName;
         this.date = date;
         this.mmRef = mmRef;
         this.total = total;
@@ -55,6 +58,9 @@ public class Report {
         this.mkt2 = mkt2;
     }
 
+    public String getUserName() {
+        return userName;
+    }
 
     public String getUserId() {
         return userId;

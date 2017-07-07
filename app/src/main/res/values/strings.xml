@@ -3,7 +3,7 @@
 
 
     <!-- LOGIN -->
-    <string name="title_activity_login">Ласкаво просимо</string>
+    <string name="title_activity_login">KIDS APP</string>
     <string name="toast_minimum_password">Пароль за короткий. Мінімальна довжина 6 символів!</string>
     <string name="toast_auth_failed">Не вдається ввійти! Перевірте, будь ласка, правильність введених даних</string>
     <string name="button_login">ВВІЙТИ</string>
@@ -69,8 +69,8 @@
     <!-- EVENTS -->
     <string name="title_activity_events">Повідомлення</string>
 
-    <!-- ZVIT -->
-    <string name="title_activity_zvit">Звіт 07 ЧЕР</string>
+    <!-- REPORT -->
+    <string name="title_activity_zvit">Звіт</string>
     <string name="button_save">Зберегти звіт</string>
     <string name="action_edit">Редагувати</string>
     <string name="action_add">Зберегти звіт</string>
@@ -139,5 +139,7 @@
         Деко\n
         Пергамент для запікання
     </string>
+    <string name="dialog_delete_title">Видалити звіт?</string>
+    <string name="dialog_delete_message">Після видалення відновити звіт буде неможливо</string>
 
 </resources>

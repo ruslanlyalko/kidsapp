@@ -3,15 +3,16 @@ package com.example.android.kidsapp;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.kidsapp.utils.SwipeLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         buttonUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                startActivity(new Intent(MainActivity.this, UserActivity.class));
             }
         });
         buttonEvents.setOnClickListener(new View.OnClickListener() {
@@ -231,18 +232,18 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        if (mDoubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            // TODO (kostul) close application completely
-            int pid = android.os.Process.myPid();
-            android.os.Process.killProcess(pid);
-            return;
-        }
 
         // Swipe down
         if (mSwipeOpened) {
             swipeLayout.close();
             mSwipeOpened = false;
+            return;
+        }
+        if (mDoubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            // TODO (kostul) close application completely
+            int pid = android.os.Process.myPid();
+            android.os.Process.killProcess(pid);
             return;
         }
 
@@ -259,4 +260,13 @@ public class MainActivity extends AppCompatActivity {
         }, 2000);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(FirebaseAuth.getInstance().getCurrentUser()== null){
+            finish();
+        }
+    }
 }

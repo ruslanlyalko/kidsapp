@@ -3,6 +3,7 @@ package com.example.android.kidsapp;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -256,7 +257,13 @@ public class UserActivity extends AppCompatActivity {
                 .setPositiveButton("Вийти", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         mAuth.signOut();
-                        onBackPressed();
+
+                        Intent intent = new Intent(UserActivity.this,
+                                LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
                     }
                 })
                 .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {

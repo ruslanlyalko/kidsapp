@@ -10,26 +10,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".UserActivity"
-            android:label="@string/title_activity_user"
-            android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.kidsapp.MainActivity" />
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login"
+            android:name=".UserActivity"
+            android:label="@string/title_activity_user"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden">
             <meta-data
