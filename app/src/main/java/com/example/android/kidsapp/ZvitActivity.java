@@ -1,13 +1,12 @@
 package com.example.android.kidsapp;
 
 import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -24,6 +23,7 @@ public class ZvitActivity extends AppCompatActivity {
 
     int roomTotal, room60, room40, room20;
     int bdayTotal, bday50, bday25, bdayMk;
+    int mkTotal, mkT1, mkT2, mk1, mk2;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -35,10 +35,14 @@ public class ZvitActivity extends AppCompatActivity {
 
     TextView textRoom60, textRoom40, textRoom20, textRoomTotal;
     TextView textBday50, textBday25, textBdayTotal, textBdayMk;
+    TextView textMk1, textMk2, textMkT1, textMkT2, textMkTotal;
+
     SeekBar seekRoom60, seekRoom40, seekRoom20;
     SeekBar seekBday50, seekBday25, seekBdayMk;
+    SeekBar seekMkT1, seekMkT2, seekMk1, seekMk2;
+
     EditText inputRoom60, inputRoom40, inputRoom20;
-    SwipeLayout swipeLayout, swipeLayout2;
+    SwipeLayout swipeLayout, swipeLayout2, swipeLayout3;
 
 
     @Override
@@ -54,6 +58,10 @@ public class ZvitActivity extends AppCompatActivity {
         swipeLayout2.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu2);
         swipeLayout2.setRightSwipeEnabled(true);
         swipeLayout2.setBottomSwipeEnabled(false);
+
+        swipeLayout3.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu3);
+        swipeLayout3.setRightSwipeEnabled(true);
+        swipeLayout3.setBottomSwipeEnabled(false);
 
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
         swipeLayout.setRightSwipeEnabled(true);
@@ -114,6 +122,7 @@ public class ZvitActivity extends AppCompatActivity {
             }
         });
 
+
         seekBday50.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -167,6 +176,80 @@ public class ZvitActivity extends AppCompatActivity {
 
             }
         });
+
+        // MK
+
+        seekMkT1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mkT1 = progress;
+                updateMkTotal();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        seekMkT2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mkT2 = progress;
+                updateMkTotal();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        seekMk1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mk1 = progress;
+                updateMkTotal();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        seekMk2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mk2 = progress;
+                updateMkTotal();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     void updateRoomTotal() {
@@ -208,12 +291,31 @@ public class ZvitActivity extends AppCompatActivity {
         updateTitel();
     }
 
+    void updateMkTotal() {
+        int tar1 = 30 + mkT1 * 10;
+        int tar2 = 30 + mkT2 * 10;
+
+        mkTotal = tar1 * mk1 + tar2 * mk2;
+
+        textMkT1.setText("Тариф 1:  " + tar1 + " грн  x");
+        textMkT2.setText("Тариф 2:  " + tar2 + " грн  x");
+
+        textMk1.setText("  " + mk1 + " = " + (tar1 * mk1) + " ГРН");
+        textMk2.setText("  " + mk2 + " = " + (tar2 * mk2) + " ГРН");
+
+        textMkTotal.setText(mkTotal + " ГРН");
+        updateTitel();
+    }
+
     void updateTitel() {
         String activityName = getResources().getString(R.string.title_activity_zvit);
-        setTitle(activityName + " (" + (roomTotal + bdayTotal) + " ГРН)");
+        setTitle(activityName + " (" + (roomTotal + bdayTotal + mkTotal) + " ГРН)");
     }
 
     private void initializeReferences() {
+
+        // Room
+        swipeLayout = (SwipeLayout) findViewById(R.id.swipe_layout);
         textRoomTotal = (TextView) findViewById(R.id.text_room_total);
         textRoom60 = (TextView) findViewById(R.id.text_room_60);
         textRoom40 = (TextView) findViewById(R.id.text_room_40);
@@ -223,6 +325,13 @@ public class ZvitActivity extends AppCompatActivity {
         seekRoom40 = (SeekBar) findViewById(R.id.seek_room_40);
         seekRoom20 = (SeekBar) findViewById(R.id.seek_room_20);
 
+        inputRoom60 = (EditText) findViewById(R.id.input_room_60);
+        inputRoom40 = (EditText) findViewById(R.id.input_room_40);
+        inputRoom20 = (EditText) findViewById(R.id.input_room_20);
+
+
+        // BirthDay
+        swipeLayout2 = (SwipeLayout) findViewById(R.id.swipe_layout2);
         textBdayTotal = (TextView) findViewById(R.id.text_bday_total);
         textBday50 = (TextView) findViewById(R.id.text_bday_50);
         textBday25 = (TextView) findViewById(R.id.text_bday_25);
@@ -232,14 +341,19 @@ public class ZvitActivity extends AppCompatActivity {
         seekBday25 = (SeekBar) findViewById(R.id.seek_bday_25);
         seekBdayMk = (SeekBar) findViewById(R.id.seek_bday_mk_done);
 
-        swipeLayout2 = (SwipeLayout) findViewById(R.id.swipe_layout2);
+        // MK
+        swipeLayout3 = (SwipeLayout) findViewById(R.id.swipe_layout3);
 
-        swipeLayout = (SwipeLayout) findViewById(R.id.swipe_layout);
+        seekMk1 = (SeekBar) findViewById(R.id.seek_mk_1);
+        seekMk2 = (SeekBar) findViewById(R.id.seek_mk_2);
+        seekMkT1 = (SeekBar) findViewById(R.id.seek_mk_t1);
+        seekMkT2 = (SeekBar) findViewById(R.id.seek_mk_t2);
 
-        inputRoom60 = (EditText) findViewById(R.id.input_room_60);
-        inputRoom40 = (EditText) findViewById(R.id.input_room_40);
-        inputRoom20 = (EditText) findViewById(R.id.input_room_20);
-
+        textMkTotal = (TextView) findViewById(R.id.text_mk_total);
+        textMk1 = (TextView) findViewById(R.id.text_mk_1);
+        textMk2 = (TextView) findViewById(R.id.text_mk_2);
+        textMkT1 = (TextView) findViewById(R.id.text_mk_t1);
+        textMkT2 = (TextView) findViewById(R.id.text_mk_t2);
     }
 
 

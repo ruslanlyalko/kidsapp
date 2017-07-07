@@ -114,8 +114,7 @@
     <string name="backdrop_title">LOVE KIDS</string>
     <string name="backdrop_subtitle">Кращі майстер класи</string>
 
-    <string name="large_text">
-        "Material is the metaphor.\n\n"
+    <string name="large_text">"Material is the metaphor.\n"
 
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."
         "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
@@ -126,7 +125,7 @@
         "world, without breaking the rules of physics.\n"
         "The fundamentals of light, surface, and movement are key to conveying how objects move, "
         "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts.\n\n"
+        "seams, divides space, and indicates moving parts."
     </string>
 
 </resources>

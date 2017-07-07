@@ -50,22 +50,22 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/text_date"
+                android:id="@+id/text_cout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/title1"
                 android:layout_alignParentEnd="true"
                 android:paddingRight="16dp"
-                android:text="18.05" />
+                android:text="3 рази" />
 
             <TextView
-                android:id="@+id/text_cout"
+                android:id="@+id/text_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/title2"
                 android:layout_alignParentRight="true"
                 android:paddingRight="16dp"
-                android:text="2 рази" />
+                android:text="останній 16.05" />
 
             <LinearLayout
                 android:id="@+id/panel_action"
@@ -84,17 +84,19 @@
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:text="РЕДАГУВАТИ"
+                    android:textAllCaps="true"
                     android:textColor="@color/colorAccent" />
 
 
                 <Button
-                    android:id="@+id/button_history"
+                    android:id="@+id/button_add"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:background="?attr/selectableItemBackground"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
-                    android:text="ІСТОРІЯ"
+                    android:text="ДОБАВИТИ У ЗВІТ"
+                    android:textAllCaps="true"
                     android:textColor="@color/colorAccent" />
 
                 <View
@@ -119,8 +121,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/panel_action"
                 android:orientation="vertical"
-                android:padding="16dp"
                 android:paddingBottom="24dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="10dp"
                 android:visibility="gone">
 
                 <TextView
@@ -128,7 +132,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Large text her" />
-
 
             </LinearLayout>
 
