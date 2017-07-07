@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         buttonZvit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ZvitActivity.class);
+                Intent intent = new Intent(MainActivity.this, ReportActivity.class);
                 startActivity(intent);
             }
         });

@@ -31,7 +31,6 @@ public class User {
         return userBDay;
     }
 
-
     public String getUserPhone() {
         return userPhone;
     }
@@ -43,7 +42,6 @@ public class User {
     public String getUserEmail() {
         return this.userEmail;
     }
-
 
     public String getUserCard() {return this.userCard;}
 

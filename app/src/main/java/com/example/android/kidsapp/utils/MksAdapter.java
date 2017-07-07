@@ -92,15 +92,13 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
                             public void onClick(View v) {
 
                             }
-                        }).setActionTextColor(Color.RED);
+                        }).setActionTextColor(Color.YELLOW);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     sn.setActionTextColor(mContext.getColor(R.color.colorPrimary));
                 }
                 sn.show();
             }
         });
-
-
     }
 
 

@@ -55,7 +55,7 @@
                 android:value="com.example.android.kidsapp.MainActivity" />
         </activity>
         <activity
-            android:name=".ZvitActivity"
+            android:name=".ReportActivity"
             android:label="@string/title_activity_zvit"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden">

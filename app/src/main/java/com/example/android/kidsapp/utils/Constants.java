@@ -6,6 +6,7 @@ public class Constants {
      * Firebase DATABASE
      */
     public static final String FIREBASE_REF_USERS ="USERS";
+    public static final String FIREBASE_REF_REPORTS ="REPORTS";
 
     /**
      * Firebase STORAGE
