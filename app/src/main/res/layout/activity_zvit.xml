@@ -9,10 +9,285 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="?android:dividerHorizontal"
+        android:divider="@drawable/divider_with_left_padding"
         android:dividerPadding="8dp"
         android:orientation="vertical"
         android:showDividers="middle">
+
+        <com.example.android.kidsapp.utils.SwipeLayout
+            android:id="@+id/swipe_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:id="@+id/swipe_menu"
+                android:layout_width="64dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:divider="?android:dividerHorizontal"
+                android:dividerPadding="2dp"
+                android:orientation="vertical"
+                android:paddingBottom="22dp"
+                android:showDividers="middle">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5" />
+
+                <EditText
+                    android:id="@+id/input_room_60"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:inputType="number"
+                    android:text="0"
+                    android:textAlignment="center" />
+
+                <EditText
+                    android:id="@+id/input_room_40"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:inputType="number"
+                    android:text="0"
+                    android:textAlignment="center" />
+
+                <EditText
+                    android:id="@+id/input_room_20"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:inputType="number"
+                    android:text="0"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/ic_action_room" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Кімната"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Всього"
+                        android:textColor="@color/colorBlack" />
+
+                    <TextView
+                        android:id="@+id/text_room_total"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0 ГРН"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="32sp" />
+
+                    <TextView
+                        android:id="@+id/text_room_60"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="60 грн * 0 = 0 ГРН"
+                        android:textColor="@color/colorBlack" />
+
+                    <SeekBar
+                        android:id="@+id/seek_room_60"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="25"
+                        android:progress="0" />
+
+                    <TextView
+                        android:id="@+id/text_room_40"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="40 грн * 0 = 0 ГРН"
+                        android:textColor="@color/colorBlack" />
+
+                    <SeekBar
+                        android:id="@+id/seek_room_40"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="25"
+                        android:progress="0" />
+
+                    <TextView
+                        android:id="@+id/text_room_20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="20 грн * 0 = 0 ГРН"
+                        android:textColor="@color/colorBlack" />
+
+                    <SeekBar
+                        android:id="@+id/seek_room_20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="25"
+                        android:progress="0" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.example.android.kidsapp.utils.SwipeLayout>
+
+        <com.example.android.kidsapp.utils.SwipeLayout
+            android:id="@+id/swipe_layout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/swipe_menu2"
+                android:layout_width="64dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:divider="?android:dividerHorizontal"
+                android:dividerPadding="2dp"
+                android:orientation="vertical"
+                android:paddingBottom="22dp"
+                android:showDividers="middle">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5" />
+
+                <EditText
+                    android:id="@+id/input_room_50"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:inputType="number"
+                    android:text="0"
+                    android:textAlignment="center" />
+
+                <EditText
+                    android:id="@+id/input_room_25"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:inputType="number"
+                    android:text="0"
+                    android:textAlignment="center" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/ic_action_birthday" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:text="Дні Народження"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:text="Всього"
+                        android:textColor="@color/colorBlack" />
+
+                    <TextView
+                        android:id="@+id/text_bday_total"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="0 ГРН"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="32sp" />
+
+                    <TextView
+                        android:id="@+id/text_bday_50"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:text="Кімната: 50 грн * 0 = 0 ГРН"
+                        android:textColor="@color/colorBlack" />
+
+                    <SeekBar
+                        android:id="@+id/seek_bday_50"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="25"
+                        android:progress="0" />
+
+                    <TextView
+                        android:id="@+id/text_bday_25"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:text="МК: 25 грн * 0 = 0 ГРН"
+                        android:textColor="@color/colorBlack" />
+
+                    <SeekBar
+                        android:id="@+id/seek_bday_25"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="25"
+                        android:progress="0" />
+
+                    <TextView
+                        android:id="@+id/text_bday_mk_done"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:text="Проведено Майстер Класів - 0"
+                        android:textColor="@color/colorBlack" />
+
+                    <SeekBar
+                        android:id="@+id/seek_bday_mk_done"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="3"
+                        android:progress="0" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </com.example.android.kidsapp.utils.SwipeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,21 +299,21 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_action_vyruchka" />
+                android:src="@drawable/ic_action_mk" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="16dp"
-                    android:text="Кімната"
-                    android:textSize="16sp" />
+                    android:text="Майстер класи"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -48,230 +323,14 @@
                     android:textColor="@color/colorBlack" />
 
                 <TextView
+                    android:id="@+id/text_mk_total"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="1000 ГРН"
+                    android:text="0 ГРН"
                     android:textColor="@color/colorBlack"
                     android:textSize="32sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:text="60 грн * 5 = 300 ГРН"
-                    android:textColor="@color/colorBlack" />
-
-                <SeekBar
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:max="30"
-                    android:progress="5" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:text="40 грн * 10 = 400 ГРН"
-                    android:textColor="@color/colorBlack" />
-
-                <SeekBar
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:max="30"
-                    android:progress="10" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:text="20 грн * 15 = 300 ГРН"
-                    android:textColor="@color/colorBlack" />
-
-                <SeekBar
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:max="30"
-                    android:progress="15" />
-
             </LinearLayout>
-
-        </LinearLayout>
-
- 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:paddingLeft="24dp"
-                android:paddingTop="20dp"
-                android:text="@string/text_birth"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/margin_medium"
-                android:paddingRight="@dimen/margin_medium">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="2"
-                    android:text="50 грн"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="x"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:inputType="number"
-                    android:text="0"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="="
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:text="0 ГРН"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/margin_medium"
-                android:paddingRight="@dimen/margin_medium">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="2"
-                    android:text="25 грн"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="x"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:inputType="number"
-                    android:text="0"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="="
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:text="0 ГРН"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/margin_medium"
-                android:paddingRight="@dimen/margin_medium">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="6"
-                    android:text="Проведено майстер класів"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:inputType="number"
-                    android:text="0"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="24dp"
-                android:paddingTop="20dp"
-                android:text="@string/text_mk"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp" />
-            android:textSize="16sp" />
 
         </LinearLayout>
 

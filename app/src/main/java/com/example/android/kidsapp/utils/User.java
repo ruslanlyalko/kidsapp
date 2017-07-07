@@ -12,12 +12,14 @@ public class User {
     public String userPhone;
     public String userEmail;
     public String userBDay;
+    public String userCard;
 
-    public User(String userName, String userPhone, String userEmail, String bDay) {
+    public User(String userName, String userPhone, String userEmail, String bDay, String userCard) {
         this.userName = userName;
         this.userPhone = userPhone;
         this.userEmail = userEmail;
         this.userBDay = bDay;
+        this.userCard = userCard;
     }
 
 
@@ -42,6 +44,10 @@ public class User {
         return this.userEmail;
     }
 
+
+    public String getUserCard() {return this.userCard;}
+
+
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
@@ -49,6 +55,7 @@ public class User {
         result.put("userPhone", userPhone);
         result.put("userEmail", userEmail);
         result.put("userBDay", userBDay);
+        result.put("userCard", userCard);
 
         return result;
     }

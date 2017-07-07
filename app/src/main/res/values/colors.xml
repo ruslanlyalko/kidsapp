@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FF9800</color>
-    <color name="colorPrimaryDark">#F57C00</color>
+    <color name="colorPrimary">#FF5722</color>
+    <color name="colorPrimaryDark">#E64A19</color>
     <color name="colorAccent">#FF6E40</color>
 
     <color name="colorWhite">#FFFFFF</color>
@@ -9,5 +9,12 @@
     <color name="colorBg">#fafafa</color>
     <color name="colorBgGray">#f4f4f4</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorBlack12">#1F000000</color>
+    <color name="colorBlack70">#BF000000</color>
+    <color name="colorWhite70">#BFFFFFFF</color>
+
+    <color name="viewBg">#f1f5f8</color>
+    <color name="album_title">#4c4c4c</color>
+
 
 </resources>

@@ -97,7 +97,7 @@
 
 
     <com.example.android.kidsapp.utils.SwipeLayout
-        android:id="@+id/godfather"
+        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2">

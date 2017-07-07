@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         buttonInst = (Button) findViewById(R.id.button_inst);
         buttonFB = (Button) findViewById(R.id.button_fb);
         buttonCall = (Button) findViewById(R.id.button_call);
-        swipeLayout = (SwipeLayout) findViewById(R.id.godfather);
+        swipeLayout = (SwipeLayout) findViewById(R.id.swipe_layout);
 
     }
 

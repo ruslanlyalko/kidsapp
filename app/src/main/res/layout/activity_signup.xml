@@ -31,61 +31,122 @@
 
 
 
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_name" />
 
             <EditText
                 android:id="@+id/text_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:hint="@string/hint_first_name"
-                android:inputType="textPersonName"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
-        </android.support.design.widget.TextInputLayout>
+                android:inputType="textPersonName|textCapWords" />
 
-        <android.support.design.widget.TextInputLayout
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_phone" />
 
             <EditText
                 android:id="@+id/text_phone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:hint="@string/hint_phone"
-                android:inputType="text|phone"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
-        </android.support.design.widget.TextInputLayout>
+                android:inputType="phone" />
 
-        <android.support.design.widget.TextInputLayout
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_email" />
 
             <EditText
                 android:id="@+id/text_email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:hint="@string/hint_email"
-                android:inputType="textEmailAddress"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
-        </android.support.design.widget.TextInputLayout>
+                android:inputType="textEmailAddress" />
 
-        <android.support.design.widget.TextInputLayout
+        </LinearLayout>
+<!--
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_birthday" />
+
+            <EditText
+                android:id="@+id/text_bday"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:focusable="false"
+                android:hint="@string/hint_date_birth" />
+
+        </LinearLayout>
+-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_password" />
 
             <EditText
                 android:id="@+id/text_password"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:hint="@string/hint_password"
+                android:maxLength="19"
                 android:inputType="textPassword"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
-        </android.support.design.widget.TextInputLayout>
+                />
+
+        </LinearLayout>
+
 
 
         <RelativeLayout

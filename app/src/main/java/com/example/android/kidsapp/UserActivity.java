@@ -3,28 +3,23 @@ package com.example.android.kidsapp;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +30,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import com.example.android.kidsapp.utils.User;
 import com.example.android.kidsapp.utils.Constants;
@@ -54,7 +48,8 @@ public class UserActivity extends AppCompatActivity {
     private static final String TAG = UserActivity.class.getSimpleName();
 
     ImageView imageUser;
-    EditText inputName, inputEmail, inputPhone, inputBDay;
+    EditText inputName, inputEmail, inputPhone, inputBDay, inputCard;
+    TextView textTitleName;
     // ProgressBar progressBar;
 
     private Calendar mBirthDay = Calendar.getInstance();
@@ -99,8 +94,42 @@ public class UserActivity extends AppCompatActivity {
             }
         });
 
+        inputCard.addTextChangedListener(mWatcher);
+
         initializeCurrentUserData();
     }
+
+    private String mNumber = "";
+
+    private TextWatcher mWatcher = new TextWatcher() {
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (mNumber.length() < s.length()) {
+
+                switch (s.length()) {
+                    case 5:
+                        s.insert(4, " ");
+
+                        break;
+                    case 10:
+                        s.insert(9, " ");
+                        break;
+                    case 15:
+                        s.insert(14, " ");
+                        break;
+                }
+            }
+            mNumber = s.toString();
+        }
+    };
 
     private void initializeReferences() {
 
@@ -108,6 +137,9 @@ public class UserActivity extends AppCompatActivity {
         inputPhone = (EditText) findViewById(R.id.text_phone);
         inputEmail = (EditText) findViewById(R.id.text_email);
         inputBDay = (EditText) findViewById(R.id.text_bday);
+        inputCard = (EditText) findViewById(R.id.text_card);
+
+        textTitleName = (TextView) findViewById(R.id.text_title_name);
     }
 
     private void saveChanges() {
@@ -118,14 +150,16 @@ public class UserActivity extends AppCompatActivity {
         final String phone = inputPhone.getText().toString().trim();
         final String email = inputEmail.getText().toString().trim();
         final String bday = inputBDay.getText().toString().trim();
+        final String card = inputCard.getText().toString().trim();
 
         final String tname = inputName.getTag().toString().trim();
         final String tphone = inputPhone.getTag().toString().trim();
         final String temail = inputEmail.getTag().toString().trim();
         final String tbday = inputBDay.getTag().toString().trim();
+        final String tcard = inputCard.getTag().toString().trim();
 
 
-        User user = new User(name, phone, email, bday);
+        User user = new User(name, phone, email, bday, card);
 
         Map<String, Object> userValue = user.toMap();
 
@@ -144,12 +178,15 @@ public class UserActivity extends AppCompatActivity {
             childUpdates.put("userBDay", bday);
             needUpdate = true;
         }
+        if (!card.equals(tcard)) {
+            childUpdates.put("userCard", card);
+            needUpdate = true;
+        }
         if (needUpdate)
             mDatabaseRefCurrentUser.updateChildren(childUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     Toast.makeText(UserActivity.this, R.string.toast_data_updated, Toast.LENGTH_SHORT).show();
-                    // progressBar.setVisibility(View.GONE);
                 }
             });
 
@@ -168,6 +205,8 @@ public class UserActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User user = dataSnapshot.getValue(User.class);
 
+                    textTitleName.setText(user.getUserName());
+
                     inputName.setText(user.getUserName());
                     inputName.setTag(user.getUserName());
 
@@ -179,6 +218,11 @@ public class UserActivity extends AppCompatActivity {
 
                     inputBDay.setText(user.getUserBDay());
                     inputBDay.setTag(user.getUserBDay());
+
+                    inputCard.setText(user.getUserCard());
+                    inputCard.setTag(user.getUserCard());
+
+
 
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
