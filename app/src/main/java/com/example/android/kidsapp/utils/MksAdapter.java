@@ -1,10 +1,14 @@
 package com.example.android.kidsapp.utils;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,18 +27,20 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
         public TextView title1, title2, largeText, date, count;
         public ImageView image1, imageExpand;
         public LinearLayout expandPanel;
-
+        public Button buttonAdd;
 
         public MyViewHolder(View view) {
             super(view);
             title1 = (TextView) view.findViewById(R.id.title1);
             title2 = (TextView) view.findViewById(R.id.title2);
             date = (TextView) view.findViewById(R.id.text_date);
-            count= (TextView) view.findViewById(R.id.text_cout);
+            count = (TextView) view.findViewById(R.id.text_cout);
             largeText = (TextView) view.findViewById(R.id.large_text);
             image1 = (ImageView) view.findViewById(R.id.image1);
             expandPanel = (LinearLayout) view.findViewById(R.id.panel_expand);
             imageExpand = (ImageView) view.findViewById(R.id.image_expand);
+            buttonAdd = (Button) view.findViewById(R.id.button_add_zvit);
+
         }
     }
 
@@ -70,10 +76,27 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
                 if (holder.expandPanel.getVisibility() == View.VISIBLE) {
                     holder.imageExpand.setImageResource(R.drawable.ic_action_expand_more);
                     holder.expandPanel.setVisibility(View.GONE);
-                }else {
+                } else {
                     holder.imageExpand.setImageResource(R.drawable.ic_action_expand_less);
                     holder.expandPanel.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        holder.buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar sn = Snackbar.make(holder.buttonAdd, "Добавлено. Перейти у звіт?", Snackbar.LENGTH_LONG)
+                        .setAction("ПЕРЕЙТИ", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        }).setActionTextColor(Color.RED);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    sn.setActionTextColor(mContext.getColor(R.color.colorPrimary));
+                }
+                sn.show();
             }
         });
 

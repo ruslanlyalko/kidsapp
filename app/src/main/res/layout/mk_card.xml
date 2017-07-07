@@ -87,9 +87,8 @@
                     android:textAllCaps="true"
                     android:textColor="@color/colorAccent" />
 
-
                 <Button
-                    android:id="@+id/button_add"
+                    android:id="@+id/button_add_zvit"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:background="?attr/selectableItemBackground"
@@ -98,6 +97,7 @@
                     android:text="ДОБАВИТИ У ЗВІТ"
                     android:textAllCaps="true"
                     android:textColor="@color/colorAccent" />
+
 
                 <View
                     android:layout_width="0dp"

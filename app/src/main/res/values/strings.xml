@@ -114,18 +114,30 @@
     <string name="backdrop_title">LOVE KIDS</string>
     <string name="backdrop_subtitle">Кращі майстер класи</string>
 
-    <string name="large_text">"Material is the metaphor.\n"
+    <string name="large_text">
 
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n"
-        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
-        "world, without breaking the rules of physics.\n"
-        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
-        "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts."
+        "Рецепт «Яблучні троянди» дуже простий і гранично зрозумілий. \n\n"
+
+        Зате готову страву можна їсти як  окреме і дуже незвичайне ласощі,
+        а можна використовувати в якості оригінального прикраси десертів і святкового столу.
+        Особливо такі хрусткі солодкі квіточки припадають до смаку  дітям
+        "і любителям естетичної  і низькокалорійної кухні.\n\n"
+
+        Інгредієнти для приготування яблучних троянд:\n
+        Яблука – 3 шт.\n
+        Листкове тісто (бездріжджове) – 250 гр.\n
+        Цукор – 300 гр.\n
+        Борошно пшеничне – 3 ст. ложки\n
+        Цукрова пудра для прикраси – 1 ст. ложка\n\n
+
+        Інвентар:\n
+        Гострий ніж\n
+        Обробна дошка\n
+        Каструля\n
+        Друшляк\n
+        Скалка\n
+        Деко\n
+        Пергамент для запікання
     </string>
 
 </resources>

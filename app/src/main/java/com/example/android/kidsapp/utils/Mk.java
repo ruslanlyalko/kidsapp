@@ -11,7 +11,7 @@ public class Mk {
     public Mk() {
     }
 
-    public Mk(String title1, String title2, String largeText, String date, String count, int imageId) {
+    public Mk(String title1, String title2, String largeText,  String count, String date,int imageId) {
         this.title1 = title1;
         this.title2 = title2;
         this.date = date;
