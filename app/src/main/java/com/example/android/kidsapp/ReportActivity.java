@@ -41,7 +41,7 @@ public class ReportActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabaseRefCurrentUser;
     private ValueEventListener mUserListener;
-    private String mDateStr, mActivityTitle, mUId;
+    private String mDateStr, mDateMonth, mDateYear, mDateDay, mActivityTitle, mUId;
 
 
     TextView textRoom60, textRoom40, textRoom20, textRoomTotal;
@@ -69,6 +69,8 @@ public class ReportActivity extends AppCompatActivity {
             String date = bundle.getString("date");
             mDateStr = date;
 
+            fillDateStr(date);
+
             String id = bundle.getString("uId");
             mUId = id;
 
@@ -77,7 +79,9 @@ public class ReportActivity extends AppCompatActivity {
         } else {
             mUId = mAuth.getCurrentUser().getUid();
             Calendar today = Calendar.getInstance();
-            mDateStr = today.get(Calendar.DAY_OF_MONTH) + "-" + (today.get(Calendar.MONTH) + 1) + "-" + today.get(Calendar.YEAR);
+            mDateStr = (today.get(Calendar.DAY_OF_MONTH)) + "-" + (today.get(Calendar.MONTH) + 1) + "-" + today.get(Calendar.YEAR);
+
+            fillDateStr(mDateStr);
 
             mActivityTitle = getResources().getString(R.string.title_activity_zvit) + " "
                     + today.get(Calendar.DAY_OF_MONTH) + " "
@@ -91,6 +95,16 @@ public class ReportActivity extends AppCompatActivity {
         loadReport();
 
         initSeeks();
+    }
+
+    private void fillDateStr(String date) {
+        int first = date.indexOf('-');
+        int last = date.lastIndexOf('-');
+
+        mDateDay = date.substring(0, first);
+        mDateMonth = date.substring(first + 1, last);
+        mDateYear = date.substring(last + 1);
+
     }
 
 
@@ -417,7 +431,7 @@ public class ReportActivity extends AppCompatActivity {
         mDatabase.getReference(Constants.FIREBASE_REF_USERS)
                 .child(mUId)
                 .child(Constants.FIREBASE_REF_REPORTS)
-                .child(mDateStr)
+                .child(mDateYear).child(mDateMonth).child(mDateDay)
                 .setValue(mReport);
     }
 

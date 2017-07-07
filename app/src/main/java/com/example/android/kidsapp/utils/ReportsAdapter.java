@@ -116,8 +116,29 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
         // Delete item from DB
         FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         mDatabase.getReference(Constants.FIREBASE_REF_REPORTS).child(report.date).child(report.userId).removeValue();
-        mDatabase.getReference(Constants.FIREBASE_REF_USERS).child(report.userId).child(Constants.FIREBASE_REF_REPORTS).child(report.date).removeValue();
 
+
+
+        mDatabase.getReference(Constants.FIREBASE_REF_USERS).child(report.userId).child(Constants.FIREBASE_REF_REPORTS)
+                .child(getYearFromStr(report.date)).child(getMonthFromStr(report.date)).child(getDayFromStr(report.date))
+                .removeValue();
+
+    }
+
+    private String getDayFromStr(String date) {
+        int first = date.indexOf('-');
+        return date.substring(0, first);
+    }
+
+    private String getMonthFromStr(String date) {
+        int first = date.indexOf('-');
+        int last = date.lastIndexOf('-');
+        return date.substring(first + 1, last);
+    }
+
+    private String getYearFromStr(String date) {
+        int last = date.lastIndexOf('-');
+        return date.substring(last + 1);
     }
 
     @Override

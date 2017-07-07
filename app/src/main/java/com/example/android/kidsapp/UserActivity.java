@@ -5,9 +5,10 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.kidsapp.utils.Constants;
+import com.example.android.kidsapp.utils.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,9 +34,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-
-import com.example.android.kidsapp.utils.User;
-import com.example.android.kidsapp.utils.Constants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,7 +50,8 @@ public class UserActivity extends AppCompatActivity {
 
     ImageView imageUser;
     EditText inputName, inputEmail, inputPhone, inputBDay, inputCard;
-    TextView textTitleName;
+    TextView textTitleName,textTitlePosition;
+    FloatingActionButton fab;
     // ProgressBar progressBar;
 
     private Calendar mBirthDay = Calendar.getInstance();
@@ -97,6 +98,15 @@ public class UserActivity extends AppCompatActivity {
 
         inputCard.addTextChangedListener(mWatcher);
 
+
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent inetnt = new Intent(UserActivity.this, DashboardActivity.class);
+                startActivity(inetnt);
+            }
+        });
         initializeCurrentUserData();
     }
 
@@ -140,12 +150,13 @@ public class UserActivity extends AppCompatActivity {
         inputBDay = (EditText) findViewById(R.id.text_bday);
         inputCard = (EditText) findViewById(R.id.text_card);
 
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
         textTitleName = (TextView) findViewById(R.id.text_title_name);
+        textTitlePosition = (TextView) findViewById(R.id.text_position_title);
     }
 
     private void saveChanges() {
-
-//        progressBar.setVisibility(View.VISIBLE);
 
         final String name = inputName.getText().toString().trim();
         final String phone = inputPhone.getText().toString().trim();
@@ -158,11 +169,6 @@ public class UserActivity extends AppCompatActivity {
         final String temail = inputEmail.getTag().toString().trim();
         final String tbday = inputBDay.getTag().toString().trim();
         final String tcard = inputCard.getTag().toString().trim();
-
-
-        User user = new User(name, phone, email, bday, card);
-
-        Map<String, Object> userValue = user.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
 
@@ -222,7 +228,6 @@ public class UserActivity extends AppCompatActivity {
 
                     inputCard.setText(user.getUserCard());
                     inputCard.setTag(user.getUserCard());
-
 
 
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");

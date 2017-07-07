@@ -38,9 +38,10 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/text_position_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Інструктор дитячої кімнати"
+                    android:text=""
                     android:layout_alignParentBottom="true"
                     android:paddingBottom="4dp"
                     android:layout_alignEnd="@id/text_title_name"
@@ -177,7 +178,11 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/image_user1"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_action_money" />
+        app:srcCompat="@drawable/ic_action_money"
+        app:backgroundTint="@color/colorAccent"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        />
 
 </android.support.design.widget.CoordinatorLayout>
 

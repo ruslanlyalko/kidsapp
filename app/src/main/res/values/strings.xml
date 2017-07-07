@@ -141,5 +141,6 @@
     </string>
     <string name="dialog_delete_title">Видалити звіт?</string>
     <string name="dialog_delete_message">Після видалення відновити звіт буде неможливо</string>
+    <string name="title_activity_dashboard">Панель</string>
 
 </resources>

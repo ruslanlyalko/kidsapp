@@ -83,8 +83,10 @@ public class CalendarActivity extends AppCompatActivity {
 
                 // TODO if user is not Admin then show only his data
 
-                reportList.add(report);
-                adapter.notifyDataSetChanged();
+                if (report != null) {
+                    reportList.add(report);
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -131,7 +133,7 @@ public class CalendarActivity extends AppCompatActivity {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                mCurrentDate = dayOfMonth+"-"+(month+1)+"-"+year;
+                mCurrentDate = dayOfMonth + "-" + (month + 1) + "-" + year;
                 loadData(mCurrentDate);
             }
         });
