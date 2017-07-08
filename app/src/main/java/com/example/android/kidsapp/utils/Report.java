@@ -5,7 +5,18 @@ public class Report {
     public String userId;
     public String userName;
     public String date;
-    public String mmRef;
+    public String mkRef;
+
+    public String getMkRef() {
+        return mkRef;
+    }
+
+    public String getMkName() {
+        return mkName;
+    }
+
+    public String mkName;
+
 
     public int total;
     public int totalRoom;
@@ -34,14 +45,16 @@ public class Report {
         this.userId = userId;
         this.userName = userName;
         this.date = date;
-        this.mmRef = " ";
+        this.mkRef = "";
+        this.mkName = "";
     }
 
-    public Report(String userId, String userName, String date, String mmRef, int total, int totalRoom, int totalBday, int totalMk, int r60, int r40, int r20, int b50, int b25, int bMk, int mk1, int mk2, int mkt1, int mkt2) {
+    public Report(String userId, String userName, String date, String mkRef, String mkName, int total, int totalRoom, int totalBday, int totalMk, int r60, int r40, int r20, int b50, int b25, int bMk, int mk1, int mk2, int mkt1, int mkt2) {
         this.userId = userId;
         this.userName = userName;
         this.date = date;
-        this.mmRef = mmRef;
+        this.mkRef = mkRef;
+        this.mkName = mkName;
         this.total = total;
         this.totalRoom = totalRoom;
         this.totalBday = totalBday;
@@ -68,10 +81,6 @@ public class Report {
 
     public String getDate() {
         return date;
-    }
-
-    public String getMmRef() {
-        return mmRef;
     }
 
     public int getTotal() {

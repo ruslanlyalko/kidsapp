@@ -399,6 +399,8 @@ public class ReportActivity extends AppCompatActivity {
                         updateBdayTotal();
                         updateMkTotal();
                         updateSeekBars();
+                        if (mReport.getMkName()!=null && !mReport.getMkName().isEmpty())
+                            ((TextView) findViewById(R.id.text_mk_name)).setText(mReport.getMkName());
                     }
 
                     @Override

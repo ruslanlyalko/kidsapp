@@ -17,12 +17,16 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Mk;
 import com.example.android.kidsapp.utils.MksAdapter;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +41,7 @@ public class MkActivity extends AppCompatActivity {
     private FloatingActionButton fab, fab1, fab2;
     private Animation fab_open, fab_close, rotate_forward, rotate_backward, fade, fade_back;
     private TextView textFab1, textFab2;
-    private RelativeLayout body;
-    private View backfon;
+    private View fadedBeckground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class MkActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mk);
 
         initCollapsingToolbar();
+        initRef();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -60,7 +64,7 @@ public class MkActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        prepareAlbums();
+        loadMK();
 
         try {
             Glide.with(this).load(R.drawable.cover).into((ImageView) findViewById(R.id.backdrop));
@@ -68,13 +72,46 @@ public class MkActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        body = (RelativeLayout) findViewById(R.id.body);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
-        fab2 = (FloatingActionButton) findViewById(R.id.fab2);
-        textFab1 = (TextView) findViewById(R.id.textFab1);
-        textFab2 = (TextView) findViewById(R.id.textFab2);
+        initFAB();
+    }
 
+    private void loadMK() {
+        mkList.clear();
+
+        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_MK).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Mk mk = dataSnapshot.getValue(Mk.class);
+                if (mk != null) {
+                    mkList.add(0, mk);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void initFAB() {
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_forward);
@@ -86,7 +123,8 @@ public class MkActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 animateFAB();
-                mkList.add(0, new Mk("Новий МК","Кулінарний майстер клас","Опис тут","0 раз","",R.drawable.album4));
+                Mk newMk = new Mk("", "Новий МК", "Кулінарний майстер клас", "Опис", 0, "", R.drawable.album4);
+                addMk(newMk);
                 adapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(0);
             }
@@ -95,7 +133,8 @@ public class MkActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 animateFAB();
-                mkList.add(0, new Mk("Новий МК","Творчий майстер клас","Опис тут","0 раз","",R.drawable.album3));
+                Mk newMk = new Mk("", "Новий МК", "Творчий майстер клас", "Опис", 0, "", R.drawable.album3);
+                addMk(newMk);
                 adapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(0);
             }
@@ -107,14 +146,37 @@ public class MkActivity extends AppCompatActivity {
             }
         });
 
-        backfon = (View) findViewById(R.id.fadedbackgroud);
 
-        backfon.setOnClickListener(new View.OnClickListener() {
+        fadedBeckground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 animateFAB();
             }
         });
+
+    }
+
+    /**
+     * Save new MK to database
+     *
+     * @param newMk
+     */
+    private void addMk(Mk newMk) {
+        String key = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_MK).push().getKey();
+
+        newMk.setKey(key);
+
+        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_MK)
+                .child(key).setValue(newMk);
+    }
+
+    private void initRef() {
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
+        fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+        textFab1 = (TextView) findViewById(R.id.textFab1);
+        textFab2 = (TextView) findViewById(R.id.textFab2);
+        fadedBeckground = (View) findViewById(R.id.fadedbackgroud);
 
     }
 
@@ -133,8 +195,8 @@ public class MkActivity extends AppCompatActivity {
 //            body.startAnimation(fade_back);
 
 
-            backfon.setClickable(false);
-            backfon.startAnimation(fade_back);
+            fadedBeckground.setClickable(false);
+            fadedBeckground.startAnimation(fade_back);
 
             isFabOpen = false;
 
@@ -149,8 +211,8 @@ public class MkActivity extends AppCompatActivity {
             fab2.setClickable(true);
 //            body.startAnimation(fade);
 
-            backfon.setClickable(true);
-            backfon.startAnimation(fade);
+            fadedBeckground.setClickable(true);
+            fadedBeckground.startAnimation(fade);
             isFabOpen = true;
         }
     }
@@ -188,30 +250,6 @@ public class MkActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Adding few albums for testing
-     */
-    private void prepareAlbums() {
-
-        Mk a = new Mk("Яблучні троянди", "Кулінарний майстер клас", getString(R.string.large_text)
-                ,  "3 рази","16.05", R.drawable.album1);
-        Mk b = new Mk("Мафіни з бананами", "Кулінарний майстер клас", getString(R.string.large_text)
-                , "1 рази", "19.05", R.drawable.album2);
-
-        mkList.add(a);
-        mkList.add(b);
-        mkList.add(a);
-        mkList.add(b);
-        mkList.add(a);
-        mkList.add(b);
-        mkList.add(a);
-        mkList.add(b);
-        mkList.add(a);
-        mkList.add(b);
-        mkList.add(a);
-
-        adapter.notifyDataSetChanged();
-    }
 
     /**
      * RecyclerView item decoration - give equal margin around grid item
@@ -249,6 +287,7 @@ public class MkActivity extends AppCompatActivity {
                 }
             }
         }
+
     }
 
     /**

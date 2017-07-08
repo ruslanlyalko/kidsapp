@@ -139,8 +139,12 @@
         Деко\n
         Пергамент для запікання
     </string>
+    <string name="dialog_delete_mk_title">Видалити майстер клас?</string>
+    <string name="dialog_delete_mk_message">Після видалення відновити мастер клас буде неможливо</string>
     <string name="dialog_delete_title">Видалити звіт?</string>
     <string name="dialog_delete_message">Після видалення відновити звіт буде неможливо</string>
-    <string name="title_activity_dashboard">Панель</string>
+
+
+    <string name="title_activity_dashboard">Заробітня плата</string>
 
 </resources>

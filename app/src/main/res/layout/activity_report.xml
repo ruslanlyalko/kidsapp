@@ -355,8 +355,9 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/text_mk_name"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:text="Майстер клас"
                             android:textSize="18sp" />
@@ -367,6 +368,7 @@
                             android:layout_weight="1" />
 
                         <Button
+                            android:visibility="gone"
                             android:id="@+id/button_choose_mk"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"

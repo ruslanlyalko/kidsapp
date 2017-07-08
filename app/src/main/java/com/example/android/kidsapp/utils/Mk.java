@@ -1,22 +1,34 @@
 package com.example.android.kidsapp.utils;
 
 public class Mk {
+
+    public String getKey() {
+        return key;
+    }
+
+    private String key;
     private String title1;
     private String title2;
     private String largeText;
     private String date;
-    private String count;
+    private int count;
     private int imageId;
 
     public Mk() {
     }
 
-    public Mk(String title1, String title2, String largeText,  String count, String date,int imageId) {
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public Mk(String key, String title1, String title2, String largeText, int count, String date, int imageId) {
+        this.key= key;
         this.title1 = title1;
         this.title2 = title2;
         this.date = date;
         this.count = count;
         this.largeText = largeText;
+
         this.imageId = imageId;
     }
 
@@ -28,11 +40,12 @@ public class Mk {
         this.date = date;
     }
 
-    public String getCount() {
+
+    public int getCount() {
         return count;
     }
 
-    public void setCount(String count) {
+    public void setCount(int count) {
         this.count = count;
     }
 

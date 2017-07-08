@@ -1,26 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.kidsapp.DashboardActivity">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-
-        <Button
-            android:id="@+id/button_salary"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linear_user"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SAlARY" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/text_salary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_action_vyruchka" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_month"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:text=""
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:text="Всього"
+                    android:textColor="@color/colorBlack" />
+
+                <TextView
+                    android:id="@+id/text_total"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="0 грн"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="32sp" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="5000"
+                    android:progress="0" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Ставка"
+                            android:textColor="@color/colorBlack" />
+
+                        <TextView
+                            android:id="@+id/text_stavka_total"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="0 грн" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Проценти"
+                            android:textColor="@color/colorBlack" />
+
+                        <TextView
+                            android:id="@+id/text_percent_total"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="0 грн" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="МК"
+                            android:textColor="@color/colorBlack" />
+
+                        <TextView
+                            android:id="@+id/text_mk_total"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="0 грн" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/panel_expand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/colorDividers">
+
+                </View>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_action_vyruchka" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_month2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:text=""
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:text="Всього"
+                    android:textColor="@color/colorBlack" />
+
+                <TextView
+                    android:id="@+id/text_total2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="0 грн"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="32sp" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar2"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="5000"
+                    android:progress="0" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Ставка"
+                            android:textColor="@color/colorBlack" />
+
+                        <TextView
+                            android:id="@+id/text_stavka_total2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="0 грн" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Проценти"
+                            android:textColor="@color/colorBlack" />
+
+                        <TextView
+                            android:id="@+id/text_percent_total2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="0 грн" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="МК"
+                            android:textColor="@color/colorBlack" />
+
+                        <TextView
+                            android:id="@+id/text_mk_total2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="0 грн" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/colorDividers">
+
+                </View>
+            </LinearLayout>
+
+
+        </LinearLayout>
 
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</ScrollView>
