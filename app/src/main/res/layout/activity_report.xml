@@ -59,6 +59,13 @@
                     android:inputType="number"
                     android:text="0"
                     android:textAlignment="center" />
+                <EditText
+                    android:id="@+id/input_room_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:inputType="number"
+                    android:text="0"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
@@ -144,6 +151,21 @@
 
                     <SeekBar
                         android:id="@+id/seek_room_20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="25"
+                        android:progress="0" />
+
+                    <TextView
+                        android:id="@+id/text_room_10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="10 грн * 0 = 0 ГРН"
+                        android:textColor="@color/colorBlack" />
+
+                    <SeekBar
+                        android:id="@+id/seek_room_10"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:max="25"

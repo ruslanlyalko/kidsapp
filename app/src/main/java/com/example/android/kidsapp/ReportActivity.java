@@ -44,15 +44,15 @@ public class ReportActivity extends AppCompatActivity {
     private String mDateStr, mDateMonth, mDateYear, mDateDay, mActivityTitle, mUId;
 
 
-    TextView textRoom60, textRoom40, textRoom20, textRoomTotal;
+    TextView textRoom60, textRoom40, textRoom20,textRoom10, textRoomTotal;
     TextView textBday50, textBday25, textBdayTotal, textBdayMk;
     TextView textMk1, textMk2, textMkT1, textMkT2, textMkTotal;
 
-    SeekBar seekRoom60, seekRoom40, seekRoom20;
+    SeekBar seekRoom60, seekRoom40, seekRoom20,seekRoom10;
     SeekBar seekBday50, seekBday25, seekBdayMk;
     SeekBar seekMkT1, seekMkT2, seekMk1, seekMk2;
 
-    EditText inputRoom60, inputRoom40, inputRoom20;
+    EditText inputRoom60, inputRoom40, inputRoom20, inputRoom10;
     SwipeLayout swipeLayout, swipeLayout2, swipeLayout3;
 
 
@@ -66,12 +66,12 @@ public class ReportActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            String date = bundle.getString("date");
+            String date = bundle.getString(Constants.EXTRA_DATE);
             mDateStr = date;
 
             fillDateStr(date);
 
-            String id = bundle.getString("uId");
+            String id = bundle.getString(Constants.EXTRA_UID);
             mUId = id;
 
 
@@ -116,14 +116,17 @@ public class ReportActivity extends AppCompatActivity {
         textRoom60 = (TextView) findViewById(R.id.text_room_60);
         textRoom40 = (TextView) findViewById(R.id.text_room_40);
         textRoom20 = (TextView) findViewById(R.id.text_room_20);
+        textRoom10 = (TextView) findViewById(R.id.text_room_10);
 
         seekRoom60 = (SeekBar) findViewById(R.id.seek_room_60);
         seekRoom40 = (SeekBar) findViewById(R.id.seek_room_40);
         seekRoom20 = (SeekBar) findViewById(R.id.seek_room_20);
+        seekRoom10 = (SeekBar) findViewById(R.id.seek_room_10);
 
         inputRoom60 = (EditText) findViewById(R.id.input_room_60);
         inputRoom40 = (EditText) findViewById(R.id.input_room_40);
         inputRoom20 = (EditText) findViewById(R.id.input_room_20);
+        inputRoom10 = (EditText) findViewById(R.id.input_room_10);
 
 
         // BirthDay
@@ -198,6 +201,25 @@ public class ReportActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
                     mReport.r20 = progress;
+                    updateRoomTotal();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        seekRoom10.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    mReport.r10 = progress;
                     updateRoomTotal();
                 }
             }
@@ -442,12 +464,14 @@ public class ReportActivity extends AppCompatActivity {
         textRoom60.setText("60грн х " + mReport.r60 + " = " + (mReport.r60 * 60) + " ГРН");
         textRoom40.setText("40грн х " + mReport.r40 + " = " + (mReport.r40 * 40) + " ГРН");
         textRoom20.setText("20грн х " + mReport.r20 + " = " + (mReport.r20 * 20) + " ГРН");
+        textRoom10.setText("10грн х " + mReport.r10 + " = " + (mReport.r10 * 10) + " ГРН");
 
         inputRoom60.setText(String.valueOf(mReport.r60));
         inputRoom40.setText(String.valueOf(mReport.r40));
         inputRoom20.setText(String.valueOf(mReport.r20));
+        inputRoom10.setText(String.valueOf(mReport.r10));
 
-        mReport.totalRoom = mReport.r60 * 60 + mReport.r40 * 40 + mReport.r20 * 20;
+        mReport.totalRoom = mReport.r60 * 60 + mReport.r40 * 40 + mReport.r20 * 20+ mReport.r10 * 10;
 
         textRoomTotal.setText((mReport.totalRoom) + " ГРН");
 
@@ -493,6 +517,7 @@ public class ReportActivity extends AppCompatActivity {
         seekRoom60.setProgress(mReport.r60);
         seekRoom40.setProgress(mReport.r40);
         seekRoom20.setProgress(mReport.r20);
+        seekRoom10.setProgress(mReport.r10);
 
         seekBday50.setProgress(mReport.b50);
         seekBday25.setProgress(mReport.b25);

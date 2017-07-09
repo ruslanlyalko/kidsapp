@@ -78,8 +78,8 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, ReportActivity.class);
-                intent.putExtra("date", report.date);
-                intent.putExtra("uId", report.userId);
+                intent.putExtra(Constants.EXTRA_DATE, report.date);
+                intent.putExtra(Constants.EXTRA_UID, report.userId);
 
                 mContext.startActivity(intent);
             }

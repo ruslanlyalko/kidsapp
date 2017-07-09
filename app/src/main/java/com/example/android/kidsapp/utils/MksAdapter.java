@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.android.kidsapp.MainActivity;
 import com.example.android.kidsapp.R;
 import com.example.android.kidsapp.ReportActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -166,7 +165,9 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
         mDateYear = date.substring(last + 1);
 
     }
+
     private void addToReport(Mk mk) {
+        final String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         String mUId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Calendar today = Calendar.getInstance();
         String mDateStr = (today.get(Calendar.DAY_OF_MONTH)) + "-" + (today.get(Calendar.MONTH) + 1) + "-" + today.get(Calendar.YEAR);
@@ -182,6 +183,8 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
                     .child("userId").setValue(mUId);
             FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_REPORTS).child(mDateStr).child(mUId)
                     .child("date").setValue(mDateStr);
+            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_REPORTS).child(mDateStr).child(mUId)
+                    .child("userName").setValue(userName);
 
 
             FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_USERS)
@@ -189,13 +192,12 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
                     .child(Constants.FIREBASE_REF_REPORTS)
                     .child(mDateYear).child(mDateMonth).child(mDateDay)
                     .child("mkRef").setValue(mk.getKey());
-
-
             FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_USERS)
                     .child(mUId)
                     .child(Constants.FIREBASE_REF_REPORTS)
                     .child(mDateYear).child(mDateMonth).child(mDateDay)
                     .child("mkName").setValue(mk.getTitle1());
+
             FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_USERS)
                     .child(mUId)
                     .child(Constants.FIREBASE_REF_REPORTS)
@@ -206,6 +208,11 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
                     .child(Constants.FIREBASE_REF_REPORTS)
                     .child(mDateYear).child(mDateMonth).child(mDateDay)
                     .child("date").setValue(mDateStr);
+            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_USERS)
+                    .child(mUId)
+                    .child(Constants.FIREBASE_REF_REPORTS)
+                    .child(mDateYear).child(mDateMonth).child(mDateDay)
+                    .child("userName").setValue(userName);
 
         } catch (Exception e) {
 

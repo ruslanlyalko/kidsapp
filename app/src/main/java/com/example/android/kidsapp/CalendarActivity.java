@@ -18,8 +18,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,14 +32,9 @@ public class CalendarActivity extends AppCompatActivity {
     private ReportsAdapter adapter;
     private List<Report> reportList;
     private CalendarView calendarView;
+    private boolean isAdmin = false;
 
-
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-    private FirebaseStorage mStorage = FirebaseStorage.getInstance();
-
-    private DatabaseReference mDatabaseRefCurrentUser;
-    private ValueEventListener mUserListener;
     private String mCurrentDate;
 
 
@@ -51,6 +44,11 @@ public class CalendarActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
         setContentView(R.layout.activity_calendar);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            isAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
+        }
 
         initRef();
 
@@ -70,6 +68,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void loadData(String date) {
 
+        final String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reportList.clear();
         adapter.notifyDataSetChanged();
 
@@ -78,14 +77,15 @@ public class CalendarActivity extends AppCompatActivity {
         listOfUsersReports.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //Toast.makeText(CalendarActivity.this, dataSnapshot.getKey(), Toast.LENGTH_SHORT).show();
                 Report report = dataSnapshot.getValue(Report.class);
 
-                // TODO if user is not Admin then show only his data
-
+                // Add to list only current user reports
+                // But if user role - Admin then add all reports
                 if (report != null) {
-                    reportList.add(report);
-                    adapter.notifyDataSetChanged();
+                    if (isAdmin || report.getUserId().equals(uId)) {
+                        reportList.add(report);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             }
 

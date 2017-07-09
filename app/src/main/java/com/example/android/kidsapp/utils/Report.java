@@ -6,15 +6,6 @@ public class Report {
     public String userName;
     public String date;
     public String mkRef;
-
-    public String getMkRef() {
-        return mkRef;
-    }
-
-    public String getMkName() {
-        return mkName;
-    }
-
     public String mkName;
 
 
@@ -26,6 +17,7 @@ public class Report {
     public int r60;
     public int r40;
     public int r20;
+    public int r10;
 
     public int b50;
     public int b25;
@@ -35,7 +27,6 @@ public class Report {
     public int mk2;
     public int mkt1;
     public int mkt2;
-
 
     public Report() {
 
@@ -69,6 +60,14 @@ public class Report {
         this.mk2 = mk2;
         this.mkt1 = mkt1;
         this.mkt2 = mkt2;
+    }
+
+    public String getMkRef() {
+        return mkRef;
+    }
+
+    public String getMkName() {
+        return mkName;
     }
 
     public String getUserName() {

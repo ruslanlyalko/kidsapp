@@ -116,7 +116,7 @@ public class SignupActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     String uId = mFirebaseAuth.getCurrentUser().getUid();
                                     createUserData(name,phone, email, uId);
-                                    Toast.makeText(SignupActivity.this, getResources().getString(R.string.toast_user_created) +" "+ email , Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SignupActivity.this, getResources().getString(R.string.toast_user_created) +" "+ email , Toast.LENGTH_LONG).show();
 
                                     onBackPressed();
                                 }
@@ -133,7 +133,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private void createUserData(String name, String phone, String email, String uId) {
         mDatabaseRefCurrentUser = mFirebaseDatabase.getReference(Constants.FIREBASE_REF_USERS).child(uId);
-        User user = new User(name, phone, email,"01.06.1991","");
+        User user = new User(name, phone, email,"01.06.1991","",false);
         mDatabaseRefCurrentUser.setValue(user);
     }
 

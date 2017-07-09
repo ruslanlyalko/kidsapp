@@ -11,9 +11,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.SwipeLayout;
+import com.example.android.kidsapp.utils.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,9 +35,15 @@ public class MainActivity extends AppCompatActivity {
     boolean mDoubleBackToExitPressedOnce = false;
     boolean mSwipeOpened = false;
 
-    //private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseStorage mStorage = FirebaseStorage.getInstance();
+    private DatabaseReference mDatabaseRefCurrentUser;
+    private ValueEventListener mUserListener;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private boolean mLinkActive = false;
+    private FirebaseUser currentUserAuth;
+    private User mCurrentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,87 +56,20 @@ public class MainActivity extends AppCompatActivity {
         // Enable connection without internet
         mDatabase.setPersistenceEnabled(true);
 
+        initCurrentUser();
 
-        textSnoopy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mLinkActive) {
-                    mLinkActive = false;
-                    textLink.setText("");
-                    textLinkDetails.setText("");
-                } else {
-                    mLinkActive = true;
-                    textLink.setText("Відвідайте нашу сторінку у ФБ!");
-                    textLinkDetails.setText("Докладніше >");
-                }
-            }
-        });
+        initLink();
 
-        textLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mLinkActive) openBrowser(FB_LINK);
-            }
-        });
-        textLinkDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mLinkActive) openBrowser(FB_LINK);
-            }
-        });
+        initButtons();
+
+        initSwipes();
 
 
-        // User & Events buttons
-        buttonUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, UserActivity.class));
-            }
-        });
-        buttonEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //   startActivity(new Intent(MainActivity.this, EventsActivity.class));
-            }
-        });
-        // Main Buttons
-        buttonZvit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ReportActivity.class);
-                startActivity(intent);
-            }
-        });
-        buttonCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
-                startActivity(intent);
-            }
-        });
-        buttonMk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MkActivity.class);
-                startActivity(intent);
-            }
-        });
-        buttonVyt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, VytActivity.class);
-                startActivity(intent);
-            }
-        });
-        buttonEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
-                startActivity(intent);
-            }
-        });
+
+    }
 
 
+    private void initSwipes() {
         // Swipe
         swipeLayout.setSwipeEnabled(false);
         swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
@@ -167,8 +114,60 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
-        //
+    private void initButtons() {
+
+        // User & Events buttons
+        buttonUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, UserActivity.class));
+            }
+        });
+        buttonEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //   startActivity(new Intent(MainActivity.this, EventsActivity.class));
+            }
+        });
+        // Main Buttons
+        buttonZvit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ReportActivity.class);
+                startActivity(intent);
+            }
+        });
+        buttonCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
+                intent.putExtra(Constants.EXTRA_IS_ADMIN,mCurrentUser.getUserIsAdmin());
+                startActivity(intent);
+            }
+        });
+        buttonMk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MkActivity.class);
+                startActivity(intent);
+            }
+        });
+        buttonVyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, VytActivity.class);
+                startActivity(intent);
+            }
+        });
+        buttonEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+                startActivity(intent);
+            }
+        });
 
         buttonFB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,6 +193,61 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void initLink() {
+        textSnoopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mLinkActive) {
+                    mLinkActive = false;
+                    textLink.setText("");
+                    textLinkDetails.setText("");
+                } else {
+                    mLinkActive = true;
+                    textLink.setText("Відвідайте нашу сторінку у ФБ!");
+                    textLinkDetails.setText("Докладніше >");
+                }
+            }
+        });
+
+        textLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mLinkActive) openBrowser(FB_LINK);
+            }
+        });
+        textLinkDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mLinkActive) openBrowser(FB_LINK);
+            }
+        });
+    }
+
+    private void initCurrentUser() {
+
+        currentUserAuth = mAuth.getCurrentUser();
+        if (currentUserAuth != null) {
+            mDatabaseRefCurrentUser = mDatabase.getReference(Constants.FIREBASE_REF_USERS).child(currentUserAuth.getUid());
+
+            mUserListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    mCurrentUser = user;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+
+            mDatabaseRefCurrentUser.addValueEventListener(mUserListener);
+        } else {
+            onDestroy();
+        }
     }
 
 
@@ -224,6 +278,22 @@ public class MainActivity extends AppCompatActivity {
         buttonCall = (Button) findViewById(R.id.button_call);
         swipeLayout = (SwipeLayout) findViewById(R.id.swipe_layout);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mDatabaseRefCurrentUser.addValueEventListener(mUserListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (mUserListener != null) {
+            mDatabaseRefCurrentUser.removeEventListener(mUserListener);
+        }
     }
 
     /**
@@ -265,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if(FirebaseAuth.getInstance().getCurrentUser()== null){
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             finish();
         }
     }
