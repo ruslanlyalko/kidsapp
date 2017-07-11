@@ -128,7 +128,9 @@ public class MainActivity extends AppCompatActivity {
         buttonEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //   startActivity(new Intent(MainActivity.this, EventsActivity.class));
+                Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+                intent.putExtra(Constants.EXTRA_IS_ADMIN, mCurrentUser.getUserIsAdmin());
+                startActivity(intent);
             }
         });
         // Main Buttons
@@ -159,13 +161,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CostsActivity.class);
                 intent.putExtra(Constants.EXTRA_IS_ADMIN, mCurrentUser.getUserIsAdmin());
-                startActivity(intent);
-            }
-        });
-        buttonEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
                 startActivity(intent);
             }
         });

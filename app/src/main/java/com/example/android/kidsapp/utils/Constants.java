@@ -38,7 +38,13 @@ public class Constants {
     public static int[] COLORS = {Color.GREEN, Color.BLUE, Color.RED, Color.MAGENTA, Color.GRAY, Color.YELLOW};
 
 
-    public static int MK_TARIF = 30;
+    //public static int MK_TARIF = 30;
     public static String URI_CARD_MK_T = "https://firebasestorage.googleapis.com/v0/b/kids-3440d.appspot.com/o/mk-cards%2Fmk_t.jpg?alt=media&token=740bb31f-5be0-4c02-9fe4-8e79edf88787";
     public static String URI_CARD_MK_K = "https://firebasestorage.googleapis.com/v0/b/kids-3440d.appspot.com/o/mk-cards%2Fmk_k.jpg?alt=media&token=8e6f4e23-4f19-4a65-8f38-45e175b4faab";
+
+
+    public static int SALARY_STAVKA = 60;
+    public static int SALARY_BDAY_MK = 50;
+    public static int SALARY_ART_MK = 10;
+    public static double SALARY_PERCENT = 0.08;
 }

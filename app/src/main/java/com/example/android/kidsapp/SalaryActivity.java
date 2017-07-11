@@ -1,11 +1,17 @@
 package com.example.android.kidsapp;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Report;
@@ -14,6 +20,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,6 +30,8 @@ public class SalaryActivity extends AppCompatActivity {
 
     TextView textTotal, textPercent, textStavka, textMk, textMonth;
     TextView textTotal2, textPercent2, textStavka2, textMk2, textMonth2;
+    TextView textCard;
+    LinearLayout panelCopy;
 
     ProgressBar progressBar, progressBar2;
     List<Report> reportList, reportList2;
@@ -49,10 +58,33 @@ public class SalaryActivity extends AppCompatActivity {
             if (mAuth.getCurrentUser() != null)
                 mUId = mAuth.getCurrentUser().getUid();
 
-        }else{
+        } else {
             mUId = bundle.getString(Constants.EXTRA_UID);
         }
 
+        panelCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(textCard.getText().toString(), textCard.getText().toString());
+                clipboard.setPrimaryClip(clip);
+
+                Toast.makeText(SalaryActivity.this, getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mDatabase.getReference(Constants.FIREBASE_REF_USERS).child(mUId).child("userCard").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                textCard.setText(dataSnapshot.getValue().toString());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         Calendar today = Calendar.getInstance();
         mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
@@ -130,6 +162,10 @@ public class SalaryActivity extends AppCompatActivity {
 
     private void initRef() {
 
+        panelCopy= (LinearLayout) findViewById(R.id.panel_copy);
+
+        textCard = (TextView) findViewById(R.id.text_card);
+
         textMonth = (TextView) findViewById(R.id.text_month);
         textTotal = (TextView) findViewById(R.id.text_total);
         textStavka = (TextView) findViewById(R.id.text_stavka_total);
@@ -153,12 +189,12 @@ public class SalaryActivity extends AppCompatActivity {
         int mk = 0;
 
         for (Report rep : reportList) {
-            stavka += 60;
+            stavka += Constants.SALARY_STAVKA;
             percent += rep.total;
-            mk += rep.mk1 * 10 + rep.mk2 * 10;
-            mk += rep.bMk * 50;
+            mk += rep.bMk * Constants.SALARY_BDAY_MK;
+            mk += rep.mk1 * Constants.SALARY_ART_MK + rep.mk2 * Constants.SALARY_ART_MK;
         }
-        percent = (int) (percent * 0.08);
+        percent = (int) (percent * Constants.SALARY_PERCENT);
         int total = stavka + percent + mk;
 
         textMonth.setText(Constants.MONTH_FULL[Calendar.getInstance().get(Calendar.MONTH)] + "");
@@ -178,12 +214,12 @@ public class SalaryActivity extends AppCompatActivity {
         int mk = 0;
 
         for (Report rep : reportList2) {
-            stavka += 60;
+            stavka += Constants.SALARY_STAVKA;
             percent += rep.total;
-            mk += rep.bMk * 50;
-            mk += rep.mk1 * 10 + rep.mk2 * 10;
+            mk += rep.bMk * Constants.SALARY_BDAY_MK;
+            mk += rep.mk1 * Constants.SALARY_ART_MK + rep.mk2 * Constants.SALARY_ART_MK;
         }
-        percent = (int) (percent * 0.08);
+        percent = (int) (percent * Constants.SALARY_PERCENT);
         int total = stavka + percent + mk;
 
         textMonth2.setText(Constants.MONTH_FULL[Calendar.getInstance().get(Calendar.MONTH) - 1] + "");

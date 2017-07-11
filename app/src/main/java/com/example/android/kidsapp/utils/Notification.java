@@ -8,17 +8,27 @@ public class Notification {
     private String title2;
     private String largeText;
     private String date;
+    private String userId;
 
     public Notification() {
     }
 
 
-    public Notification(String key, String title1, String title2, String largeText, String date) {
+    public Notification(String key, String title1, String title2, String largeText, String date, String userId) {
         this.key = key;
         this.title1 = title1;
         this.title2 = title2;
-        this.date = date;
         this.largeText = largeText;
+        this.date = date;
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getKey() {

@@ -169,5 +169,6 @@
     <string name="dialog_delete_notification_message">Після видаленння відновити статтю буде неможливо</string>
     <string name="dialog_about_title">Про програму</string>
     <string name="dialog_about_message">KIDS APP \n v 2.0</string>
+    <string name="text_copied">Номер картки скопійовано</string>
 
 </resources>

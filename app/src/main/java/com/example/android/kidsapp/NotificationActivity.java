@@ -13,6 +13,7 @@ import android.view.View;
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Notification;
 import com.example.android.kidsapp.utils.NotificationsAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +31,7 @@ public class NotificationActivity extends AppCompatActivity {
     private List<Notification> notificationList;
 
     private FloatingActionButton fab;
+    private boolean mIsAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,14 @@ public class NotificationActivity extends AppCompatActivity {
 
         initRef();
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mIsAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
+        }
+
+
         notificationList = new ArrayList<>();
-        adapter = new NotificationsAdapter(this, notificationList);
+        adapter = new NotificationsAdapter(this, notificationList, mIsAdmin);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -61,7 +69,8 @@ public class NotificationActivity extends AppCompatActivity {
     private void addNotification() {
         String key = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_NOTIFICATIONS).push().getKey();
 
-        Notification notification = new Notification(key, "Заголовок", "Короткий опис", "Детальний опис", new SimpleDateFormat("d-M-yyyy").format(new Date()));
+        Notification notification = new Notification(key, "Заголовок", "Короткий опис", "Детальний опис",
+                new SimpleDateFormat("d-M-yyyy").format(new Date()), FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_NOTIFICATIONS)
                 .child(key).setValue(notification);
