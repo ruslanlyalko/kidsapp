@@ -1,43 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.kidsapp.CalendarActivity">
 
-    <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipere_fresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="?android:dividerHorizontal"
-        android:dividerPadding="8dp"
-        android:orientation="vertical"
-        android:showDividers="middle">
-
-        <CalendarView
-            android:id="@+id/calendar_d"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:maxDate="08/01/2017"
-            android:minDate="06/01/2017" />
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@drawable/divider_with_left_padding"
+            android:divider="?android:dividerHorizontal"
             android:dividerPadding="8dp"
             android:orientation="vertical"
             android:showDividers="middle">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
+            <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/compactcalendar_view"
+                android:layout_width="fill_parent"
+                android:layout_height="250dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                app:compactCalendarBackgroundColor="@color/colorBgGray"
+                app:compactCalendarCurrentDayBackgroundColor="@color/colorDividers"
+                app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorGray"
+                app:compactCalendarMultiEventIndicatorColor="#fff"
+                app:compactCalendarTargetHeight="250dp"
+                app:compactCalendarTextColor="@color/colorPrimary"
+                app:compactCalendarTextSize="12sp" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:scrollbars="vertical" />
+                android:divider="@drawable/divider_with_left_padding"
+                android:dividerPadding="8dp"
+                android:orientation="vertical"
+                android:showDividers="middle">
 
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:scrollbars="vertical" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
-</ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

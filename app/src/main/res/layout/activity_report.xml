@@ -13,6 +13,27 @@
         android:orientation="vertical"
         android:showDividers="middle">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_birthday" />
+
+            <EditText
+                android:id="@+id/input_date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:focusable="false"
+                android:hint="@string/hint_date" />
+
+        </LinearLayout>
 
         <com.example.android.kidsapp.utils.SwipeLayout
             android:id="@+id/swipe_layout"
@@ -59,6 +80,7 @@
                     android:inputType="number"
                     android:text="0"
                     android:textAlignment="center" />
+
                 <EditText
                     android:id="@+id/input_room_10"
                     android:layout_width="match_parent"
@@ -390,7 +412,6 @@
                             android:layout_weight="1" />
 
                         <Button
-                            android:visibility="gone"
                             android:id="@+id/button_choose_mk"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
@@ -400,7 +421,8 @@
                             android:paddingRight="8dp"
                             android:text="ВИБРАТИ"
                             android:textAllCaps="true"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/colorAccent"
+                            android:visibility="gone" />
                     </LinearLayout>
 
 

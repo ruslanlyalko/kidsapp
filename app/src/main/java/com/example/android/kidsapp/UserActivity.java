@@ -189,6 +189,7 @@ public class UserActivity extends AppCompatActivity {
             childUpdates.put("userCard", card);
             needUpdate = true;
         }
+
         if (needUpdate)
             mDatabaseRefCurrentUser.updateChildren(childUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override

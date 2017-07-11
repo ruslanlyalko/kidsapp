@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
         initSwipes();
 
-
-
     }
 
 
@@ -143,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
-                intent.putExtra(Constants.EXTRA_IS_ADMIN,mCurrentUser.getUserIsAdmin());
+                intent.putExtra(Constants.EXTRA_IS_ADMIN, mCurrentUser.getUserIsAdmin());
                 startActivity(intent);
             }
         });

@@ -8,7 +8,6 @@ public class Report {
     public String mkRef;
     public String mkName;
 
-
     public int total;
     public int totalRoom;
     public int totalBday;
@@ -40,26 +39,9 @@ public class Report {
         this.mkName = "";
     }
 
-    public Report(String userId, String userName, String date, String mkRef, String mkName, int total, int totalRoom, int totalBday, int totalMk, int r60, int r40, int r20, int b50, int b25, int bMk, int mk1, int mk2, int mkt1, int mkt2) {
-        this.userId = userId;
-        this.userName = userName;
-        this.date = date;
-        this.mkRef = mkRef;
-        this.mkName = mkName;
-        this.total = total;
-        this.totalRoom = totalRoom;
-        this.totalBday = totalBday;
-        this.totalMk = totalMk;
-        this.r60 = r60;
-        this.r40 = r40;
-        this.r20 = r20;
-        this.b50 = b50;
-        this.b25 = b25;
-        this.bMk = bMk;
-        this.mk1 = mk1;
-        this.mk2 = mk2;
-        this.mkt1 = mkt1;
-        this.mkt2 = mkt2;
+
+    public int getR10() {
+        return r10;
     }
 
     public String getMkRef() {

@@ -1,13 +1,7 @@
 package com.example.android.kidsapp.utils;
 
-import com.google.firebase.database.Exclude;
-import com.google.firebase.database.IgnoreExtraProperties;
-
-import java.util.HashMap;
-import java.util.Map;
-
-@IgnoreExtraProperties
 public class User {
+
     public String userName;
     public String userPhone;
     public String userEmail;
@@ -15,11 +9,12 @@ public class User {
     public String userCard;
     public boolean userIsAdmin;
 
-    public User(String userName, String userPhone, String userEmail, String bDay, String userCard, boolean userIsAdmin) {
+
+    public User(String userName, String userPhone, String userEmail, String userBDay, String userCard, boolean userIsAdmin) {
         this.userName = userName;
         this.userPhone = userPhone;
         this.userEmail = userEmail;
-        this.userBDay = bDay;
+        this.userBDay = userBDay;
         this.userCard = userCard;
         this.userIsAdmin = userIsAdmin;
     }
@@ -27,6 +22,7 @@ public class User {
     public User() {
         // Default constructor required
     }
+
 
     public boolean getUserIsAdmin() {
         return userIsAdmin;
@@ -52,18 +48,5 @@ public class User {
         return this.userCard;
     }
 
-
-    @Exclude
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("userFirstName", userName);
-        result.put("userPhone", userPhone);
-        result.put("userEmail", userEmail);
-        result.put("userBDay", userBDay);
-        result.put("userCard", userCard);
-        result.put("userIsAdmin", userIsAdmin);
-
-        return result;
-    }
 
 }

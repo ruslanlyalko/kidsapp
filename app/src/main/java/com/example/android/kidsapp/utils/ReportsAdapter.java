@@ -21,6 +21,7 @@ import java.util.List;
 public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHolder> {
     private Context mContext;
     private List<Report> reportList;
+    private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textUserName, textTotal, textBdayTotal, textRoomTotal, textMkTotal;
@@ -80,6 +81,7 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
                 Intent intent = new Intent(mContext, ReportActivity.class);
                 intent.putExtra(Constants.EXTRA_DATE, report.date);
                 intent.putExtra(Constants.EXTRA_UID, report.userId);
+                intent.putExtra(Constants.EXTRA_USER_NAME, report.userName);
 
                 mContext.startActivity(intent);
             }
@@ -114,14 +116,10 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
         notifyDataSetChanged();
 
         // Delete item from DB
-        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-        mDatabase.getReference(Constants.FIREBASE_REF_REPORTS).child(report.date).child(report.userId).removeValue();
 
-
-
-        mDatabase.getReference(Constants.FIREBASE_REF_USERS).child(report.userId).child(Constants.FIREBASE_REF_REPORTS)
+        mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
                 .child(getYearFromStr(report.date)).child(getMonthFromStr(report.date)).child(getDayFromStr(report.date))
-                .removeValue();
+                .child(report.userId).removeValue();
 
     }
 

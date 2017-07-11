@@ -70,7 +70,7 @@
     <string name="title_activity_events">Повідомлення</string>
 
     <!-- REPORT -->
-    <string name="title_activity_zvit">Звіт</string>
+    <string name="title_activity_report">Звіт</string>
     <string name="button_save">Зберегти звіт</string>
     <string name="action_edit">Редагувати</string>
     <string name="action_add">Зберегти звіт</string>
@@ -146,5 +146,7 @@
 
 
     <string name="title_activity_dashboard">Заробітня плата</string>
+    <string name="hint_date">Дата</string>
+    <string name="mk_done">Проведено Майстер Класів -</string>
 
 </resources>

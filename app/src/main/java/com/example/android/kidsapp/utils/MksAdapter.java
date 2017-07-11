@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.example.android.kidsapp.R;
 import com.example.android.kidsapp.ReportActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
@@ -32,9 +33,8 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
     private List<Mk> mkList;
 
     boolean isEdit = false;
-    private String mDateDay;
-    private String mDateYear;
-    private String mDateMonth;
+    private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title1, title2, largeText, date, count;
@@ -156,67 +156,28 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
 
     }
 
-    private void fillDateStr(String date) {
-        int first = date.indexOf('-');
-        int last = date.lastIndexOf('-');
-
-        mDateDay = date.substring(0, first);
-        mDateMonth = date.substring(first + 1, last);
-        mDateYear = date.substring(last + 1);
-
-    }
 
     private void addToReport(Mk mk) {
-        final String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        String mUId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String userName = mAuth.getCurrentUser().getDisplayName();
+        String mUId = mAuth.getCurrentUser().getUid();
+
         Calendar today = Calendar.getInstance();
-        String mDateStr = (today.get(Calendar.DAY_OF_MONTH)) + "-" + (today.get(Calendar.MONTH) + 1) + "-" + today.get(Calendar.YEAR);
 
-        fillDateStr(mDateStr);
+        String dateStr = (today.get(Calendar.DAY_OF_MONTH)) + "-" + (today.get(Calendar.MONTH) + 1) + "-" + today.get(Calendar.YEAR);
 
-        try {
-            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_REPORTS).child(mDateStr).child(mUId)
-                    .child("mkRef").setValue(mk.getKey());
-            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_REPORTS).child(mDateStr).child(mUId)
-                    .child("mkName").setValue(mk.getTitle1());
-            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_REPORTS).child(mDateStr).child(mUId)
-                    .child("userId").setValue(mUId);
-            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_REPORTS).child(mDateStr).child(mUId)
-                    .child("date").setValue(mDateStr);
-            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_REPORTS).child(mDateStr).child(mUId)
-                    .child("userName").setValue(userName);
+        String dateDay = today.get(Calendar.DAY_OF_MONTH)+"";
+        String dateMonth = (today.get(Calendar.MONTH) + 1)+"";
+        String dateYear = today.get(Calendar.YEAR)+"";
 
 
-            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_USERS)
-                    .child(mUId)
-                    .child(Constants.FIREBASE_REF_REPORTS)
-                    .child(mDateYear).child(mDateMonth).child(mDateDay)
-                    .child("mkRef").setValue(mk.getKey());
-            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_USERS)
-                    .child(mUId)
-                    .child(Constants.FIREBASE_REF_REPORTS)
-                    .child(mDateYear).child(mDateMonth).child(mDateDay)
-                    .child("mkName").setValue(mk.getTitle1());
+        DatabaseReference ref = mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
+                .child(dateYear).child(dateMonth).child(dateDay).child(mUId);
 
-            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_USERS)
-                    .child(mUId)
-                    .child(Constants.FIREBASE_REF_REPORTS)
-                    .child(mDateYear).child(mDateMonth).child(mDateDay)
-                    .child("userId").setValue(mUId);
-            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_USERS)
-                    .child(mUId)
-                    .child(Constants.FIREBASE_REF_REPORTS)
-                    .child(mDateYear).child(mDateMonth).child(mDateDay)
-                    .child("date").setValue(mDateStr);
-            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_USERS)
-                    .child(mUId)
-                    .child(Constants.FIREBASE_REF_REPORTS)
-                    .child(mDateYear).child(mDateMonth).child(mDateDay)
-                    .child("userName").setValue(userName);
-
-        } catch (Exception e) {
-
-        }
+        ref.child("mkRef").setValue(mk.getKey());
+        ref.child("mkName").setValue(mk.getTitle1());
+        ref.child("userId").setValue(mUId);
+        ref.child("date").setValue(dateStr);
+        ref.child("userName").setValue(userName);
     }
 
     private void editMK(Mk mk, MyViewHolder holder, boolean save) {
@@ -288,8 +249,6 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
         FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_MK)
                 .child(mk.getKey()).removeValue();
         notifyItemRemoved(position);
-
-
     }
 
 

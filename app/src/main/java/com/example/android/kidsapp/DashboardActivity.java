@@ -26,6 +26,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     ProgressBar progressBar, progressBar2;
     List<Report> reportList, reportList2;
+    private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,25 +40,24 @@ public class DashboardActivity extends AppCompatActivity {
 
         initRef();
 
-        reportList.clear();
-        reportList2.clear();
-
-        String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // Delete item from DB
-        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+
 
         Calendar today = Calendar.getInstance();
-        mDatabase.getReference(Constants.FIREBASE_REF_USERS)
-                .child(uId)
-                .child(Constants.FIREBASE_REF_REPORTS)
+        mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
                 .child(String.valueOf(today.get(Calendar.YEAR)))
                 .child(String.valueOf(today.get(Calendar.MONTH) + 1))
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Report report = dataSnapshot.getValue(Report.class);
-                        reportList.add(report);
-                        calcSalary();
+
+                        Report report = dataSnapshot.child(uId).getValue(Report.class);
+                        if (report != null) {
+                            reportList.add(report);
+                            calcSalary();
+                        }
+
                     }
 
                     @Override
@@ -81,17 +81,19 @@ public class DashboardActivity extends AppCompatActivity {
                     }
                 });
 
-        mDatabase.getReference(Constants.FIREBASE_REF_USERS)
-                .child(uId)
-                .child(Constants.FIREBASE_REF_REPORTS)
+        mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
                 .child(String.valueOf(today.get(Calendar.YEAR)))
-                .child(String.valueOf(today.get(Calendar.MONTH)))// TODO BAG if now if january
+                .child(String.valueOf(today.get(Calendar.MONTH))) // TODO KOSTUL'
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Report report = dataSnapshot.getValue(Report.class);
-                        reportList2.add(report);
-                        calcSalary2();
+
+                        Report report = dataSnapshot.child(uId).getValue(Report.class);
+                        if (report != null) {
+                            reportList2.add(report);
+                            calcSalary2();
+                        }
+
                     }
 
                     @Override
@@ -131,15 +133,6 @@ public class DashboardActivity extends AppCompatActivity {
         textPercent2 = (TextView) findViewById(R.id.text_percent_total2);
         textMk2 = (TextView) findViewById(R.id.text_mk_total2);
         progressBar2 = (ProgressBar) findViewById(R.id.progress_bar2);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        calcSalary();
-        calcSalary2();
 
     }
 
@@ -191,7 +184,15 @@ public class DashboardActivity extends AppCompatActivity {
         textTotal2.setText(total + " ГРН");
 
         progressBar2.setProgress(total);
+    }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        calcSalary();
+        calcSalary2();
     }
 
     @Override
