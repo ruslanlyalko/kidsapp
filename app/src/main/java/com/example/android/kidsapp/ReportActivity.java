@@ -3,6 +3,8 @@ package com.example.android.kidsapp;
 import android.app.DatePickerDialog;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,10 +14,13 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Report;
 import com.example.android.kidsapp.utils.SwipeLayout;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -450,14 +455,16 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void saveReport() {
-        // depricated
-        //mDatabase.getReference(Constants.FIREBASE_REF_REPORTS).child(mDateStr).child(mUId).setValue(mReport);
-
 
         mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
                 .child(mDateYear).child(mDateMonth).child(mDateDay)
                 .child(mUId)
-                .setValue(mReport);
+                .setValue(mReport).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Snackbar.make(textRoom60, getString(R.string.toast_report_saved), Snackbar.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void updateMkName() {

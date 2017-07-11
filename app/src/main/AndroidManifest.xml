@@ -77,7 +77,7 @@
                 android:value="com.example.android.kidsapp.MainActivity" />
         </activity>
         <activity
-            android:name=".VytActivity"
+            android:name=".CostsActivity"
             android:label="@string/title_activity_vyt"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden">

@@ -71,10 +71,6 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
 
         holder.progressBar.setMax(report.total);
         holder.progressBar.setProgress(report.totalRoom);
-
-        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
-        holder.swipeLayout.setRightSwipeEnabled(true);
-        holder.swipeLayout.setBottomSwipeEnabled(false);
         holder.buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +82,10 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
                 mContext.startActivity(intent);
             }
         });
+
+        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
+        holder.swipeLayout.setRightSwipeEnabled(true);
+        holder.swipeLayout.setBottomSwipeEnabled(false);
         holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

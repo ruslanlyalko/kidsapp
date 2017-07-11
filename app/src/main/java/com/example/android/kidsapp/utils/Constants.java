@@ -10,6 +10,7 @@ public class Constants {
     public static final String FIREBASE_REF_USER_REPORTS = "REPORTS";
     public static final String FIREBASE_REF_USERS ="USERS";
     public static final String FIREBASE_REF_MK ="MK";
+    public static final String FIREBASE_REF_COSTS ="COSTS";
     /**
      * Firebase STORAGE
      */
@@ -33,5 +34,5 @@ public class Constants {
             ,"ЧЕРВЕНЬ","ЛИПЕНЬ","СЕРПЕНЬ","ВЕРЕСЕНЬ","ЖОВТЕНЬ","ЛИСТОПАД","ГРУДЕНЬ"};
 
 
-    public static int[] COLORS = {Color.RED, Color.GREEN, Color.BLUE, Color.MAGENTA, Color.GRAY, Color.YELLOW};
+    public static int[] COLORS = {Color.GREEN, Color.BLUE, Color.RED, Color.MAGENTA, Color.GRAY, Color.YELLOW};
 }

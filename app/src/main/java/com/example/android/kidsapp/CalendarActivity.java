@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Report;
@@ -36,13 +38,14 @@ public class CalendarActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     CompactCalendarView compactCalendarView;
     SwipeRefreshLayout swipeRefresh;
-
+    Button buttonPrev, buttonNext;
+    TextView textMonth;
 
     private ReportsAdapter adapter;
     private List<Report> reportList = new ArrayList<>();
     private ArrayList<String> usersList = new ArrayList<>();
     private boolean isAdmin = false;
-
+    private Date mCurrentDate;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     //private String mDay, mMonth, mYear;
@@ -63,16 +66,41 @@ public class CalendarActivity extends AppCompatActivity {
             isAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
         }
 
+
         initRecycle();
+
+        initCalendarView();
 
         showReportsOnCalendar();
 
         Date today = Calendar.getInstance().getTime();
+
         showReportsForDate(today);
+
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compactCalendarView.showNextMonth();
+            }
+        });
+
+        buttonPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compactCalendarView.showPreviousMonth();
+            }
+        });
+    }
+
+    private void initCalendarView() {
+
 
         compactCalendarView.setUseThreeLetterAbbreviation(true);
         compactCalendarView.shouldDrawIndicatorsBelowSelectedDays(true);
+        compactCalendarView.shouldScrollMonth(false);
 
+        Calendar month = Calendar.getInstance();
+        textMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);
 
         // define a listener to receive callbacks when certain events happen.
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
@@ -84,14 +112,18 @@ public class CalendarActivity extends AppCompatActivity {
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
+                Calendar month = Calendar.getInstance();
+                month.setTime(firstDayOfNewMonth);
+
+                textMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);
             }
         });
-
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
                 showReportsOnCalendar();
+                reloadReportsForDate();
             }
         });
 
@@ -100,6 +132,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void showReportsOnCalendar() {
 
+        swipeRefresh.setRefreshing(true);
         usersList.clear();
         compactCalendarView.removeAllEvents();
 
@@ -178,8 +211,12 @@ public class CalendarActivity extends AppCompatActivity {
             return Color.GREEN;
     }
 
+    private void reloadReportsForDate(){
+        showReportsForDate(mCurrentDate);
+    }
     private void showReportsForDate(Date date) {
 
+        mCurrentDate = date;
         String mDay = DateFormat.format("d", date).toString();
         String mMonth = DateFormat.format("M", date).toString();
         String mYear = DateFormat.format("yyyy", date).toString();
@@ -241,11 +278,14 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void initRef() {
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipere_fresh);
+
+        textMonth = (TextView) findViewById(R.id.text_month);
+        buttonNext = (Button) findViewById(R.id.button_next);
+        buttonPrev = (Button) findViewById(R.id.button_prev);
 
         compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
-
-        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipere_fresh);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
     }
 

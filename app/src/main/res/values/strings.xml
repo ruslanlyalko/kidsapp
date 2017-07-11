@@ -89,8 +89,7 @@
 
     <!-- NOTIFICATION-->
     <string name="title_activity_notification">Повідомлення</string>
-    <string name="text_total">Загальна виручка: 1570 ГРН</string>
-    <string name="text_mk">Майстер клас: 500грн</string>
+    <string name="text_cost_total">Витрати за місяць:  </string>
 
 
     <string-array name="month_array">
@@ -148,5 +147,7 @@
     <string name="title_activity_dashboard">Заробітня плата</string>
     <string name="hint_date">Дата</string>
     <string name="mk_done">Проведено Майстер Класів -</string>
+    <string name="month_prev"><![CDATA[ < ]]></string>
+    <string name="toast_report_saved">Звіт збережено</string>
 
 </resources>

@@ -191,13 +191,13 @@
 
                 <TextView
                     android:id="@+id/large_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Large text her" />
 
                 <EditText
                     android:id="@+id/input_text_large"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
                     android:text="Large text her"

@@ -53,7 +53,6 @@ public class MkActivity extends AppCompatActivity {
         initCollapsingToolbar();
         initRef();
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         mkList = new ArrayList<>();
         adapter = new MksAdapter(this, mkList);
@@ -177,7 +176,7 @@ public class MkActivity extends AppCompatActivity {
         textFab1 = (TextView) findViewById(R.id.textFab1);
         textFab2 = (TextView) findViewById(R.id.textFab2);
         fadedBeckground = (View) findViewById(R.id.fadedbackgroud);
-
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
     }
 
     public void animateFAB() {
