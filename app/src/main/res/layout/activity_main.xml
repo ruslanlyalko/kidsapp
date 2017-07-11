@@ -199,13 +199,13 @@
 
                 <!-- Left Top Button -->
                 <Button
-                    android:id="@+id/button_zvit"
+                    android:id="@+id/button_report"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:drawableTop="@drawable/ic_zvit"
+                    android:drawableTop="@mipmap/ic_button_report"
                     android:paddingBottom="16dp"
                     android:paddingTop="32dp"
                     android:text="@string/button_zvit" />
@@ -223,7 +223,7 @@
                     android:layout_margin="1dp"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:drawableTop="@drawable/ic_mk"
+                    android:drawableTop="@mipmap/ic_button_mk"
                     android:paddingBottom="15dp"
                     android:paddingTop="32dp"
                     android:text="@string/button_calendar" />
@@ -249,7 +249,7 @@
                     android:layout_margin="1dp"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:drawableTop="@drawable/ic_calendar"
+                    android:drawableTop="@mipmap/ic_button_calendar"
                     android:paddingBottom="16dp"
                     android:paddingTop="32dp"
                     android:text="@string/button_team" />
@@ -268,7 +268,7 @@
                     android:layout_margin="1dp"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:drawableTop="@drawable/ic_vyt"
+                    android:drawableTop="@mipmap/ic_button_cost"
                     android:paddingBottom="16dp"
                     android:paddingTop="32dp"
                     android:text="@string/button_requisites" />
@@ -289,7 +289,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="?android:attr/selectableItemBackground"
-                    android:drawableTop="@drawable/ic_up2"
+                    android:drawableTop="@drawable/ic_up3"
                     android:paddingTop="14dp" />
 
             </LinearLayout>

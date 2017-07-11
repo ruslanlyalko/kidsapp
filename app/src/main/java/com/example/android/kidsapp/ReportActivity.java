@@ -14,7 +14,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Report;
@@ -36,14 +35,14 @@ public class ReportActivity extends AppCompatActivity {
 
 
     TextView textRoom60, textRoom40, textRoom20, textRoom10, textRoomTotal;
-    TextView textBday50, textBday25, textBdayTotal, textBdayMk;
+    TextView textBday50, textBday30, textBdayTotal, textBdayMk;
     TextView textMk1, textMk2, textMkT1, textMkT2, textMkTotal;
     EditText inputDate;
     TextView textMkName;
 
 
     SeekBar seekRoom60, seekRoom40, seekRoom20, seekRoom10;
-    SeekBar seekBday50, seekBday25, seekBdayMk;
+    SeekBar seekBday50, seekBday30, seekBdayMk;
     SeekBar seekMkT1, seekMkT2, seekMk1, seekMk2;
 
     EditText inputRoom60, inputRoom40, inputRoom20, inputRoom10;
@@ -93,7 +92,7 @@ public class ReportActivity extends AppCompatActivity {
 
         initDatePicker();
 
-        initSwipes();
+        //initSwipes();
 
         initSeeks();
 
@@ -152,11 +151,11 @@ public class ReportActivity extends AppCompatActivity {
 
         textBdayTotal = (TextView) findViewById(R.id.text_bday_total);
         textBday50 = (TextView) findViewById(R.id.text_bday_50);
-        textBday25 = (TextView) findViewById(R.id.text_bday_25);
+        textBday30 = (TextView) findViewById(R.id.text_bday_30);
         textBdayMk = (TextView) findViewById(R.id.text_bday_mk_done);
 
         seekBday50 = (SeekBar) findViewById(R.id.seek_bday_50);
-        seekBday25 = (SeekBar) findViewById(R.id.seek_bday_25);
+        seekBday30 = (SeekBar) findViewById(R.id.seek_bday_30);
         seekBdayMk = (SeekBar) findViewById(R.id.seek_bday_mk_done);
 
         // MK
@@ -277,20 +276,20 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
-        seekBday25.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        seekBday30.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
-                    mReport.b25 = progress;
+                    mReport.b30 = progress;
 
-                    if (mReport.b25 > 0)
+                    if (mReport.b30 > 0)
                         mReport.bMk = 1;
                     else
                         mReport.bMk = 0;
-                    if (mReport.b25 > 10)
+                    if (mReport.b30 > 10)
                         mReport.bMk = 2;
 
-                    if (mReport.b25 > 20)
+                    if (mReport.b30 > 20)
                         mReport.bMk = 3;
                     seekBdayMk.setProgress(mReport.bMk);
 
@@ -494,12 +493,12 @@ public class ReportActivity extends AppCompatActivity {
     void updateBdayTotal() {
 
         textBday50.setText("50грн х " + mReport.b50 + " = " + (mReport.b50 * 50) + " ГРН");
-        textBday25.setText("25грн х " + mReport.b25 + " = " + (mReport.b25 * 25) + " ГРН");
+        textBday30.setText("30грн х " + mReport.b30 + " = " + (mReport.b30 * 30) + " ГРН");
 
         String mkDone = getString(R.string.mk_done) + mReport.bMk;
         textBdayMk.setText(mkDone);
 
-        mReport.totalBday = mReport.b50 * 50 + mReport.b25 * 25;
+        mReport.totalBday = mReport.b50 * 50 + mReport.b30 * 30;
 
         String total = (mReport.totalBday) + " ГРН";
         textBdayTotal.setText(total);
@@ -537,7 +536,7 @@ public class ReportActivity extends AppCompatActivity {
         seekRoom10.setProgress(mReport.r10);
 
         seekBday50.setProgress(mReport.b50);
-        seekBday25.setProgress(mReport.b25);
+        seekBday30.setProgress(mReport.b30);
         seekBdayMk.setProgress(mReport.bMk);
 
         seekMk1.setProgress(mReport.mk1);

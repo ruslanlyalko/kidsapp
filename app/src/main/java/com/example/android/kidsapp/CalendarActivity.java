@@ -98,6 +98,7 @@ public class CalendarActivity extends AppCompatActivity {
         compactCalendarView.setUseThreeLetterAbbreviation(true);
         compactCalendarView.shouldDrawIndicatorsBelowSelectedDays(true);
         compactCalendarView.shouldScrollMonth(false);
+        compactCalendarView.displayOtherMonthDays(true);
 
         Calendar month = Calendar.getInstance();
         textMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);

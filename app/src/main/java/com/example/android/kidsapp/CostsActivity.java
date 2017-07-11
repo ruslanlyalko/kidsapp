@@ -1,30 +1,37 @@
 package com.example.android.kidsapp;
 
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Cost;
 import com.example.android.kidsapp.utils.CostsAdapter;
-import com.example.android.kidsapp.utils.Mk;
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -36,12 +43,18 @@ public class CostsActivity extends AppCompatActivity {
     private CostsAdapter adapter;
     private List<Cost> costList = new ArrayList<>();
     private Boolean isFabOpen = false;
+    Button buttonPrev, buttonNext, buttonDeleteAll;
+    TextView textMonth, textTotal, textCommon, textMk;
+    ProgressBar progressBar;
 
+    CompactCalendarView compactCalendarView;
     private FloatingActionButton fab, fab1, fab2;
     private Animation fab_open, fab_close, rotate_forward, rotate_backward, fade, fade_back;
     private TextView textFab1, textFab2;
     private View fadedBeckground;
-    private FirebaseAuth mAuth= FirebaseAuth.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    private boolean isAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,18 +63,110 @@ public class CostsActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
         setContentView(R.layout.activity_costs);
 
-        initRef();
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            isAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
+        }
 
-       // costList.add(new Cost("123", "Сок", "гарний", "12.07", "", "", 125));
+
+        initRef();
 
         initRecycle();
 
         initFAB();
 
-        loadCosts();
+        Calendar month = Calendar.getInstance();
+        textMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);
+
+        // define a listener to receive callbacks when certain events happen.
+        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+                Calendar month = Calendar.getInstance();
+                month.setTime(firstDayOfNewMonth);
+
+                textMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);
+
+                String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(firstDayOfNewMonth).toString();
+                String monthStr = new SimpleDateFormat("M", Locale.US).format(firstDayOfNewMonth).toString();
+
+                loadCosts(yearStr, monthStr);
+            }
+        });
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compactCalendarView.showNextMonth();
+            }
+        });
+
+        buttonPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compactCalendarView.showPreviousMonth();
+            }
+        });
+
+        buttonDeleteAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (isAdmin) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CostsActivity.this);
+                    builder.setTitle(R.string.dialog_cost_delete_all_title)
+                            .setMessage(R.string.dialog_cost_delete_all_message)
+                            .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    removeAllCost();
+
+                                    costList.clear();
+                                    adapter.notifyDataSetChanged();
+
+                                }
+
+                            })
+                            .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .show();
+                } else {
+                    Snackbar.make(buttonDeleteAll, getString(R.string.cant_delete_all), Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date()).toString();
+        String monthStr = new SimpleDateFormat("M", Locale.US).format(new Date()).toString();
+
+        loadCosts(yearStr, monthStr);
+    }
+
+    private void removeAllCost() {
+
+        String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date()).toString();
+        String monthStr = new SimpleDateFormat("M", Locale.US).format(new Date()).toString();
+
+        mDatabase.getReference(Constants.FIREBASE_REF_COSTS)
+                .child(yearStr)
+                .child(monthStr).removeValue();
     }
 
     private void initRef() {
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+
+        textMonth = (TextView) findViewById(R.id.text_month);
+        compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
+        textTotal = (TextView) findViewById(R.id.text_cost_total);
+        textCommon = (TextView) findViewById(R.id.text_cost_common);
+        textMk = (TextView) findViewById(R.id.text_cost_mk);
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab1 = (FloatingActionButton) findViewById(R.id.fab1);
@@ -69,71 +174,81 @@ public class CostsActivity extends AppCompatActivity {
         textFab1 = (TextView) findViewById(R.id.textFab1);
         textFab2 = (TextView) findViewById(R.id.textFab2);
         fadedBeckground = (View) findViewById(R.id.fadedbackgroud);
+        buttonNext = (Button) findViewById(R.id.button_next);
+        buttonPrev = (Button) findViewById(R.id.button_prev);
+        buttonDeleteAll = (Button) findViewById(R.id.button_cost_delete_all);
 
     }
 
 
     private void initRecycle() {
-
-        adapter = new CostsAdapter(this, costList);
-
+        adapter = new CostsAdapter(this, costList, isAdmin);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
     }
 
-    private void loadCosts() {
+
+    private void loadCosts(String yearStr, String monthStr) {
         costList.clear();
+        adapter.notifyDataSetChanged();
+        calcTotal();
 
-        // TODO CHECK REFERENCES year / month / id
-        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_COSTS).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Cost cost = dataSnapshot.getValue(Cost.class);
-                if (cost != null) {
-                    costList.add(0, cost);
-                    adapter.notifyDataSetChanged();
-                }
-            }
+        mDatabase.getReference(Constants.FIREBASE_REF_COSTS).child(yearStr).child(monthStr)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Cost cost = dataSnapshot.getValue(Cost.class);
+                        if (cost != null) {
+                            costList.add(0, cost);
+                            adapter.notifyItemInserted(0);
+                            calcTotal();
+                        }
+                    }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            }
+                    }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            }
+                    }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            }
+                    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                    }
+                });
 
     }
 
-    private void addCost(Cost newCost) {
+    private void calcTotal() {
+        int common = 0;
+        int mk = 0;
 
-        String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date()).toString();
-        String monthStr = new SimpleDateFormat("M", Locale.US).format(new Date()).toString();
+        for (Cost cost : costList) {
+            if (cost.getTitle2().equals(getString(R.string.text_cost_common)))
+                common += cost.getPrice();
+            if (cost.getTitle2().equals(getString(R.string.text_cost_mk))) mk += cost.getPrice();
+        }
 
-        String key = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_COSTS)
-                .child(yearStr)
-                .child(monthStr)
-                .push().getKey();
+        int total = common + mk;
 
-        newCost.setKey(key);
+        progressBar.setMax(total);
+        progressBar.setProgress(common);
 
-        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_COSTS)
-                .child(key).setValue(newCost);
+        textCommon.setText(common + " грн");
+        textMk.setText(mk + " грн");
+
+        textTotal.setText(total + " ГРН");
     }
+
 
     private void initFAB() {
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
@@ -147,18 +262,14 @@ public class CostsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 animateFAB();
-                addCoastDialog("Загальне");
-                adapter.notifyDataSetChanged();
-                recyclerView.smoothScrollToPosition(0);
+                addCostDialog(getString(R.string.text_cost_common));
             }
         });
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 animateFAB();
-                addCoastDialog("На МК");
-                adapter.notifyDataSetChanged();
-                recyclerView.smoothScrollToPosition(0);
+                addCostDialog(getString(R.string.text_cost_mk));
             }
         });
         fab.setOnClickListener(new View.OnClickListener() {
@@ -168,25 +279,80 @@ public class CostsActivity extends AppCompatActivity {
             }
         });
 
-
         fadedBeckground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 animateFAB();
             }
         });
+    }
+
+    private void addCostDialog(String title2) {
+
+        final String title22 = title2;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Введіть опис");
+
+
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_cost, null, false);
+        builder.setView(viewInflated);
+        final EditText inputTitle1 = (EditText) viewInflated.findViewById(R.id.text_title1);
+        final EditText inputPrice = (EditText) viewInflated.findViewById(R.id.text_price);
+
+        builder.setPositiveButton("ДОБАВИТИ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String title1 = inputTitle1.getText().toString();
+                String price = inputPrice.getText().toString();
+
+                addCost(title1, title22, price);
+
+            }
+        });
+        builder.setNegativeButton("Відмінити", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
 
     }
 
-    private void addCoastDialog(String title2){
+    private void addCost(String title1, String title22, String price) {
+        if (price == null || price.isEmpty())
+            price = "0";
 
-        // TODO SHOW DIALOG
-        addCost(new Cost("", "Щось2",title2,
-                new SimpleDateFormat("d.M.yyyy", Locale.US).format(new Date()).toString(),
+        Cost cost = new Cost(title1, title22,
+                new SimpleDateFormat("d-M-yyyy", Locale.US).format(new Date()).toString(),
                 mAuth.getCurrentUser().getUid(),
                 mAuth.getCurrentUser().getDisplayName(),
-                255));
+                Integer.parseInt(price));
+
+        addCostToDb(cost);
+        recyclerView.smoothScrollToPosition(0);
     }
+
+    private void addCostToDb(Cost newCost) {
+
+        String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date()).toString();
+        String monthStr = new SimpleDateFormat("M", Locale.US).format(new Date()).toString();
+
+        String key = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_COSTS)
+                .child(yearStr)
+                .child(monthStr)
+                .push().getKey();
+
+        newCost.setKey(key);
+
+        mDatabase.getReference(Constants.FIREBASE_REF_COSTS)
+                .child(yearStr)
+                .child(monthStr)
+                .child(key).setValue(newCost);
+    }
+
     public void animateFAB() {
 
         if (isFabOpen) {

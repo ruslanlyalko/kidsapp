@@ -35,4 +35,7 @@ public class Constants {
 
 
     public static int[] COLORS = {Color.GREEN, Color.BLUE, Color.RED, Color.MAGENTA, Color.GRAY, Color.YELLOW};
+
+
+    public static int MK_TARIF = 30;
 }

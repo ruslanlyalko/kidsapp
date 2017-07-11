@@ -19,7 +19,7 @@ public class Report {
     public int r10;
 
     public int b50;
-    public int b25;
+    public int b30;
     public int bMk;
 
     public int mk1;
@@ -96,8 +96,8 @@ public class Report {
         return b50;
     }
 
-    public int getB25() {
-        return b25;
+    public int getB30() {
+        return b30;
     }
 
     public int getbMk() {

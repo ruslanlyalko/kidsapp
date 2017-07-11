@@ -13,8 +13,7 @@ public class Cost {
     public Cost() {
     }
 
-    public Cost(String key, String title1, String title2, String date, String userId, String userName, int price) {
-        this.key = key;
+    public Cost(String title1, String title2, String date, String userId, String userName, int price) {
         this.title1 = title1;
         this.title2 = title2;
         this.date = date;

@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
             @Override
             public void onStartOpen(SwipeLayout layout) {
-                buttonSwipe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_down2, 0, 0);
+                buttonSwipe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_down3, 0, 0);
             }
 
             @Override
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStartClose(SwipeLayout layout) {
-                buttonSwipe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_up2, 0, 0);
+                buttonSwipe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_up3, 0, 0);
             }
 
             @Override
@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CostsActivity.class);
+                intent.putExtra(Constants.EXTRA_IS_ADMIN, mCurrentUser.getUserIsAdmin());
                 startActivity(intent);
             }
         });
@@ -265,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
 
         buttonUser = (Button) findViewById(R.id.button_user);
         buttonEvents = (Button) findViewById(R.id.button_events);
-        buttonZvit = (Button) findViewById(R.id.button_zvit);
+        buttonZvit = (Button) findViewById(R.id.button_report);
         buttonCalendar = (Button) findViewById(R.id.button_calendar);
         buttonMk = (Button) findViewById(R.id.button_mk);
         buttonVyt = (Button) findViewById(R.id.button_vyt);

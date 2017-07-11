@@ -149,5 +149,22 @@
     <string name="mk_done">Проведено Майстер Класів -</string>
     <string name="month_prev"><![CDATA[ < ]]></string>
     <string name="toast_report_saved">Звіт збережено</string>
+    <string name="hint_price">Ціна</string>
+    <string name="hint_title2">Тип</string>
+    <string name="hint_title1">Опис</string>
+    <string name="text_cost_common">Загальні</string>
+    <string name="text_cost_mk">На МК</string>
+    <string name="text_cost_list">Список витрат</string>
+    <string name="action_delete_all">  ВИДАЛИТИ ВСЕ  </string>
+    <string name="dialog_cost_delete_title">Видалити витрату?</string>
+    <string name="dialog_cost_delete_message">Після видалення відновити витрату буде неможливо</string>
+    <string name="dialog_cost_delete_all_title">Видалити всі витрати?</string>
+    <string name="dialog_cost_delete_all_message">Після видалення відновити витрати буде неможливо</string>
+    <string name="cant_delete">Неможливо видалити. Видаляти можливо тільки витрати створені Вами</string>
+    <string name="cant_delete_all">Неможливо видалити. Ця функція доступна тільки Адміністратору</string>
+    <string name="text_date">Дата</string>
+    <string name="text_room">Кімната</string>
+    <string name="text_all">Всього</string>
+    <string name="text_birthdays">Дні Народження</string>
 
 </resources>

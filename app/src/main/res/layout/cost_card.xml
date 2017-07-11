@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp">
 
     <com.example.android.kidsapp.utils.SwipeLayout
         android:id="@+id/swipe_layout"
@@ -9,29 +10,13 @@
 
         <LinearLayout
             android:id="@+id/swipe_menu"
-            android:layout_width="200dp"
+            android:layout_width="54dp"
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"
             android:divider="?android:dividerHorizontal"
             android:dividerPadding="2dp"
             android:orientation="horizontal"
             android:showDividers="middle">
-
-            <ImageButton
-                android:id="@+id/button_user"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="?android:attr/selectableItemBackground"
-                android:src="@drawable/ic_user_name_dark" />
-
-            <ImageButton
-                android:id="@+id/button_edit"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="?android:attr/selectableItemBackground"
-                android:src="@drawable/ic_action_edit_dark" />
 
             <ImageButton
                 android:id="@+id/button_delete"
@@ -53,7 +38,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_name" />
+                android:src="@drawable/ic_action_cost" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -61,7 +46,12 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorDividers">
 
+                </View>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -87,7 +77,7 @@
                         android:layout_marginRight="4dp"
                         android:text="175 ГРН"
                         android:textAlignment="viewEnd"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="@color/colorPrimaryDark" />
 
                     <TextView
                         android:id="@+id/text_title1"
@@ -110,13 +100,7 @@
 
                 </RelativeLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@color/colorDividers">
 
-                </View>
 
             </LinearLayout>
         </LinearLayout>
