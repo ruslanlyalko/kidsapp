@@ -1,19 +1,35 @@
 package com.example.android.kidsapp;
 
-import android.app.ListActivity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.android.kidsapp.utils.Constants;
+import com.example.android.kidsapp.utils.Notification;
+import com.example.android.kidsapp.utils.NotificationsAdapter;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class NotificationActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private NotificationsAdapter adapter;
+    private List<Notification> notificationList;
+
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,64 +38,77 @@ public class NotificationActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
         setContentView(R.layout.activity_notification);
 
-        //setListAdapter(mListAdapter);
-        ListView listView = (ListView) findViewById(R.id.list_view);
-        listView.setAdapter(mListAdapter);
+        initRef();
+
+        notificationList = new ArrayList<>();
+        adapter = new NotificationsAdapter(this, notificationList);
+
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+
+        loadNotifications();
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNotification();
+            }
+        });
+
     }
 
+    private void addNotification() {
+        String key = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_NOTIFICATIONS).push().getKey();
 
-    private BaseAdapter mListAdapter = new BaseAdapter() {
-        public int iddd = 0;
-        @Override
-        public int getCount() {
-            return 10;
-        }
+        Notification notification = new Notification(key, "Заголовок", "Короткий опис", "Детальний опис", new SimpleDateFormat("d-M-yyyy").format(new Date()));
 
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
+        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_NOTIFICATIONS)
+                .child(key).setValue(notification);
+    }
 
-        @Override
-        public long getItemId(int position) {
-            return position + 1;
-        }
+    private void loadNotifications() {
+        notificationList.clear();
 
-        @Override
-        public View getView(final int position, View convertView, ViewGroup container) {
-            if (convertView == null) {
-                convertView = getLayoutInflater().inflate(R.layout.notification_item, container, false);
-            }
-
-            // Because the list item contains multiple touch targets, you should not override
-            // onListItemClick. Instead, set a click listener for each target individually.
-
-            //((TextView) convertView.findViewById(R.id.text1)).setText("Count" + position);
-
-            convertView.findViewById(R.id.primary_target).setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-
-                            Toast.makeText(NotificationActivity.this,
-                                    String.valueOf(getItemId(position)),
-                                    Toast.LENGTH_SHORT).show();
+        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_NOTIFICATIONS)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Notification notification = dataSnapshot.getValue(Notification.class);
+                        if (notification != null) {
+                            notificationList.add(0, notification);
+                            adapter.notifyDataSetChanged();
                         }
-                    });
+                    }
 
-            convertView.findViewById(R.id.secondary_action).setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Toast.makeText(NotificationActivity.this,
-                                    "2",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
-            return convertView;
-        }
-    };
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
+
+    private void initRef() {
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

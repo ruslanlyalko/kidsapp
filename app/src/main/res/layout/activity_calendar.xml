@@ -42,7 +42,7 @@
                         android:background="?android:attr/selectableItemBackground"
                         android:text="@string/month_prev"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/colorAccent" />
 
                     <TextView
                         android:id="@+id/text_month"
@@ -62,7 +62,7 @@
                         android:background="?android:attr/selectableItemBackground"
                         android:text=">"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/colorAccent" />
 
                 </LinearLayout>
 

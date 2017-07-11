@@ -1,5 +1,7 @@
 package com.example.android.kidsapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -28,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String FB_LINK = "https://www.fb.com/snoopyagency";
     private static final String INST_LINK = "https://www.instagram.com/snoopyagency";
 
-    Button buttonUser, buttonEvents, buttonZvit, buttonCalendar, buttonMk, buttonVyt, buttonSwipe, buttonFB, buttonInst, buttonCall;
+    Button buttonUser, buttonEvents, buttonZvit, buttonCalendar, buttonMk, buttonVyt;
+    Button buttonSwipe, buttonAbout, buttonFB, buttonInst, buttonCall;
     TextView textSnoopy, textLink, textLinkDetails;
     SwipeLayout swipeLayout;
 
@@ -37,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private FirebaseStorage mStorage = FirebaseStorage.getInstance();
     private DatabaseReference mDatabaseRefCurrentUser;
     private ValueEventListener mUserListener;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -168,6 +170,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        buttonAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(R.string.dialog_about_title)
+                        .setMessage(R.string.dialog_about_message)
+                        .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
+            }
+        });
+
         buttonFB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -272,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
         buttonVyt = (Button) findViewById(R.id.button_vyt);
 
         buttonSwipe = (Button) findViewById(R.id.button_swipe);
+        buttonAbout = (Button) findViewById(R.id.button_about);
         buttonInst = (Button) findViewById(R.id.button_inst);
         buttonFB = (Button) findViewById(R.id.button_fb);
         buttonCall = (Button) findViewById(R.id.button_call);

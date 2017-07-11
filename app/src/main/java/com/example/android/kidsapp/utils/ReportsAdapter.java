@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.example.android.kidsapp.R;
 import com.example.android.kidsapp.ReportActivity;
+import com.example.android.kidsapp.SalaryActivity;
+import com.example.android.kidsapp.UserActivity;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
@@ -108,7 +110,15 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
             }
         });
 
-        //TODO implement other things (Buttons click etc)
+        // Open
+        holder.buttonUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent inetnt = new Intent(mContext, SalaryActivity.class);
+                inetnt.putExtra(Constants.EXTRA_UID, report.getUserId());
+                mContext.startActivity(inetnt);
+            }
+        });
     }
 
     private void removeReport(Report report, int position) {

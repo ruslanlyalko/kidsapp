@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class DashboardActivity extends AppCompatActivity {
+public class SalaryActivity extends AppCompatActivity {
 
     TextView textTotal, textPercent, textStavka, textMk, textMonth;
     TextView textTotal2, textPercent2, textStavka2, textMk2, textMonth2;
@@ -27,21 +27,31 @@ public class DashboardActivity extends AppCompatActivity {
     ProgressBar progressBar, progressBar2;
     List<Report> reportList, reportList2;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String mUId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.activity_salary);
 
         reportList = new ArrayList<>();
         reportList2 = new ArrayList<>();
 
         initRef();
 
-        final String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        // Delete item from DB
+        Bundle bundle = getIntent().getExtras();
+
+        if (bundle == null) {
+            if (mAuth.getCurrentUser() != null)
+                mUId = mAuth.getCurrentUser().getUid();
+
+        }else{
+            mUId = bundle.getString(Constants.EXTRA_UID);
+        }
 
 
         Calendar today = Calendar.getInstance();
@@ -52,7 +62,7 @@ public class DashboardActivity extends AppCompatActivity {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                        Report report = dataSnapshot.child(uId).getValue(Report.class);
+                        Report report = dataSnapshot.child(mUId).getValue(Report.class);
                         if (report != null) {
                             reportList.add(report);
                             calcSalary();
@@ -88,7 +98,7 @@ public class DashboardActivity extends AppCompatActivity {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                        Report report = dataSnapshot.child(uId).getValue(Report.class);
+                        Report report = dataSnapshot.child(mUId).getValue(Report.class);
                         if (report != null) {
                             reportList2.add(report);
                             calcSalary2();

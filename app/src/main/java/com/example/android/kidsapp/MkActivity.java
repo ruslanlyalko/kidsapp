@@ -23,10 +23,13 @@ import com.bumptech.glide.Glide;
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Mk;
 import com.example.android.kidsapp.utils.MksAdapter;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +68,13 @@ public class MkActivity extends AppCompatActivity {
 
         loadMK();
 
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("mk-cards").child("cover.jpg");
         try {
-            Glide.with(this).load(R.drawable.cover).into((ImageView) findViewById(R.id.backdrop));
+            Glide.with(this)
+                    .using(new FirebaseImageLoader())
+                    .load(storageReference)
+                    .into((ImageView) findViewById(R.id.backdrop));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -122,7 +130,7 @@ public class MkActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 animateFAB();
-                Mk newMk = new Mk("", "Новий МК", "Кулінарний майстер клас", "Опис", 0, "", R.drawable.album4);
+                Mk newMk = new Mk("", "Новий МК", "Кулінарний майстер клас", "Опис", 0, "", Constants.URI_CARD_MK_K);
                 addMk(newMk);
                 adapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(0);
@@ -132,7 +140,7 @@ public class MkActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 animateFAB();
-                Mk newMk = new Mk("", "Новий МК", "Творчий майстер клас", "Опис", 0, "", R.drawable.album3);
+                Mk newMk = new Mk("", "Новий МК", "Творчий майстер клас", "Опис", 0, "", Constants.URI_CARD_MK_T);
                 addMk(newMk);
                 adapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(0);

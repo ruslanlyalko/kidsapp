@@ -103,7 +103,7 @@ public class UserActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent inetnt = new Intent(UserActivity.this, DashboardActivity.class);
+                Intent inetnt = new Intent(UserActivity.this, SalaryActivity.class);
                 startActivity(inetnt);
             }
         });

@@ -1,35 +1,32 @@
 package com.example.android.kidsapp.utils;
 
-public class Mk {
+public class Notification {
 
-    public String getKey() {
-        return key;
-    }
 
     private String key;
     private String title1;
     private String title2;
     private String largeText;
     private String date;
-    private int count;
-    private String imageUri;
 
-    public Mk() {
+    public Notification() {
+    }
+
+
+    public Notification(String key, String title1, String title2, String largeText, String date) {
+        this.key = key;
+        this.title1 = title1;
+        this.title2 = title2;
+        this.date = date;
+        this.largeText = largeText;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public void setKey(String key) {
         this.key = key;
-    }
-
-    public Mk(String key, String title1, String title2, String largeText, int count, String date, String imageUri) {
-        this.key= key;
-        this.title1 = title1;
-        this.title2 = title2;
-        this.date = date;
-        this.count = count;
-        this.largeText = largeText;
-
-        this.imageUri = imageUri;
     }
 
     public String getDate() {
@@ -38,15 +35,6 @@ public class Mk {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 
     public String getTitle1() {
@@ -73,11 +61,4 @@ public class Mk {
         this.largeText = largeText;
     }
 
-    public String getImageUri() {
-        return imageUri;
-    }
-
-    public void setImageUri(String imageUri) {
-        this.imageUri = imageUri;
-    }
 }

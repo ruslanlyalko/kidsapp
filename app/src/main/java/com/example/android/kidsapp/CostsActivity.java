@@ -68,8 +68,10 @@ public class CostsActivity extends AppCompatActivity {
             isAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
         }
 
-
         initRef();
+
+        if(isAdmin) buttonDeleteAll.setVisibility(View.VISIBLE);
+        else buttonDeleteAll.setVisibility(View.GONE);
 
         initRecycle();
 
@@ -136,8 +138,6 @@ public class CostsActivity extends AppCompatActivity {
                                 }
                             })
                             .show();
-                } else {
-                    Snackbar.make(buttonDeleteAll, getString(R.string.cant_delete_all), Snackbar.LENGTH_LONG).show();
                 }
             }
         });

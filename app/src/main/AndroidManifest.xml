@@ -94,12 +94,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.MainActivity" />
         </activity>
-        <activity
-            android:name=".ScrollingActivity"
-            android:label="@string/title_activity_scrolling"
-            android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".DashboardActivity"
+        <activity android:name=".SalaryActivity"
             android:label="@string/title_activity_dashboard"
             android:parentActivityName=".UserActivity"
             android:windowSoftInputMode="stateHidden">

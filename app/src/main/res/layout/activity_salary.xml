@@ -1,85 +1,53 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:background="@color/viewBg"
+    tools:context="com.example.android.kidsapp.SalaryActivity">
 
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/card_margin"
-        android:layout_marginTop="@dimen/card_margin"
-        android:elevation="3dp"
-        card_view:cardCornerRadius="@dimen/card_album_radius">
+        android:orientation="vertical">
 
-        <com.example.android.kidsapp.utils.SwipeLayout
-            android:id="@+id/swipe_layout"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:id="@+id/swipe_menu"
-                android:layout_width="56dp"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimary"
-                android:divider="?android:dividerHorizontal"
-                android:dividerPadding="2dp"
-                android:orientation="vertical"
-                android:showDividers="middle">
-
-                <ImageButton
-                    android:id="@+id/button_user"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:src="@drawable/ic_action_money" />
-
-                <ImageButton
-                    android:id="@+id/button_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:src="@drawable/ic_action_edit_dark" />
-
-                <ImageButton
-                    android:id="@+id/button_delete"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:src="@drawable/ic_action_delete_red" />
-
-            </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/card_margin"
+            android:layout_marginTop="@dimen/card_margin"
+            android:elevation="3dp"
+            card_view:cardCornerRadius="@dimen/card_album_radius">
 
             <LinearLayout
                 android:id="@+id/linear_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="16dp">
 
                 <ImageView
+                    android:id="@+id/imageView"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_margin="16dp"
-                    android:src="@drawable/ic_user_name" />
+                    android:src="@drawable/ic_action_vyruchka" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_marginBottom="16dp"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/text_user_name"
+                        android:id="@+id/text_month"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="16dp"
-                        android:text="Анна Василівна"
+                        android:text=""
                         android:textSize="18sp" />
 
                     <TextView
@@ -93,7 +61,7 @@
                         android:id="@+id/text_total"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="1570 ГРН"
+                        android:text="0 грн"
                         android:textColor="@color/colorBlack"
                         android:textSize="32sp" />
 
@@ -102,8 +70,8 @@
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:max="20"
-                        android:progress="5" />
+                        android:max="5000"
+                        android:progress="0" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -119,14 +87,14 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Кімната"
+                                android:text="Ставка"
                                 android:textColor="@color/colorBlack" />
 
                             <TextView
-                                android:id="@+id/text_room_total"
+                                android:id="@+id/text_stavka_total"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="500 грн" />
+                                android:text="0 грн" />
 
                         </LinearLayout>
 
@@ -139,14 +107,14 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="День народження"
+                                android:text="Проценти"
                                 android:textColor="@color/colorBlack" />
 
                             <TextView
-                                android:id="@+id/text_bday_total"
+                                android:id="@+id/text_percent_total"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="540 грн" />
+                                android:text="0 грн" />
 
                         </LinearLayout>
 
@@ -166,63 +134,29 @@
                                 android:id="@+id/text_mk_total"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="530 грн" />
+                                android:text="0 грн" />
 
                         </LinearLayout>
 
-
                     </LinearLayout>
-
 
                 </LinearLayout>
 
 
             </LinearLayout>
 
-        </com.example.android.kidsapp.utils.SwipeLayout>
+        </android.support.v7.widget.CardView>
 
-    </android.support.v7.widget.CardView>
-</LinearLayout><!--
-        <com.example.android.kidsapp.utils.SwipeLayout
-            android:id="@+id/swipe_layout"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/card_margin"
+            android:layout_marginTop="@dimen/card_margin"
+            android:elevation="3dp"
+            card_view:cardCornerRadius="@dimen/card_album_radius">
 
             <LinearLayout
-                android:id="@+id/swipe_menu"
-                android:layout_width="56dp"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimary"
-                android:divider="?android:dividerHorizontal"
-                android:dividerPadding="2dp"
-                android:showDividers="middle"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:src="@drawable/ic_user_name_dark" />
-
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:src="@drawable/ic_action_edit_dark" />
-
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:src="@drawable/ic_action_delete_red" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -232,7 +166,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_margin="16dp"
-                    android:src="@drawable/ic_user_name" />
+                    android:src="@drawable/ic_action_vyruchka" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -242,11 +176,11 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/text_user_name"
+                        android:id="@+id/text_month2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="16dp"
-                        android:text="Анна Василівна"
+                        android:text=""
                         android:textSize="18sp" />
 
                     <TextView
@@ -257,20 +191,20 @@
                         android:textColor="@color/colorBlack" />
 
                     <TextView
-                        android:id="@+id/text_total"
+                        android:id="@+id/text_total2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="1570 ГРН"
+                        android:text="0 грн"
                         android:textColor="@color/colorBlack"
                         android:textSize="32sp" />
 
                     <ProgressBar
-                        android:id="@+id/progressBar2"
+                        android:id="@+id/progress_bar2"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:max="20"
-                        android:progress="5" />
+                        android:max="5000"
+                        android:progress="0" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -286,14 +220,14 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Кімната"
+                                android:text="Ставка"
                                 android:textColor="@color/colorBlack" />
 
                             <TextView
-                                android:id="@+id/text_room_total"
+                                android:id="@+id/text_stavka_total2"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="500 грн" />
+                                android:text="0 грн" />
 
                         </LinearLayout>
 
@@ -306,21 +240,21 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="День народження"
+                                android:text="Проценти"
                                 android:textColor="@color/colorBlack" />
 
                             <TextView
-                                android:id="@+id/text_bday_total"
+                                android:id="@+id/text_percent_total2"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="540 грн" />
+                                android:text="0 грн" />
 
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="16dp"
+                            android:layout_marginLeft="8dp"
                             android:orientation="vertical">
 
                             <TextView
@@ -330,17 +264,23 @@
                                 android:textColor="@color/colorBlack" />
 
                             <TextView
-                                android:id="@+id/text_mk_total"
+                                android:id="@+id/text_mk_total2"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="530 грн" />
+                                android:text="0 грн" />
 
                         </LinearLayout>
 
 
                     </LinearLayout>
 
+
                 </LinearLayout>
 
+
             </LinearLayout>
--->
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

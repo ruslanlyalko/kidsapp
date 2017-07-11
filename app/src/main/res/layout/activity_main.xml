@@ -116,27 +116,13 @@
                 android:background="@drawable/gradient" />
 
             <Button
-                android:id="@+id/button_1"
+                android:id="@+id/button_about"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackground"
                 android:text="@string/button_about" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@drawable/gradient" />
-
-            <Button
-                android:id="@+id/button_2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:background="?android:attr/selectableItemBackground"
-                android:text="@string/button_news" />
 
             <View
                 android:layout_width="match_parent"
