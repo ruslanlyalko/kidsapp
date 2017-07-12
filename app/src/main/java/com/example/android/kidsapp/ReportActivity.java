@@ -1,10 +1,12 @@
 package com.example.android.kidsapp;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -57,6 +59,7 @@ public class ReportActivity extends AppCompatActivity {
     private Report mReport;
 
     private SimpleDateFormat mSdf = new SimpleDateFormat("d-M-yyyy", Locale.US);
+    private boolean isChanged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -315,6 +318,8 @@ public class ReportActivity extends AppCompatActivity {
                     mReport.bMk = progress;
                     String mkDone = getString(R.string.mk_done) + mReport.bMk;
                     textBdayMk.setText(mkDone);
+
+                    updateBdayTotal();
                 }
             }
 
@@ -443,6 +448,8 @@ public class ReportActivity extends AppCompatActivity {
                         updateMkTotal();
                         updateSeekBars();
                         updateMkName();
+
+                        isChanged = false;
                     }
 
                     @Override
@@ -455,6 +462,7 @@ public class ReportActivity extends AppCompatActivity {
 
     private void saveReport() {
 
+        isChanged = false;
         mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
                 .child(mDateYear).child(mDateMonth).child(mDateDay)
                 .child(mUId)
@@ -527,6 +535,7 @@ public class ReportActivity extends AppCompatActivity {
 
         mReport.total = (mReport.totalRoom + mReport.totalBday + mReport.totalMk);
         setTitle(getResources().getString(R.string.title_activity_report) + " (" + mReport.total + " ГРН)");
+        isChanged = true;
     }
 
     void updateSeekBars() {
@@ -627,7 +636,32 @@ public class ReportActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+        if(isChanged){
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
+            builder.setTitle(R.string.dialog_report_save_before_close_title)
+                    .setMessage(R.string.dialog_report_save_before_close_text)
+                    .setPositiveButton("ЗБЕРЕГТИ ЗМІНИ", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            saveReport();
+                            onBackPressed();
+
+                        }
+
+                    })
+                    .setNegativeButton("НЕ ЗБЕРІГАТИ", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                            isChanged = false;
+                            onBackPressed();
+                        }
+                    })
+                    .show();
+        }else {
+
+            super.onBackPressed();
+            overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+        }
     }
 }

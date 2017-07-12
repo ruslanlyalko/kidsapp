@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.SwipeLayout;
 import com.example.android.kidsapp.utils.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,12 +25,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final String FB_LINK = "https://www.fb.com/snoopyagency";
-    private static final String INST_LINK = "https://www.instagram.com/snoopyagency";
 
     Button buttonUser, buttonEvents, buttonZvit, buttonCalendar, buttonMk, buttonVyt;
     Button buttonSwipe, buttonAbout, buttonFB, buttonInst, buttonCall;
@@ -40,12 +42,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseRemoteConfig mRemoteConfig = FirebaseRemoteConfig.getInstance();
     private DatabaseReference mDatabaseRefCurrentUser;
     private ValueEventListener mUserListener;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-    private boolean mLinkActive = false;
     private FirebaseUser currentUserAuth;
     private User mCurrentUser;
+
+    private boolean mLinkActive = false;
+    private String mLink;
+    private String mLinkText;
+    private String mLinkFb;
+    private String mLinkInst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,17 +63,69 @@ public class MainActivity extends AppCompatActivity {
 
         initializeReferences();
 
+        initRemoteConfig();
         // Enable connection without internet
         mDatabase.setPersistenceEnabled(true);
 
         initCurrentUser();
 
-        initLink();
-
         initButtons();
 
         initSwipes();
 
+    }
+
+    private void initRemoteConfig() {
+        mRemoteConfig.setConfigSettings(new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(true)
+                .build());
+
+        HashMap<String, Object> defaults = new HashMap<>();
+        defaults.put("link_show", false);
+        defaults.put("link", "https://www.fb.com/snoopyagency");
+        defaults.put("link_text", "Відвідайте нашу сторінку у ФБ!");
+        defaults.put("link_inst", "https://www.instagram.com/snoopyagency");
+        defaults.put("link_fb", "https://www.fb.com/snoopyagency");
+
+        mRemoteConfig.setDefaults(defaults);
+        final Task<Void> fetch = mRemoteConfig.fetch(0);
+
+        fetch.addOnSuccessListener(this, new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mRemoteConfig.activateFetched();
+                updateLink();
+            }
+        });
+    }
+
+    private void updateLink() {
+        mLinkActive = mRemoteConfig.getBoolean("link_show");
+        mLinkText = mRemoteConfig.getString("link_text");
+        mLink = mRemoteConfig.getString("link");
+        mLinkFb= mRemoteConfig.getString("link_fb");
+        mLinkInst= mRemoteConfig.getString("link_inst");
+
+        if (mLinkActive) {
+            textLink.setText(mLinkText);
+            textLinkDetails.setText("Докладніше >");
+        } else {
+            textLink.setText("");
+            textLinkDetails.setText("");
+        }
+        textLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mLinkActive) openBrowser(mLink);
+            }
+        });
+        textLinkDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mLinkActive) openBrowser(mLink);
+            }
+        });
+        //todo
     }
 
 
@@ -183,14 +243,14 @@ public class MainActivity extends AppCompatActivity {
         buttonFB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openBrowser(FB_LINK);
+                openBrowser(mLinkFb);
             }
         });
 
         buttonInst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openBrowser(INST_LINK);
+                openBrowser(mLinkInst);
             }
         });
 
@@ -206,35 +266,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initLink() {
-        textSnoopy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mLinkActive) {
-                    mLinkActive = false;
-                    textLink.setText("");
-                    textLinkDetails.setText("");
-                } else {
-                    mLinkActive = true;
-                    textLink.setText("Відвідайте нашу сторінку у ФБ!");
-                    textLinkDetails.setText("Докладніше >");
-                }
-            }
-        });
-
-        textLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mLinkActive) openBrowser(FB_LINK);
-            }
-        });
-        textLinkDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mLinkActive) openBrowser(FB_LINK);
-            }
-        });
-    }
 
     private void initCurrentUser() {
 

@@ -170,5 +170,7 @@
     <string name="dialog_about_title">Про програму</string>
     <string name="dialog_about_message">KIDS APP \n v 2.0</string>
     <string name="text_copied">Номер картки скопійовано</string>
+    <string name="dialog_report_save_before_close_title">Зберегти зміни?</string>
+    <string name="dialog_report_save_before_close_text">У звіті є зміни. Натисніть зберегти щоб не втратити їх</string>
 
 </resources>
