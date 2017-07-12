@@ -59,23 +59,23 @@
                             android:text=""
                             android:textSize="18sp" />
 
-                        <Button
+                        <ImageButton
                             android:id="@+id/button_prev"
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_weight="1"
                             android:background="?android:attr/selectableItemBackground"
-                            android:text="@string/month_prev"
+                            android:src="@drawable/ic_action_left"
                             android:textAlignment="center"
                             android:textColor="@color/colorAccent" />
 
-                        <Button
+                        <ImageButton
                             android:id="@+id/button_next"
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_weight="1"
+                            android:src="@drawable/ic_action_right"
                             android:background="?android:attr/selectableItemBackground"
-                            android:text=">"
                             android:textAlignment="center"
                             android:textColor="@color/colorAccent" />
 

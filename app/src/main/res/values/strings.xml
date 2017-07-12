@@ -8,7 +8,7 @@
     <string name="toast_auth_failed">Не вдається ввійти! Перевірте, будь ласка, правильність введених даних</string>
     <string name="button_login">ВВІЙТИ</string>
     <string name="button_forgot_password">Забули свій пароль?</string>
-    <string name="button_link_to_register">Не зареєстровані? Зареєструватись прямо зараз!</string>
+    <string name="button_link_to_register">Зареєструвати нового користувача</string>
 
     <!-- RESET PASS -->
     <string name="title_activity_reset_password">Відновлення паролю</string>
@@ -88,7 +88,6 @@
 
     <!-- NOTIFICATION-->
     <string name="title_activity_notification">Статті</string>
-    <string name="text_cost_total">Витрати за місяць:  </string>
 
 
     <string-array name="month_array">
@@ -143,7 +142,7 @@
     <string name="dialog_delete_message">Після видалення відновити звіт буде неможливо</string>
 
 
-    <string name="title_activity_dashboard">Заробітня плата</string>
+    <string name="title_activity_dashboard">Адмін панель</string>
     <string name="hint_date">Дата</string>
     <string name="mk_done">Проведено Майстер Класів -</string>
     <string name="month_prev"><![CDATA[ < ]]></string>
@@ -168,9 +167,25 @@
     <string name="dialog_delete_notification_title">Видалити статтю?</string>
     <string name="dialog_delete_notification_message">Після видаленння відновити статтю буде неможливо</string>
     <string name="dialog_about_title">Про програму</string>
-    <string name="dialog_about_message">KIDS APP \n v 2.0</string>
+    <string name="dialog_about_message">KIDS APP  \nv </string>
     <string name="text_copied">Номер картки скопійовано</string>
     <string name="dialog_report_save_before_close_title">Зберегти зміни?</string>
     <string name="dialog_report_save_before_close_text">У звіті є зміни. Натисніть зберегти щоб не втратити їх</string>
+    <string name="title_activity_salary">Зарплата</string>
+    <string name="text_mk">МК</string>
+    <string name="text_stavka">Ставка</string>
+    <string name="text_percent">Проценти</string>
+    <string name="text_oborot">Оборот</string>
+    <string name="text_cost_total1">Витрати</string>
+    <string name="text_salary">Зарплата</string>
+    <string name="text_salary_detail_title">Деталі зарплати</string>
+
+    <string name="text_salary_detail_stavka">"Ставка:"</string>
+    <string name="text_salary_detail_percent">"Процент від обороту:"</string>
+    <string name="text_salary_detail_art">"Арт МК:"</string>
+    <string name="text_salary_detail_mk1">"МК на ДН:"</string>
+    <string name="text_salary_detail_mk2">"МК на ДН(>10 дітей):"</string>
+    <string name="dialog_salary_title">Введіть значення</string>
+
 
 </resources>

@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.android.kidsapp.utils.Constants;
@@ -38,13 +38,13 @@ public class CalendarActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     CompactCalendarView compactCalendarView;
     SwipeRefreshLayout swipeRefresh;
-    Button buttonPrev, buttonNext;
+    ImageButton buttonPrev, buttonNext;
     TextView textMonth;
 
     private ReportsAdapter adapter;
     private List<Report> reportList = new ArrayList<>();
     private ArrayList<String> usersList = new ArrayList<>();
-    private boolean isAdmin = false;
+    private boolean mIsAdmin = false;
     private Date mCurrentDate;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -63,7 +63,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            isAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
+            mIsAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
         }
 
 
@@ -148,7 +148,7 @@ public class CalendarActivity extends AppCompatActivity {
                             for (DataSnapshot datDay : datMonth.getChildren()) {
                                 Report report = datDay.getValue(Report.class);
 
-                                if (isAdmin || report.getUserId().equals(mAuth.getCurrentUser().getUid())) {
+                                if (mIsAdmin || report.getUserId().equals(mAuth.getCurrentUser().getUid())) {
 
                                     int color = getUserColor(report.getUserId());
                                     long date = getDateLongFromStr(report.getDate());
@@ -237,7 +237,7 @@ public class CalendarActivity extends AppCompatActivity {
                 // Add to list only current user reports
                 // But if user role - Admin then add all reports
                 if (report != null) {
-                    if (isAdmin || report.getUserId().equals(uId)) {
+                    if (mIsAdmin || report.getUserId().equals(uId)) {
                         reportList.add(report);
                         adapter.notifyDataSetChanged();
                     }
@@ -270,7 +270,7 @@ public class CalendarActivity extends AppCompatActivity {
     private void initRecycle() {
 
         reportList = new ArrayList<>();
-        adapter = new ReportsAdapter(this, reportList);
+        adapter = new ReportsAdapter(this, reportList, mIsAdmin);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -282,8 +282,8 @@ public class CalendarActivity extends AppCompatActivity {
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipere_fresh);
 
         textMonth = (TextView) findViewById(R.id.text_month);
-        buttonNext = (Button) findViewById(R.id.button_next);
-        buttonPrev = (Button) findViewById(R.id.button_prev);
+        buttonNext = (ImageButton) findViewById(R.id.button_next);
+        buttonPrev = (ImageButton) findViewById(R.id.button_prev);
 
         compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);

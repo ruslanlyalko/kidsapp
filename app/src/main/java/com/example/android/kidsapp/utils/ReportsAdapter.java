@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.List;
 
 public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHolder> {
+    private final boolean mIsAdmin;
     private Context mContext;
     private List<Report> reportList;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -48,9 +49,11 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
         }
     }
 
-    public ReportsAdapter(Context mContext, List<Report> reportList) {
+    public ReportsAdapter(Context mContext, List<Report> reportList, boolean isAdmin) {
         this.mContext = mContext;
         this.reportList = reportList;
+        this.mIsAdmin= isAdmin;
+
     }
 
     @Override
@@ -116,6 +119,7 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
             public void onClick(View v) {
                 Intent inetnt = new Intent(mContext, SalaryActivity.class);
                 inetnt.putExtra(Constants.EXTRA_UID, report.getUserId());
+                inetnt.putExtra(Constants.EXTRA_IS_ADMIN, mIsAdmin);
                 mContext.startActivity(inetnt);
             }
         });

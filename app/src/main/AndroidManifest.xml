@@ -96,6 +96,14 @@
         </activity>
 
         <activity android:name=".SalaryActivity"
+            android:label="@string/title_activity_salary"
+            android:parentActivityName=".UserActivity"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.UserActivity" />
+        </activity>
+        <activity android:name=".DashboardActivity"
             android:label="@string/title_activity_dashboard"
             android:parentActivityName=".UserActivity"
             android:windowSoftInputMode="stateHidden">

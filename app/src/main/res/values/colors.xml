@@ -4,22 +4,23 @@
     <color name="colorPrimaryDark">#388E3C</color>
     <color name="colorAccent">#FF6E40</color>
 
-    <color name="colorWhite">#FFFFFF</color>
-    <color name="colorGray">#e1dcdc</color> 
+    <color name="viewBg">#f1f5f8</color>
+    <color name="colorGray">#e1dcdc</color>
     <color name="colorBg">#fafafa</color>
     <color name="colorBgGray">#f4f4f4</color>
-    <color name="colorBlack">#000000</color>
-    <color name="colorBlack12">#1F000000</color>
-    <color name="colorBlack70">#BF000000</color>
-    <color name="colorWhite70">#BFFFFFFF</color>
+    <color name="colorDividers">#1F000000</color>
 
-    <color name="viewBg">#f1f5f8</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+
+    <color name="colorWhite70">#BFFFFFFF</color>
+    <color name="colorBlack12">#1F000000</color>
+    <color name="colorBlack50">#7F000000</color>
+    <color name="colorBlack70">#BF000000</color>
+
     <color name="album_title">#4c4c4c</color>
     <color name="fabColor1">#6a8bbf</color>
     <color name="fabColor2">#d232c2</color>
-    <color name="colorDividers">#1F000000</color>
-
-
 
 
 </resources>

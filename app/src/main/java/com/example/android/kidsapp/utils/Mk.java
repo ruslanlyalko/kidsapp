@@ -13,6 +13,7 @@ public class Mk {
     private String date;
     private int count;
     private String imageUri;
+    private String userId;
 
     public Mk() {
     }
@@ -21,15 +22,23 @@ public class Mk {
         this.key = key;
     }
 
-    public Mk(String key, String title1, String title2, String largeText, int count, String date, String imageUri) {
-        this.key= key;
+    public Mk( String title1, String title2, String largeText,  String imageUri, String userId) {
+        this.key = "";
         this.title1 = title1;
         this.title2 = title2;
-        this.date = date;
-        this.count = count;
         this.largeText = largeText;
-
+        this.date = "";
+        this.count = 0;
         this.imageUri = imageUri;
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getDate() {

@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -103,8 +105,8 @@ public class MainActivity extends AppCompatActivity {
         mLinkActive = mRemoteConfig.getBoolean("link_show");
         mLinkText = mRemoteConfig.getString("link_text");
         mLink = mRemoteConfig.getString("link");
-        mLinkFb= mRemoteConfig.getString("link_fb");
-        mLinkInst= mRemoteConfig.getString("link_inst");
+        mLinkFb = mRemoteConfig.getString("link_fb");
+        mLinkInst = mRemoteConfig.getString("link_inst");
 
         if (mLinkActive) {
             textLink.setText(mLinkText);
@@ -182,7 +184,9 @@ public class MainActivity extends AppCompatActivity {
         buttonUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, UserActivity.class));
+                Intent intent = new Intent(MainActivity.this, UserActivity.class);
+                intent.putExtra(Constants.EXTRA_IS_ADMIN, mCurrentUser.getUserIsAdmin());
+                startActivity(intent);
             }
         });
         buttonEvents.setOnClickListener(new View.OnClickListener() {
@@ -213,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MkActivity.class);
+                intent.putExtra(Constants.EXTRA_IS_ADMIN, mCurrentUser.getUserIsAdmin());
                 startActivity(intent);
             }
         });
@@ -228,9 +233,18 @@ public class MainActivity extends AppCompatActivity {
         buttonAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                PackageInfo pInfo = null;
+                try {
+                    pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                String version = pInfo.versionName;
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(R.string.dialog_about_title)
-                        .setMessage(R.string.dialog_about_message)
+                        .setMessage(getString(R.string.dialog_about_message)+""+version)
                         .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 

@@ -3,7 +3,7 @@
     android:duration="150"
 
     android:fillAfter="true"
-    android:fromAlpha="0.7"
+    android:fromAlpha="0.5"
     android:interpolator="@android:anim/accelerate_interpolator"
     android:toAlpha="0.0">
 

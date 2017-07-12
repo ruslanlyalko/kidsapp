@@ -24,6 +24,7 @@ import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Mk;
 import com.example.android.kidsapp.utils.MksAdapter;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,6 +46,7 @@ public class MkActivity extends AppCompatActivity {
     private Animation fab_open, fab_close, rotate_forward, rotate_backward, fade, fade_back;
     private TextView textFab1, textFab2;
     private View fadedBeckground;
+    private boolean mIsAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +57,14 @@ public class MkActivity extends AppCompatActivity {
 
         initCollapsingToolbar();
         initRef();
-
+        
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mIsAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
+        }
 
         mkList = new ArrayList<>();
-        adapter = new MksAdapter(this, mkList);
+        adapter = new MksAdapter(this, mkList, mIsAdmin);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -130,7 +136,7 @@ public class MkActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 animateFAB();
-                Mk newMk = new Mk("", "Новий МК", "Кулінарний майстер клас", "Опис", 0, "", Constants.URI_CARD_MK_K);
+                Mk newMk = new Mk( "Новий МК", "Кулінарний майстер клас", "Опис", Constants.URI_CARD_MK_K, FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
                 addMk(newMk);
                 adapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(0);
@@ -140,7 +146,7 @@ public class MkActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 animateFAB();
-                Mk newMk = new Mk("", "Новий МК", "Творчий майстер клас", "Опис", 0, "", Constants.URI_CARD_MK_T);
+                Mk newMk = new Mk( "Новий МК", "Творчий майстер клас", "Опис", Constants.URI_CARD_MK_T, FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
                 addMk(newMk);
                 adapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(0);

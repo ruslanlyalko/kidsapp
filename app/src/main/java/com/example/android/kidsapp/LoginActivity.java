@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText inputEmail, inputPassword;
     private FirebaseAuth auth;
     private ProgressBar progressBar;
-    private Button btnSignup, btnLogin, btnReset;
+    private Button  btnLogin, btnReset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +47,12 @@ public class LoginActivity extends AppCompatActivity {
         inputEmail = (EditText) findViewById(R.id.text_email);
         inputPassword = (EditText) findViewById(R.id.text_password);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        btnSignup = (Button) findViewById(R.id.button_sign_up);
         btnLogin = (Button) findViewById(R.id.button_login);
         btnReset = (Button) findViewById(R.id.button_reset_password);
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        btnSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
-            }
-        });
 
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override

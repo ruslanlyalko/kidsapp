@@ -40,21 +40,28 @@
                         android:layout_marginRight="8dp"
                         android:orientation="vertical">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="@string/text_date"
-                            android:textSize="18sp" />
+                            android:orientation="horizontal">
 
-                        <EditText
-                            android:id="@+id/input_date"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:focusable="false"
-                            android:hint="@string/hint_date" />
+                            <TextView
+                                android:id="@+id/text_date"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="16dp"
+                                android:layout_weight="4"
+                                android:text=""
+                                android:textSize="18sp" />
+
+                            <ImageButton
+                                android:id="@+id/button_choose"
+                                android:layout_width="0dp"
+                                android:layout_height="56dp"
+                                android:layout_weight="1"
+                                android:background="?android:attr/selectableItemBackground"
+                                android:src="@drawable/ic_action_right" />
+                        </LinearLayout>
 
                     </LinearLayout>
 

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -39,9 +40,9 @@ public class ReportActivity extends AppCompatActivity {
     TextView textRoom60, textRoom40, textRoom20, textRoom10, textRoomTotal;
     TextView textBday50, textBday30, textBdayTotal, textBdayMk;
     TextView textMk1, textMk2, textMkT1, textMkT2, textMkTotal;
-    EditText inputDate;
-    TextView textMkName;
 
+    TextView textDate, textMkName;
+    ImageButton buttonChoose;
 
     SeekBar seekRoom60, seekRoom40, seekRoom20, seekRoom10;
     SeekBar seekBday50, seekBday30, seekBdayMk;
@@ -113,7 +114,7 @@ public class ReportActivity extends AppCompatActivity {
         };
 
         // Pop up the Date Picker after user clicked on editText
-        inputDate.setOnClickListener(new View.OnClickListener() {
+        buttonChoose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(ReportActivity.this, dateSetListener,
@@ -128,7 +129,8 @@ public class ReportActivity extends AppCompatActivity {
 
     private void initRef() {
 
-        inputDate = (EditText) findViewById(R.id.input_date);
+        textDate = (TextView) findViewById(R.id.text_date);
+        buttonChoose = (ImageButton) findViewById(R.id.button_choose);
         // Room
         swipeLayout = (SwipeLayout) findViewById(R.id.swipe_layout);
 
@@ -588,7 +590,7 @@ public class ReportActivity extends AppCompatActivity {
         mDateMonth = dateStr.substring(first + 1, last);
         mDateYear = dateStr.substring(last + 1);
 
-        inputDate.setText(mDateStr);
+        textDate.setText(mDateStr);
 
         if (mReport != null)
             mReport.date = mDateStr;
@@ -636,7 +638,7 @@ public class ReportActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(isChanged){
+        if (isChanged) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
             builder.setTitle(R.string.dialog_report_save_before_close_title)
@@ -658,7 +660,7 @@ public class ReportActivity extends AppCompatActivity {
                         }
                     })
                     .show();
-        }else {
+        } else {
 
             super.onBackPressed();
             overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);

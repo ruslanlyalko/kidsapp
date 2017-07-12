@@ -166,10 +166,25 @@
 
             </LinearLayout>
 
+            <!-- Link to Login Screen -->
+
+            <Button
+                android:id="@+id/button_sign_up"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="@string/button_link_to_register"
+                android:textAllCaps="false"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:visibility="gone"/>
+
         </LinearLayout>
 
 
     </ScrollView>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

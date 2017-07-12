@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -50,9 +51,9 @@ public class UserActivity extends AppCompatActivity {
 
     ImageView imageUser;
     EditText inputName, inputEmail, inputPhone, inputBDay, inputCard;
-    TextView textTitleName,textTitlePosition;
+    TextView textTitleName, textTitlePosition;
     FloatingActionButton fab;
-    // ProgressBar progressBar;
+    Button btnSignup;
 
     private Calendar mBirthDay = Calendar.getInstance();
 
@@ -62,6 +63,7 @@ public class UserActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabaseRefCurrentUser;
     private ValueEventListener mUserListener;
+    private boolean mIsAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,14 @@ public class UserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user);
 
         // Set btn's, text's references and onClickListener's
-        initializeReferences();
+        initRef();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mIsAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
+        }
+
+        btnSignup.setVisibility(mIsAdmin ? View.VISIBLE : View.GONE);
 
         final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -99,15 +108,26 @@ public class UserActivity extends AppCompatActivity {
         inputCard.addTextChangedListener(mWatcher);
 
 
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent inetnt = new Intent(UserActivity.this, SalaryActivity.class);
-                startActivity(inetnt);
+                if (mIsAdmin) {
+                    Intent intent = new Intent(UserActivity.this, DashboardActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(UserActivity.this, SalaryActivity.class);
+                    startActivity(intent);
+                }
             }
         });
-        initializeCurrentUserData();
+        btnSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(UserActivity.this, SignupActivity.class));
+            }
+        });
+
+        initCurrentUserData();
     }
 
     private String mNumber = "";
@@ -142,13 +162,15 @@ public class UserActivity extends AppCompatActivity {
         }
     };
 
-    private void initializeReferences() {
+    private void initRef() {
 
         inputName = (EditText) findViewById(R.id.text_name);
         inputPhone = (EditText) findViewById(R.id.text_phone);
         inputEmail = (EditText) findViewById(R.id.text_email);
         inputBDay = (EditText) findViewById(R.id.text_bday);
         inputCard = (EditText) findViewById(R.id.text_card);
+
+        btnSignup = (Button) findViewById(R.id.button_sign_up);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -189,6 +211,11 @@ public class UserActivity extends AppCompatActivity {
             childUpdates.put("userCard", card);
             needUpdate = true;
         }
+        if (!email.equals(temail)) {
+            childUpdates.put("userEmail", email);
+            mAuth.getCurrentUser().updateEmail(email);
+            needUpdate = true;
+        }
 
         if (needUpdate)
             mDatabaseRefCurrentUser.updateChildren(childUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -202,7 +229,7 @@ public class UserActivity extends AppCompatActivity {
 
     }
 
-    private void initializeCurrentUserData() {
+    private void initCurrentUserData() {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {

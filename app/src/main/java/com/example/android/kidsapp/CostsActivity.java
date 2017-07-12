@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -43,13 +43,13 @@ public class CostsActivity extends AppCompatActivity {
     private CostsAdapter adapter;
     private List<Cost> costList = new ArrayList<>();
     private Boolean isFabOpen = false;
-    Button buttonPrev, buttonNext, buttonDeleteAll;
+    Button buttonDeleteAll;
+    ImageButton buttonNext, buttonPrev;
     TextView textMonth, textTotal, textCommon, textMk;
     ProgressBar progressBar;
 
     CompactCalendarView compactCalendarView;
     private FloatingActionButton fab, fab1, fab2;
-    private Animation fab_open, fab_close, rotate_forward, rotate_backward, fade, fade_back;
     private TextView textFab1, textFab2;
     private View fadedBeckground;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -70,7 +70,7 @@ public class CostsActivity extends AppCompatActivity {
 
         initRef();
 
-        if(isAdmin) buttonDeleteAll.setVisibility(View.VISIBLE);
+        if (isAdmin) buttonDeleteAll.setVisibility(View.VISIBLE);
         else buttonDeleteAll.setVisibility(View.GONE);
 
         initRecycle();
@@ -91,7 +91,14 @@ public class CostsActivity extends AppCompatActivity {
                 Calendar month = Calendar.getInstance();
                 month.setTime(firstDayOfNewMonth);
 
-                textMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);
+                String yearSimple = new SimpleDateFormat("yy", Locale.US).format(firstDayOfNewMonth).toString();
+
+                String str = Constants.MONTH_FULL[month.get(Calendar.MONTH)];
+
+                if (firstDayOfNewMonth.getYear() != new Date().getYear())
+                    str = str + "'" + yearSimple;
+
+                textMonth.setText(str);
 
                 String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(firstDayOfNewMonth).toString();
                 String monthStr = new SimpleDateFormat("M", Locale.US).format(firstDayOfNewMonth).toString();
@@ -156,6 +163,9 @@ public class CostsActivity extends AppCompatActivity {
         mDatabase.getReference(Constants.FIREBASE_REF_COSTS)
                 .child(yearStr)
                 .child(monthStr).removeValue();
+
+        calcTotal();
+
     }
 
     private void initRef() {
@@ -174,8 +184,8 @@ public class CostsActivity extends AppCompatActivity {
         textFab1 = (TextView) findViewById(R.id.textFab1);
         textFab2 = (TextView) findViewById(R.id.textFab2);
         fadedBeckground = (View) findViewById(R.id.fadedbackgroud);
-        buttonNext = (Button) findViewById(R.id.button_next);
-        buttonPrev = (Button) findViewById(R.id.button_prev);
+        buttonNext = (ImageButton) findViewById(R.id.button_next);
+        buttonPrev = (ImageButton) findViewById(R.id.button_prev);
         buttonDeleteAll = (Button) findViewById(R.id.button_cost_delete_all);
 
     }
@@ -212,7 +222,18 @@ public class CostsActivity extends AppCompatActivity {
 
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        Cost cost = dataSnapshot.getValue(Cost.class);
+                        if (cost != null) {
+                            for (Cost cost1 : costList) {
 
+                                if (cost1.getKey().equals(cost.getKey())) {
+                                    costList.remove(cost1);
+                                    adapter.notifyDataSetChanged();
+                                    calcTotal();
+                                }
+                            }
+
+                        }
                     }
 
                     @Override
@@ -256,7 +277,7 @@ public class CostsActivity extends AppCompatActivity {
         rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_forward);
         rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_backward);
         fade = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade);
-        fade_back = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_back);
+        fade_back_quick = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_back_quick);
 
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -369,7 +390,7 @@ public class CostsActivity extends AppCompatActivity {
 
 
             fadedBeckground.setClickable(false);
-            fadedBeckground.startAnimation(fade_back);
+            fadedBeckground.startAnimation(fade_back_quick);
 
             isFabOpen = false;
 

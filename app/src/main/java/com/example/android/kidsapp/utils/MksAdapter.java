@@ -35,6 +35,8 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
     boolean isEdit = false;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private boolean mIsAdmin=false;
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title1, title2, largeText, date, count;
@@ -66,9 +68,11 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
     }
 
 
-    public MksAdapter(Context mContext, List<Mk> mkList) {
+    public MksAdapter(Context mContext, List<Mk> mkList, boolean isAdmin) {
         this.mContext = mContext;
         this.mkList = mkList;
+        this.mIsAdmin = isAdmin;
+
     }
 
     @Override
@@ -88,6 +92,9 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
         holder.date.setText(mk.getDate());
         holder.count.setText(mk.getCount() + " разів");
 
+        holder.buttonEdit.setVisibility(mIsAdmin || mk.getUserId().equals(mAuth.getCurrentUser().getUid()) ?
+                View.VISIBLE : View.GONE);
+
         // loading mk cover using Glide library
         Glide.with(mContext).load(mk.getImageUri()).into(holder.image1);
 
@@ -103,6 +110,19 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
                 }
             }
         });
+        holder.image1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.expandPanel.getVisibility() == View.VISIBLE) {
+                    holder.imageExpand.setImageResource(R.drawable.ic_action_expand_more);
+                    holder.expandPanel.setVisibility(View.GONE);
+                } else {
+                    holder.imageExpand.setImageResource(R.drawable.ic_action_expand_less);
+                    holder.expandPanel.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
 
         holder.buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override

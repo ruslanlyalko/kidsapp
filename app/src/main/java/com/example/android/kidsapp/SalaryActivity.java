@@ -3,11 +3,16 @@ package com.example.android.kidsapp;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -15,6 +20,8 @@ import android.widget.Toast;
 
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Report;
+import com.example.android.kidsapp.utils.User;
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -22,22 +29,35 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class SalaryActivity extends AppCompatActivity {
 
+    ImageButton buttonPrev, buttonNext;
+    CompactCalendarView compactCalendarView;
+
+    TextView textSalaryStavka, textSalaryPercent, textSalaryArt, textSalaryMk, textSalaryMk2;
     TextView textTotal, textPercent, textStavka, textMk, textMonth;
-    TextView textTotal2, textPercent2, textStavka2, textMk2, textMonth2;
+    ProgressBar progressBar;
+
     TextView textCard;
     LinearLayout panelCopy;
 
-    ProgressBar progressBar, progressBar2;
-    List<Report> reportList, reportList2;
+
+    List<Report> reportList = new ArrayList<>();
+    ;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String mUId;
+    private User mUser = new User();
+    private boolean uploaded = false;
+    private LinearLayout panelDetails;
+    private boolean mIsAdmin;
 
 
     @Override
@@ -46,9 +66,6 @@ public class SalaryActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
         setContentView(R.layout.activity_salary);
-
-        reportList = new ArrayList<>();
-        reportList2 = new ArrayList<>();
 
         initRef();
 
@@ -60,7 +77,25 @@ public class SalaryActivity extends AppCompatActivity {
 
         } else {
             mUId = bundle.getString(Constants.EXTRA_UID);
+            mIsAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
         }
+
+        initCalendar();
+
+        initOnClick();
+
+        loadCurrentUser();
+
+        Calendar month = Calendar.getInstance();
+        textMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);
+
+        String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date()).toString();
+        String monthStr = new SimpleDateFormat("M", Locale.US).format(new Date()).toString();
+
+        loadReports(yearStr, monthStr);
+    }
+
+    private void initOnClick() {
 
         panelCopy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,23 +108,158 @@ public class SalaryActivity extends AppCompatActivity {
             }
         });
 
-        mDatabase.getReference(Constants.FIREBASE_REF_USERS).child(mUId).child("userCard").addListenerForSingleValueEvent(new ValueEventListener() {
+        panelDetails.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                textCard.setText(dataSnapshot.getValue().toString());
-
+            public void onClick(View v) {
+                if (mIsAdmin)
+                    editSalaryStavkaDialog();
             }
+        });
+    }
 
+    private void editSalaryStavkaDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.dialog_salary_title);
+
+
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_salary, null, false);
+        builder.setView(viewInflated);
+        final EditText inputStavka = (EditText) viewInflated.findViewById(R.id.input_salary_stavka);
+        final EditText inputPercent = (EditText) viewInflated.findViewById(R.id.input_salary_percent);
+        final EditText inputArt = (EditText) viewInflated.findViewById(R.id.input_salary_art);
+        final EditText inputMk = (EditText) viewInflated.findViewById(R.id.input_salary_mk);
+
+        inputStavka.setText(mUser.getUserStavka() + "");
+        inputPercent.setText(mUser.getUserPercent() + "");
+        inputArt.setText(mUser.getUserArt() + "");
+        inputMk.setText(mUser.getUserMk() + "");
+
+        builder.setPositiveButton("Ок", new DialogInterface.OnClickListener() {
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onClick(DialogInterface dialog, int which) {
+
+                String stavka = inputStavka.getText().toString();
+                String percent = inputPercent.getText().toString();
+                String art = inputArt.getText().toString();
+                String mk = inputMk.getText().toString();
+
+                try {
+                    mUser.userStavka = Integer.parseInt(stavka);
+                } catch (Exception e) {
+                }
+                try {
+                    mUser.userPercent = Integer.parseInt(percent);
+                } catch (Exception e) {
+                }
+                try {
+                    mUser.userArt = Integer.parseInt(art);
+                } catch (Exception e) {
+                }
+                try {
+                    mUser.userMk = Integer.parseInt(mk);
+                } catch (Exception e) {
+                }
+
+                saveCurrentUser();
 
             }
         });
+        builder.setNegativeButton("Відмінити", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
 
-        Calendar today = Calendar.getInstance();
+        builder.show();
+
+    }
+
+
+    private void saveCurrentUser() {
+        if (uploaded) {
+            mDatabase.getReference(Constants.FIREBASE_REF_USERS).child(mUId).setValue(mUser);
+        }
+
+    }
+
+    private void loadCurrentUser() {
+        mDatabase.getReference(Constants.FIREBASE_REF_USERS).child(mUId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        mUser = dataSnapshot.getValue(User.class);
+
+                        textCard.setText(mUser.userCard.toString());
+
+                        textSalaryStavka.setText(mUser.getUserStavka() + " грн/день");
+                        textSalaryPercent.setText(mUser.getUserPercent() + " %");
+                        textSalaryArt.setText(mUser.getUserArt() + " грн/дитина");
+                        textSalaryMk.setText(mUser.getUserMk() + " грн");
+                        textSalaryMk2.setText(mUser.getUserMk() * 2 + " грн");
+
+                        uploaded = true;
+                        calcSalary();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+
+    private void initCalendar() {
+        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+                Calendar month = Calendar.getInstance();
+                month.setTime(firstDayOfNewMonth);
+
+                String yearSimple = new SimpleDateFormat("yy", Locale.US).format(firstDayOfNewMonth).toString();
+
+                String str = Constants.MONTH_FULL[month.get(Calendar.MONTH)];
+
+                if (firstDayOfNewMonth.getYear() != new Date().getYear())
+                    str = str + "'" + yearSimple;
+
+                textMonth.setText(str);
+
+                String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(firstDayOfNewMonth).toString();
+                String monthStr = new SimpleDateFormat("M", Locale.US).format(firstDayOfNewMonth).toString();
+
+                loadReports(yearStr, monthStr);
+            }
+        });
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compactCalendarView.showNextMonth();
+            }
+        });
+
+        buttonPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compactCalendarView.showPreviousMonth();
+            }
+        });
+    }
+
+
+    private void loadReports(String yearStr, String monthStr) {
+
+        reportList.clear();
+        calcSalary();
         mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
-                .child(String.valueOf(today.get(Calendar.YEAR)))
-                .child(String.valueOf(today.get(Calendar.MONTH) + 1))
+                .child(yearStr)
+                .child(monthStr)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -99,43 +269,6 @@ public class SalaryActivity extends AppCompatActivity {
                             reportList.add(report);
                             calcSalary();
                         }
-
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-        mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
-                .child(String.valueOf(today.get(Calendar.YEAR)))
-                .child(String.valueOf(today.get(Calendar.MONTH))) // TODO KOSTUL'
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                        Report report = dataSnapshot.child(mUId).getValue(Report.class);
-                        if (report != null) {
-                            reportList2.add(report);
-                            calcSalary2();
-                        }
-
                     }
 
                     @Override
@@ -160,11 +293,19 @@ public class SalaryActivity extends AppCompatActivity {
                 });
     }
 
+
     private void initRef() {
 
-        panelCopy= (LinearLayout) findViewById(R.id.panel_copy);
+        panelDetails = (LinearLayout) findViewById(R.id.panel_details);
+        buttonNext = (ImageButton) findViewById(R.id.button_next);
+        buttonPrev = (ImageButton) findViewById(R.id.button_prev);
+        compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
 
-        textCard = (TextView) findViewById(R.id.text_card);
+        textSalaryStavka = (TextView) findViewById(R.id.text_salary_stavka);
+        textSalaryPercent = (TextView) findViewById(R.id.text_salary_percent);
+        textSalaryArt = (TextView) findViewById(R.id.text_salary_art);
+        textSalaryMk = (TextView) findViewById(R.id.text_salary_mk1);
+        textSalaryMk2 = (TextView) findViewById(R.id.text_salary_mk2);
 
         textMonth = (TextView) findViewById(R.id.text_month);
         textTotal = (TextView) findViewById(R.id.text_total);
@@ -173,13 +314,8 @@ public class SalaryActivity extends AppCompatActivity {
         textMk = (TextView) findViewById(R.id.text_mk_total);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
-        textMonth2 = (TextView) findViewById(R.id.text_month2);
-        textTotal2 = (TextView) findViewById(R.id.text_total2);
-        textStavka2 = (TextView) findViewById(R.id.text_stavka_total2);
-        textPercent2 = (TextView) findViewById(R.id.text_percent_total2);
-        textMk2 = (TextView) findViewById(R.id.text_mk_total2);
-        progressBar2 = (ProgressBar) findViewById(R.id.progress_bar2);
-
+        panelCopy = (LinearLayout) findViewById(R.id.panel_copy);
+        textCard = (TextView) findViewById(R.id.text_card);
     }
 
     private void calcSalary() {
@@ -189,15 +325,13 @@ public class SalaryActivity extends AppCompatActivity {
         int mk = 0;
 
         for (Report rep : reportList) {
-            stavka += Constants.SALARY_STAVKA;
+            stavka += mUser.getUserStavka();
             percent += rep.total;
-            mk += rep.bMk * Constants.SALARY_BDAY_MK;
-            mk += rep.mk1 * Constants.SALARY_ART_MK + rep.mk2 * Constants.SALARY_ART_MK;
+            mk += rep.bMk * mUser.getUserMk();
+            mk += (rep.mk1 + rep.mk2) * mUser.getUserArt();
         }
-        percent = (int) (percent * Constants.SALARY_PERCENT);
+        percent = (int) (percent * mUser.getUserPercent() / 100);
         int total = stavka + percent + mk;
-
-        textMonth.setText(Constants.MONTH_FULL[Calendar.getInstance().get(Calendar.MONTH)] + "");
 
         textStavka.setText(stavka + " грн");
         textPercent.setText(percent + " грн");
@@ -207,38 +341,12 @@ public class SalaryActivity extends AppCompatActivity {
         progressBar.setProgress(total);
     }
 
-    private void calcSalary2() {
-
-        int percent = 0;
-        int stavka = 0;
-        int mk = 0;
-
-        for (Report rep : reportList2) {
-            stavka += Constants.SALARY_STAVKA;
-            percent += rep.total;
-            mk += rep.bMk * Constants.SALARY_BDAY_MK;
-            mk += rep.mk1 * Constants.SALARY_ART_MK + rep.mk2 * Constants.SALARY_ART_MK;
-        }
-        percent = (int) (percent * Constants.SALARY_PERCENT);
-        int total = stavka + percent + mk;
-
-        textMonth2.setText(Constants.MONTH_FULL[Calendar.getInstance().get(Calendar.MONTH) - 1] + "");
-
-        textStavka2.setText(stavka + " грн");
-        textPercent2.setText(percent + " грн");
-        textMk2.setText(mk + " грн");
-        textTotal2.setText(total + " ГРН");
-
-        progressBar2.setProgress(total);
-    }
-
 
     @Override
     protected void onResume() {
         super.onResume();
 
         calcSalary();
-        calcSalary2();
     }
 
     @Override
