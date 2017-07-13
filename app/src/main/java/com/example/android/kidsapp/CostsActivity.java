@@ -50,6 +50,7 @@ public class CostsActivity extends AppCompatActivity {
 
     CompactCalendarView compactCalendarView;
     private FloatingActionButton fab, fab1, fab2;
+    private Animation fab_open, fab_close, rotate_forward, rotate_backward, fade, fade_back_quick;
     private TextView textFab1, textFab2;
     private View fadedBeckground;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();

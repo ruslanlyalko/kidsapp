@@ -178,7 +178,7 @@
     <string name="text_oborot">Оборот</string>
     <string name="text_cost_total1">Витрати</string>
     <string name="text_salary">Зарплата</string>
-    <string name="text_salary_detail_title">Деталі зарплати</string>
+    <string name="text_salary_detail_title">Деталі</string>
 
     <string name="text_salary_detail_stavka">"Ставка:"</string>
     <string name="text_salary_detail_percent">"Процент від обороту:"</string>

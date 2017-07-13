@@ -323,14 +323,17 @@ public class SalaryActivity extends AppCompatActivity {
         int percent = 0;
         int stavka = 0;
         int mk = 0;
+        int total1 = 0;
 
         for (Report rep : reportList) {
+            total1 += rep.total;
             stavka += mUser.getUserStavka();
-            percent += rep.total;
             mk += rep.bMk * mUser.getUserMk();
             mk += (rep.mk1 + rep.mk2) * mUser.getUserArt();
         }
-        percent = (int) (percent * mUser.getUserPercent() / 100);
+
+        percent += (total1 * mUser.getUserPercent() / 100);
+
         int total = stavka + percent + mk;
 
         textStavka.setText(stavka + " грн");

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Cost;
 import com.example.android.kidsapp.utils.Report;
+import com.example.android.kidsapp.utils.User;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -32,12 +34,14 @@ public class DashboardActivity extends AppCompatActivity {
     CompactCalendarView compactCalendarView;
 
     TextView textCostTotal, textCostCommon, textCostMk;
-
+    TextView textSalaryTotal, textSalaryStavka, textSalaryPercent, textSalaryMk;
 
     private List<Cost> costList = new ArrayList<>();
     ProgressBar progressBar, progressBarCost;
-    List<Report> reportList;
+    List<Report> reportList = new ArrayList<>();
+
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    private List<User> userList = new ArrayList<>();
 
 
     @Override
@@ -46,8 +50,6 @@ public class DashboardActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
         setContentView(R.layout.activity_dashboard);
-
-        reportList = new ArrayList<>();
 
         initRef();
 
@@ -63,6 +65,8 @@ public class DashboardActivity extends AppCompatActivity {
 
         loadCosts(yearStr, monthStr);
 
+        loadUsers();
+
     }
 
     private void initRef() {
@@ -74,7 +78,7 @@ public class DashboardActivity extends AppCompatActivity {
         textMonth = (TextView) findViewById(R.id.text_month);
         textTotal = (TextView) findViewById(R.id.text_total);
         textRoom = (TextView) findViewById(R.id.text_room_total);
-        textBday= (TextView) findViewById(R.id.text_bday_total);
+        textBday = (TextView) findViewById(R.id.text_bday_total);
         textMk = (TextView) findViewById(R.id.text_mk_total);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
@@ -83,6 +87,11 @@ public class DashboardActivity extends AppCompatActivity {
         textCostTotal = (TextView) findViewById(R.id.text_cost_total);
         textCostCommon = (TextView) findViewById(R.id.text_cost_common);
         textCostMk = (TextView) findViewById(R.id.text_cost_mk);
+
+        textSalaryTotal = (TextView) findViewById(R.id.text_salary_total);
+        textSalaryStavka = (TextView) findViewById(R.id.text_stavka_total);
+        textSalaryPercent = (TextView) findViewById(R.id.text_percent_total);
+        textSalaryMk = (TextView) findViewById(R.id.text_salary_mk_total);
 
     }
 
@@ -101,8 +110,8 @@ public class DashboardActivity extends AppCompatActivity {
 
                 String str = Constants.MONTH_FULL[month.get(Calendar.MONTH)];
 
-                if(firstDayOfNewMonth.getYear() != new Date().getYear())
-                    str = str +"'"+yearSimple;
+                if (firstDayOfNewMonth.getYear() != new Date().getYear())
+                    str = str + "'" + yearSimple;
 
                 textMonth.setText(str);
 
@@ -111,6 +120,8 @@ public class DashboardActivity extends AppCompatActivity {
 
                 loadReports(yearStr, monthStr);
                 loadCosts(yearStr, monthStr);
+                loadUsers();
+
             }
         });
         buttonNext.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +139,7 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 
-    private void loadReports(String yearStr, String monthStr){
+    private void loadReports(String yearStr, String monthStr) {
 
         reportList.clear();
         calcOborot();
@@ -139,7 +150,7 @@ public class DashboardActivity extends AppCompatActivity {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                        for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
                             Report report = ds.getValue(Report.class);
                             if (report != null) {
@@ -183,12 +194,12 @@ public class DashboardActivity extends AppCompatActivity {
             mk += rep.totalMk;
         }
 
-        int total = room + bday+ mk;
+        int total = room + bday + mk;
 
         textRoom.setText(room + " грн");
         textBday.setText(bday + " грн");
         textMk.setText(mk + " грн");
-        textTotal.setText(total + " ГРН");
+        textTotal.setText(total + " ГРН ("+ (total*80/100)+")");
 
         progressBar.setProgress(total);
     }
@@ -252,6 +263,73 @@ public class DashboardActivity extends AppCompatActivity {
         textCostTotal.setText(total + " ГРН");
     }
 
+    private void loadUsers() {
+
+        userList.clear();
+        calcSalaryForUsers();
+
+        mDatabase.getReference(Constants.FIREBASE_REF_USERS)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        User user = dataSnapshot.getValue(User.class);
+                        if (user != null) {
+                            userList.add(0, user);
+                            calcSalaryForUsers();
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void calcSalaryForUsers() {
+
+        int total = 0;
+        int percent = 0;
+        int stavka = 0;
+        int mk = 0;
+
+        for (User user : userList) {
+            int total1=0;
+            for (Report rep : reportList) {
+
+                if (rep.userName.equals(user.userName)) {
+
+                    stavka += user.getUserStavka();
+                    total1 += rep.total;
+                    mk += rep.bMk * user.getUserMk();
+                    mk += (rep.mk1 + rep.mk2) * user.getUserArt();
+                }
+            }
+            percent += total1 * user.getUserPercent() / 100;
+
+        }
+
+        total += stavka + percent + mk;
+        textSalaryStavka.setText(stavka + " грн");
+        textSalaryPercent.setText(percent + " грн");
+        textSalaryMk.setText(mk + " грн");
+
+        textSalaryTotal.setText(total+" ГРН");
+    }
 
     @Override
     protected void onResume() {
