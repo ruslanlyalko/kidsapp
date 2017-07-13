@@ -93,9 +93,12 @@
             card_view:cardCornerRadius="@dimen/card_album_radius">
 
             <LinearLayout
-                android:id="@+id/linear_user"
+                android:id="@+id/panel_salary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
                 android:orientation="horizontal"
                 android:paddingBottom="16dp">
 
@@ -232,8 +235,12 @@
             card_view:cardCornerRadius="@dimen/card_album_radius">
 
             <LinearLayout
+                android:id="@+id/panel_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -243,14 +250,10 @@
                     android:src="@drawable/ic_user_name" />
 
                 <LinearLayout
-                    android:id="@+id/panel_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:orientation="vertical">
 
                     <TextView
@@ -367,8 +370,12 @@
             card_view:cardCornerRadius="@dimen/card_album_radius">
 
             <LinearLayout
+                android:id="@+id/panel_copy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -378,14 +385,10 @@
                     android:src="@drawable/ic_user_card" />
 
                 <LinearLayout
-                    android:id="@+id/panel_copy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:orientation="vertical">
 
                     <TextView

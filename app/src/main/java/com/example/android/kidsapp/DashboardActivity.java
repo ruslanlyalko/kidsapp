@@ -36,6 +36,8 @@ public class DashboardActivity extends AppCompatActivity {
     TextView textCostTotal, textCostCommon, textCostMk;
     TextView textSalaryTotal, textSalaryStavka, textSalaryPercent, textSalaryMk;
 
+    TextView textBirthdays;
+
     private List<Cost> costList = new ArrayList<>();
     ProgressBar progressBar, progressBarCost;
     List<Report> reportList = new ArrayList<>();
@@ -93,6 +95,7 @@ public class DashboardActivity extends AppCompatActivity {
         textSalaryPercent = (TextView) findViewById(R.id.text_percent_total);
         textSalaryMk = (TextView) findViewById(R.id.text_salary_mk_total);
 
+        textBirthdays = (TextView) findViewById(R.id.text_birthdays);
     }
 
     private void initCalendar() {
@@ -302,6 +305,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void calcSalaryForUsers() {
 
+        String birthdays="";
         int total = 0;
         int percent = 0;
         int stavka = 0;
@@ -321,7 +325,11 @@ public class DashboardActivity extends AppCompatActivity {
             }
             percent += total1 * user.getUserPercent() / 100;
 
+            if(!user.userIsAdmin)
+                birthdays += user.getUserName()+" - " + user.userBDay+ "\n";
         }
+
+        textBirthdays.setText(birthdays);
 
         total += stavka + percent + mk;
         textSalaryStavka.setText(stavka + " грн");

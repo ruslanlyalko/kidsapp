@@ -8,13 +8,15 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -42,13 +44,14 @@ public class ReportActivity extends AppCompatActivity {
     TextView textMk1, textMk2, textMkT1, textMkT2, textMkTotal;
 
     TextView textDate, textMkName;
-    ImageButton buttonChoose;
+    LinearLayout panelDate;
 
     SeekBar seekRoom60, seekRoom40, seekRoom20, seekRoom10;
     SeekBar seekBday50, seekBday30, seekBdayMk;
     SeekBar seekMkT1, seekMkT2, seekMk1, seekMk2;
 
     EditText inputRoom60, inputRoom40, inputRoom20, inputRoom10;
+    EditText inputBday50, inputBday30, inputMk1, inputMk2;
     SwipeLayout swipeLayout, swipeLayout2, swipeLayout3;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -96,7 +99,7 @@ public class ReportActivity extends AppCompatActivity {
 
         initDatePicker();
 
-        //initSwipes();
+        initSwipes();
 
         initSeeks();
 
@@ -114,7 +117,7 @@ public class ReportActivity extends AppCompatActivity {
         };
 
         // Pop up the Date Picker after user clicked on editText
-        buttonChoose.setOnClickListener(new View.OnClickListener() {
+        panelDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(ReportActivity.this, dateSetListener,
@@ -130,7 +133,7 @@ public class ReportActivity extends AppCompatActivity {
     private void initRef() {
 
         textDate = (TextView) findViewById(R.id.text_date);
-        buttonChoose = (ImageButton) findViewById(R.id.button_choose);
+        panelDate = (LinearLayout) findViewById(R.id.panel_date);
         // Room
         swipeLayout = (SwipeLayout) findViewById(R.id.swipe_layout);
 
@@ -163,6 +166,10 @@ public class ReportActivity extends AppCompatActivity {
         seekBday30 = (SeekBar) findViewById(R.id.seek_bday_30);
         seekBdayMk = (SeekBar) findViewById(R.id.seek_bday_mk_done);
 
+        inputBday50 = (EditText) findViewById(R.id.input_bday_50);
+        inputBday30 = (EditText) findViewById(R.id.input_bday_30);
+
+
         // MK
         swipeLayout3 = (SwipeLayout) findViewById(R.id.swipe_layout3);
 
@@ -178,16 +185,20 @@ public class ReportActivity extends AppCompatActivity {
         textMk2 = (TextView) findViewById(R.id.text_mk_2);
         textMkT1 = (TextView) findViewById(R.id.text_mk_t1);
         textMkT2 = (TextView) findViewById(R.id.text_mk_t2);
+
+        inputMk1 = (EditText) findViewById(R.id.input_mk_1);
+        inputMk2 = (EditText) findViewById(R.id.input_mk_2);
+
+
     }
 
     private void initSeeks() {
+
         seekRoom60.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mReport.r60 = progress;
-                    updateRoomTotal();
-                }
+                mReport.r60 = progress;
+                updateRoomTotal();
             }
 
             @Override
@@ -204,10 +215,10 @@ public class ReportActivity extends AppCompatActivity {
         seekRoom40.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mReport.r40 = progress;
-                    updateRoomTotal();
-                }
+
+                mReport.r40 = progress;
+                updateRoomTotal();
+
             }
 
             @Override
@@ -224,10 +235,10 @@ public class ReportActivity extends AppCompatActivity {
         seekRoom20.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mReport.r20 = progress;
-                    updateRoomTotal();
-                }
+
+                mReport.r20 = progress;
+                updateRoomTotal();
+
             }
 
             @Override
@@ -243,10 +254,10 @@ public class ReportActivity extends AppCompatActivity {
         seekRoom10.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mReport.r10 = progress;
-                    updateRoomTotal();
-                }
+
+                mReport.r10 = progress;
+                updateRoomTotal();
+
             }
 
             @Override
@@ -264,10 +275,10 @@ public class ReportActivity extends AppCompatActivity {
         seekBday50.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mReport.b50 = progress;
-                    updateBdayTotal();
-                }
+
+                mReport.b50 = progress;
+                updateBdayTotal();
+
             }
 
             @Override
@@ -284,22 +295,22 @@ public class ReportActivity extends AppCompatActivity {
         seekBday30.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mReport.b30 = progress;
 
-                    if (mReport.b30 > 0)
-                        mReport.bMk = 1;
-                    else
-                        mReport.bMk = 0;
-                    if (mReport.b30 > 10)
-                        mReport.bMk = 2;
+                mReport.b30 = progress;
 
-                    if (mReport.b30 > 20)
-                        mReport.bMk = 3;
-                    seekBdayMk.setProgress(mReport.bMk);
+                if (mReport.b30 > 0)
+                    mReport.bMk = 1;
+                else
+                    mReport.bMk = 0;
+                if (mReport.b30 > 10)
+                    mReport.bMk = 2;
 
-                    updateBdayTotal();
-                }
+                if (mReport.b30 > 20)
+                    mReport.bMk = 3;
+                seekBdayMk.setProgress(mReport.bMk);
+
+                updateBdayTotal();
+
             }
 
             @Override
@@ -316,13 +327,13 @@ public class ReportActivity extends AppCompatActivity {
         seekBdayMk.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mReport.bMk = progress;
-                    String mkDone = getString(R.string.mk_done) + mReport.bMk;
-                    textBdayMk.setText(mkDone);
 
-                    updateBdayTotal();
-                }
+                mReport.bMk = progress;
+                String mkDone = getString(R.string.mk_done) + mReport.bMk;
+                textBdayMk.setText(mkDone);
+
+                updateBdayTotal();
+
             }
 
             @Override
@@ -341,10 +352,10 @@ public class ReportActivity extends AppCompatActivity {
         seekMkT1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mReport.mkt1 = progress;
-                    updateMkTotal();
-                }
+
+                mReport.mkt1 = progress;
+                updateMkTotal();
+
             }
 
             @Override
@@ -361,10 +372,10 @@ public class ReportActivity extends AppCompatActivity {
         seekMkT2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mReport.mkt2 = progress;
-                    updateMkTotal();
-                }
+
+                mReport.mkt2 = progress;
+                updateMkTotal();
+
             }
 
             @Override
@@ -381,10 +392,10 @@ public class ReportActivity extends AppCompatActivity {
         seekMk1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mReport.mk1 = progress;
-                    updateMkTotal();
-                }
+
+                mReport.mk1 = progress;
+                updateMkTotal();
+
             }
 
             @Override
@@ -401,10 +412,10 @@ public class ReportActivity extends AppCompatActivity {
         seekMk2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mReport.mk2 = progress;
-                    updateMkTotal();
-                }
+
+                mReport.mk2 = progress;
+                updateMkTotal();
+
             }
 
             @Override
@@ -417,6 +428,202 @@ public class ReportActivity extends AppCompatActivity {
 
             }
         });
+
+        inputRoom60.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int value = 0;
+                try {
+                    value = Integer.parseInt(String.valueOf(s));
+                } catch (Exception e) {
+                    //eat it
+                }
+
+                mReport.r60 = value;
+                updateSeekBars();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        inputRoom40.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int value = 0;
+                try {
+                    value = Integer.parseInt(String.valueOf(s));
+                } catch (Exception e) {
+                    //eat it
+                }
+
+                mReport.r40 = value;
+                updateSeekBars();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        inputRoom20.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int value = 0;
+                try {
+                    value = Integer.parseInt(String.valueOf(s));
+                } catch (Exception e) {
+                    //eat it
+                }
+
+                mReport.r20 = value;
+                updateSeekBars();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        inputRoom10.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int value = 0;
+                try {
+                    value = Integer.parseInt(String.valueOf(s));
+                } catch (Exception e) {
+                    //eat it
+                }
+
+                mReport.r10 = value;
+                updateSeekBars();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        inputBday50.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int value = 0;
+                try {
+                    value = Integer.parseInt(String.valueOf(s));
+                } catch (Exception e) {
+                    //eat it
+                }
+
+                mReport.b50= value;
+                updateSeekBars();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        inputBday30.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int value = 0;
+                try {
+                    value = Integer.parseInt(String.valueOf(s));
+                } catch (Exception e) {
+                    //eat it
+                }
+
+                mReport.b30 = value;
+                updateSeekBars();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        inputMk1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int value = 0;
+                try {
+                    value = Integer.parseInt(String.valueOf(s));
+                } catch (Exception e) {
+                    //eat it
+                }
+
+                mReport.mk1= value;
+                updateSeekBars();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        inputMk2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int value = 0;
+                try {
+                    value = Integer.parseInt(String.valueOf(s));
+                } catch (Exception e) {
+                    //eat it
+                }
+
+                mReport.mk2 = value;
+                updateSeekBars();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
     private void initSwipes() {
@@ -431,6 +638,7 @@ public class ReportActivity extends AppCompatActivity {
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
         swipeLayout.setRightSwipeEnabled(true);
         swipeLayout.setBottomSwipeEnabled(false);
+
     }
 
 
@@ -445,9 +653,7 @@ public class ReportActivity extends AppCompatActivity {
                         if (mReport == null) {
                             mReport = new Report(mUId, mUserName, mDateStr);
                         }
-                        updateRoomTotal();
-                        updateBdayTotal();
-                        updateMkTotal();
+
                         updateSeekBars();
                         updateMkName();
 
@@ -487,10 +693,14 @@ public class ReportActivity extends AppCompatActivity {
         textRoom20.setText("20грн х " + mReport.r20 + " = " + (mReport.r20 * 20) + " ГРН");
         textRoom10.setText("10грн х " + mReport.r10 + " = " + (mReport.r10 * 10) + " ГРН");
 
-        inputRoom60.setText(String.valueOf(mReport.r60));
-        inputRoom40.setText(String.valueOf(mReport.r40));
-        inputRoom20.setText(String.valueOf(mReport.r20));
-        inputRoom10.setText(String.valueOf(mReport.r10));
+        if (!inputRoom60.hasFocus())
+            inputRoom60.setText(String.valueOf(mReport.r60));
+        if (!inputRoom40.hasFocus())
+            inputRoom40.setText(String.valueOf(mReport.r40));
+        if (!inputRoom20.hasFocus())
+            inputRoom20.setText(String.valueOf(mReport.r20));
+        if (!inputRoom10.hasFocus())
+            inputRoom10.setText(String.valueOf(mReport.r10));
 
         mReport.totalRoom = mReport.r60 * 60 + mReport.r40 * 40 + mReport.r20 * 20 + mReport.r10 * 10;
 
@@ -507,6 +717,11 @@ public class ReportActivity extends AppCompatActivity {
 
         String mkDone = getString(R.string.mk_done) + mReport.bMk;
         textBdayMk.setText(mkDone);
+
+        if (!inputBday50.hasFocus())
+            inputBday50.setText(String.valueOf(mReport.b50));
+        if (!inputBday30.hasFocus())
+            inputBday30.setText(String.valueOf(mReport.b30));
 
         mReport.totalBday = mReport.b50 * 50 + mReport.b30 * 30;
 
@@ -527,6 +742,12 @@ public class ReportActivity extends AppCompatActivity {
 
         textMk1.setText("  " + mReport.mk1 + " = " + (tar1 * mReport.mk1) + " ГРН");
         textMk2.setText("  " + mReport.mk2 + " = " + (tar2 * mReport.mk2) + " ГРН");
+
+        if (!inputMk1.hasFocus())
+            inputMk1.setText(String.valueOf(mReport.mk1));
+        if (!inputMk2.hasFocus())
+            inputMk2.setText(String.valueOf(mReport.mk2));
+
 
         String total = mReport.totalMk + " ГРН";
         textMkTotal.setText(total);

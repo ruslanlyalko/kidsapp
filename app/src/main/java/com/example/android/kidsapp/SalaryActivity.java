@@ -40,24 +40,24 @@ public class SalaryActivity extends AppCompatActivity {
 
     ImageButton buttonPrev, buttonNext;
     CompactCalendarView compactCalendarView;
+    LinearLayout panelSalary;
 
     TextView textSalaryStavka, textSalaryPercent, textSalaryArt, textSalaryMk, textSalaryMk2;
     TextView textTotal, textPercent, textStavka, textMk, textMonth;
     ProgressBar progressBar;
 
+    LinearLayout panelDetails;
+
     TextView textCard;
     LinearLayout panelCopy;
 
-
-    List<Report> reportList = new ArrayList<>();
-    ;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String mUId;
+    List<Report> reportList = new ArrayList<>();
     private User mUser = new User();
+    private String mUId;
     private boolean uploaded = false;
-    private LinearLayout panelDetails;
-    private boolean mIsAdmin;
+    private boolean mIsAdmin = false;
 
 
     @Override
@@ -113,6 +113,13 @@ public class SalaryActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mIsAdmin)
                     editSalaryStavkaDialog();
+            }
+        });
+
+        panelSalary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
@@ -296,6 +303,7 @@ public class SalaryActivity extends AppCompatActivity {
 
     private void initRef() {
 
+        panelSalary= (LinearLayout) findViewById(R.id.panel_salary);
         panelDetails = (LinearLayout) findViewById(R.id.panel_details);
         buttonNext = (ImageButton) findViewById(R.id.button_next);
         buttonPrev = (ImageButton) findViewById(R.id.button_prev);

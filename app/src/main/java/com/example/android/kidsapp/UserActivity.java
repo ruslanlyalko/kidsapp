@@ -225,8 +225,6 @@ public class UserActivity extends AppCompatActivity {
                 }
             });
 
-        // TODO update Email!
-
     }
 
     private void initCurrentUserData() {

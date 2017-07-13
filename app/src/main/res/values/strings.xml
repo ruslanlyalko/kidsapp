@@ -7,7 +7,7 @@
     <string name="toast_minimum_password">Пароль за короткий. Мінімальна довжина 6 символів!</string>
     <string name="toast_auth_failed">Не вдається ввійти! Перевірте, будь ласка, правильність введених даних</string>
     <string name="button_login">ВВІЙТИ</string>
-    <string name="button_forgot_password">Забули свій пароль?</string>
+    <string name="button_forgot_password">Забули пароль?</string>
     <string name="button_link_to_register">Зареєструвати нового користувача</string>
 
     <!-- RESET PASS -->
@@ -20,7 +20,7 @@
 
     <!-- SIGN UP-->
     <string name="title_activity_signup">Реєстрація</string>
-    <string name="button_sign_up">Зареєструватись</string>
+    <string name="button_sign_up">Зареєструвати</string>
 
     <!-- HINTS-->
     <string name="hint_first_name">ПІБ</string>
