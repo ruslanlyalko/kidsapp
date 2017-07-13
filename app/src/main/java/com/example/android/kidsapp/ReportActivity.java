@@ -13,11 +13,14 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.android.kidsapp.utils.Constants;
@@ -53,6 +56,9 @@ public class ReportActivity extends AppCompatActivity {
     EditText inputRoom60, inputRoom40, inputRoom20, inputRoom10;
     EditText inputBday50, inputBday30, inputMk1, inputMk2;
     SwipeLayout swipeLayout, swipeLayout2, swipeLayout3;
+
+    Switch switchMyMk;
+
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -188,8 +194,7 @@ public class ReportActivity extends AppCompatActivity {
 
         inputMk1 = (EditText) findViewById(R.id.input_mk_1);
         inputMk2 = (EditText) findViewById(R.id.input_mk_2);
-
-
+        switchMyMk = (Switch) findViewById(R.id.switch_my_mk);
     }
 
     private void initSeeks() {
@@ -203,12 +208,10 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
 
@@ -624,6 +627,13 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
+        switchMyMk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mReport.mkMy = isChecked;
+                //todo update title
+            }
+        });
     }
 
     private void initSwipes() {
@@ -775,6 +785,8 @@ public class ReportActivity extends AppCompatActivity {
         seekMk2.setProgress(mReport.mk2);
         seekMkT1.setProgress(mReport.mkt1);
         seekMkT2.setProgress(mReport.mkt2);
+
+        switchMyMk.setChecked(mReport.mkMy);
     }
 
 

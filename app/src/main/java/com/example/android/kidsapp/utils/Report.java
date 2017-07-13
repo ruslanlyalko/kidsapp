@@ -26,6 +26,7 @@ public class Report {
     public int mk2;
     public int mkt1;
     public int mkt2;
+    public boolean mkMy = true;
 
     public Report() {
 
@@ -39,6 +40,9 @@ public class Report {
         this.mkName = "";
     }
 
+    public boolean isMkMy() {
+        return mkMy;
+    }
 
     public int getR10() {
         return r10;

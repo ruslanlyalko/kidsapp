@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -202,7 +201,7 @@ public class DashboardActivity extends AppCompatActivity {
         textRoom.setText(room + " грн");
         textBday.setText(bday + " грн");
         textMk.setText(mk + " грн");
-        textTotal.setText(total + " ГРН ("+ (total*80/100)+")");
+        textTotal.setText(total + " ГРН (" + (total * 80 / 100) + ")");
 
         progressBar.setProgress(total);
     }
@@ -305,28 +304,32 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void calcSalaryForUsers() {
 
-        String birthdays="";
+        String birthdays = "";
         int total = 0;
         int percent = 0;
         int stavka = 0;
         int mk = 0;
 
         for (User user : userList) {
-            int total1=0;
+            int total1 = 0;
             for (Report rep : reportList) {
 
                 if (rep.userName.equals(user.userName)) {
-
+                    //stavka
                     stavka += user.getUserStavka();
+                    //percent
                     total1 += rep.total;
+                    // Birthdays Mk
                     mk += rep.bMk * user.getUserMk();
-                    mk += (rep.mk1 + rep.mk2) * user.getUserArt();
+                    // Art Mk
+                    if (rep.mkMy)
+                        mk += (rep.mk1 + rep.mk2) * user.getUserArt();
                 }
             }
             percent += total1 * user.getUserPercent() / 100;
 
-            if(!user.userIsAdmin)
-                birthdays += user.getUserName()+" - " + user.userBDay+ "\n";
+            if (!user.userIsAdmin)
+                birthdays += user.getUserName() + " - " + user.userBDay + "\n";
         }
 
         textBirthdays.setText(birthdays);
@@ -336,7 +339,7 @@ public class DashboardActivity extends AppCompatActivity {
         textSalaryPercent.setText(percent + " грн");
         textSalaryMk.setText(mk + " грн");
 
-        textSalaryTotal.setText(total+" ГРН");
+        textSalaryTotal.setText(total + " ГРН");
     }
 
     @Override

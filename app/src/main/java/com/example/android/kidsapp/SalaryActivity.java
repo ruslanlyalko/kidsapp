@@ -349,16 +349,19 @@ public class SalaryActivity extends AppCompatActivity {
         for (Report rep : reportList) {
             total1 += rep.total;
             stavka += mUser.getUserStavka();
+            //Birthdays Mk
             mk += rep.bMk * mUser.getUserMk();
-            mk += (rep.mk1 + rep.mk2) * mUser.getUserArt();
-            if (rep.mk1 != 0 || rep.mk2 != 0) {
-                mkCount += 1;
-            }
-            childOnArtMk += rep.mk1;
-            childOnArtMk += rep.mk2;
-
             if (rep.bMk != 0) {
                 birthMkCount += 1;
+            }
+            // Art MK
+            if(rep.mkMy) {
+                mk += (rep.mk1 + rep.mk2) * mUser.getUserArt();
+                if (rep.mk1 != 0 || rep.mk2 != 0) {
+                    mkCount += 1;
+                }
+                childOnArtMk += rep.mk1;
+                childOnArtMk += rep.mk2;
             }
         }
 

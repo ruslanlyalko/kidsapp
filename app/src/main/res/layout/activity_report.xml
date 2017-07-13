@@ -31,6 +31,7 @@
                 android:focusable="true"
                 android:orientation="horizontal">
 
+
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -80,7 +81,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
                 <LinearLayout
                     android:id="@+id/swipe_menu"
                     android:layout_width="56dp"
@@ -91,6 +91,10 @@
                     android:orientation="vertical"
                     android:paddingBottom="22dp"
                     android:showDividers="middle">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="0dp" />
 
                     <View
                         android:layout_width="match_parent"
@@ -265,6 +269,10 @@
                     android:orientation="vertical"
                     android:paddingBottom="22dp"
                     android:showDividers="middle">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="0dp" />
 
                     <View
                         android:layout_width="match_parent"
@@ -473,18 +481,14 @@
                                 android:layout_height="1dp"
                                 android:layout_weight="1" />
 
-                            <Button
-                                android:id="@+id/button_choose_mk"
+                            <Switch
+                                android:id="@+id/switch_my_mk"
                                 android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:layout_marginTop="8dp"
-                                android:background="?attr/selectableItemBackground"
-                                android:paddingLeft="8dp"
-                                android:paddingRight="8dp"
-                                android:text="ВИБРАТИ"
-                                android:textAllCaps="true"
-                                android:textColor="@color/colorAccent"
-                                android:visibility="gone" />
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="Мій МК"
+                                android:layout_marginTop="16dp" />
+
                         </LinearLayout>
 
 
