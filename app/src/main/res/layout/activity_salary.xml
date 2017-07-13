@@ -218,6 +218,21 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/panel_expand"
+                        android:layout_marginTop="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+
+                        <TextView
+                            android:id="@+id/text_salary_expand"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
 

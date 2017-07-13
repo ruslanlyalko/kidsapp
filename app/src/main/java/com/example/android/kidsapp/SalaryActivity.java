@@ -48,7 +48,7 @@ public class SalaryActivity extends AppCompatActivity {
 
     LinearLayout panelDetails;
 
-    TextView textCard;
+    TextView textCard, textExpand;
     LinearLayout panelCopy;
 
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -58,6 +58,7 @@ public class SalaryActivity extends AppCompatActivity {
     private String mUId;
     private boolean uploaded = false;
     private boolean mIsAdmin = false;
+    private LinearLayout panelExpand;
 
 
     @Override
@@ -120,6 +121,13 @@ public class SalaryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if (panelExpand.getVisibility() != View.VISIBLE) {
+                    panelExpand.setVisibility(View.VISIBLE);
+
+                } else {
+                    panelExpand.setVisibility(View.GONE);
+
+                }
             }
         });
     }
@@ -303,7 +311,9 @@ public class SalaryActivity extends AppCompatActivity {
 
     private void initRef() {
 
-        panelSalary= (LinearLayout) findViewById(R.id.panel_salary);
+        textExpand = (TextView) findViewById(R.id.text_salary_expand);
+        panelExpand = (LinearLayout) findViewById(R.id.panel_expand);
+        panelSalary = (LinearLayout) findViewById(R.id.panel_salary);
         panelDetails = (LinearLayout) findViewById(R.id.panel_details);
         buttonNext = (ImageButton) findViewById(R.id.button_next);
         buttonPrev = (ImageButton) findViewById(R.id.button_prev);
@@ -332,15 +342,27 @@ public class SalaryActivity extends AppCompatActivity {
         int stavka = 0;
         int mk = 0;
         int total1 = 0;
+        int mkCount = 0;
+        int birthMkCount = 0;
+        int childOnArtMk = 0;
 
         for (Report rep : reportList) {
             total1 += rep.total;
             stavka += mUser.getUserStavka();
             mk += rep.bMk * mUser.getUserMk();
             mk += (rep.mk1 + rep.mk2) * mUser.getUserArt();
+            if (rep.mk1 != 0 || rep.mk2 != 0) {
+                mkCount += 1;
+            }
+            childOnArtMk += rep.mk1;
+            childOnArtMk += rep.mk2;
+
+            if (rep.bMk != 0) {
+                birthMkCount += 1;
+            }
         }
 
-        percent += (total1 * mUser.getUserPercent() / 100);
+        percent = (total1 * mUser.getUserPercent() / 100);
 
         int total = stavka + percent + mk;
 
@@ -348,6 +370,14 @@ public class SalaryActivity extends AppCompatActivity {
         textPercent.setText(percent + " грн");
         textMk.setText(mk + " грн");
         textTotal.setText(total + " ГРН");
+
+        String text1 = "В цьоу місяці було " + reportList.size() + " робочих днів \n";
+        text1 += "Загальна виручка " + total1 + " грн \n\n";
+        text1 += "Проведено " + mkCount + " Творчих та Кулінарних МК \n";
+        text1 += " На яких було присутньо " + childOnArtMk + " дітей \n\n";
+        text1 += "Проведено " + birthMkCount + " МК на Днях Народженнях \n";
+
+        textExpand.setText(text1);
 
         progressBar.setProgress(total);
     }
