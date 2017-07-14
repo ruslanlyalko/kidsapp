@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
+        <!-- TILE  Date picker -->
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
 
         </android.support.v7.widget.CardView>
 
-
+        <!-- TILE  Room -->
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,68 +76,19 @@
             android:elevation="3dp"
             card_view:cardCornerRadius="@dimen/card_album_radius">
 
-            <com.example.android.kidsapp.utils.SwipeLayout
-                android:id="@+id/swipe_layout"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <!-- Title  Room -->
                 <LinearLayout
-                    android:id="@+id/swipe_menu"
-                    android:layout_width="56dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorPrimary"
-                    android:divider="?android:dividerHorizontal"
-                    android:dividerPadding="2dp"
-                    android:orientation="vertical"
-                    android:paddingBottom="22dp"
-                    android:showDividers="middle">
-
-                    <EditText
-                        android:layout_width="0dp"
-                        android:layout_height="0dp" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="5" />
-
-                    <EditText
-                        android:id="@+id/input_room_60"
-                        android:layout_width="match_parent"
-                        android:layout_height="66dp"
-                        android:inputType="number"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <EditText
-                        android:id="@+id/input_room_40"
-                        android:layout_width="match_parent"
-                        android:layout_height="66dp"
-                        android:inputType="number"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <EditText
-                        android:id="@+id/input_room_20"
-                        android:layout_width="match_parent"
-                        android:layout_height="66dp"
-                        android:inputType="number"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <EditText
-                        android:id="@+id/input_room_10"
-                        android:layout_width="match_parent"
-                        android:layout_height="66dp"
-                        android:inputType="number"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                    android:id="@+id/panel_room_expand"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:orientation="horizontal"
                     android:paddingBottom="16dp">
 
@@ -165,6 +116,7 @@
                             android:id="@+id/textView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="-4dp"
                             android:layout_marginTop="16dp"
                             android:text="@string/text_all"
                             android:textColor="@color/colorBlack" />
@@ -177,74 +129,162 @@
                             android:textColor="@color/colorBlack"
                             android:textSize="32sp" />
 
-                        <TextView
-                            android:id="@+id/text_room_60"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="60 грн * 0 = 0 ГРН"
-                            android:textColor="@color/colorBlack" />
-
-                        <SeekBar
-                            android:id="@+id/seek_room_60"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="25"
-                            android:progress="0" />
-
-                        <TextView
-                            android:id="@+id/text_room_40"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="40 грн * 0 = 0 ГРН"
-                            android:textColor="@color/colorBlack" />
-
-                        <SeekBar
-                            android:id="@+id/seek_room_40"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="25"
-                            android:progress="0" />
-
-                        <TextView
-                            android:id="@+id/text_room_20"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="20 грн * 0 = 0 ГРН"
-                            android:textColor="@color/colorBlack" />
-
-                        <SeekBar
-                            android:id="@+id/seek_room_20"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="25"
-                            android:progress="0" />
-
-                        <TextView
-                            android:id="@+id/text_room_10"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="10 грн * 0 = 0 ГРН"
-                            android:textColor="@color/colorBlack" />
-
-                        <SeekBar
-                            android:id="@+id/seek_room_10"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="25"
-                            android:progress="0" />
 
                     </LinearLayout>
 
                 </LinearLayout>
 
-            </com.example.android.kidsapp.utils.SwipeLayout>
+                <!-- Body  Room -->
+                <com.example.android.kidsapp.utils.SwipeLayout
+                    android:id="@+id/swipe_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <!-- Menu  Room -->
+                    <LinearLayout
+                        android:id="@+id/swipe_menu"
+                        android:layout_width="56dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:divider="?android:dividerHorizontal"
+                        android:dividerPadding="2dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="22dp"
+                        android:showDividers="middle">
+
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="0dp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="5" />
+
+                        <EditText
+                            android:id="@+id/input_room_60"
+                            android:layout_width="56dp"
+                            android:layout_height="66dp"
+                            android:inputType="number"
+                            android:text="0"
+                            android:textAlignment="center" />
+
+                        <EditText
+                            android:id="@+id/input_room_40"
+                            android:layout_width="56dp"
+                            android:layout_height="66dp"
+                            android:inputType="number"
+                            android:text="0"
+                            android:textAlignment="center" />
+
+                        <EditText
+                            android:id="@+id/input_room_20"
+                            android:layout_width="56dp"
+                            android:layout_height="66dp"
+                            android:inputType="number"
+                            android:text="0"
+                            android:textAlignment="center" />
+
+                        <EditText
+                            android:id="@+id/input_room_10"
+                            android:layout_width="56dp"
+                            android:layout_height="66dp"
+                            android:inputType="number"
+                            android:text="0"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+
+                    <!-- SeekBars  Room -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="56dp">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:orientation="vertical">
+
+
+                            <TextView
+                                android:id="@+id/text_room_60"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:text="60 грн * 0 = 0 ГРН"
+                                android:textColor="@color/colorBlack" />
+
+                            <SeekBar
+                                android:id="@+id/seek_room_60"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:max="25"
+                                android:progress="0" />
+
+                            <TextView
+                                android:id="@+id/text_room_40"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:text="40 грн * 0 = 0 ГРН"
+                                android:textColor="@color/colorBlack" />
+
+                            <SeekBar
+                                android:id="@+id/seek_room_40"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:max="25"
+                                android:progress="0" />
+
+                            <TextView
+                                android:id="@+id/text_room_20"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:text="20 грн * 0 = 0 ГРН"
+                                android:textColor="@color/colorBlack" />
+
+                            <SeekBar
+                                android:id="@+id/seek_room_20"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:max="25"
+                                android:progress="0" />
+
+                            <TextView
+                                android:id="@+id/text_room_10"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:text="10 грн * 0 = 0 ГРН"
+                                android:textColor="@color/colorBlack" />
+
+                            <SeekBar
+                                android:id="@+id/seek_room_10"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:max="25"
+                                android:progress="0" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.example.android.kidsapp.utils.SwipeLayout>
+
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
+        <!-- TILE  Birth Days-->
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -254,56 +294,22 @@
             android:elevation="3dp"
             card_view:cardCornerRadius="@dimen/card_album_radius">
 
-            <com.example.android.kidsapp.utils.SwipeLayout
-                android:id="@+id/swipe_layout2"
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <!-- Title BirthDays-->
                 <LinearLayout
-                    android:id="@+id/swipe_menu2"
-                    android:layout_width="56dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorPrimary"
-                    android:divider="?android:dividerHorizontal"
-                    android:dividerPadding="2dp"
-                    android:orientation="vertical"
-                    android:paddingBottom="22dp"
-                    android:showDividers="middle">
-
-                    <EditText
-                        android:layout_width="0dp"
-                        android:layout_height="0dp" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="5" />
-
-                    <EditText
-                        android:id="@+id/input_bday_50"
-                        android:layout_width="match_parent"
-                        android:layout_height="66dp"
-                        android:inputType="number"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <EditText
-                        android:id="@+id/input_bday_30"
-                        android:layout_width="match_parent"
-                        android:layout_height="66dp"
-                        android:inputType="number"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="66dp" />
-                </LinearLayout>
-
-                <LinearLayout
+                    android:id="@+id/panel_room_expand2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:orientation="horizontal"
+
                     android:paddingBottom="16dp">
 
                     <ImageView
@@ -316,6 +322,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
+
                         android:layout_marginRight="8dp"
                         android:orientation="vertical">
 
@@ -329,6 +336,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginBottom="-4dp"
                             android:layout_marginTop="16dp"
                             android:text="@string/text_all"
                             android:textColor="@color/colorBlack" />
@@ -341,60 +349,131 @@
                             android:textColor="@color/colorBlack"
                             android:textSize="32sp" />
 
-                        <TextView
-                            android:id="@+id/text_bday_50"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="16dp"
-                            android:text="Кімната: 50 грн * 0 = 0 ГРН"
-                            android:textColor="@color/colorBlack" />
-
-                        <SeekBar
-                            android:id="@+id/seek_bday_50"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="25"
-                            android:progress="0" />
-
-                        <TextView
-                            android:id="@+id/text_bday_30"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="16dp"
-                            android:text="МК: 30 грн * 0 = 0 ГРН"
-                            android:textColor="@color/colorBlack" />
-
-                        <SeekBar
-                            android:id="@+id/seek_bday_30"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="25"
-                            android:progress="0" />
-
-                        <TextView
-                            android:id="@+id/text_bday_mk_done"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="16dp"
-                            android:text="Проведено Майстер Класів - 0"
-                            android:textColor="@color/colorBlack" />
-
-                        <SeekBar
-                            android:id="@+id/seek_bday_mk_done"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="3"
-                            android:progress="0" />
-
                     </LinearLayout>
 
                 </LinearLayout>
 
+                <!-- Body  BirthDay-->
+                <com.example.android.kidsapp.utils.SwipeLayout
+                    android:id="@+id/swipe_layout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
 
-            </com.example.android.kidsapp.utils.SwipeLayout>
+                    <!-- Menu  BirthDay-->
+                    <LinearLayout
+                        android:id="@+id/swipe_menu2"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorPrimary"
+                        android:divider="?android:dividerHorizontal"
+                        android:dividerPadding="2dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="22dp"
+                        android:showDividers="middle">
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="0dp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="5" />
+
+                        <EditText
+                            android:id="@+id/input_bday_50"
+                            android:layout_width="match_parent"
+                            android:layout_height="66dp"
+                            android:inputType="number"
+                            android:text="0"
+                            android:textAlignment="center" />
+
+                        <EditText
+                            android:id="@+id/input_bday_30"
+                            android:layout_width="match_parent"
+                            android:layout_height="66dp"
+                            android:inputType="number"
+                            android:text="0"
+                            android:textAlignment="center" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="66dp" />
+                    </LinearLayout>
+                    <!-- SeekBars  BirthDay-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="56dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+
+                            android:layout_marginRight="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/text_bday_50"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="16dp"
+                                android:text="Кімната: 50 грн * 0 = 0 ГРН"
+                                android:textColor="@color/colorBlack" />
+
+                            <SeekBar
+                                android:id="@+id/seek_bday_50"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:max="25"
+                                android:progress="0" />
+
+                            <TextView
+                                android:id="@+id/text_bday_30"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="16dp"
+                                android:text="МК: 30 грн * 0 = 0 ГРН"
+                                android:textColor="@color/colorBlack" />
+
+                            <SeekBar
+                                android:id="@+id/seek_bday_30"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:max="25"
+                                android:progress="0" />
+
+                            <TextView
+                                android:id="@+id/text_bday_mk_done"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="16dp"
+                                android:text="Проведено Майстер Класів - 0"
+                                android:textColor="@color/colorBlack" />
+
+                            <SeekBar
+                                android:id="@+id/seek_bday_mk_done"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:max="3"
+                                android:progress="0" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </com.example.android.kidsapp.utils.SwipeLayout>
+
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
+        <!-- TILE  MK-->
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -404,49 +483,20 @@
             android:elevation="3dp"
             card_view:cardCornerRadius="@dimen/card_album_radius">
 
-            <com.example.android.kidsapp.utils.SwipeLayout
-                android:id="@+id/swipe_layout3"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
+                <!-- Title  Mk -->
                 <LinearLayout
-                    android:id="@+id/swipe_menu3"
-                    android:layout_width="56dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorPrimary"
-                    android:divider="?android:dividerHorizontal"
-                    android:dividerPadding="2dp"
-                    android:orientation="vertical"
-                    android:paddingBottom="22dp"
-                    android:showDividers="middle">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="5" />
-
-                    <EditText
-                        android:id="@+id/input_mk_1"
-                        android:layout_width="match_parent"
-                        android:layout_height="66dp"
-                        android:inputType="number"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <EditText
-                        android:id="@+id/input_mk_2"
-                        android:layout_width="match_parent"
-                        android:layout_height="66dp"
-                        android:inputType="number"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                    android:id="@+id/panel_room_expand3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:orientation="horizontal"
                     android:paddingBottom="16dp">
 
@@ -485,9 +535,9 @@
                                 android:id="@+id/switch_my_mk"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
                                 android:checked="true"
-                                android:text="Мій МК"
-                                android:layout_marginTop="16dp" />
+                                android:text="Мій МК" />
 
                         </LinearLayout>
 
@@ -495,8 +545,9 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="-4dp"
                             android:layout_marginTop="16dp"
-                            android:text="Всього"
+                            android:text="@string/text_all"
                             android:textColor="@color/colorBlack" />
 
                         <TextView
@@ -508,98 +559,166 @@
                             android:textSize="32sp" />
 
 
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Body  Mk -->
+                <com.example.android.kidsapp.utils.SwipeLayout
+                    android:id="@+id/swipe_layout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+
+                    <!-- Menu Mk-->
+                    <LinearLayout
+                        android:id="@+id/swipe_menu3"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorPrimary"
+                        android:divider="?android:dividerHorizontal"
+                        android:dividerPadding="2dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="22dp"
+                        android:showDividers="middle">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="5" />
+
+                        <EditText
+                            android:id="@+id/input_mk_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="66dp"
+                            android:inputType="number"
+                            android:text="0"
+                            android:textAlignment="center" />
+
+                        <EditText
+                            android:id="@+id/input_mk_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="66dp"
+                            android:inputType="number"
+                            android:text="0"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+
+                    <!-- SeekBars Mk -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="56dp">
+
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:orientation="vertical">
 
 
                             <LinearLayout
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:orientation="vertical">
+                                android:orientation="horizontal">
 
-                                <TextView
-                                    android:id="@+id/text_mk_t1"
-                                    android:layout_width="match_parent"
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="16dp"
-                                    android:text="Тариф 1:  30 грн  x"
-                                    android:textColor="@color/colorBlack" />
+                                    android:layout_weight="2"
+                                    android:orientation="vertical">
 
-                                <SeekBar
-                                    android:id="@+id/seek_mk_t1"
-                                    android:layout_width="match_parent"
+                                    <TextView
+                                        android:id="@+id/text_mk_t1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="16dp"
+                                        android:text="Тариф 1:  30 грн  x"
+                                        android:textColor="@color/colorBlack" />
+
+                                    <SeekBar
+                                        android:id="@+id/seek_mk_t1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:max="5"
+                                        android:progress="0" />
+
+                                    <TextView
+                                        android:id="@+id/text_mk_t2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="16dp"
+                                        android:text="Тариф 2:  30 грн  x"
+                                        android:textColor="@color/colorBlack" />
+
+                                    <SeekBar
+                                        android:id="@+id/seek_mk_t2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:max="5"
+                                        android:progress="0" />
+
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:max="5"
-                                    android:progress="0" />
-
-                                <TextView
-                                    android:id="@+id/text_mk_t2"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="16dp"
-                                    android:text="Тариф 2:  30 грн  x"
-                                    android:textColor="@color/colorBlack" />
-
-                                <SeekBar
-                                    android:id="@+id/seek_mk_t2"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:max="5"
-                                    android:progress="0" />
-
-                            </LinearLayout>
+                                    android:layout_weight="3"
+                                    android:orientation="vertical">
 
 
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"
-                                android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/text_mk_1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="16dp"
+                                        android:text="  0 = 0 ГРН"
+                                        android:textColor="@color/colorBlack" />
 
+                                    <SeekBar
+                                        android:id="@+id/seek_mk_1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:max="15"
+                                        android:progress="0" />
 
-                                <TextView
-                                    android:id="@+id/text_mk_1"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="16dp"
-                                    android:text="  0 = 0 ГРН"
-                                    android:textColor="@color/colorBlack" />
+                                    <TextView
+                                        android:id="@+id/text_mk_2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="16dp"
+                                        android:text="  0 = 0 ГРН"
+                                        android:textColor="@color/colorBlack" />
 
-                                <SeekBar
-                                    android:id="@+id/seek_mk_1"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:max="15"
-                                    android:progress="0" />
+                                    <SeekBar
+                                        android:id="@+id/seek_mk_2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:max="15"
+                                        android:progress="0" />
+                                </LinearLayout>
 
-                                <TextView
-                                    android:id="@+id/text_mk_2"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="16dp"
-                                    android:text="  0 = 0 ГРН"
-                                    android:textColor="@color/colorBlack" />
-
-                                <SeekBar
-                                    android:id="@+id/seek_mk_2"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:max="15"
-                                    android:progress="0" />
                             </LinearLayout>
 
                         </LinearLayout>
 
                     </LinearLayout>
 
-                </LinearLayout>
+                </com.example.android.kidsapp.utils.SwipeLayout>
 
-            </com.example.android.kidsapp.utils.SwipeLayout>
+            </LinearLayout>
+
 
         </android.support.v7.widget.CardView>
+
     </LinearLayout>
 
 </ScrollView>

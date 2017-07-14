@@ -378,7 +378,8 @@ public class SalaryActivity extends AppCompatActivity {
         text1 += "Загальна виручка " + total1 + " грн \n\n";
         text1 += "Проведено " + mkCount + " Творчих та Кулінарних МК \n";
         text1 += " На яких було присутньо " + childOnArtMk + " дітей \n\n";
-        text1 += "Проведено " + birthMkCount + " МК на Днях Народженнях \n";
+        text1 += "Проведено " + birthMkCount + " МК на Днях Народженнях \n\n";
+        text1 += "Аванс: до 20-го чиса;  ЗП: до 5-го числа\n";
 
         textExpand.setText(text1);
 

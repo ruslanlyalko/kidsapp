@@ -144,7 +144,7 @@
 
     <string name="title_activity_dashboard">Адмін панель</string>
     <string name="hint_date">Дата</string>
-    <string name="mk_done">Проведено Майстер Класів -</string>
+    <string name="mk_done">Проведено Майстер Класів - </string>
     <string name="month_prev"><![CDATA[ < ]]></string>
     <string name="toast_report_saved">Звіт збережено</string>
     <string name="hint_price">Ціна</string>

@@ -1,6 +1,7 @@
 package com.example.android.kidsapp;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -13,8 +14,8 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -47,7 +48,7 @@ public class ReportActivity extends AppCompatActivity {
     TextView textMk1, textMk2, textMkT1, textMkT2, textMkTotal;
 
     TextView textDate, textMkName;
-    LinearLayout panelDate;
+    LinearLayout panelDate, panelRoomExpand, panelRoomExpand2, panelRoomExpand3;
 
     SeekBar seekRoom60, seekRoom40, seekRoom20, seekRoom10;
     SeekBar seekBday50, seekBday30, seekBdayMk;
@@ -105,14 +106,16 @@ public class ReportActivity extends AppCompatActivity {
 
         initDatePicker();
 
-        initSwipes();
+        initSwipesAndExpandPanels();
 
         initSeeks();
 
         loadReport();
     }
 
-
+    /**
+     * Initialize DatePicker
+     */
     private void initDatePicker() {
 
         final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -136,8 +139,14 @@ public class ReportActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Initialize references for all Views
+     */
     private void initRef() {
 
+        panelRoomExpand = (LinearLayout) findViewById(R.id.panel_room_expand);
+        panelRoomExpand2 = (LinearLayout) findViewById(R.id.panel_room_expand2);
+        panelRoomExpand3 = (LinearLayout) findViewById(R.id.panel_room_expand3);
         textDate = (TextView) findViewById(R.id.text_date);
         panelDate = (LinearLayout) findViewById(R.id.panel_date);
         // Room
@@ -197,6 +206,9 @@ public class ReportActivity extends AppCompatActivity {
         switchMyMk = (Switch) findViewById(R.id.switch_my_mk);
     }
 
+    /**
+     * Set OnSeekBarChanged and TextChanged Listeners for inputs
+     */
     private void initSeeks() {
 
         seekRoom60.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -204,6 +216,9 @@ public class ReportActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mReport.r60 = progress;
                 updateRoomTotal();
+                if(fromUser)
+                    closeSoftKeyBoard();
+
             }
 
             @Override
@@ -221,7 +236,8 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.r40 = progress;
                 updateRoomTotal();
-
+                if(fromUser)
+                    closeSoftKeyBoard();
             }
 
             @Override
@@ -241,6 +257,8 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.r20 = progress;
                 updateRoomTotal();
+                if(fromUser)
+                    closeSoftKeyBoard();
 
             }
 
@@ -254,12 +272,15 @@ public class ReportActivity extends AppCompatActivity {
 
             }
         });
+
         seekRoom10.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 mReport.r10 = progress;
                 updateRoomTotal();
+                if(fromUser)
+                    closeSoftKeyBoard();
 
             }
 
@@ -281,6 +302,8 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.b50 = progress;
                 updateBdayTotal();
+                if(fromUser)
+                    closeSoftKeyBoard();
 
             }
 
@@ -313,6 +336,8 @@ public class ReportActivity extends AppCompatActivity {
                 seekBdayMk.setProgress(mReport.bMk);
 
                 updateBdayTotal();
+                if(fromUser)
+                    closeSoftKeyBoard();
 
             }
 
@@ -336,6 +361,8 @@ public class ReportActivity extends AppCompatActivity {
                 textBdayMk.setText(mkDone);
 
                 updateBdayTotal();
+                if(fromUser)
+                    closeSoftKeyBoard();
 
             }
 
@@ -358,6 +385,8 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.mkt1 = progress;
                 updateMkTotal();
+                if(fromUser)
+                    closeSoftKeyBoard();
 
             }
 
@@ -378,6 +407,8 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.mkt2 = progress;
                 updateMkTotal();
+                if(fromUser)
+                    closeSoftKeyBoard();
 
             }
 
@@ -398,6 +429,8 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.mk1 = progress;
                 updateMkTotal();
+                if(fromUser)
+                    closeSoftKeyBoard();
 
             }
 
@@ -418,6 +451,8 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.mk2 = progress;
                 updateMkTotal();
+                if(fromUser)
+                    closeSoftKeyBoard();
 
             }
 
@@ -631,27 +666,84 @@ public class ReportActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mReport.mkMy = isChecked;
-                //todo update title
+                isChanged = true;
             }
         });
     }
 
-    private void initSwipes() {
-        swipeLayout2.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu2);
-        swipeLayout2.setRightSwipeEnabled(true);
-        swipeLayout2.setBottomSwipeEnabled(false);
+    /**
+     * Clear focus on focused View and hide Soft Keyboard
+     */
+    private void closeSoftKeyBoard() {
+        // Clear Focus
+        inputRoom60.clearFocus();
+        inputRoom40.clearFocus();
+        inputRoom20.clearFocus();
+        inputRoom10.clearFocus();
+        inputBday50.clearFocus();
+        inputBday30.clearFocus();
+        inputMk1.clearFocus();
+        inputMk2.clearFocus();
+        // Check if no view has focus:
+        View view = ReportActivity.this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 
-        swipeLayout3.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu3);
-        swipeLayout3.setRightSwipeEnabled(true);
-        swipeLayout3.setBottomSwipeEnabled(false);
-
-        swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
-        swipeLayout.setRightSwipeEnabled(true);
+    /**
+     * Initialize Swipe panels and Expanded panels
+     */
+    private void initSwipesAndExpandPanels() {
+        swipeLayout.addDrag(SwipeLayout.DragEdge.Left, R.id.swipe_menu);
+        swipeLayout.setLeftSwipeEnabled(true);
         swipeLayout.setBottomSwipeEnabled(false);
 
+        swipeLayout2.addDrag(SwipeLayout.DragEdge.Left, R.id.swipe_menu2);
+        swipeLayout2.setLeftSwipeEnabled(true);
+        swipeLayout2.setBottomSwipeEnabled(false);
+
+        swipeLayout3.addDrag(SwipeLayout.DragEdge.Left, R.id.swipe_menu3);
+        swipeLayout3.setLeftSwipeEnabled(true);
+        swipeLayout3.setBottomSwipeEnabled(false);
+
+        panelRoomExpand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swipeLayout.setVisibility((swipeLayout.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
+
+                swipeLayout2.setVisibility(View.GONE);
+                swipeLayout3.setVisibility(View.GONE);
+            }
+        });
+
+        panelRoomExpand2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swipeLayout2.setVisibility((swipeLayout2.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
+
+                swipeLayout.setVisibility(View.GONE);
+                swipeLayout3.setVisibility(View.GONE);
+
+            }
+        });
+        panelRoomExpand3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swipeLayout3.setVisibility((swipeLayout3.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
+
+                swipeLayout2.setVisibility(View.GONE);
+                swipeLayout.setVisibility(View.GONE);
+
+            }
+        });
     }
 
 
+    /**
+     * If exist load report from DB for selected day, otherwise create new report
+     */
     private void loadReport() {
 
         mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
@@ -678,6 +770,9 @@ public class ReportActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Save current report to DB
+     */
     private void saveReport() {
 
         isChanged = false;
@@ -692,12 +787,21 @@ public class ReportActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Update View with Mk name if exist
+     */
     private void updateMkName() {
         if (mReport.getMkName() != null && !mReport.getMkName().isEmpty())
             textMkName.setText(mReport.getMkName());
     }
 
+    /**
+     * Update all text views on Room Panel
+     * Update Report with new values
+     * Update Title of Activity
+     */
     void updateRoomTotal() {
+
         textRoom60.setText("60грн х " + mReport.r60 + " = " + (mReport.r60 * 60) + " ГРН");
         textRoom40.setText("40грн х " + mReport.r40 + " = " + (mReport.r40 * 40) + " ГРН");
         textRoom20.setText("20грн х " + mReport.r20 + " = " + (mReport.r20 * 20) + " ГРН");
@@ -720,6 +824,11 @@ public class ReportActivity extends AppCompatActivity {
         updateTitle();
     }
 
+    /**
+     * Update all text views on BirthDayPanel
+     * Update Report with new values
+     * Update Title of Activity
+     */
     void updateBdayTotal() {
 
         textBday50.setText("50грн х " + mReport.b50 + " = " + (mReport.b50 * 50) + " ГРН");
@@ -741,14 +850,19 @@ public class ReportActivity extends AppCompatActivity {
         updateTitle();
     }
 
+    /**
+     * Update all text views on Mk Panel
+     * Update Report with new values
+     * Update Title of Activity
+     */
     void updateMkTotal() {
         int tar1 = 30 + mReport.mkt1 * 10;
         int tar2 = 30 + mReport.mkt2 * 10;
 
         mReport.totalMk = tar1 * mReport.mk1 + tar2 * mReport.mk2;
 
-        textMkT1.setText("Тариф 1:  " + tar1 + " грн  x");
-        textMkT2.setText("Тариф 2:  " + tar2 + " грн  x");
+        textMkT1.setText("Тариф 1: " + tar1 + " грн x");
+        textMkT2.setText("Тариф 2: " + tar2 + " грн x");
 
         textMk1.setText("  " + mReport.mk1 + " = " + (tar1 * mReport.mk1) + " ГРН");
         textMk2.setText("  " + mReport.mk2 + " = " + (tar2 * mReport.mk2) + " ГРН");
@@ -764,6 +878,9 @@ public class ReportActivity extends AppCompatActivity {
         updateTitle();
     }
 
+    /**
+     * Update Title of Activity
+     */
     void updateTitle() {
 
         mReport.total = (mReport.totalRoom + mReport.totalBday + mReport.totalMk);
@@ -771,6 +888,9 @@ public class ReportActivity extends AppCompatActivity {
         isChanged = true;
     }
 
+    /**
+     * Load values from Report to Seek Bars
+     */
     void updateSeekBars() {
         seekRoom60.setProgress(mReport.r60);
         seekRoom40.setProgress(mReport.r40);
@@ -790,6 +910,10 @@ public class ReportActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Set new values of current date
+     * @param calendar
+     */
     private void setDate(Calendar calendar) {
 
         mDate = calendar;
@@ -871,8 +995,8 @@ public class ReportActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        // Show Dialog if we have not saved data
         if (isChanged) {
-
             AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
             builder.setTitle(R.string.dialog_report_save_before_close_title)
                     .setMessage(R.string.dialog_report_save_before_close_text)
