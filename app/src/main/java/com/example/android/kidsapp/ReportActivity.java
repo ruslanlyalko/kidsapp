@@ -43,18 +43,18 @@ import java.util.Locale;
 public class ReportActivity extends AppCompatActivity {
 
 
-    TextView textRoom60, textRoom40, textRoom20, textRoom10, textRoomTotal;
+    TextView textRoom60, textRoom30, textRoom20, textRoom10, textRoomTotal;
     TextView textBday50, textBday30, textBdayTotal, textBdayMk;
     TextView textMk1, textMk2, textMkT1, textMkT2, textMkTotal;
 
     TextView textDate, textMkName;
     LinearLayout panelDate, panelRoomExpand, panelRoomExpand2, panelRoomExpand3;
 
-    SeekBar seekRoom60, seekRoom40, seekRoom20, seekRoom10;
+    SeekBar seekRoom60, seekRoom30, seekRoom20, seekRoom10;
     SeekBar seekBday50, seekBday30, seekBdayMk;
     SeekBar seekMkT1, seekMkT2, seekMk1, seekMk2;
 
-    EditText inputRoom60, inputRoom40, inputRoom20, inputRoom10;
+    EditText inputRoom60, inputRoom30, inputRoom20, inputRoom10;
     EditText inputBday50, inputBday30, inputMk1, inputMk2;
     SwipeLayout swipeLayout, swipeLayout2, swipeLayout3;
 
@@ -154,17 +154,17 @@ public class ReportActivity extends AppCompatActivity {
 
         textRoomTotal = (TextView) findViewById(R.id.text_room_total);
         textRoom60 = (TextView) findViewById(R.id.text_room_60);
-        textRoom40 = (TextView) findViewById(R.id.text_room_40);
+        textRoom30 = (TextView) findViewById(R.id.text_room_30);
         textRoom20 = (TextView) findViewById(R.id.text_room_20);
         textRoom10 = (TextView) findViewById(R.id.text_room_10);
 
         seekRoom60 = (SeekBar) findViewById(R.id.seek_room_60);
-        seekRoom40 = (SeekBar) findViewById(R.id.seek_room_40);
+        seekRoom30 = (SeekBar) findViewById(R.id.seek_room_30);
         seekRoom20 = (SeekBar) findViewById(R.id.seek_room_20);
         seekRoom10 = (SeekBar) findViewById(R.id.seek_room_10);
 
         inputRoom60 = (EditText) findViewById(R.id.input_room_60);
-        inputRoom40 = (EditText) findViewById(R.id.input_room_40);
+        inputRoom30 = (EditText) findViewById(R.id.input_room_30);
         inputRoom20 = (EditText) findViewById(R.id.input_room_20);
         inputRoom10 = (EditText) findViewById(R.id.input_room_10);
 
@@ -230,11 +230,11 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
-        seekRoom40.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        seekRoom30.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                mReport.r40 = progress;
+                mReport.r30 = progress;
                 updateRoomTotal();
                 if(fromUser)
                     closeSoftKeyBoard();
@@ -491,7 +491,7 @@ public class ReportActivity extends AppCompatActivity {
 
             }
         });
-        inputRoom40.addTextChangedListener(new TextWatcher() {
+        inputRoom30.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -506,7 +506,7 @@ public class ReportActivity extends AppCompatActivity {
                     //eat it
                 }
 
-                mReport.r40 = value;
+                mReport.r30 = value;
                 updateSeekBars();
             }
 
@@ -677,7 +677,7 @@ public class ReportActivity extends AppCompatActivity {
     private void closeSoftKeyBoard() {
         // Clear Focus
         inputRoom60.clearFocus();
-        inputRoom40.clearFocus();
+        inputRoom30.clearFocus();
         inputRoom20.clearFocus();
         inputRoom10.clearFocus();
         inputBday50.clearFocus();
@@ -803,20 +803,20 @@ public class ReportActivity extends AppCompatActivity {
     void updateRoomTotal() {
 
         textRoom60.setText("60грн х " + mReport.r60 + " = " + (mReport.r60 * 60) + " ГРН");
-        textRoom40.setText("40грн х " + mReport.r40 + " = " + (mReport.r40 * 40) + " ГРН");
+        textRoom30.setText("30грн х " + mReport.r30 + " = " + (mReport.r30 * 30) + " ГРН");
         textRoom20.setText("20грн х " + mReport.r20 + " = " + (mReport.r20 * 20) + " ГРН");
         textRoom10.setText("10грн х " + mReport.r10 + " = " + (mReport.r10 * 10) + " ГРН");
 
         if (!inputRoom60.hasFocus())
             inputRoom60.setText(String.valueOf(mReport.r60));
-        if (!inputRoom40.hasFocus())
-            inputRoom40.setText(String.valueOf(mReport.r40));
+        if (!inputRoom30.hasFocus())
+            inputRoom30.setText(String.valueOf(mReport.r30));
         if (!inputRoom20.hasFocus())
             inputRoom20.setText(String.valueOf(mReport.r20));
         if (!inputRoom10.hasFocus())
             inputRoom10.setText(String.valueOf(mReport.r10));
 
-        mReport.totalRoom = mReport.r60 * 60 + mReport.r40 * 40 + mReport.r20 * 20 + mReport.r10 * 10;
+        mReport.totalRoom = mReport.r60 * 60 + mReport.r30 * 30 + mReport.r20 * 20 + mReport.r10 * 10;
 
         String total = mReport.totalRoom + " ГРН";
         textRoomTotal.setText(total);
@@ -893,7 +893,7 @@ public class ReportActivity extends AppCompatActivity {
      */
     void updateSeekBars() {
         seekRoom60.setProgress(mReport.r60);
-        seekRoom40.setProgress(mReport.r40);
+        seekRoom30.setProgress(mReport.r30);
         seekRoom20.setProgress(mReport.r20);
         seekRoom10.setProgress(mReport.r10);
 

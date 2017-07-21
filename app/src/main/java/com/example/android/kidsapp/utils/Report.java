@@ -14,7 +14,7 @@ public class Report {
     public int totalMk;
 
     public int r60;
-    public int r40;
+    public int r30;
     public int r20;
     public int r10;
 
@@ -88,8 +88,8 @@ public class Report {
         return r60;
     }
 
-    public int getR40() {
-        return r40;
+    public int getR30() {
+        return r30;
     }
 
     public int getR20() {
