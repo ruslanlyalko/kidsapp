@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class DashboardActivity extends AppCompatActivity {
     TextView textSalaryTotal, textSalaryStavka, textSalaryPercent, textSalaryMk;
 
     TextView textBirthdays;
+    EditText editComment;
 
     private List<Cost> costList = new ArrayList<>();
     ProgressBar progressBar, progressBarCost;
@@ -43,6 +46,8 @@ public class DashboardActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private List<User> userList = new ArrayList<>();
+    private String yearStr;
+    private String monthStr;
 
 
     @Override
@@ -59,8 +64,8 @@ public class DashboardActivity extends AppCompatActivity {
         Calendar month = Calendar.getInstance();
         textMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);
 
-        String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date()).toString();
-        String monthStr = new SimpleDateFormat("M", Locale.US).format(new Date()).toString();
+        yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date()).toString();
+        monthStr = new SimpleDateFormat("M", Locale.US).format(new Date()).toString();
 
         loadReports(yearStr, monthStr);
 
@@ -68,13 +73,15 @@ public class DashboardActivity extends AppCompatActivity {
 
         loadUsers();
 
+        loadComment(yearStr, monthStr);
+
     }
 
     private void initRef() {
 
         buttonNext = (ImageButton) findViewById(R.id.button_next);
         buttonPrev = (ImageButton) findViewById(R.id.button_prev);
-        compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
+        compactCalendarView = (CompactCalendarView) findViewById(R.id.calendar_view);
 
         textMonth = (TextView) findViewById(R.id.text_month);
         textTotal = (TextView) findViewById(R.id.text_total);
@@ -95,6 +102,7 @@ public class DashboardActivity extends AppCompatActivity {
         textSalaryMk = (TextView) findViewById(R.id.text_salary_mk_total);
 
         textBirthdays = (TextView) findViewById(R.id.text_birthdays);
+        editComment = (EditText) findViewById(R.id.edit_comment);
     }
 
     private void initCalendar() {
@@ -117,18 +125,21 @@ public class DashboardActivity extends AppCompatActivity {
 
                 textMonth.setText(str);
 
-                String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(firstDayOfNewMonth).toString();
-                String monthStr = new SimpleDateFormat("M", Locale.US).format(firstDayOfNewMonth).toString();
+                yearStr = new SimpleDateFormat("yyyy", Locale.US).format(firstDayOfNewMonth).toString();
+                monthStr = new SimpleDateFormat("M", Locale.US).format(firstDayOfNewMonth).toString();
 
                 loadReports(yearStr, monthStr);
                 loadCosts(yearStr, monthStr);
                 loadUsers();
-
+                loadComment(yearStr, monthStr);
             }
         });
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // save comment
+                saveCommentToDB(editComment.getText().toString());
+
                 compactCalendarView.showNextMonth();
             }
         });
@@ -136,16 +147,26 @@ public class DashboardActivity extends AppCompatActivity {
         buttonPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // save comment
+                saveCommentToDB(editComment.getText().toString());
+
                 compactCalendarView.showPreviousMonth();
             }
         });
+
+    }
+
+    private void saveCommentToDB(String s) {
+        mDatabase.getReference(Constants.FIREBASE_REF_COMMENTS)
+                .child(yearStr)
+                .child(monthStr).setValue(s);
     }
 
     private void loadReports(String yearStr, String monthStr) {
 
         reportList.clear();
         calcOborot();
-        mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
+        mDatabase.getReference(Constants.FIREBASE_REF_REPORTS)
                 .child(yearStr)
                 .child(monthStr)
                 .addChildEventListener(new ChildEventListener() {
@@ -342,6 +363,26 @@ public class DashboardActivity extends AppCompatActivity {
         textSalaryTotal.setText(total + " ГРН");
     }
 
+    private void loadComment(String yearStr, String monthStr) {
+        editComment.setText("");
+
+        mDatabase.getReference(Constants.FIREBASE_REF_COMMENTS)
+                .child(yearStr)
+                .child(monthStr).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null && !dataSnapshot.getValue().toString().isEmpty())
+                    editComment.setText(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -364,6 +405,9 @@ public class DashboardActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        // save comments before exit
+        saveCommentToDB(editComment.getText().toString());
+
         super.onBackPressed();
         overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
     }

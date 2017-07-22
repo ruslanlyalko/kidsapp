@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,7 +33,6 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
     boolean isEdit = false;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private boolean mIsAdmin=false;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -68,17 +65,16 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
     }
 
 
-    public MksAdapter(Context mContext, List<Mk> mkList, boolean isAdmin) {
+    public MksAdapter(Context mContext, List<Mk> mkList) {
         this.mContext = mContext;
         this.mkList = mkList;
-        this.mIsAdmin = isAdmin;
 
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.mk_card, parent, false);
+                .inflate(R.layout.card_mk, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -92,7 +88,7 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
         holder.date.setText(mk.getDate());
         holder.count.setText(mk.getCount() + " разів");
 
-        holder.buttonEdit.setVisibility(mIsAdmin || mk.getUserId().equals(mAuth.getCurrentUser().getUid()) ?
+        holder.buttonEdit.setVisibility(Utils.isIsAdmin() || mk.getUserId().equals(mAuth.getCurrentUser().getUid()) ?
                 View.VISIBLE : View.GONE);
 
         // loading mk cover using Glide library
@@ -136,10 +132,7 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
                                 Intent intent = new Intent(mContext, ReportActivity.class);
                                 mContext.startActivity(intent);
                             }
-                        }).setActionTextColor(Color.YELLOW);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    sn.setActionTextColor(mContext.getColor(R.color.colorPrimary));
-                }
+                        });
                 sn.show();
 
             }
@@ -185,12 +178,12 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
 
         String dateStr = (today.get(Calendar.DAY_OF_MONTH)) + "-" + (today.get(Calendar.MONTH) + 1) + "-" + today.get(Calendar.YEAR);
 
-        String dateDay = today.get(Calendar.DAY_OF_MONTH)+"";
-        String dateMonth = (today.get(Calendar.MONTH) + 1)+"";
-        String dateYear = today.get(Calendar.YEAR)+"";
+        String dateDay = today.get(Calendar.DAY_OF_MONTH) + "";
+        String dateMonth = (today.get(Calendar.MONTH) + 1) + "";
+        String dateYear = today.get(Calendar.YEAR) + "";
 
 
-        DatabaseReference ref = mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
+        DatabaseReference ref = mDatabase.getReference(Constants.FIREBASE_REF_REPORTS)
                 .child(dateYear).child(dateMonth).child(dateDay).child(mUId);
 
         ref.child("mkRef").setValue(mk.getKey());

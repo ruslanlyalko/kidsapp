@@ -133,7 +133,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private void createUserData(String name, String phone, String email, String uId) {
         mDatabaseRefCurrentUser = mFirebaseDatabase.getReference(Constants.FIREBASE_REF_USERS).child(uId);
-        User user = new User(name, phone, email,"01.06.1991","",false);
+        User user = new User(uId, name, phone, email,"01.06.1991","",false);
         mDatabaseRefCurrentUser.setValue(user);
     }
 

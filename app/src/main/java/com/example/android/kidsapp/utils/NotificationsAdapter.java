@@ -27,7 +27,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     boolean isEdit = false;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private boolean mIsAdmin=false;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title1, title2, largeText, date;
@@ -56,10 +55,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     }
 
 
-    public NotificationsAdapter(Context mContext, List<Notification> notificationList, boolean isAdmin) {
+    public NotificationsAdapter(Context mContext, List<Notification> notificationList) {
         this.mContext = mContext;
         this.notificationList = notificationList;
-        this.mIsAdmin = isAdmin;
     }
 
     @Override
@@ -78,7 +76,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         holder.largeText.setText(notification.getLargeText());
         holder.date.setText(notification.getDate());
 
-        holder.buttonEdit.setVisibility(mIsAdmin || notification.getUserId().equals(mAuth.getCurrentUser().getUid()) ?
+        holder.buttonEdit.setVisibility(Utils.isIsAdmin() || notification.getUserId().equals(mAuth.getCurrentUser().getUid()) ?
                 View.VISIBLE : View.GONE);
 
         holder.imageExpand.setOnClickListener(new View.OnClickListener() {

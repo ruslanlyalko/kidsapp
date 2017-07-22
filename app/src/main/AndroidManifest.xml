@@ -25,6 +25,7 @@
         <activity
             android:name=".UserActivity"
             android:label="@string/title_activity_user"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden">
             <meta-data
@@ -70,6 +71,7 @@
         <activity
             android:name=".MkActivity"
             android:label="@string/title_activity_mk"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden">
             <meta-data

@@ -3,6 +3,7 @@ package com.example.android.kidsapp;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,9 +25,11 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.bumptech.glide.util.Util;
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Report;
 import com.example.android.kidsapp.utils.SwipeLayout;
+import com.example.android.kidsapp.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,19 +47,21 @@ public class ReportActivity extends AppCompatActivity {
 
 
     TextView textRoom60, textRoom30, textRoom20, textRoom10, textRoomTotal;
-    TextView textBday50, textBday30, textBdayTotal, textBdayMk;
+    TextView textBday50, textBday10, textBday30, textBdayTotal, textBdayMk;
     TextView textMk1, textMk2, textMkT1, textMkT2, textMkTotal;
 
     TextView textDate, textMkName;
     LinearLayout panelDate, panelRoomExpand, panelRoomExpand2, panelRoomExpand3;
 
     SeekBar seekRoom60, seekRoom30, seekRoom20, seekRoom10;
-    SeekBar seekBday50, seekBday30, seekBdayMk;
+    SeekBar seekBday50, seekBday10, seekBday30, seekBdayMk;
     SeekBar seekMkT1, seekMkT2, seekMk1, seekMk2;
 
     EditText inputRoom60, inputRoom30, inputRoom20, inputRoom10;
-    EditText inputBday50, inputBday30, inputMk1, inputMk2;
+    EditText inputBday50, inputBday10, inputBday30, inputMk1, inputMk2;
     SwipeLayout swipeLayout, swipeLayout2, swipeLayout3;
+
+    EditText editComment;
 
     Switch switchMyMk;
 
@@ -96,11 +101,16 @@ public class ReportActivity extends AppCompatActivity {
 
         } else {
 
-            mUId = bundle.getString(Constants.EXTRA_UID);
+            mUId = bundle.getString(Constants.EXTRA_UID, mAuth.getCurrentUser().getUid());
 
-            mUserName = bundle.getString(Constants.EXTRA_USER_NAME);
+            mUserName = bundle.getString(Constants.EXTRA_USER_NAME, mAuth.getCurrentUser().getDisplayName());
 
-            setDate(bundle.getString(Constants.EXTRA_DATE));
+            String date = bundle.getString(Constants.EXTRA_DATE);
+            if (date != null)
+                setDate(date);
+            else
+                setDate(Calendar.getInstance());
+
         }
 
 
@@ -110,7 +120,7 @@ public class ReportActivity extends AppCompatActivity {
 
         initSeeks();
 
-        loadReport();
+        loadReportFromDB();
     }
 
     /**
@@ -125,19 +135,20 @@ public class ReportActivity extends AppCompatActivity {
             }
         };
 
-        // Pop up the Date Picker after user clicked on editText
-        panelDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(ReportActivity.this, dateSetListener,
-                        mDate.get(Calendar.YEAR), mDate.get(Calendar.MONTH),
-                        mDate.get(Calendar.DAY_OF_MONTH)).show();
+        if (Utils.isIsAdmin()) {
+            // Pop up the Date Picker after user clicked on editText
+            panelDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new DatePickerDialog(ReportActivity.this, dateSetListener,
+                            mDate.get(Calendar.YEAR), mDate.get(Calendar.MONTH),
+                            mDate.get(Calendar.DAY_OF_MONTH)).show();
 
 
-            }
-        });
+                }
+            });
+        }
     }
-
 
     /**
      * Initialize references for all Views
@@ -148,6 +159,8 @@ public class ReportActivity extends AppCompatActivity {
         panelRoomExpand2 = (LinearLayout) findViewById(R.id.panel_room_expand2);
         panelRoomExpand3 = (LinearLayout) findViewById(R.id.panel_room_expand3);
         textDate = (TextView) findViewById(R.id.text_date);
+        editComment = (EditText) findViewById(R.id.edit_comment);
+
         panelDate = (LinearLayout) findViewById(R.id.panel_date);
         // Room
         swipeLayout = (SwipeLayout) findViewById(R.id.swipe_layout);
@@ -174,16 +187,18 @@ public class ReportActivity extends AppCompatActivity {
 
         textBdayTotal = (TextView) findViewById(R.id.text_bday_total);
         textBday50 = (TextView) findViewById(R.id.text_bday_50);
+        textBday10 = (TextView) findViewById(R.id.text_bday_10);
         textBday30 = (TextView) findViewById(R.id.text_bday_30);
         textBdayMk = (TextView) findViewById(R.id.text_bday_mk_done);
 
         seekBday50 = (SeekBar) findViewById(R.id.seek_bday_50);
+        seekBday10 = (SeekBar) findViewById(R.id.seek_bday_10);
         seekBday30 = (SeekBar) findViewById(R.id.seek_bday_30);
         seekBdayMk = (SeekBar) findViewById(R.id.seek_bday_mk_done);
 
         inputBday50 = (EditText) findViewById(R.id.input_bday_50);
+        inputBday10 = (EditText) findViewById(R.id.input_bday_10);
         inputBday30 = (EditText) findViewById(R.id.input_bday_30);
-
 
         // MK
         swipeLayout3 = (SwipeLayout) findViewById(R.id.swipe_layout3);
@@ -216,7 +231,7 @@ public class ReportActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mReport.r60 = progress;
                 updateRoomTotal();
-                if(fromUser)
+                if (fromUser)
                     closeSoftKeyBoard();
 
             }
@@ -236,7 +251,7 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.r30 = progress;
                 updateRoomTotal();
-                if(fromUser)
+                if (fromUser)
                     closeSoftKeyBoard();
             }
 
@@ -257,7 +272,7 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.r20 = progress;
                 updateRoomTotal();
-                if(fromUser)
+                if (fromUser)
                     closeSoftKeyBoard();
 
             }
@@ -279,7 +294,7 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.r10 = progress;
                 updateRoomTotal();
-                if(fromUser)
+                if (fromUser)
                     closeSoftKeyBoard();
 
             }
@@ -302,7 +317,29 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.b50 = progress;
                 updateBdayTotal();
-                if(fromUser)
+                if (fromUser)
+                    closeSoftKeyBoard();
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        seekBday10.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                mReport.b10 = progress;
+                updateBdayTotal();
+                if (fromUser)
                     closeSoftKeyBoard();
 
             }
@@ -336,7 +373,7 @@ public class ReportActivity extends AppCompatActivity {
                 seekBdayMk.setProgress(mReport.bMk);
 
                 updateBdayTotal();
-                if(fromUser)
+                if (fromUser)
                     closeSoftKeyBoard();
 
             }
@@ -361,7 +398,7 @@ public class ReportActivity extends AppCompatActivity {
                 textBdayMk.setText(mkDone);
 
                 updateBdayTotal();
-                if(fromUser)
+                if (fromUser)
                     closeSoftKeyBoard();
 
             }
@@ -385,7 +422,7 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.mkt1 = progress;
                 updateMkTotal();
-                if(fromUser)
+                if (fromUser)
                     closeSoftKeyBoard();
 
             }
@@ -407,7 +444,7 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.mkt2 = progress;
                 updateMkTotal();
-                if(fromUser)
+                if (fromUser)
                     closeSoftKeyBoard();
 
             }
@@ -429,7 +466,7 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.mk1 = progress;
                 updateMkTotal();
-                if(fromUser)
+                if (fromUser)
                     closeSoftKeyBoard();
 
             }
@@ -451,7 +488,7 @@ public class ReportActivity extends AppCompatActivity {
 
                 mReport.mk2 = progress;
                 updateMkTotal();
-                if(fromUser)
+                if (fromUser)
                     closeSoftKeyBoard();
 
             }
@@ -579,7 +616,7 @@ public class ReportActivity extends AppCompatActivity {
                     //eat it
                 }
 
-                mReport.b50= value;
+                mReport.b50 = value;
                 updateSeekBars();
             }
 
@@ -628,7 +665,7 @@ public class ReportActivity extends AppCompatActivity {
                     //eat it
                 }
 
-                mReport.mk1= value;
+                mReport.mk1 = value;
                 updateSeekBars();
             }
 
@@ -669,6 +706,24 @@ public class ReportActivity extends AppCompatActivity {
                 isChanged = true;
             }
         });
+
+        editComment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mReport.comment = editComment.getText().toString();
+                isChanged = true;
+            }
+        });
     }
 
     /**
@@ -687,7 +742,7 @@ public class ReportActivity extends AppCompatActivity {
         // Check if no view has focus:
         View view = ReportActivity.this.getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
@@ -744,9 +799,9 @@ public class ReportActivity extends AppCompatActivity {
     /**
      * If exist load report from DB for selected day, otherwise create new report
      */
-    private void loadReport() {
+    private void loadReportFromDB() {
 
-        mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
+        mDatabase.getReference(Constants.FIREBASE_REF_REPORTS)
                 .child(mDateYear).child(mDateMonth).child(mDateDay).child(mUId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -770,19 +825,73 @@ public class ReportActivity extends AppCompatActivity {
 
     }
 
+
+    private void deleteReport() {
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportActivity.this);
+        builder.setTitle(R.string.dialog_delete_title)
+                .setMessage(R.string.dialog_delete_message)
+                .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // delete from DB
+                        deleteReportFromDB();
+                        loadReportFromDB();
+                    }
+                })
+                .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .show();
+
+    }
+
+    private void deleteReportFromDB() {
+        // Delete item from DB
+        isChanged = false;
+        mDatabase.getReference(Constants.FIREBASE_REF_REPORTS)
+                .child(mDateYear).child(mDateMonth).child(mDateDay)
+                .child(mUId)
+                .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Snackbar.make(textRoom60, getString(R.string.toast_report_deleted), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private void clearReport() {
+
+        mReport.clearReport();
+        updateSeekBars();
+        updateMkName();
+        updateTitle();
+        Snackbar.make(textRoom60, getString(R.string.toast_report_cleared), Snackbar.LENGTH_SHORT).show();
+    }
+
     /**
      * Save current report to DB
      */
-    private void saveReport() {
-
+    private void saveReportToDB() {
         isChanged = false;
-        mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
+        mDatabase.getReference(Constants.FIREBASE_REF_REPORTS)
                 .child(mDateYear).child(mDateMonth).child(mDateDay)
                 .child(mUId)
                 .setValue(mReport).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Snackbar.make(textRoom60, getString(R.string.toast_report_saved), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(textRoom60, getString(R.string.toast_report_saved), Snackbar.LENGTH_SHORT)
+                        .setAction(getString(R.string.action_go_to_calendar), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // show calendar activity
+                                Intent intent = new Intent(ReportActivity.this, CalendarActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
             }
         });
     }
@@ -793,6 +902,14 @@ public class ReportActivity extends AppCompatActivity {
     private void updateMkName() {
         if (mReport.getMkName() != null && !mReport.getMkName().isEmpty())
             textMkName.setText(mReport.getMkName());
+        else
+            textMkName.setText(R.string.text_mk_full);
+
+        if (mReport.getComment() != null && !mReport.getComment().isEmpty())
+            editComment.setText(mReport.getComment());
+        else
+            editComment.setText("");
+
     }
 
     /**
@@ -802,10 +919,10 @@ public class ReportActivity extends AppCompatActivity {
      */
     void updateRoomTotal() {
 
-        textRoom60.setText("60грн х " + mReport.r60 + " = " + (mReport.r60 * 60) + " ГРН");
-        textRoom30.setText("30грн х " + mReport.r30 + " = " + (mReport.r30 * 30) + " ГРН");
-        textRoom20.setText("20грн х " + mReport.r20 + " = " + (mReport.r20 * 20) + " ГРН");
-        textRoom10.setText("10грн х " + mReport.r10 + " = " + (mReport.r10 * 10) + " ГРН");
+        textRoom60.setText("60 грн х " + mReport.r60 + " = " + (mReport.r60 * 60) + " ГРН");
+        textRoom30.setText("30 грн х " + mReport.r30 + " = " + (mReport.r30 * 30) + " ГРН");
+        textRoom20.setText("20 грн х " + mReport.r20 + " = " + (mReport.r20 * 20) + " ГРН");
+        textRoom10.setText("10 грн х " + mReport.r10 + " = " + (mReport.r10 * 10) + " ГРН");
 
         if (!inputRoom60.hasFocus())
             inputRoom60.setText(String.valueOf(mReport.r60));
@@ -831,18 +948,21 @@ public class ReportActivity extends AppCompatActivity {
      */
     void updateBdayTotal() {
 
-        textBday50.setText("50грн х " + mReport.b50 + " = " + (mReport.b50 * 50) + " ГРН");
-        textBday30.setText("30грн х " + mReport.b30 + " = " + (mReport.b30 * 30) + " ГРН");
+        textBday50.setText("Кімната: 50 грн х " + mReport.b50 + " = " + (mReport.b50 * 50) + " ГРН");
+        textBday10.setText("Кімната: 10 грн х " + mReport.b10 + " = " + (mReport.b10 * 10) + " ГРН");
+        textBday30.setText("МК: 30 грн х " + mReport.b30 + " = " + (mReport.b30 * 30) + " ГРН");
 
         String mkDone = getString(R.string.mk_done) + mReport.bMk;
         textBdayMk.setText(mkDone);
 
         if (!inputBday50.hasFocus())
             inputBday50.setText(String.valueOf(mReport.b50));
+        if (!inputBday10.hasFocus())
+            inputBday10.setText(String.valueOf(mReport.b10));
         if (!inputBday30.hasFocus())
             inputBday30.setText(String.valueOf(mReport.b30));
 
-        mReport.totalBday = mReport.b50 * 50 + mReport.b30 * 30;
+        mReport.totalBday = mReport.b50 * 50 + mReport.b10 * 10 + mReport.b30 * 30;
 
         String total = (mReport.totalBday) + " ГРН";
         textBdayTotal.setText(total);
@@ -898,6 +1018,7 @@ public class ReportActivity extends AppCompatActivity {
         seekRoom10.setProgress(mReport.r10);
 
         seekBday50.setProgress(mReport.b50);
+        seekBday10.setProgress(mReport.b10);
         seekBday30.setProgress(mReport.b30);
         seekBdayMk.setProgress(mReport.bMk);
 
@@ -907,11 +1028,14 @@ public class ReportActivity extends AppCompatActivity {
         seekMkT2.setProgress(mReport.mkt2);
 
         switchMyMk.setChecked(mReport.mkMy);
+
+        updateTitle();
     }
 
 
     /**
      * Set new values of current date
+     *
      * @param calendar
      */
     private void setDate(Calendar calendar) {
@@ -969,7 +1093,7 @@ public class ReportActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_zvit, menu);
+        inflater.inflate(R.menu.menu_report, menu);
         return true;
     }
 
@@ -978,20 +1102,37 @@ public class ReportActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            //todo ask if user want to save changes in report (if exist)
             onBackPressed();
             return true;
         }
 
         switch (id) {
+
             case R.id.action_add: {
-                saveReport();
+                saveReportToDB();
+                break;
             }
-            return true;
+
+            case R.id.action_today: {
+                setDate(Calendar.getInstance());
+                break;
+            }
+
+            case R.id.action_clear_report: {
+                clearReport();
+                break;
+            }
+
+            case R.id.action_delete_report: {
+                deleteReport();
+                break;
+            }
+
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void onBackPressed() {
@@ -1003,7 +1144,7 @@ public class ReportActivity extends AppCompatActivity {
                     .setPositiveButton("ЗБЕРЕГТИ ЗМІНИ", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
-                            saveReport();
+                            saveReportToDB();
                             onBackPressed();
 
                         }

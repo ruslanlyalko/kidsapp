@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Report;
 import com.example.android.kidsapp.utils.User;
+import com.example.android.kidsapp.utils.Utils;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -57,7 +58,6 @@ public class SalaryActivity extends AppCompatActivity {
     private User mUser = new User();
     private String mUId;
     private boolean uploaded = false;
-    private boolean mIsAdmin = false;
     private LinearLayout panelExpand;
 
 
@@ -78,7 +78,6 @@ public class SalaryActivity extends AppCompatActivity {
 
         } else {
             mUId = bundle.getString(Constants.EXTRA_UID);
-            mIsAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
         }
 
         initCalendar();
@@ -109,14 +108,14 @@ public class SalaryActivity extends AppCompatActivity {
             }
         });
 
-        panelDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mIsAdmin)
+        if (Utils.isIsAdmin()) {
+            panelDetails.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     editSalaryStavkaDialog();
-            }
-        });
-
+                }
+            });
+        }
         panelSalary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -272,7 +271,7 @@ public class SalaryActivity extends AppCompatActivity {
 
         reportList.clear();
         calcSalary();
-        mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
+        mDatabase.getReference(Constants.FIREBASE_REF_REPORTS)
                 .child(yearStr)
                 .child(monthStr)
                 .addChildEventListener(new ChildEventListener() {
@@ -317,7 +316,7 @@ public class SalaryActivity extends AppCompatActivity {
         panelDetails = (LinearLayout) findViewById(R.id.panel_details);
         buttonNext = (ImageButton) findViewById(R.id.button_next);
         buttonPrev = (ImageButton) findViewById(R.id.button_prev);
-        compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
+        compactCalendarView = (CompactCalendarView) findViewById(R.id.calendar_view);
 
         textSalaryStavka = (TextView) findViewById(R.id.text_salary_stavka);
         textSalaryPercent = (TextView) findViewById(R.id.text_salary_percent);
@@ -355,7 +354,7 @@ public class SalaryActivity extends AppCompatActivity {
                 birthMkCount += 1;
             }
             // Art MK
-            if(rep.mkMy) {
+            if (rep.mkMy) {
                 mk += (rep.mk1 + rep.mk2) * mUser.getUserArt();
                 if (rep.mk1 != 0 || rep.mk2 != 0) {
                     mkCount += 1;

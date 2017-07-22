@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Report;
 import com.example.android.kidsapp.utils.ReportsAdapter;
+import com.example.android.kidsapp.utils.Utils;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,7 +45,6 @@ public class CalendarActivity extends AppCompatActivity {
     private ReportsAdapter adapter;
     private List<Report> reportList = new ArrayList<>();
     private ArrayList<String> usersList = new ArrayList<>();
-    private boolean mIsAdmin = false;
     private Date mCurrentDate;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -60,12 +60,6 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
 
         initRef();
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            mIsAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
-        }
-
 
         initRecycle();
 
@@ -116,7 +110,14 @@ public class CalendarActivity extends AppCompatActivity {
                 Calendar month = Calendar.getInstance();
                 month.setTime(firstDayOfNewMonth);
 
-                textMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);
+                String yearSimple = new SimpleDateFormat("yy", Locale.US).format(firstDayOfNewMonth).toString();
+
+                String str = Constants.MONTH_FULL[month.get(Calendar.MONTH)];
+
+                if (firstDayOfNewMonth.getYear() != new Date().getYear())
+                    str = str + "'" + yearSimple;
+
+                textMonth.setText(str);
             }
         });
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -139,7 +140,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         String yearStr = DateFormat.format("yyyy", Calendar.getInstance()).toString();
 
-        mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS).child(yearStr)
+        mDatabase.getReference(Constants.FIREBASE_REF_REPORTS).child(yearStr)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -148,7 +149,7 @@ public class CalendarActivity extends AppCompatActivity {
                             for (DataSnapshot datDay : datMonth.getChildren()) {
                                 Report report = datDay.getValue(Report.class);
 
-                                if (mIsAdmin || report.getUserId().equals(mAuth.getCurrentUser().getUid())) {
+                                if (Utils.isIsAdmin() || report.getUserId().equals(mAuth.getCurrentUser().getUid())) {
 
                                     int color = getUserColor(report.getUserId());
                                     long date = getDateLongFromStr(report.getDate());
@@ -226,7 +227,7 @@ public class CalendarActivity extends AppCompatActivity {
         reportList.clear();
         adapter.notifyDataSetChanged();
 
-        DatabaseReference listOfUsersReports = mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
+        DatabaseReference listOfUsersReports = mDatabase.getReference(Constants.FIREBASE_REF_REPORTS)
                 .child(mYear).child(mMonth).child(mDay);
 
         listOfUsersReports.addChildEventListener(new ChildEventListener() {
@@ -237,7 +238,7 @@ public class CalendarActivity extends AppCompatActivity {
                 // Add to list only current user reports
                 // But if user role - Admin then add all reports
                 if (report != null) {
-                    if (mIsAdmin || report.getUserId().equals(uId)) {
+                    if (Utils.isIsAdmin() || report.getUserId().equals(uId)) {
                         reportList.add(report);
                         adapter.notifyDataSetChanged();
                     }
@@ -270,7 +271,7 @@ public class CalendarActivity extends AppCompatActivity {
     private void initRecycle() {
 
         reportList = new ArrayList<>();
-        adapter = new ReportsAdapter(this, reportList, mIsAdmin);
+        adapter = new ReportsAdapter(this, reportList);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -285,7 +286,7 @@ public class CalendarActivity extends AppCompatActivity {
         buttonNext = (ImageButton) findViewById(R.id.button_next);
         buttonPrev = (ImageButton) findViewById(R.id.button_prev);
 
-        compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
+        compactCalendarView = (CompactCalendarView) findViewById(R.id.calendar_view);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
     }

@@ -16,15 +16,19 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_user_name" />
 
-        <EditText
-            android:id="@+id/text_title1"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:hint="@string/hint_title1"
-            android:inputType="text" />
+            android:layout_height="match_parent">
 
+            <EditText
+                android:id="@+id/text_title1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:hint="@string/hint_title1"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -39,15 +43,19 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_action_vyruchka" />
 
-        <EditText
-            android:id="@+id/text_price"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:hint="@string/hint_price"
-            android:inputType="number" />
+            android:layout_height="match_parent">
 
+            <EditText
+                android:id="@+id/text_price"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:hint="@string/hint_price"
+                android:inputType="number" />
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
 

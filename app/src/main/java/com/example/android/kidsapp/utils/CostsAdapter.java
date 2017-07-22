@@ -22,7 +22,6 @@ public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder
     private List<Cost> costList;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private boolean isAdmin = false;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textTitle1, textTitle2, textPrice, textDate;
@@ -45,10 +44,9 @@ public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder
         }
     }
 
-    public CostsAdapter(Context mContext, List<Cost> reportList, boolean isAdmin) {
+    public CostsAdapter(Context mContext, List<Cost> reportList) {
         this.mContext = mContext;
         this.costList = reportList;
-        this.isAdmin = isAdmin;
     }
 
     @Override
@@ -69,37 +67,39 @@ public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder
         holder.textTitle2.setText(cost.getTitle2());
         holder.textDate.setText(cost.getDate());
 
-        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
-        holder.swipeLayout.setRightSwipeEnabled(true);
-        holder.swipeLayout.setBottomSwipeEnabled(false);
+        if (Utils.isIsAdmin()) {
+            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
+            holder.swipeLayout.setRightSwipeEnabled(true);
+            holder.swipeLayout.setBottomSwipeEnabled(false);
 
 
-        holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isAdmin || cost.getUserId().equals(mAuth.getCurrentUser().getUid())) {
+            holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Utils.isIsAdmin() || cost.getUserId().equals(mAuth.getCurrentUser().getUid())) {
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle(R.string.dialog_cost_delete_title)
-                            .setMessage(R.string.dialog_cost_delete_message)
-                            .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    removeCost(cost, position);
-                                }
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        builder.setTitle(R.string.dialog_cost_delete_title)
+                                .setMessage(R.string.dialog_cost_delete_message)
+                                .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        removeCost(cost, position);
+                                    }
 
-                            })
-                            .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
-                                }
-                            })
-                            .show();
+                                })
+                                .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .show();
 
-                } else {
-                    Snackbar.make(holder.buttonDelete, mContext.getString(R.string.cant_delete), Snackbar.LENGTH_LONG).show();
+                    } else {
+                        Snackbar.make(holder.buttonDelete, mContext.getString(R.string.cant_delete), Snackbar.LENGTH_LONG).show();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void removeCost(Cost cost, int position) {

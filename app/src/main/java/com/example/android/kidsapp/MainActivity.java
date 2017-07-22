@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.SwipeLayout;
 import com.example.android.kidsapp.utils.User;
+import com.example.android.kidsapp.utils.Utils;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
     private ValueEventListener mUserListener;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private FirebaseUser currentUserAuth;
-    private User mCurrentUser;
 
     private boolean mLinkActive = false;
     private String mLink;
@@ -185,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, UserActivity.class);
-                intent.putExtra(Constants.EXTRA_IS_ADMIN, mCurrentUser.getUserIsAdmin());
                 startActivity(intent);
             }
         });
@@ -193,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
-                intent.putExtra(Constants.EXTRA_IS_ADMIN, mCurrentUser.getUserIsAdmin());
                 startActivity(intent);
             }
         });
@@ -209,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
-                intent.putExtra(Constants.EXTRA_IS_ADMIN, mCurrentUser.getUserIsAdmin());
                 startActivity(intent);
             }
         });
@@ -217,7 +214,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MkActivity.class);
-                intent.putExtra(Constants.EXTRA_IS_ADMIN, mCurrentUser.getUserIsAdmin());
                 startActivity(intent);
             }
         });
@@ -225,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CostsActivity.class);
-                intent.putExtra(Constants.EXTRA_IS_ADMIN, mCurrentUser.getUserIsAdmin());
                 startActivity(intent);
             }
         });
@@ -291,7 +286,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User user = dataSnapshot.getValue(User.class);
-                    mCurrentUser = user;
+                    //todo user
+                    Utils.setIsAdmin(user.getUserIsAdmin());
                 }
 
                 @Override

@@ -31,7 +31,6 @@ public class NotificationActivity extends AppCompatActivity {
     private List<Notification> notificationList;
 
     private FloatingActionButton fab;
-    private boolean mIsAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +41,8 @@ public class NotificationActivity extends AppCompatActivity {
 
         initRef();
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            mIsAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
-        }
-
-
         notificationList = new ArrayList<>();
-        adapter = new NotificationsAdapter(this, notificationList, mIsAdmin);
+        adapter = new NotificationsAdapter(this, notificationList);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);

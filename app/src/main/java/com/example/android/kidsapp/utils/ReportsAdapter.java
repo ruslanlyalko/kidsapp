@@ -15,13 +15,11 @@ import android.widget.TextView;
 import com.example.android.kidsapp.R;
 import com.example.android.kidsapp.ReportActivity;
 import com.example.android.kidsapp.SalaryActivity;
-import com.example.android.kidsapp.UserActivity;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
 public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHolder> {
-    private final boolean mIsAdmin;
     private Context mContext;
     private List<Report> reportList;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -49,10 +47,9 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
         }
     }
 
-    public ReportsAdapter(Context mContext, List<Report> reportList, boolean isAdmin) {
+    public ReportsAdapter(Context mContext, List<Report> reportList) {
         this.mContext = mContext;
         this.reportList = reportList;
-        this.mIsAdmin= isAdmin;
 
     }
 
@@ -88,41 +85,42 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
             }
         });
 
-        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
-        holder.swipeLayout.setRightSwipeEnabled(true);
-        holder.swipeLayout.setBottomSwipeEnabled(false);
-        holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle(R.string.dialog_delete_title)
-                        .setMessage(R.string.dialog_delete_message)
-                        .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                removeReport(report, position);
-                            }
+        if (Utils.isIsAdmin()) {
+            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
+            holder.swipeLayout.setRightSwipeEnabled(true);
+            holder.swipeLayout.setBottomSwipeEnabled(false);
+            holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle(R.string.dialog_delete_title)
+                            .setMessage(R.string.dialog_delete_message)
+                            .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    removeReport(report, position);
+                                }
 
-                        })
-                        .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                            }
-                        })
-                        .show();
+                            })
+                            .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .show();
 
-            }
-        });
+                }
+            });
 
-        // Open
-        holder.buttonUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent inetnt = new Intent(mContext, SalaryActivity.class);
-                inetnt.putExtra(Constants.EXTRA_UID, report.getUserId());
-                inetnt.putExtra(Constants.EXTRA_IS_ADMIN, mIsAdmin);
-                mContext.startActivity(inetnt);
-            }
-        });
+            // Open
+            holder.buttonUser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, SalaryActivity.class);
+                    intent.putExtra(Constants.EXTRA_UID, report.getUserId());
+                    mContext.startActivity(intent);
+                }
+            });
+        }
     }
 
     private void removeReport(Report report, int position) {
@@ -131,7 +129,7 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
 
         // Delete item from DB
 
-        mDatabase.getReference(Constants.FIREBASE_REF_USER_REPORTS)
+        mDatabase.getReference(Constants.FIREBASE_REF_REPORTS)
                 .child(getYearFromStr(report.date)).child(getMonthFromStr(report.date)).child(getDayFromStr(report.date))
                 .child(report.userId).removeValue();
 

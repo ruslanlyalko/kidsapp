@@ -19,6 +19,7 @@ public class Report {
     public int r10;
 
     public int b50;
+    public int b10;
     public int b30;
     public int bMk;
 
@@ -27,6 +28,8 @@ public class Report {
     public int mkt1;
     public int mkt2;
     public boolean mkMy = true;
+
+    public String comment;
 
     public Report() {
 
@@ -38,6 +41,15 @@ public class Report {
         this.date = date;
         this.mkRef = "";
         this.mkName = "";
+    }
+
+
+    public String getComment() {
+        return comment;
+    }
+
+    public int getB10() {
+        return b10;
     }
 
     public boolean isMkMy() {
@@ -122,5 +134,29 @@ public class Report {
 
     public int getMkt2() {
         return mkt2;
+    }
+
+    public void clearReport() {
+        r60 = 0;
+        r30 = 0;
+        r20 = 0;
+        r10 = 0;
+
+        b50 = 0;
+        b10 = 0;
+        b30 = 0;
+        bMk = 0;
+
+
+        mkMy = true;
+        mk1 = 0;
+        mkt1 =0;
+        mk2 = 0;
+        mkt2 =0;
+        mkName = "";
+        mkRef = "";
+
+        comment = "";
+
     }
 }

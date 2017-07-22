@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Cost;
 import com.example.android.kidsapp.utils.CostsAdapter;
+import com.example.android.kidsapp.utils.Utils;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -55,7 +56,6 @@ public class CostsActivity extends AppCompatActivity {
     private View fadedBeckground;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-    private boolean isAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +64,9 @@ public class CostsActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
         setContentView(R.layout.activity_costs);
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            isAdmin = bundle.getBoolean(Constants.EXTRA_IS_ADMIN, false);
-        }
-
         initRef();
 
-        if (isAdmin) buttonDeleteAll.setVisibility(View.VISIBLE);
+        if (Utils.isIsAdmin()) buttonDeleteAll.setVisibility(View.VISIBLE);
         else buttonDeleteAll.setVisibility(View.GONE);
 
         initRecycle();
@@ -125,7 +120,7 @@ public class CostsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (isAdmin) {
+                if (Utils.isIsAdmin()) {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(CostsActivity.this);
                     builder.setTitle(R.string.dialog_cost_delete_all_title)
@@ -173,7 +168,7 @@ public class CostsActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         textMonth = (TextView) findViewById(R.id.text_month);
-        compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
+        compactCalendarView = (CompactCalendarView) findViewById(R.id.calendar_view);
         textTotal = (TextView) findViewById(R.id.text_cost_total);
         textCommon = (TextView) findViewById(R.id.text_cost_common);
         textMk = (TextView) findViewById(R.id.text_cost_mk);
@@ -193,7 +188,7 @@ public class CostsActivity extends AppCompatActivity {
 
 
     private void initRecycle() {
-        adapter = new CostsAdapter(this, costList, isAdmin);
+        adapter = new CostsAdapter(this, costList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
@@ -209,7 +204,7 @@ public class CostsActivity extends AppCompatActivity {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Cost cost = dataSnapshot.getValue(Cost.class);
-                        if (cost != null) {
+                        if (cost != null && (Utils.isIsAdmin() || cost.getUserId().equals(mAuth.getCurrentUser().getUid()))) {
                             costList.add(0, cost);
                             adapter.notifyItemInserted(0);
                             calcTotal();
