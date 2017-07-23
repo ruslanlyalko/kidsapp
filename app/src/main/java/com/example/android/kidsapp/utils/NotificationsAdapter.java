@@ -43,7 +43,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             inputTitle2 = (EditText) view.findViewById(R.id.input_title2);
 
             date = (TextView) view.findViewById(R.id.text_date);
-            largeText = (TextView) view.findViewById(R.id.large_text);
+            largeText = (TextView) view.findViewById(R.id.text_description);
             inputTextLarge = (EditText) view.findViewById(R.id.input_text_large);
 
 
@@ -151,7 +151,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             notification.setTitle2(newTitle2);
             notification.setLargeText(newTextLarge);
 
-            //holder.imageExpand.setImageResource(R.drawable.ic_action_expand_more);
+            //holder.buttonExpand.setImageResource(R.drawable.ic_action_expand_more);
             //holder.expandPanel.setVisibility(View.GONE);
             if (save)
                 updateMk(notification);

@@ -1,5 +1,6 @@
 package com.example.android.kidsapp;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -13,6 +14,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -25,7 +28,6 @@ import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Mk;
 import com.example.android.kidsapp.utils.MksAdapter;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -135,20 +137,22 @@ public class MkActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 animateFAB();
-                Mk newMk = new Mk("Новий МК", "Кулінарний майстер клас", "Опис", Constants.URI_CARD_MK_K, FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-                addMk(newMk);
-                adapter.notifyDataSetChanged();
-                recyclerView.smoothScrollToPosition(0);
+
+                Intent intent = new Intent(MkActivity.this, MkEditActivity.class);
+                intent.putExtra(Constants.EXTRA_MK_TITLE2, getString(R.string.mk_k));
+                startActivity(intent);
+
             }
         });
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 animateFAB();
-                Mk newMk = new Mk("Новий МК", "Творчий майстер клас", "Опис", Constants.URI_CARD_MK_T, FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-                addMk(newMk);
-                adapter.notifyDataSetChanged();
-                recyclerView.smoothScrollToPosition(0);
+
+                Intent intent = new Intent(MkActivity.this, MkEditActivity.class);
+                intent.putExtra(Constants.EXTRA_MK_TITLE2, getString(R.string.mk_art));
+                startActivity(intent);
+
             }
         });
         fab.setOnClickListener(new View.OnClickListener() {
@@ -168,19 +172,6 @@ public class MkActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Save new MK to database
-     *
-     * @param newMk
-     */
-    private void addMk(Mk newMk) {
-        String key = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_MK).push().getKey();
-
-        newMk.setKey(key);
-
-        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_MK)
-                .child(key).setValue(newMk);
-    }
 
     private void initRef() {
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -311,6 +302,13 @@ public class MkActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_mk, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -319,6 +317,12 @@ public class MkActivity extends AppCompatActivity {
             return true;
         }
 
+        switch (id) {
+            case R.id.action_plan: {
+                //todo plan
+            }
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

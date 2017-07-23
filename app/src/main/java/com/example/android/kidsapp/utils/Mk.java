@@ -2,61 +2,36 @@ package com.example.android.kidsapp.utils;
 
 public class Mk {
 
-    public String getKey() {
-        return key;
-    }
-
     private String key;
     private String title1;
     private String title2;
-    private String largeText;
-    private String date;
-    private int count;
+    private String description;
     private String imageUri;
     private String userId;
+    private String userName;
 
     public Mk() {
+        //firebase required
     }
 
     public void setKey(String key) {
         this.key = key;
     }
 
-    public Mk( String title1, String title2, String largeText,  String imageUri, String userId) {
-        this.key = "";
+    public Mk(String key, String title1, String title2, String description, String imageUri, String userId, String userName) {
+        this.key = key;
         this.title1 = title1;
         this.title2 = title2;
-        this.largeText = largeText;
-        this.date = "";
-        this.count = 0;
+        this.description = description;
         this.imageUri = imageUri;
         this.userId = userId;
+        this.userName = userName;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getKey() {
+        return key;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
 
     public String getTitle1() {
         return title1;
@@ -74,12 +49,12 @@ public class Mk {
         this.title2 = title2;
     }
 
-    public String getLargeText() {
-        return largeText;
+    public String getDescription() {
+        return description;
     }
 
-    public void setLargeText(String largeText) {
-        this.largeText = largeText;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getImageUri() {
@@ -88,5 +63,21 @@ public class Mk {
 
     public void setImageUri(String imageUri) {
         this.imageUri = imageUri;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

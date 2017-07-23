@@ -3,19 +3,31 @@ package com.example.android.kidsapp.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.kidsapp.R;
+import com.example.android.kidsapp.ShowImageActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder> {
     private Context mContext;
@@ -26,7 +38,9 @@ public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textTitle1, textTitle2, textPrice, textDate;
         public ImageButton buttonDelete;
+        public LinearLayout linearUser, linearMenu;
         public SwipeLayout swipeLayout;
+        public ImageView imageView;
 
 
         public MyViewHolder(View view) {
@@ -40,6 +54,9 @@ public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder
             swipeLayout = (SwipeLayout) view.findViewById(R.id.swipe_layout);
 
             buttonDelete = (ImageButton) view.findViewById(R.id.button_delete);
+            linearUser = (LinearLayout) view.findViewById(R.id.linear_user);
+            linearMenu = (LinearLayout) view.findViewById(R.id.swipe_menu);
+            imageView = (ImageView) view.findViewById(R.id.image_view);
 
         }
     }
@@ -52,7 +69,7 @@ public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder
     @Override
     public CostsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.cost_card, parent, false);
+                .inflate(R.layout.card_cost, parent, false);
 
         return new CostsAdapter.MyViewHolder(itemView);
     }
@@ -61,13 +78,50 @@ public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder
     public void onBindViewHolder(final CostsAdapter.MyViewHolder holder, final int position) {
         final Cost cost = costList.get(position);
 
+        boolean isCurrentUserCost = cost.getUserId().endsWith(mAuth.getCurrentUser().getUid());
 
-        holder.textPrice.setText(cost.getPrice() + " грн");
         holder.textTitle1.setText(cost.getTitle1());
-        holder.textTitle2.setText(cost.getTitle2());
-        holder.textDate.setText(cost.getDate());
+        holder.textTitle2.setText(isCurrentUserCost? cost.getTitle2():cost.getTitle2()+"  ("+cost.getUserName()+")");
+        holder.textPrice.setText(cost.getPrice() + " грн");
+        holder.textDate.setText(cost.getDate().substring(0,cost.getDate().length()-5)+" о "+cost.getTime());
 
-        if (Utils.isIsAdmin()) {
+        // click on item to open photo
+        if (cost.getUri() != null && !cost.getUri().isEmpty()) {
+            holder.linearUser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // open new Activity and load image from storage
+                    String uri = cost.getUri();
+
+                    Intent intent = new Intent(mContext, ShowImageActivity.class);
+                    intent.putExtra(Constants.EXTRA_URI, uri);
+                    intent.putExtra(Constants.EXTRA_USER_NAME, cost.getUserName());
+                    mContext.startActivity(intent);
+                }
+            });
+            // change icon
+            holder.imageView.setImageResource(R.drawable.ic_image_light);
+        }
+
+        //check if just added
+        int diff = getDifference(cost.getDate(), cost.getTime());
+        boolean justAdded = (diff <= Constants.COST_EDIT_MIN);
+
+        // Avoid delete
+        if (!Utils.isIsAdmin() && justAdded) {
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    holder.swipeLayout.close();
+                    holder.swipeLayout.setRightSwipeEnabled(false);
+                    holder.linearMenu.setVisibility(View.GONE);
+                }
+                // start this code after 5* minutes
+            }, (Constants.COST_EDIT_MIN - diff + 1) * 60 * 1000);
+        }
+
+        if (Utils.isIsAdmin() || justAdded) {
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
             holder.swipeLayout.setRightSwipeEnabled(true);
             holder.swipeLayout.setBottomSwipeEnabled(false);
@@ -83,7 +137,8 @@ public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder
                                 .setMessage(R.string.dialog_cost_delete_message)
                                 .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        removeCost(cost, position);
+                                        removeCost(cost, holder.buttonDelete);
+                                        holder.swipeLayout.close();
                                     }
 
                                 })
@@ -94,23 +149,54 @@ public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder
                                 })
                                 .show();
 
-                    } else {
-                        Snackbar.make(holder.buttonDelete, mContext.getString(R.string.cant_delete), Snackbar.LENGTH_LONG).show();
                     }
+
                 }
             });
+        }else
+        {
+            // not admin
+            holder.linearMenu.setVisibility(View.GONE);
         }
     }
 
-    private void removeCost(Cost cost, int position) {
-        costList.remove(position);
+    private int getDifference(String date, String time) {
+
+        if (time == null || time.isEmpty()) return 10;
+
+        SimpleDateFormat format = new SimpleDateFormat("d-M-yyyy HH:mm");
+
+        Date d1 = new Date();
+        Date d2 = null;
+        try {
+            d2 = format.parse(date + " " + time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        // Get msec from each, and subtract.
+        long diff = d1.getTime() - d2.getTime();
+
+        int diffMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(diff);
+        ;
+
+        return diffMinutes;
+    }
+
+    private void removeCost(Cost cost, final View view) {
+        // costList.remove(position);
 
 
         mDatabase.getReference(Constants.FIREBASE_REF_COSTS)
                 .child(getYearFromStr(cost.date)).child(getMonthFromStr(cost.date))
-                .child(cost.getKey()).removeValue();
+                .child(cost.getKey()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Snackbar.make(view, mContext.getString(R.string.snack_deleted), Snackbar.LENGTH_LONG).show();
+            }
+        });
 
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
 
     }
 

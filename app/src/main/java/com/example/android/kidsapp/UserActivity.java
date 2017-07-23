@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -22,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.kidsapp.utils.Constants;
@@ -56,6 +58,7 @@ public class UserActivity extends AppCompatActivity {
     private List<User> userList = new ArrayList<>();
     private UsersAdapter adapter;
     private RecyclerView recyclerView;
+    private LinearLayout linearPhoneCall;
     private boolean needLoadFriends;
 
     @Override
@@ -128,7 +131,7 @@ public class UserActivity extends AppCompatActivity {
                                 mUser = user;
                                 updateUI(user);
                             } else if (needLoadFriends) {
-                                userList.add(0,user);
+                                userList.add(0, user);
                                 adapter.notifyDataSetChanged();
                             }
                         }
@@ -174,6 +177,7 @@ public class UserActivity extends AppCompatActivity {
 
         cardFriends = (CardView) findViewById(R.id.card_friends);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        linearPhoneCall = (LinearLayout) findViewById(R.id.linear_phone_call);
     }
 
     private void initCollapsingToolbar() {
@@ -199,9 +203,11 @@ public class UserActivity extends AppCompatActivity {
                 }
                 if (scrollRange + verticalOffset == 0) {
                     collapsingToolbar.setTitle(mUser.getUserName());
+                    fab.setVisibility(View.GONE);
                     isShow = true;
                 } else if (isShow) {
                     collapsingToolbar.setTitle(" ");
+                    fab.setVisibility(View.VISIBLE);
                     isShow = false;
                 }
             }
@@ -223,6 +229,16 @@ public class UserActivity extends AppCompatActivity {
         textBDay.setText(user.getUserBDay());
         textCard.setText(user.getUserCard());
         textTime.setText(user.getUserTimeStart() + " - " + user.getUserTimeEnd());
+
+        final String phone = user.getUserPhone();
+        linearPhoneCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:" + phone));
+                startActivity(callIntent);
+            }
+        });
 
        /* StorageReference storageRef = storage.getReference(Constants.FIREBASE_STORAGE_PICTURES)
                 .child("cover5.png");

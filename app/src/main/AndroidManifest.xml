@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.kidsapp">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,12 +23,12 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UserActivity"
             android:label="@string/title_activity_user"
-            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -71,8 +73,8 @@
         <activity
             android:name=".MkActivity"
             android:label="@string/title_activity_mk"
-            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -96,8 +98,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.MainActivity" />
         </activity>
-
-        <activity android:name=".SalaryActivity"
+        <activity
+            android:name=".SalaryActivity"
             android:label="@string/title_activity_salary"
             android:parentActivityName=".UserActivity"
             android:windowSoftInputMode="stateHidden">
@@ -105,13 +107,38 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.UserActivity" />
         </activity>
-        <activity android:name=".DashboardActivity"
+        <activity
+            android:name=".DashboardActivity"
             android:label="@string/title_activity_dashboard"
             android:parentActivityName=".UserActivity"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.UserActivity" />
+        </activity>
+        <activity android:name=".ShowImageActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.CostsActivity" />
+        </activity>
+        <activity
+            android:name=".MkItemActivity"
+            android:label="@string/title_activity_mk_item"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.MkActivity" />
+        </activity>
+        <activity
+            android:name=".MkEditActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Close"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.MkActivity" />
         </activity>
     </application>
 

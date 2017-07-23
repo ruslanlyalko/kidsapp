@@ -6,6 +6,8 @@ public class Cost {
     public String title1;
     public String title2;
     public String date;
+    public String time;
+    public String uri;
     public String userId;
     public String userName;
     public int price;
@@ -13,13 +15,30 @@ public class Cost {
     public Cost() {
     }
 
-    public Cost(String title1, String title2, String date, String userId, String userName, int price) {
+    public Cost(String title1, String title2, String date, String uri, String userId, String userName, int price) {
         this.title1 = title1;
         this.title2 = title2;
         this.date = date;
+        this.uri = uri;
         this.userId = userId;
         this.userName = userName;
         this.price = price;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public String getUri() {
+        return uri;
     }
 
     public String getUserId() {

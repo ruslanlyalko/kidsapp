@@ -27,7 +27,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:hint="@string/hint_title1"
-                android:inputType="text" />
+                android:inputType="text|textCapSentences" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 

@@ -1,8 +1,13 @@
 package com.example.android.kidsapp;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,12 +29,24 @@ import com.example.android.kidsapp.utils.Cost;
 import com.example.android.kidsapp.utils.CostsAdapter;
 import com.example.android.kidsapp.utils.Utils;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,21 +58,23 @@ public class CostsActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
 
-    private CostsAdapter adapter;
-    private List<Cost> costList = new ArrayList<>();
-    private Boolean isFabOpen = false;
     Button buttonDeleteAll;
     ImageButton buttonNext, buttonPrev;
     TextView textMonth, textTotal, textCommon, textMk;
-    ProgressBar progressBar;
-
+    ProgressBar progressBar, progressBarUpload;
     CompactCalendarView compactCalendarView;
+
+    private CostsAdapter adapter;
+    private List<Cost> costList = new ArrayList<>();
+    private Boolean isFabOpen = false;
     private FloatingActionButton fab, fab1, fab2;
     private Animation fab_open, fab_close, rotate_forward, rotate_backward, fade, fade_back_quick;
     private TextView textFab1, textFab2;
     private View fadedBeckground;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    private String mTitle1, mTitle2, mPrice;
+    private Uri mImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +170,12 @@ public class CostsActivity extends AppCompatActivity {
         loadCosts(yearStr, monthStr);
     }
 
+    /*
+     int REQUEST_CODE_CAMERA =123;
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, REQUEST_CODE_CAMERA);
+     */
+
     private void removeAllCost() {
 
         String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date()).toString();
@@ -166,6 +191,7 @@ public class CostsActivity extends AppCompatActivity {
 
     private void initRef() {
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBarUpload = (ProgressBar) findViewById(R.id.progress_bar_upload);
 
         textMonth = (TextView) findViewById(R.id.text_month);
         compactCalendarView = (CompactCalendarView) findViewById(R.id.calendar_view);
@@ -220,15 +246,17 @@ public class CostsActivity extends AppCompatActivity {
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
                         Cost cost = dataSnapshot.getValue(Cost.class);
                         if (cost != null) {
+                            int i =0;
                             for (Cost cost1 : costList) {
-
                                 if (cost1.getKey().equals(cost.getKey())) {
                                     costList.remove(cost1);
+                                    adapter.notifyItemRemoved(i);
                                     adapter.notifyDataSetChanged();
                                     calcTotal();
+                                    break;
                                 }
+                                i++;
                             }
-
                         }
                     }
 
@@ -304,7 +332,7 @@ public class CostsActivity extends AppCompatActivity {
         });
     }
 
-    private void addCostDialog(String title2) {
+    private void addCostDialog(final String title2) {
 
         final String title22 = title2;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -323,8 +351,19 @@ public class CostsActivity extends AppCompatActivity {
                 String title1 = inputTitle1.getText().toString();
                 String price = inputPrice.getText().toString();
 
-                addCost(title1, title22, price);
+                addCost(title1, title22, price, "");
 
+            }
+        });
+        builder.setNeutralButton("+ ФОТО", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                mTitle1 = inputTitle1.getText().toString();
+                mTitle2 = title2;
+                mPrice = inputPrice.getText().toString();
+
+                startCamera();
             }
         });
         builder.setNegativeButton("Відмінити", new DialogInterface.OnClickListener() {
@@ -338,36 +377,119 @@ public class CostsActivity extends AppCompatActivity {
 
     }
 
-    private void addCost(String title1, String title22, String price) {
+    private String pictureImagePath = "";
+
+    void startCamera() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = timeStamp + ".jpg";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+        File file = new File(pictureImagePath);
+        Uri outputFileUri = Uri.fromFile(file);
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+
+        startActivityForResult(cameraIntent, Constants.REQUEST_CODE_CAMERA);
+        showProgressBarUpload();
+    }
+
+    void showProgressBarUpload() {
+        progressBarUpload.setVisibility(View.VISIBLE);
+    }
+
+
+    void hideProgressBarUpload() {
+        progressBarUpload.setVisibility(View.GONE);
+        recyclerView.scrollToPosition(0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // handle request from camera
+        if (requestCode == Constants.REQUEST_CODE_CAMERA) {
+            if (resultCode == RESULT_OK) {
+
+                InputStream stream = null;
+                try {
+                    stream = new FileInputStream(new File(pictureImagePath));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                // Meta data for image
+                StorageMetadata metadata = new StorageMetadata.Builder()
+                        .setContentType("image/jpg")
+                        .setCustomMetadata(mTitle1, mTitle2)
+                        .build();
+
+                // name of file in Storage
+                final String filename = Utils.getCurrentTimeStamp() + ".jpg";
+
+                UploadTask uploadTask = FirebaseStorage.getInstance()
+                        .getReference(Constants.FIREBASE_STORAGE_COST)
+                        .child(filename)
+                        .putStream(stream, metadata);
+
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        addCost(mTitle1, mTitle2, mPrice, filename);
+                        hideProgressBarUpload();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        addCost(mTitle1, mTitle2, mPrice, "");
+                        hideProgressBarUpload();
+                    }
+                });
+
+            } else { //resultCode
+                addCost(mTitle1, mTitle2, mPrice, "");
+                hideProgressBarUpload();
+
+            }
+
+        }
+        //other request code
+    }
+
+    private void addCost(String title1, String title22, String price, String uri) {
         if (price == null || price.isEmpty())
             price = "0";
 
         Cost cost = new Cost(title1, title22,
                 new SimpleDateFormat("d-M-yyyy", Locale.US).format(new Date()).toString(),
+                uri,
                 mAuth.getCurrentUser().getUid(),
                 mAuth.getCurrentUser().getDisplayName(),
                 Integer.parseInt(price));
 
         addCostToDb(cost);
-        recyclerView.smoothScrollToPosition(0);
     }
 
     private void addCostToDb(Cost newCost) {
 
         String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date()).toString();
         String monthStr = new SimpleDateFormat("M", Locale.US).format(new Date()).toString();
+        String time = new SimpleDateFormat("HH:mm", Locale.US).format(new Date()).toString();
 
-        String key = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_COSTS)
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_COSTS)
                 .child(yearStr)
-                .child(monthStr)
-                .push().getKey();
+                .child(monthStr);
 
+        String key = ref.push().getKey();
         newCost.setKey(key);
+        newCost.setTime(time);
 
-        mDatabase.getReference(Constants.FIREBASE_REF_COSTS)
-                .child(yearStr)
-                .child(monthStr)
-                .child(key).setValue(newCost);
+        ref.child(key).setValue(newCost).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                recyclerView.smoothScrollToPosition(0);
+            }
+        });
     }
 
     public void animateFAB() {

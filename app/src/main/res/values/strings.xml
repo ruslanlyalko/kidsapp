@@ -42,9 +42,8 @@
 
     <string name="hint_double_press">Натисніть ще раз аби вийти з додатку</string>
     <string name="button_about">Про Програму</string>
-    <string name="button_contacts">Набрати: 098 1990 655</string>
+    <string name="button_contacts">Погода в Іршаві</string>
     <string name="button_fb">Ми в Facebook</string>
-    <string name="button_inst">Ми в Instagram</string>
     <string name="phone_call">tel:0681990655</string>
 
     <!-- USER -->
@@ -136,9 +135,9 @@
         Деко\n
         Пергамент для запікання
     </string>
-    <string name="dialog_delete_mk_title">Видалити майстер клас?</string>
+    <string name="dialog_delete_mk_title">Видалити майстер клас</string>
     <string name="dialog_delete_mk_message">Після видалення відновити мастер клас буде неможливо</string>
-    <string name="dialog_delete_title">Видалити звіт?</string>
+    <string name="dialog_delete_title">Видалити звіт</string>
     <string name="dialog_delete_message">Після видалення відновити звіт буде неможливо</string>
 
 
@@ -149,14 +148,14 @@
     <string name="toast_report_saved">Звіт збережено</string>
     <string name="hint_price">Ціна</string>
     <string name="hint_title2">Тип</string>
-    <string name="hint_title1">Опис</string>
-    <string name="text_cost_common">Загальні</string>
-    <string name="text_cost_mk">На МК</string>
+    <string name="hint_title1">Назва</string>
+    <string name="text_cost_common">загальні</string>
+    <string name="text_cost_mk">на мк</string>
     <string name="text_cost_list">Список витрат</string>
     <string name="action_delete_all">  ВИДАЛИТИ ВСЕ  </string>
-    <string name="dialog_cost_delete_title">Видалити витрату?</string>
+    <string name="dialog_cost_delete_title">Видалити витрату</string>
     <string name="dialog_cost_delete_message">Після видалення відновити витрату буде неможливо</string>
-    <string name="dialog_cost_delete_all_title">Видалити всі витрати?</string>
+    <string name="dialog_cost_delete_all_title">Видалити всі витрати</string>
     <string name="dialog_cost_delete_all_message">Після видалення відновити витрати буде неможливо</string>
     <string name="cant_delete">Неможливо видалити. Видаляти можливо тільки витрати створені Вами</string>
     <string name="cant_delete_all">Неможливо видалити. Ця функція доступна тільки Адміністратору</string>
@@ -164,7 +163,7 @@
     <string name="text_room">Кімната</string>
     <string name="text_all">Всього</string>
     <string name="text_birthdays">Дні Народження</string>
-    <string name="dialog_delete_notification_title">Видалити статтю?</string>
+    <string name="dialog_delete_notification_title">Видалити статтю</string>
     <string name="dialog_delete_notification_message">Після видаленння відновити статтю буде неможливо</string>
     <string name="dialog_about_title">Про програму</string>
     <string name="dialog_about_message">KIDS APP  \nv </string>
@@ -198,6 +197,16 @@
     <string name="hint_time">Час роботи</string>
     <string name="action_new_user">Новий користувач</string>
     <string name="text_friend_list">Колеги</string>
+    <string name="button_notebook">Приват Нотатки</string>
+    <string name="snack_deleted">Видалено</string>
+    <string name="action_plan">План МК</string>
+    <string name="title_activity_mk_item">Майстер клас</string>
+    <string name="action_save">Зберегти</string>
+    <string name="title_activity_edit">Редагування</string>
+    <string name="title_activity_add">Добавлення</string>
+    <string name="hint_description">Детальний опис</string>
+    <string name="mk_k">Кулінарний майстер клас</string>
+    <string name="mk_art">Творчий майстер клас</string>
 
 
 </resources>

@@ -154,7 +154,7 @@
                 android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/large_text"
+                    android:id="@+id/text_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Large text her" />

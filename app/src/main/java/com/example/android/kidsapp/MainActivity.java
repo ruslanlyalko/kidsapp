@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -35,8 +36,8 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button buttonUser, buttonEvents, buttonZvit, buttonCalendar, buttonMk, buttonVyt;
-    Button buttonSwipe, buttonAbout, buttonFB, buttonInst, buttonCall;
+    Button buttonUser, buttonEvents, buttonReport, buttonCalendar, buttonMk, buttonVyt;
+    Button buttonSwipe, buttonAbout, buttonFB, buttonNotebook, buttonWeather;
     TextView textSnoopy, textLink, textLinkDetails;
     SwipeLayout swipeLayout;
 
@@ -55,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
     private String mLink;
     private String mLinkText;
     private String mLinkFb;
-    private String mLinkInst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
         defaults.put("link_show", false);
         defaults.put("link", "https://www.fb.com/snoopyagency");
         defaults.put("link_text", "Відвідайте нашу сторінку у ФБ!");
-        defaults.put("link_inst", "https://www.instagram.com/snoopyagency");
         defaults.put("link_fb", "https://www.fb.com/snoopyagency");
 
         mRemoteConfig.setDefaults(defaults);
@@ -106,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         mLinkText = mRemoteConfig.getString("link_text");
         mLink = mRemoteConfig.getString("link");
         mLinkFb = mRemoteConfig.getString("link_fb");
-        mLinkInst = mRemoteConfig.getString("link_inst");
 
         if (mLinkActive) {
             textLink.setText(mLinkText);
@@ -196,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // Main Buttons
-        buttonZvit.setOnClickListener(new View.OnClickListener() {
+        buttonReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ReportActivity.class);
@@ -256,19 +254,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        buttonInst.setOnClickListener(new View.OnClickListener() {
+        buttonNotebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openBrowser(mLinkInst);
+
+                // todo private notebook
             }
         });
 
-        buttonCall.setOnClickListener(new View.OnClickListener() {
+        buttonWeather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("tel:0681990655"));
-                startActivity(callIntent);
+                //todo weather
+
             }
         });
 
@@ -319,16 +317,16 @@ public class MainActivity extends AppCompatActivity {
 
         buttonUser = (Button) findViewById(R.id.button_user);
         buttonEvents = (Button) findViewById(R.id.button_events);
-        buttonZvit = (Button) findViewById(R.id.button_report);
+        buttonReport = (Button) findViewById(R.id.button_report);
         buttonCalendar = (Button) findViewById(R.id.button_calendar);
         buttonMk = (Button) findViewById(R.id.button_mk);
         buttonVyt = (Button) findViewById(R.id.button_vyt);
 
         buttonSwipe = (Button) findViewById(R.id.button_swipe);
         buttonAbout = (Button) findViewById(R.id.button_about);
-        buttonInst = (Button) findViewById(R.id.button_inst);
+        buttonNotebook = (Button) findViewById(R.id.button_notebook);
         buttonFB = (Button) findViewById(R.id.button_fb);
-        buttonCall = (Button) findViewById(R.id.button_call);
+        buttonWeather = (Button) findViewById(R.id.button_weather);
         swipeLayout = (SwipeLayout) findViewById(R.id.swipe_layout);
 
     }
@@ -350,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * When user press Back button
+     * When user press Back buttonExpand
      * close swipe and show message - double click to exit
      */
     @Override
@@ -370,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // Close app after twice click on Back button
+        // Close app after twice click on Back buttonExpand
         mDoubleBackToExitPressedOnce = true;
         Toast.makeText(this, R.string.hint_double_press, Toast.LENGTH_SHORT).show();
 

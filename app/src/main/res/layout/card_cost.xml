@@ -1,7 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp">
+    android:layout_height="wrap_content">
 
     <com.example.android.kidsapp.utils.SwipeLayout
         android:id="@+id/swipe_layout"
@@ -10,10 +9,10 @@
 
         <LinearLayout
             android:id="@+id/swipe_menu"
-            android:layout_width="54dp"
+            android:layout_width="56dp"
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"
-            android:divider="?android:dividerHorizontal"
+            android:divider="?android:dividerVertical"
             android:dividerPadding="2dp"
             android:orientation="horizontal"
             android:showDividers="middle">
@@ -32,9 +31,13 @@
             android:id="@+id/linear_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/image_view"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
@@ -46,6 +49,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:orientation="vertical">
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -58,26 +62,27 @@
                     android:layout_height="40dp"
                     android:layout_marginTop="8dp">
 
-                    <TextView
-                        android:id="@+id/text_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginTop="4dp"
-                        android:text="12.06 o 9:55"
-                        android:textAlignment="viewEnd" />
 
                     <TextView
                         android:id="@+id/text_total"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_below="@id/text_date"
                         android:layout_marginRight="4dp"
-                        android:text="175 ГРН"
                         android:textAlignment="viewEnd"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:textColor="@color/colorBlack70"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/text_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/text_total"
+                        android:layout_marginRight="4dp"
+                        android:text="12.06 o 9:55"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/colorBlack50" />
 
                     <TextView
                         android:id="@+id/text_title1"
@@ -85,7 +90,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_toLeftOf="@id/text_date"
-                        android:text="Щось купили" />
+                        android:textColor="@color/colorBlack70"
+                        android:textStyle="bold" />
 
 
                     <TextView
@@ -95,11 +101,10 @@
                         android:layout_alignParentLeft="true"
                         android:layout_below="@id/text_title1"
                         android:layout_toLeftOf="@id/text_date"
-                        android:text="Щось купили" />
+                        android:textColor="@color/colorBlack50" />
 
 
                 </RelativeLayout>
-
 
 
             </LinearLayout>

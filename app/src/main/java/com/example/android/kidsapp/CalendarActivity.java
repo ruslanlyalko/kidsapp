@@ -301,12 +301,7 @@ public class CalendarActivity extends AppCompatActivity {
             return true;
         }
 
-        switch (id) {
-            case R.id.action_edit: {
-                //todo edit zvit
-            }
-            return true;
-        }
+
 
 
         return super.onOptionsItemSelected(item);

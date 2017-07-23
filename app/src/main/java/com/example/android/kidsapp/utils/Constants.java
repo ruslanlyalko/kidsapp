@@ -16,6 +16,8 @@ public class Constants {
      * Firebase STORAGE
      */
     public static final String FIREBASE_STORAGE_PICTURES = "user-pictures";
+    public static final String FIREBASE_STORAGE_COST = "COST";
+    public static final String FIREBASE_STORAGE_MK = "MK";
 
     /**
      * Extra constants
@@ -29,11 +31,17 @@ public class Constants {
     /**
      * Other
      */
+    public static final int REQUEST_CODE_CAMERA = 12344;
+    public static final int REQUEST_CODE_GALLERY = 454;
+
 
     public static final String[] MONTH = {"СІЧ", "ЛЮТ", "БЕР", "КВІ", "ТРА", "ЧЕР", "ЛИП", "СЕР", "ВЕР", "ЖОВ", "ЛИС", "ГРУ"};
     public static final String[] MONTH_FULL = {"СІЧЕНЬ", "ЛЮТИЙ", "БЕРЕЗЕНЬ", "КВІТЕНЬ", "ТРАВЕНЬ"
             , "ЧЕРВЕНЬ", "ЛИПЕНЬ", "СЕРПЕНЬ", "ВЕРЕСЕНЬ", "ЖОВТЕНЬ", "ЛИСТОПАД", "ГРУДЕНЬ"};
     public static final String FIREBASE_REF_NOTIFICATIONS = "NOTIFICATIONS";
+    public static final String EXTRA_URI = "extra_uri";
+    public static final String EXTRA_MK_ID = "extra_mk_id";
+    public static final String EXTRA_MK_TITLE2 = "extra_title_2";
 
 
     public static int[] COLORS = {Color.GREEN, Color.BLUE, Color.RED, Color.MAGENTA, Color.GRAY, Color.YELLOW};
@@ -47,4 +55,5 @@ public class Constants {
     public static int SALARY_BDAY_MK = 50;
     public static int SALARY_ART_MK = 10;
     public static double SALARY_PERCENT = 0.08;
+    public static int COST_EDIT_MIN = 5;
 }
