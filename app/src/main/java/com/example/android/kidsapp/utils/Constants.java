@@ -42,6 +42,7 @@ public class Constants {
     public static final String EXTRA_URI = "extra_uri";
     public static final String EXTRA_MK_ID = "extra_mk_id";
     public static final String EXTRA_MK_TITLE2 = "extra_title_2";
+    public static final int REQUEST_CODE_EDIT = 1244;
 
 
     public static int[] COLORS = {Color.GREEN, Color.BLUE, Color.RED, Color.MAGENTA, Color.GRAY, Color.YELLOW};

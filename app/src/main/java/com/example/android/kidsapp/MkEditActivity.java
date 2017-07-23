@@ -1,11 +1,16 @@
 package com.example.android.kidsapp;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +25,7 @@ import com.example.android.kidsapp.utils.Mk;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,10 +46,12 @@ public class MkEditActivity extends AppCompatActivity {
 
     // VARIABLES
     FirebaseDatabase database = FirebaseDatabase.getInstance();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
     String mkKey, mkTitle2;
-    Mk mk;
+    Mk mk = new Mk();
     boolean isNew = false;
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    boolean needToSave = false;
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,28 +91,51 @@ public class MkEditActivity extends AppCompatActivity {
                 startActivityForResult(intent, Constants.REQUEST_CODE_GALLERY);
             }
         });
+
+        TextWatcher watcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                needToSave = true;
+            }
+        };
+        textTitle1.addTextChangedListener(watcher);
+        textTitle2.addTextChangedListener(watcher);
+        textDescription.addTextChangedListener(watcher);
+
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK) {
-            if (data == null) {
-                //Display an error
+            if (data == null)
                 return;
-            }
 
+            needToSave = true;
+            progressBar.setVisibility(View.VISIBLE);
+
+            //upload to image view
             Uri selectedImage = data.getData();
-
-            // todo upload to Storage
             imageView.setImageURI(selectedImage);
 
-            final String imageName = (mk != null ? mk.getKey() : "") 
+            final String imageName = (mkKey != null ? mkKey : "newMK")
                     + new SimpleDateFormat("_ddMMyyyy_HHmmss").format(new Date()) + ".jpg";
 
-            StorageReference ref = storage.getReference(Constants.FIREBASE_STORAGE_MK).child(imageName);
+            // save in database
             mk.setImageUri(imageName);
-            progressBar.setVisibility(View.VISIBLE);
+
+            // upload to storage
+            StorageReference ref = storage.getReference(Constants.FIREBASE_STORAGE_MK).child(imageName);
             ref.putFile(selectedImage).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -135,30 +166,45 @@ public class MkEditActivity extends AppCompatActivity {
 
     }
 
-    private void addMk() {
-        String key = database.getReference(Constants.FIREBASE_REF_MK).push().getKey();
-
-        mk.setKey(key);
-        isNew = false;
-
-        database.getReference(Constants.FIREBASE_REF_MK)
-                .child(key).setValue(mk).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                // todo snackbar
-            }
-        });
+    private void updateMkModel() {
+        mk.setTitle1(textTitle1.getText().toString());
+        mk.setTitle2(textTitle2.getText().toString());
+        mk.setDescription(textDescription.getText().toString());
 
     }
 
+    private void addMk() {
+        updateMkModel();
+
+        isNew = false;
+        mkKey = database.getReference(Constants.FIREBASE_REF_MK).push().getKey();
+        mk.setKey(mkKey);
+        mk.setUserId(auth.getCurrentUser().getUid());
+        mk.setUserName(auth.getCurrentUser().getDisplayName());
+
+        database.getReference(Constants.FIREBASE_REF_MK)
+                .child(mkKey).setValue(mk).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                Snackbar.make(imageView, getString(R.string.mk_added), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+        needToSave = false;
+    }
+
     private void updateMk() {
+        updateMkModel();
+
         database.getReference(Constants.FIREBASE_REF_MK)
                 .child(mk.getKey()).setValue(mk).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                //todo snackbar
+                Snackbar.make(imageView, getString(R.string.mk_updated), Snackbar.LENGTH_SHORT).show();
+
             }
         });
+        needToSave = false;
     }
 
     private void updateUI() {
@@ -179,6 +225,7 @@ public class MkEditActivity extends AppCompatActivity {
                 }
             }
         }
+        needToSave = false;
     }
 
     @Override
@@ -198,12 +245,6 @@ public class MkEditActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_save) {
-            if (mk == null) mk = new Mk();
-
-            mk.setTitle1(textTitle1.getText().toString());
-            mk.setTitle2(textTitle2.getText().toString());
-            mk.setDescription(textDescription.getText().toString());
-
 
             if (isNew)
                 addMk();
@@ -213,4 +254,35 @@ public class MkEditActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public void onBackPressed() {
+
+        if (needToSave) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MkEditActivity.this);
+            builder.setTitle(R.string.dialog_report_save_before_close_title)
+                    .setMessage(R.string.dialog_mk_edit_text)
+                    .setPositiveButton("ЗБЕРЕГТИ ЗМІНИ", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            updateMk();
+                            needToSave = false;
+                            onBackPressed();
+
+                        }
+
+                    })
+                    .setNegativeButton("НЕ ЗБЕРІГАТИ", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            needToSave = false;
+                            onBackPressed();
+                        }
+                    })
+                    .show();
+
+        } else {
+            super.onBackPressed();
+        }
+
+    }
 }

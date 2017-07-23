@@ -168,7 +168,7 @@
     <string name="dialog_about_title">Про програму</string>
     <string name="dialog_about_message">KIDS APP  \nv </string>
     <string name="text_copied">Номер картки скопійовано</string>
-    <string name="dialog_report_save_before_close_title">Зберегти зміни?</string>
+    <string name="dialog_report_save_before_close_title">Зберегти зміни</string>
     <string name="dialog_report_save_before_close_text">У звіті є зміни. Натисніть зберегти щоб не втратити їх</string>
     <string name="title_activity_salary">Зарплата</string>
     <string name="text_mk">МК</string>
@@ -207,6 +207,9 @@
     <string name="hint_description">Детальний опис</string>
     <string name="mk_k">Кулінарний майстер клас</string>
     <string name="mk_art">Творчий майстер клас</string>
+    <string name="mk_updated">МК обновлено успішно</string>
+    <string name="mk_added">МК створено успішно</string>
+    <string name="dialog_mk_edit_text">В тексті є зміни, зберегти їх?</string>
 
 
 </resources>

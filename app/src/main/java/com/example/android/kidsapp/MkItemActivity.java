@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Mk;
+import com.example.android.kidsapp.utils.Utils;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+
 public class MkItemActivity extends AppCompatActivity {
 
     //VIEWS
@@ -30,6 +33,7 @@ public class MkItemActivity extends AppCompatActivity {
     private CollapsingToolbarLayout toolbarLayout;
     private TextView textDescription, textTitle2;
     private ImageView imageView;
+    private FloatingActionButton fab;
 
     // VARIABLES
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -53,10 +57,10 @@ public class MkItemActivity extends AppCompatActivity {
 
         initRef();
 
-        loadMkItem();
+        loadMkFromDB();
     }
 
-    private void loadMkItem() {
+    private void loadMkFromDB() {
         if (mkKey == null || mkKey.isEmpty()) return;
 
         DatabaseReference ref = database.getReference(Constants.FIREBASE_REF_MK).child(mkKey);
@@ -81,6 +85,9 @@ public class MkItemActivity extends AppCompatActivity {
             toolbarLayout.setTitle(mk.getTitle1());
             textTitle2.setText(mk.getTitle2());
             textDescription.setText(mk.getDescription());
+            
+            fab.setVisibility((Utils.isIsAdmin() || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+                    ? View.VISIBLE : View.GONE);
 
             if (mk.getImageUri() != null && !mk.getImageUri().isEmpty()) {
 
@@ -102,16 +109,27 @@ public class MkItemActivity extends AppCompatActivity {
         textTitle2 = (TextView) findViewById(R.id.text_title2);
         imageView = (ImageView) findViewById(R.id.image_view);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //todo add logic for making edit
                 Intent intent = new Intent(MkItemActivity.this, MkEditActivity.class);
                 intent.putExtra(Constants.EXTRA_MK_ID, mkKey);
-                startActivity(intent);
+                startActivityForResult(intent, Constants.REQUEST_CODE_EDIT);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.REQUEST_CODE_EDIT) {
+
+            loadMkFromDB();
+        }
     }
 
     @Override
