@@ -185,7 +185,7 @@
     <string name="text_salary_detail_mk1">"МК на ДН:"</string>
     <string name="text_salary_detail_mk2">"МК на ДН(>10 дітей):"</string>
     <string name="dialog_salary_title">Введіть значення</string>
-    <string name="hint_comment">Коментар</string>
+    <string name="hint_comment">Добавити Коментар</string>
     <string name="action_clear_report">Очистити</string>
     <string name="action_delete_report">Видалити звіт</string>
     <string name="action_yesterday">Вчора</string>
@@ -210,6 +210,10 @@
     <string name="mk_updated">МК обновлено успішно</string>
     <string name="mk_added">МК створено успішно</string>
     <string name="dialog_mk_edit_text">В тексті є зміни, зберегти їх?</string>
+    <string name="title_activity_mk_plan">Майстер класи</string>
+    <string name="text_mk_list">Майстер класи</string>
+    <string name="dialog_choose_mk">Виберіть МК</string>
+    <string name="text_add_photo">Добавити Фото</string>
 
 
 </resources>

@@ -18,6 +18,7 @@ public class ShowImageActivity extends AppCompatActivity {
 
     private String uri = "";
     private String userName = "";
+    private String folder= "";
     private float mx, my;
     boolean scroll = false;
 
@@ -30,6 +31,8 @@ public class ShowImageActivity extends AppCompatActivity {
         if (bundle != null) {
             uri = bundle.getString(Constants.EXTRA_URI);
             userName = bundle.getString(Constants.EXTRA_USER_NAME);
+            folder = bundle.getString(Constants.EXTRA_FOLDER, Constants.FIREBASE_STORAGE_COST);
+
         }
     }
 
@@ -44,7 +47,7 @@ public class ShowImageActivity extends AppCompatActivity {
     private void loadImage(String uri) {
         if (uri.isEmpty()) return;
 
-        StorageReference ref = FirebaseStorage.getInstance().getReference(Constants.FIREBASE_STORAGE_COST).child(uri);
+        StorageReference ref = FirebaseStorage.getInstance().getReference(folder).child(uri);
         final ImageView image = (ImageView) findViewById(R.id.imageView);
         //load image using Glide
         Glide.with(ShowImageActivity.this).using(new FirebaseImageLoader()).load(ref).into(image);

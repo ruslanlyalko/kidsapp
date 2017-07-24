@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Cost;
@@ -543,6 +544,10 @@ public class CostsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if (progressBarUpload.getVisibility() == View.VISIBLE) {
+            Toast.makeText(this, "Фото загружається. Зачекайте хвильку..", Toast.LENGTH_SHORT).show();
+            return;
+        }
         super.onBackPressed();
         overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
     }

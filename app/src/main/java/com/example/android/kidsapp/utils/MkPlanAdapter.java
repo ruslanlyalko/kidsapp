@@ -1,8 +1,6 @@
 package com.example.android.kidsapp.utils;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,75 +12,80 @@ import android.widget.TextView;
 
 import com.example.android.kidsapp.MkItemActivity;
 import com.example.android.kidsapp.R;
-import com.example.android.kidsapp.ReportActivity;
+import com.example.android.kidsapp.UserActivity;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
-public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHolder> {
+public class MkPlanAdapter extends RecyclerView.Adapter<MkPlanAdapter.MyViewHolder> {
     private Context mContext;
     private List<Report> reportList;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textUserName, textTotal, textBdayTotal, textRoomTotal, textMkTotal;
+        public TextView textUserName, textTotal, textT2Total, textT1Total, textT1, textT2;
         public SwipeLayout swipeLayout;
         public ProgressBar progressBar;
-        public ImageButton buttonMk, buttonEdit, buttonDelete;
+        public ImageButton buttonMK, buttonUser, buttonDelete;
 
         public MyViewHolder(View view) {
             super(view);
 
+            textT1 = (TextView) view.findViewById(R.id.text_t1);
+            textT2 = (TextView) view.findViewById(R.id.text_t2);
             textUserName = (TextView) view.findViewById(R.id.text_user_name);
             textTotal = (TextView) view.findViewById(R.id.text_total);
-            textBdayTotal = (TextView) view.findViewById(R.id.text_bday_total);
-            textRoomTotal = (TextView) view.findViewById(R.id.text_room_total);
-            textMkTotal = (TextView) view.findViewById(R.id.text_mk_total);
+            textT2Total = (TextView) view.findViewById(R.id.text_bday_total);
+            textT1Total = (TextView) view.findViewById(R.id.text_room_total);
             swipeLayout = (SwipeLayout) view.findViewById(R.id.swipe_layout);
             progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-            buttonMk = (ImageButton) view.findViewById(R.id.button_user);
-            buttonEdit = (ImageButton) view.findViewById(R.id.button_edit);
+            buttonMK = (ImageButton) view.findViewById(R.id.button_user);
+            buttonUser = (ImageButton) view.findViewById(R.id.button_edit);
             buttonDelete = (ImageButton) view.findViewById(R.id.button_delete);
 
         }
     }
 
-    public ReportsAdapter(Context mContext, List<Report> reportList) {
+    public MkPlanAdapter(Context mContext, List<Report> reportList) {
         this.mContext = mContext;
         this.reportList = reportList;
 
     }
 
     @Override
-    public ReportsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MkPlanAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_report, parent, false);
+                .inflate(R.layout.card_mk_plan, parent, false);
 
-        return new ReportsAdapter.MyViewHolder(itemView);
+        return new MkPlanAdapter.MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final ReportsAdapter.MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MkPlanAdapter.MyViewHolder holder, final int position) {
         final Report report = reportList.get(position);
 
-        holder.textUserName.setText(report.userName);
-        holder.textTotal.setText(report.total + " ГРН");
-        holder.textRoomTotal.setText(report.totalRoom + " грн");
-        holder.textBdayTotal.setText(report.totalBday + " грн");
-        holder.textMkTotal.setText(report.totalMk + " грн");
+        String mkName = (report.getMkName() == null || report.getMkName().isEmpty()
+                ? "МК" : report.getMkName());
+        String mkDate = report.getDate().substring(0, report.getDate().lastIndexOf('-'));
 
-        holder.progressBar.setMax(report.total);
-        holder.progressBar.setProgress(report.totalRoom);
+        holder.textUserName.setText(mkName + " (" + Utils.getFirstLetters(report.getUserName()) + ") [" + mkDate + "]");
+        holder.textTotal.setText(report.totalMk + " ГРН");
+        holder.textT1.setText(report.mk1 + " дітей");
+        holder.textT1Total.setText(((30 + 10 * report.mkt1)) + " грн");
+        holder.textT2.setText(report.mk2 + " дітей");
+        holder.textT2Total.setText(((30 + 10 * report.mkt2)) + " грн");
+
+        holder.progressBar.setMax(report.totalMk);
+        holder.progressBar.setProgress(report.mk1 * (30 + report.mkt1 * 10));
 
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
         holder.swipeLayout.setRightSwipeEnabled(true);
         holder.swipeLayout.setBottomSwipeEnabled(false);
 
-        // Open
-        holder.buttonMk.setOnClickListener(new View.OnClickListener() {
+        // MK
+        holder.buttonMK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (report.getMkRef() != null && !report.getMkRef().isEmpty()) {
                     Intent intent = new Intent(mContext, MkItemActivity.class);
                     intent.putExtra(Constants.EXTRA_MK_ID, report.getMkRef());
@@ -91,43 +94,22 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
             }
         });
 
-        holder.buttonEdit.setOnClickListener(new View.OnClickListener() {
+        // User
+        holder.buttonUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (Utils.isIsAdmin() || Utils.todayOrFuture(report.getDate())) {
-                    Intent intent = new Intent(mContext, ReportActivity.class);
-                    intent.putExtra(Constants.EXTRA_DATE, report.date);
-                    intent.putExtra(Constants.EXTRA_UID, report.userId);
-                    intent.putExtra(Constants.EXTRA_USER_NAME, report.userName);
-
-                    mContext.startActivity(intent);
-                }
+                Intent intent = new Intent(mContext, UserActivity.class);
+                intent.putExtra(Constants.EXTRA_UID, report.userId);
+                mContext.startActivity(intent);
             }
         });
 
+        // Calendar
         holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (Utils.isIsAdmin()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle(R.string.dialog_delete_title)
-                            .setMessage(R.string.dialog_delete_message)
-                            .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    removeReport(report, position);
-                                }
-
-                            })
-                            .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
-                                }
-                            })
-                            .show();
-
-                }
             }
         });
 

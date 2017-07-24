@@ -346,6 +346,8 @@ public class SalaryActivity extends AppCompatActivity {
         int childOnArtMk = 0;
 
         for (Report rep : reportList) {
+            if(Utils.future(rep.getDate())) continue;
+
             total1 += rep.total;
             stavka += mUser.getUserStavka();
             //Birthdays Mk
@@ -375,9 +377,9 @@ public class SalaryActivity extends AppCompatActivity {
 
         String text1 = "В цьоу місяці було " + reportList.size() + " робочих днів \n";
         text1 += "Загальна виручка " + total1 + " грн \n\n";
+        text1 += "Проведено " + birthMkCount + " МК на Днях Народженнях \n\n";
         text1 += "Проведено " + mkCount + " Творчих та Кулінарних МК \n";
         text1 += " На яких було присутньо " + childOnArtMk + " дітей \n\n";
-        text1 += "Проведено " + birthMkCount + " МК на Днях Народженнях \n\n";
         text1 += "Аванс: до 20-го чиса;  ЗП: до 5-го числа\n";
 
         textExpand.setText(text1);

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipere_fresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.kidsapp.CalendarActivity">
+    tools:context="com.example.android.kidsapp.MkPlanActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,6 +12,12 @@
         android:background="@color/viewBg"
         android:orientation="vertical">
 
+        <!-- invisible calendar-->
+        <com.github.sundeepk.compactcalendarview.CompactCalendarView
+            android:id="@+id/calendar_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -85,6 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/card_margin"
+            android:layout_marginTop="@dimen/card_margin"
             android:elevation="3dp"
             card_view:cardCornerRadius="@dimen/card_album_radius">
 
@@ -93,43 +98,47 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/calendar_view"
-                    android:layout_width="fill_parent"
-                    android:layout_height="220dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    app:compactCalendarBackgroundColor="@color/colorWhite70"
-                    app:compactCalendarCurrentDayBackgroundColor="@color/colorBlack12"
-                    app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorGray"
-                    app:compactCalendarCurrentSelectedDayTextColor="@color/colorAccent"
-                    app:compactCalendarMultiEventIndicatorColor="#fff"
-                    app:compactCalendarOtherMonthDaysTextColor="@color/colorBlack12"
-                    app:compactCalendarTargetHeight="220dp"
-                    app:compactCalendarTextColor="@color/colorBlack50"
-                    app:compactCalendarTextSize="14sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:text="@string/text_mk_list" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
+                    <!--
+                    <Button
+                        android:id="@+id/button_cost_delete_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:text="@string/action_delete_all"
+                        android:textColor="@color/colorAccent" />
+                        -->
+
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingBottom="8dp"
+                    android:scrollbars="vertical" />
 
             </LinearLayout>
-
-
         </android.support.v7.widget.CardView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@drawable/divider_with_left_padding"
-            android:dividerPadding="8dp"
-            android:orientation="vertical"
-            android:showDividers="middle">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:scrollbars="vertical" />
-
-        </LinearLayout>
     </LinearLayout>
-</android.support.v4.widget.SwipeRefreshLayout>
+</ScrollView>

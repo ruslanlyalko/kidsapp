@@ -75,17 +75,6 @@ public class MkActivity extends AppCompatActivity {
 
         loadMK();
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference("mk-cards").child("cover.jpg");
-        try {
-            Glide.with(this)
-                    .using(new FirebaseImageLoader())
-                    .load(storageReference)
-                    .into((ImageView) findViewById(R.id.backdrop));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         initFAB();
     }
 
@@ -319,7 +308,8 @@ public class MkActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_plan: {
-                //todo plan
+                Intent intent = new Intent(MkActivity.this, MkPlanActivity.class);
+                startActivity(intent);
             }
             return true;
         }

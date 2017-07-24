@@ -248,7 +248,7 @@ public class UserActivity extends AppCompatActivity {
         Bitmap bitmap = Bitmap.createBitmap(70, 70, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
-        String textToDraw = getFirstLetters(user.getUserName());
+        String textToDraw = Utils.getFirstLetters(user.getUserName());
         Paint paint = new Paint();
         paint.setColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
         paint.setTextSize(32);
@@ -257,12 +257,6 @@ public class UserActivity extends AppCompatActivity {
         imageUserLogo.setImageBitmap(bitmap);
     }
 
-    private String getFirstLetters(String displayName) {
-
-        int ind = displayName.indexOf(' ');
-
-        return displayName.substring(0, 1) + displayName.substring(ind + 1, ind + 2);
-    }
 
     private void logout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

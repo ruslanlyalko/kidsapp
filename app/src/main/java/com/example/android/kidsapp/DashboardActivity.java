@@ -14,6 +14,7 @@ import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Cost;
 import com.example.android.kidsapp.utils.Report;
 import com.example.android.kidsapp.utils.User;
+import com.example.android.kidsapp.utils.Utils;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -336,6 +337,7 @@ public class DashboardActivity extends AppCompatActivity {
             for (Report rep : reportList) {
 
                 if (rep.userName.equals(user.userName)) {
+                    if(Utils.future(rep.getDate())) continue;
                     //stavka
                     stavka += user.getUserStavka();
                     //percent

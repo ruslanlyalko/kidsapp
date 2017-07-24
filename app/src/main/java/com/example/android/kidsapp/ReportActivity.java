@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -17,30 +20,47 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.bumptech.glide.util.Util;
 import com.example.android.kidsapp.utils.Constants;
+import com.example.android.kidsapp.utils.Mk;
 import com.example.android.kidsapp.utils.Report;
 import com.example.android.kidsapp.utils.SwipeLayout;
 import com.example.android.kidsapp.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class ReportActivity extends AppCompatActivity {
@@ -51,7 +71,7 @@ public class ReportActivity extends AppCompatActivity {
     TextView textMk1, textMk2, textMkT1, textMkT2, textMkTotal;
 
     TextView textDate, textMkName;
-    LinearLayout panelDate, panelRoomExpand, panelRoomExpand2, panelRoomExpand3;
+    LinearLayout panelDate, panelRoomExpand, panelRoomExpand2, panelRoomExpand3, panelPhoto;
 
     SeekBar seekRoom60, seekRoom30, seekRoom20, seekRoom10;
     SeekBar seekBday50, seekBday10, seekBday30, seekBdayMk;
@@ -62,7 +82,8 @@ public class ReportActivity extends AppCompatActivity {
     SwipeLayout swipeLayout, swipeLayout2, swipeLayout3;
 
     EditText editComment;
-
+    TextView textPhoto;
+    Button buttonChooseMk;
     Switch switchMyMk;
 
 
@@ -76,6 +97,8 @@ public class ReportActivity extends AppCompatActivity {
 
     private SimpleDateFormat mSdf = new SimpleDateFormat("d-M-yyyy", Locale.US);
     private boolean isChanged;
+    private List<Mk> mkList = new ArrayList<>();
+    private ProgressBar progressBarUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +144,183 @@ public class ReportActivity extends AppCompatActivity {
         initSeeks();
 
         loadReportFromDB();
+
+        loadMK();
+
+        buttonChooseMk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseMkDialog();
+            }
+        });
+
+        panelPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String uri = mReport.imageUri;
+                if (uri != null && !uri.isEmpty()) {
+                    // show photo
+                    Intent intent = new Intent(ReportActivity.this, ShowImageActivity.class);
+                    intent.putExtra(Constants.EXTRA_URI, uri);
+                    intent.putExtra(Constants.EXTRA_USER_NAME, mReport.getUserName());
+                    intent.putExtra(Constants.EXTRA_FOLDER, Constants.FIREBASE_STORAGE_REPORT);
+                    startActivity(intent);
+
+                } else {
+                    // start camera to take photo
+                    startCamera();
+                }
+            }
+        });
+
+        panelPhoto.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                startCamera();
+                return false;
+            }
+        });
+    }
+
+    private String pictureImagePath = "";
+
+    void startCamera() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = timeStamp + ".jpg";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+        File file = new File(pictureImagePath);
+        Uri outputFileUri = Uri.fromFile(file);
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+
+        startActivityForResult(cameraIntent, Constants.REQUEST_CODE_CAMERA);
+    }
+
+    void showProgressBarUpload() {
+        progressBarUpload.setVisibility(View.VISIBLE);
+        textPhoto.setText("Загрузка...");
+
+    }
+
+
+    void hideProgressBarUpload() {
+        progressBarUpload.setVisibility(View.GONE);
+        textPhoto.setText("Фото загружено!");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // handle request from camera
+        if (requestCode == Constants.REQUEST_CODE_CAMERA) {
+            if (resultCode == RESULT_OK) {
+
+                showProgressBarUpload();
+                isChanged = true;
+
+                InputStream stream = null;
+                try {
+                    stream = new FileInputStream(new File(pictureImagePath));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                // Meta data for image
+                StorageMetadata metadata = new StorageMetadata.Builder()
+                        .setContentType("image/jpg")
+                        .setCustomMetadata(mReport.getUserName(), mReport.getDate())
+                        .build();
+
+                // name of file in Storage
+                final String filename = mReport.getUserId() + "_" + Utils.getCurrentTimeStamp() + ".jpg";
+
+                UploadTask uploadTask = FirebaseStorage.getInstance()
+                        .getReference(Constants.FIREBASE_STORAGE_REPORT)
+                        .child(filename)
+                        .putStream(stream, metadata);
+
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        //    addCost(mTitle1, mTitle2, mPrice, filename);
+                        mReport.imageUri = filename;
+                        hideProgressBarUpload();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        hideProgressBarUpload();
+                    }
+                });
+
+            } else { //resultCode = CANCEL
+
+            }
+
+        }
+        //other request code
+    }
+
+    private void loadMK() {
+        mkList.clear();
+
+        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_REF_MK).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Mk mk = dataSnapshot.getValue(Mk.class);
+                if (mk != null) {
+                    mkList.add(0, mk);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void chooseMkDialog() {
+
+        final ArrayList<String> mkNames = new ArrayList<>();
+        for (Mk mk : mkList) {
+            mkNames.add(mk.getTitle1());
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.dialog_choose_mk)
+                .setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_1, mkNames),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                mReport.mkRef = mkList.get(which).getKey();
+                                mReport.mkName = mkList.get(which).getTitle1();
+                                isChanged = true;
+                                updateMkName();
+                            }
+                        });
+        builder.create();
+        builder.show();
+
+
     }
 
     /**
@@ -135,31 +335,37 @@ public class ReportActivity extends AppCompatActivity {
             }
         };
 
-        if (Utils.isIsAdmin()) {
-            // Pop up the Date Picker after user clicked on editText
-            panelDate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new DatePickerDialog(ReportActivity.this, dateSetListener,
-                            mDate.get(Calendar.YEAR), mDate.get(Calendar.MONTH),
-                            mDate.get(Calendar.DAY_OF_MONTH)).show();
 
+        // Pop up the Date Picker after user clicked on editText
+        panelDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                }
-            });
-        }
+                DatePickerDialog dpd = new DatePickerDialog(ReportActivity.this, dateSetListener,
+                        mDate.get(Calendar.YEAR), mDate.get(Calendar.MONTH),
+                        mDate.get(Calendar.DAY_OF_MONTH));
+
+                if (!Utils.isIsAdmin())
+                    dpd.getDatePicker().setMinDate(mDate.getTime().getTime());
+                dpd.show();
+            }
+        });
+
     }
 
     /**
      * Initialize references for all Views
      */
     private void initRef() {
+        progressBarUpload = (ProgressBar) findViewById(R.id.progress_bar_upload);
 
+        panelPhoto = (LinearLayout) findViewById(R.id.panel_photo);
         panelRoomExpand = (LinearLayout) findViewById(R.id.panel_room_expand);
         panelRoomExpand2 = (LinearLayout) findViewById(R.id.panel_room_expand2);
         panelRoomExpand3 = (LinearLayout) findViewById(R.id.panel_room_expand3);
         textDate = (TextView) findViewById(R.id.text_date);
         editComment = (EditText) findViewById(R.id.edit_comment);
+        textPhoto = (TextView) findViewById(R.id.edit_photo);
 
         panelDate = (LinearLayout) findViewById(R.id.panel_date);
         // Room
@@ -219,6 +425,7 @@ public class ReportActivity extends AppCompatActivity {
         inputMk1 = (EditText) findViewById(R.id.input_mk_1);
         inputMk2 = (EditText) findViewById(R.id.input_mk_2);
         switchMyMk = (Switch) findViewById(R.id.switch_my_mk);
+        buttonChooseMk = (Button) findViewById(R.id.button_choose_mk);
     }
 
     /**
@@ -813,6 +1020,8 @@ public class ReportActivity extends AppCompatActivity {
 
                         updateSeekBars();
                         updateMkName();
+                        updateComents();
+                        updatePhoto();
 
                         isChanged = false;
                     }
@@ -822,6 +1031,16 @@ public class ReportActivity extends AppCompatActivity {
 
                     }
                 });
+
+    }
+
+    private void updatePhoto() {
+        String uri = mReport.imageUri;
+        if (uri != null && !uri.isEmpty()) {
+
+            textPhoto.setText("Фото загружено!");
+        }else
+            textPhoto.setText(R.string.text_add_photo);
 
     }
 
@@ -867,7 +1086,9 @@ public class ReportActivity extends AppCompatActivity {
         mReport.clearReport();
         updateSeekBars();
         updateMkName();
+        updateComents();
         updateTitle();
+        updatePhoto();
         Snackbar.make(textRoom60, getString(R.string.toast_report_cleared), Snackbar.LENGTH_SHORT).show();
     }
 
@@ -900,16 +1121,21 @@ public class ReportActivity extends AppCompatActivity {
      * Update View with Mk name if exist
      */
     private void updateMkName() {
+        //mk
         if (mReport.getMkName() != null && !mReport.getMkName().isEmpty())
             textMkName.setText(mReport.getMkName());
         else
             textMkName.setText(R.string.text_mk_full);
 
+
+    }
+
+    private void updateComents() {
+        // comment
         if (mReport.getComment() != null && !mReport.getComment().isEmpty())
             editComment.setText(mReport.getComment());
         else
             editComment.setText("");
-
     }
 
     /**
@@ -1136,6 +1362,10 @@ public class ReportActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if (progressBarUpload.getVisibility() == View.VISIBLE) {
+            Toast.makeText(this, "Фото загружається. Зачекайте хвильку..", Toast.LENGTH_SHORT).show();
+            return;
+        }
         // Show Dialog if we have not saved data
         if (isChanged) {
             AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);

@@ -85,7 +85,7 @@ public class MkItemActivity extends AppCompatActivity {
             toolbarLayout.setTitle(mk.getTitle1());
             textTitle2.setText(mk.getTitle2());
             textDescription.setText(mk.getDescription());
-            
+
             fab.setVisibility((Utils.isIsAdmin() || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
                     ? View.VISIBLE : View.GONE);
 

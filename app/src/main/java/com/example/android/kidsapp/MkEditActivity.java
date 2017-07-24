@@ -126,6 +126,7 @@ public class MkEditActivity extends AppCompatActivity {
 
             //upload to image view
             Uri selectedImage = data.getData();
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageURI(selectedImage);
 
             final String imageName = (mkKey != null ? mkKey : "newMK")
@@ -218,9 +219,11 @@ public class MkEditActivity extends AppCompatActivity {
                 textTitle1.setText(mk.getTitle1());
                 textTitle2.setText(mk.getTitle2());
                 textDescription.setText(mk.getDescription());
+
                 if (mk.getImageUri() != null && !mk.getImageUri().isEmpty()) {
 
                     StorageReference ref = storage.getReference(Constants.FIREBASE_STORAGE_MK).child(mk.getImageUri());
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     Glide.with(this).using(new FirebaseImageLoader()).load(ref).into(imageView);
                 }
             }

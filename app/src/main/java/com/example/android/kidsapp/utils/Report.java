@@ -28,6 +28,7 @@ public class Report {
     public int mkt1;
     public int mkt2;
     public boolean mkMy = true;
+    public String imageUri;
 
     public String comment;
 
@@ -41,8 +42,13 @@ public class Report {
         this.date = date;
         this.mkRef = "";
         this.mkName = "";
+        this.imageUri = "";
     }
 
+
+    public String getImageUri() {
+        return imageUri;
+    }
 
     public String getComment() {
         return comment;
@@ -157,6 +163,7 @@ public class Report {
         mkRef = "";
 
         comment = "";
+        imageUri = "";
 
     }
 }
