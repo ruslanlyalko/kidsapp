@@ -20,20 +20,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.Mk;
 import com.example.android.kidsapp.utils.MksAdapter;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,18 +82,22 @@ public class MkActivity extends AppCompatActivity {
                 Mk mk = dataSnapshot.getValue(Mk.class);
                 if (mk != null) {
                     mkList.add(0, mk);
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemInserted(0);
+
+                    recyclerView.smoothScrollToPosition(0);
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                Mk mk = dataSnapshot.getValue(Mk.class);
+                updateMk(mk);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                Mk mk = dataSnapshot.getValue(Mk.class);
+                removeMk(mk.getKey());
             }
 
             @Override
@@ -111,6 +110,38 @@ public class MkActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private void updateMk(Mk newMk) {
+        int ind = 0;
+        for (Mk m : mkList) {
+            if (m.getKey().equals(newMk.getKey())) {
+                break;
+            }
+            ind++;
+        }
+        if (ind < mkList.size()) {
+            mkList.set(ind, newMk);
+            adapter.notifyItemChanged(ind);
+        }
+        recyclerView.smoothScrollToPosition(ind);
+
+    }
+
+    private void removeMk(String key) {
+
+        int ind = 0;
+        for (Mk m : mkList) {
+            if (m.getKey().equals(key)) {
+                break;
+            }
+            ind++;
+        }
+        if (ind < mkList.size()) {
+            mkList.remove(ind);
+            adapter.notifyItemRemoved(ind);
+        }
 
     }
 

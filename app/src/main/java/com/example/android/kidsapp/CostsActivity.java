@@ -545,7 +545,7 @@ public class CostsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (progressBarUpload.getVisibility() == View.VISIBLE) {
-            Toast.makeText(this, "Фото загружається. Зачекайте хвильку..", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.photo_uploading, Toast.LENGTH_SHORT).show();
             return;
         }
         super.onBackPressed();

@@ -214,6 +214,9 @@
     <string name="text_mk_list">Майстер класи</string>
     <string name="dialog_choose_mk">Виберіть МК</string>
     <string name="text_add_photo">Добавити Фото</string>
+    <string name="action_delete_mk">Видалити МК</string>
+    <string name="photo_uploading">"Фото загружається. Зачекайте хвильку.."</string>
+    <string name="hint_first_date">Перший робочий день</string>
 
 
 </resources>

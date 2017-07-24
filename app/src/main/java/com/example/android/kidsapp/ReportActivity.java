@@ -305,14 +305,22 @@ public class ReportActivity extends AppCompatActivity {
         for (Mk mk : mkList) {
             mkNames.add(mk.getTitle1());
         }
+        mkNames.add("[не обрано]");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.dialog_choose_mk)
                 .setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_1, mkNames),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                mReport.mkRef = mkList.get(which).getKey();
-                                mReport.mkName = mkList.get(which).getTitle1();
+                                if (which == mkList.size()) {
+                                    mReport.mkRef = "";
+                                    mReport.mkName = "";
+
+                                } else {
+                                    mReport.mkRef = mkList.get(which).getKey();
+                                    mReport.mkName = mkList.get(which).getTitle1();
+                                }
+
                                 isChanged = true;
                                 updateMkName();
                             }
@@ -1020,7 +1028,7 @@ public class ReportActivity extends AppCompatActivity {
 
                         updateSeekBars();
                         updateMkName();
-                        updateComents();
+                        updateComments();
                         updatePhoto();
 
                         isChanged = false;
@@ -1039,7 +1047,7 @@ public class ReportActivity extends AppCompatActivity {
         if (uri != null && !uri.isEmpty()) {
 
             textPhoto.setText("Фото загружено!");
-        }else
+        } else
             textPhoto.setText(R.string.text_add_photo);
 
     }
@@ -1086,7 +1094,7 @@ public class ReportActivity extends AppCompatActivity {
         mReport.clearReport();
         updateSeekBars();
         updateMkName();
-        updateComents();
+        updateComments();
         updateTitle();
         updatePhoto();
         Snackbar.make(textRoom60, getString(R.string.toast_report_cleared), Snackbar.LENGTH_SHORT).show();
@@ -1130,7 +1138,7 @@ public class ReportActivity extends AppCompatActivity {
 
     }
 
-    private void updateComents() {
+    private void updateComments() {
         // comment
         if (mReport.getComment() != null && !mReport.getComment().isEmpty())
             editComment.setText(mReport.getComment());
@@ -1363,7 +1371,7 @@ public class ReportActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (progressBarUpload.getVisibility() == View.VISIBLE) {
-            Toast.makeText(this, "Фото загружається. Зачекайте хвильку..", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.photo_uploading, Toast.LENGTH_SHORT).show();
             return;
         }
         // Show Dialog if we have not saved data

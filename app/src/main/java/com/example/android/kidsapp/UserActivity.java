@@ -46,6 +46,8 @@ public class UserActivity extends AppCompatActivity {
     ImageView imageUser1, imageUserLogo;
     TextView textEmail, textPhone, textBDay, textCard;
     TextView textTitleName, textTitlePosition, textTime;
+    TextView textFirstDate;
+    LinearLayout panelFirstDate;
     FloatingActionButton fab;
     CardView cardFriends;
 
@@ -161,6 +163,9 @@ public class UserActivity extends AppCompatActivity {
 
     private void initRef() {
 
+        panelFirstDate = (LinearLayout) findViewById(R.id.panel_first_date);
+        textFirstDate = (TextView) findViewById(R.id.text_first_date);
+
         imageUserLogo = (ImageView) findViewById(R.id.image_user_logo);
         imageUser1 = (ImageView) findViewById(R.id.image_user1);
 
@@ -229,6 +234,7 @@ public class UserActivity extends AppCompatActivity {
         textBDay.setText(user.getUserBDay());
         textCard.setText(user.getUserCard());
         textTime.setText(user.getUserTimeStart() + " - " + user.getUserTimeEnd());
+        textFirstDate.setText(user.getUserFirstDate());
 
         final String phone = user.getUserPhone();
         linearPhoneCall.setOnClickListener(new View.OnClickListener() {
@@ -239,6 +245,10 @@ public class UserActivity extends AppCompatActivity {
                 startActivity(callIntent);
             }
         });
+
+        if (Utils.isIsAdmin() && !user.getUserId().equals(mAuth.getCurrentUser().getUid())) {
+            panelFirstDate.setVisibility(View.VISIBLE);
+        }
 
        /* StorageReference storageRef = storage.getReference(Constants.FIREBASE_STORAGE_PICTURES)
                 .child("cover5.png");
@@ -288,7 +298,7 @@ public class UserActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_user, menu);
 
         menu.findItem(R.id.action_add_user).setVisible(Utils.isIsAdmin());
-        menu.findItem(R.id.action_settings).setVisible(Utils.isIsAdmin());
+        menu.findItem(R.id.action_settings).setVisible(Utils.isIsAdmin()||mUID.equals(mAuth.getCurrentUser().getUid()));
         return true;
     }
 
@@ -309,6 +319,10 @@ public class UserActivity extends AppCompatActivity {
             }
             case R.id.action_settings: {
                 // todo start activity settings
+                Intent intent = new Intent(UserActivity.this, UserSettingsActivity.class);
+                intent.putExtra(Constants.EXTRA_UID, mUID);
+                startActivity(intent);
+
                 return true;
             }
             case R.id.action_logout: {

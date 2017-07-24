@@ -6,6 +6,8 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -132,6 +134,15 @@ public class MkItemActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_mk_item, menu);
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -140,6 +151,19 @@ public class MkItemActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         }
+        if (id == R.id.action_delete_mk) {
+
+            deleteMk();
+            onBackPressed();
+            //todo
+        }
         return super.onOptionsItemSelected(item);
     }
+
+    private void deleteMk() {
+
+        database.getReference(Constants.FIREBASE_REF_MK).child(mk.getKey()).removeValue();
+    }
+
+
 }

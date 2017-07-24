@@ -107,7 +107,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="193dp"
+            android:layout_height="100dp"
             android:orientation="vertical">
 
             <View
@@ -130,6 +130,7 @@
                 android:background="@drawable/gradient" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/button_weather"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -139,11 +140,15 @@
                 android:text="@string/button_contacts" />
 
             <View
+                android:visibility="gone"
+
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@drawable/gradient" />
 
             <Button
+                android:visibility="gone"
+
                 android:id="@+id/button_notebook"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -153,6 +158,8 @@
                 android:text="@string/button_notebook" />
 
             <View
+                android:visibility="gone"
+
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@drawable/gradient" />

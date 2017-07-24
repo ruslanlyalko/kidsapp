@@ -26,24 +26,28 @@
             android:visibility="gone" />
 
         <EditText
+            android:id="@+id/edit_title2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
+            android:backgroundTint="@android:color/transparent"
+            android:hint="@string/hint_title2"
+            android:enabled="false"
+            android:inputType="textCapSentences"
+            android:maxLength="30" />
+
+        <EditText
             android:id="@+id/edit_title1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/hint_title1"
             android:inputType="textCapSentences"
             android:maxLength="20" />
 
-        <EditText
-            android:id="@+id/edit_title2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:backgroundTint="@android:color/transparent"
-            android:hint="@string/hint_title2"
-            android:inputType="textCapSentences"
-            android:maxLength="30" />
 
         <EditText
             android:id="@+id/edit_description"

@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -56,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private String mLink;
     private String mLinkText;
     private String mLinkFb;
+    private String mLatestVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
-        initializeReferences();
+        initRef();
 
         initRemoteConfig();
         // Enable connection without internet
@@ -84,7 +84,10 @@ public class MainActivity extends AppCompatActivity {
 
         HashMap<String, Object> defaults = new HashMap<>();
         defaults.put("link_show", false);
+
+        defaults.put("latest_version", "3.5");
         defaults.put("link", "https://www.fb.com/snoopyagency");
+
         defaults.put("link_text", "Відвідайте нашу сторінку у ФБ!");
         defaults.put("link_fb", "https://www.fb.com/snoopyagency");
 
@@ -104,9 +107,18 @@ public class MainActivity extends AppCompatActivity {
         mLinkActive = mRemoteConfig.getBoolean("link_show");
         mLinkText = mRemoteConfig.getString("link_text");
         mLink = mRemoteConfig.getString("link");
-        mLinkFb = mRemoteConfig.getString("link_fb");
+        mLatestVersion = mRemoteConfig.getString("latest_version");
 
-        if (mLinkActive) {
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String currentVersion = pInfo.versionName;
+
+        if (mLinkActive && !currentVersion.equals(mLatestVersion)) {
             textLink.setText(mLinkText);
             textLinkDetails.setText("Докладніше >");
         } else {
@@ -125,6 +137,9 @@ public class MainActivity extends AppCompatActivity {
                 if (mLinkActive) openBrowser(mLink);
             }
         });
+
+        mLinkFb = mRemoteConfig.getString("link_fb");
+
         //todo
     }
 
@@ -237,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(R.string.dialog_about_title)
-                        .setMessage(getString(R.string.dialog_about_message)+""+version)
+                        .setMessage(getString(R.string.dialog_about_message) + "" + version)
                         .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -310,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Set references to Buttons etc
      */
-    private void initializeReferences() {
+    private void initRef() {
         textSnoopy = (TextView) findViewById(R.id.text_snoopy);
         textLink = (TextView) findViewById(R.id.text_link);
         textLinkDetails = (TextView) findViewById(R.id.text_link_details);

@@ -1,81 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.kidsapp.UserSettingsActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Name-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
 
-            <RelativeLayout
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_name" />
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.v7.widget.CardView
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    app:cardCornerRadius="35dp">
-
-                    <ImageView
-                        android:id="@+id/image_user_logo"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:backgroundTint="@color/colorPrimary" />
-                </android.support.v7.widget.CardView>
-
-                <ImageView
-                    android:id="@+id/image_user1"
-                    android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    android:background="@color/colorPrimary" />
-
-                <TextView
-                    android:id="@+id/text_title_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:paddingBottom="16dp"
-                    android:paddingLeft="16dp"
-                    android:text=""
-                    android:textColor="@color/colorWhite"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/text_position_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignEnd="@id/text_title_name"
-                    android:layout_alignParentBottom="true"
-                    android:paddingBottom="4dp"
-                    android:text=""
-                    android:textColor="@color/colorWhite70" />
-
-            </RelativeLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="16dp"
-                    android:src="@drawable/ic_user_name" />
+                android:layout_height="match_parent">
 
                 <EditText
                     android:id="@+id/text_name"
@@ -83,22 +34,29 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
+                    android:enabled="false"
                     android:hint="@string/hint_first_name"
                     android:inputType="textPersonName|textCapWords" />
+            </android.support.design.widget.TextInputLayout>
 
-            </LinearLayout>
+        </LinearLayout>
 
-            <LinearLayout
+        <!-- Phone-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_phone" />
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="16dp"
-                    android:src="@drawable/ic_user_phone" />
+                android:layout_height="match_parent">
 
                 <EditText
                     android:id="@+id/text_phone"
@@ -108,20 +66,25 @@
                     android:layout_marginRight="16dp"
                     android:hint="@string/hint_phone"
                     android:inputType="phone" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
 
-            </LinearLayout>
+        <!-- email-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
 
-            <LinearLayout
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_email" />
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="16dp"
-                    android:src="@drawable/ic_user_email" />
+                android:layout_height="match_parent">
 
                 <EditText
                     android:id="@+id/text_email"
@@ -129,22 +92,29 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
+                    android:enabled="false"
                     android:hint="@string/hint_email"
                     android:inputType="textEmailAddress" />
+            </android.support.design.widget.TextInputLayout>
 
-            </LinearLayout>
+        </LinearLayout>
 
-            <LinearLayout
+        <!-- BDay-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_birthday" />
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="16dp"
-                    android:src="@drawable/ic_user_birthday" />
+                android:layout_height="match_parent">
 
                 <EditText
                     android:id="@+id/text_bday"
@@ -154,20 +124,26 @@
                     android:layout_marginRight="16dp"
                     android:focusable="false"
                     android:hint="@string/hint_date_birth" />
+            </android.support.design.widget.TextInputLayout>
 
-            </LinearLayout>
+        </LinearLayout>
 
-            <LinearLayout
+        <!-- card-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_card" />
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="16dp"
-                    android:src="@drawable/ic_user_card" />
+                android:layout_height="match_parent">
 
                 <EditText
                     android:id="@+id/text_card"
@@ -178,40 +154,72 @@
                     android:hint="@string/hint_card"
                     android:inputType="phone"
                     android:maxLength="19" />
-
-            </LinearLayout>
-
-            <!-- Link to Login Screen -->
-
-            <Button
-                android:id="@+id/button_sign_up"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:text="@string/button_link_to_register"
-                android:textAllCaps="false"
-                android:textColor="@color/colorAccent"
-                android:textSize="15dp"
-                android:visibility="gone" />
+            </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
 
+        <!-- time -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
 
-    </ScrollView>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_name" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/text_time"
+                    android:enabled="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:hint="@string/hint_time"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <!-- First date-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_user_birthday" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/text_first_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:enabled="false"
+                    android:layout_marginRight="16dp"
+                    android:focusable="false"
+                    android:hint="@string/hint_first_date" />
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/colorAccent"
-        app:elevation="6dp"
-        app:layout_anchor="@id/image_user1"
-        app:layout_anchorGravity="bottom|end"
-        app:pressedTranslationZ="12dp"
-        app:srcCompat="@drawable/ic_action_money" />
-
-</android.support.design.widget.CoordinatorLayout>
+</ScrollView>
 

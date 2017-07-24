@@ -149,6 +149,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.MkActivity" />
         </activity>
+
+        <activity
+            android:name=".UserSettingsActivity"
+            android:label="@string/action_settings"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.UserActivity" />
+        </activity>
     </application>
 
 </manifest>

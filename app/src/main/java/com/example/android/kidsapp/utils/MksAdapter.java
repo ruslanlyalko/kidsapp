@@ -30,11 +30,12 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textTitle1, textTitle2, textDescription;
         public ImageView imageView;
-        public ImageButton buttonExpand;
+        public ImageButton buttonExpand, buttonShare;
         public LinearLayout expandPanel;
 
         public MyViewHolder(View view) {
             super(view);
+            buttonShare = (ImageButton) view.findViewById(R.id.button_share);
             textTitle1 = (TextView) view.findViewById(R.id.text_title1);
             textTitle2 = (TextView) view.findViewById(R.id.text_title2);
             textDescription = (TextView) view.findViewById(R.id.text_description);
@@ -74,7 +75,20 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
             StorageReference ref = storage.getReference(Constants.FIREBASE_STORAGE_MK).child(mk.getImageUri());
             Glide.with(mContext).using(new FirebaseImageLoader()).load(ref).into(holder.imageView);
         }
+        // button share
+        holder.buttonShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, mk.getTitle1());
+                sendIntent.putExtra(Intent.EXTRA_TEXT, mk.getTitle1()+ "\n"+mk.getTitle2()+ "\n\n"+mk.getDescription());
+                sendIntent.setType("text/plain");
+                mContext.startActivity(sendIntent);
+            }
+        });
 
+        // expand to show description
         holder.buttonExpand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

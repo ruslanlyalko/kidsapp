@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.android.kidsapp.utils.Constants;
@@ -260,6 +261,10 @@ public class MkEditActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if (progressBar.getVisibility() == View.VISIBLE) {
+            Toast.makeText(this, R.string.photo_uploading, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (needToSave) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MkEditActivity.this);
@@ -268,8 +273,11 @@ public class MkEditActivity extends AppCompatActivity {
                     .setPositiveButton("ЗБЕРЕГТИ ЗМІНИ", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
-                            updateMk();
-                            needToSave = false;
+                            if (isNew)
+                                addMk();
+                            else
+                                updateMk();
+
                             onBackPressed();
 
                         }
