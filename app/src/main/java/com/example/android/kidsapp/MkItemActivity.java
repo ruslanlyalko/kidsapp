@@ -42,6 +42,7 @@ public class MkItemActivity extends AppCompatActivity {
     String mkKey;
     Mk mk;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,10 @@ public class MkItemActivity extends AppCompatActivity {
 
     private void updateUI() {
         if (mk != null) {
+            if (mMenu != null)
+                mMenu.findItem(R.id.action_delete_mk).setVisible(Utils.isIsAdmin()
+                        || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
+
             toolbarLayout.setTitle(mk.getTitle1());
             textTitle2.setText(mk.getTitle2());
             textDescription.setText(mk.getDescription());
@@ -140,6 +145,13 @@ public class MkItemActivity extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_mk_item, menu);
+
+        mMenu = menu;
+
+        if (mk != null)
+            mMenu.findItem(R.id.action_delete_mk).setVisible(Utils.isIsAdmin()
+                    || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
+
         return true;
     }
 
@@ -153,9 +165,11 @@ public class MkItemActivity extends AppCompatActivity {
         }
         if (id == R.id.action_delete_mk) {
 
-            deleteMk();
-            onBackPressed();
-            //todo
+            if (Utils.isIsAdmin()
+                    || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                deleteMk();
+                onBackPressed();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

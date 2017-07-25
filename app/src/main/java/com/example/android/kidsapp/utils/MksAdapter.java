@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,12 +31,13 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textTitle1, textTitle2, textDescription;
         public ImageView imageView;
-        public ImageButton buttonExpand, buttonShare;
+        public ImageButton buttonExpand;
+        public Button buttonShare;
         public LinearLayout expandPanel;
 
         public MyViewHolder(View view) {
             super(view);
-            buttonShare = (ImageButton) view.findViewById(R.id.button_share);
+            buttonShare = (Button) view.findViewById(R.id.button_share);
             textTitle1 = (TextView) view.findViewById(R.id.text_title1);
             textTitle2 = (TextView) view.findViewById(R.id.text_title2);
             textDescription = (TextView) view.findViewById(R.id.text_description);

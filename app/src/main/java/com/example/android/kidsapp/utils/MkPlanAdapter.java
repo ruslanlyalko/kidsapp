@@ -23,7 +23,7 @@ public class MkPlanAdapter extends RecyclerView.Adapter<MkPlanAdapter.MyViewHold
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textUserName, textTotal, textT2Total, textT1Total, textT1, textT2;
+        public TextView textMkTitleUserName, textDate, textTotal, textT2Total, textT1Total, textT1, textT2;
         public SwipeLayout swipeLayout;
         public ProgressBar progressBar;
         public ImageButton buttonMK, buttonUser, buttonDelete;
@@ -33,7 +33,8 @@ public class MkPlanAdapter extends RecyclerView.Adapter<MkPlanAdapter.MyViewHold
 
             textT1 = (TextView) view.findViewById(R.id.text_t1);
             textT2 = (TextView) view.findViewById(R.id.text_t2);
-            textUserName = (TextView) view.findViewById(R.id.text_user_name);
+            textMkTitleUserName = (TextView) view.findViewById(R.id.text_user_name);
+            textDate = (TextView) view.findViewById(R.id.text_date);
             textTotal = (TextView) view.findViewById(R.id.text_total);
             textT2Total = (TextView) view.findViewById(R.id.text_bday_total);
             textT1Total = (TextView) view.findViewById(R.id.text_room_total);
@@ -68,7 +69,9 @@ public class MkPlanAdapter extends RecyclerView.Adapter<MkPlanAdapter.MyViewHold
                 ? "МК" : report.getMkName());
         String mkDate = report.getDate().substring(0, report.getDate().lastIndexOf('-'));
 
-        holder.textUserName.setText(mkName + " (" + Utils.getFirstLetters(report.getUserName()) + ") [" + mkDate + "]");
+        holder.textMkTitleUserName.setText(mkName + " (" + Utils.getFirstLetters(report.getUserName()) + ")");
+        holder.textDate.setText(mkDate);
+        
         holder.textTotal.setText(report.totalMk + " ГРН");
         holder.textT1.setText(report.mk1 + " дітей");
         holder.textT1Total.setText(((30 + 10 * report.mkt1)) + " грн");

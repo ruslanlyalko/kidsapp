@@ -71,16 +71,6 @@
                 android:value="com.example.android.kidsapp.MainActivity" />
         </activity>
         <activity
-            android:name=".MkActivity"
-            android:label="@string/title_activity_mk"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.kidsapp.MainActivity" />
-        </activity>
-        <activity
             android:name=".CostsActivity"
             android:label="@string/title_activity_vyt"
             android:parentActivityName=".MainActivity"
@@ -129,7 +119,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.kidsapp.MkActivity" />
+                android:value="com.example.android.kidsapp.MkTabActivity" />
         </activity>
         <activity
             android:name=".MkEditActivity"
@@ -138,7 +128,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.kidsapp.MkActivity" />
+                android:value="com.example.android.kidsapp.MkTabActivity" />
         </activity>
         <activity
             android:name=".MkPlanActivity"
@@ -147,9 +137,8 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.kidsapp.MkActivity" />
+                android:value="com.example.android.kidsapp.MkTabActivity" />
         </activity>
-
         <activity
             android:name=".UserSettingsActivity"
             android:label="@string/action_settings"
@@ -158,6 +147,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.UserActivity" />
+        </activity>
+        <activity
+            android:name=".MkTabActivity"
+            android:label="@string/title_activity_mk_tab"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.MkTabActivity" />
         </activity>
     </application>
 

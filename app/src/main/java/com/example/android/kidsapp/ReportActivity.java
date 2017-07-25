@@ -99,6 +99,7 @@ public class ReportActivity extends AppCompatActivity {
     private boolean isChanged;
     private List<Mk> mkList = new ArrayList<>();
     private ProgressBar progressBarUpload;
+    private boolean mIsFuture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -981,6 +982,7 @@ public class ReportActivity extends AppCompatActivity {
         panelRoomExpand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mIsFuture) return;
                 swipeLayout.setVisibility((swipeLayout.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
 
                 swipeLayout2.setVisibility(View.GONE);
@@ -991,6 +993,8 @@ public class ReportActivity extends AppCompatActivity {
         panelRoomExpand2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mIsFuture) return;
+
                 swipeLayout2.setVisibility((swipeLayout2.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
 
                 swipeLayout.setVisibility(View.GONE);
@@ -1001,6 +1005,8 @@ public class ReportActivity extends AppCompatActivity {
         panelRoomExpand3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mIsFuture) return;
+
                 swipeLayout3.setVisibility((swipeLayout3.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
 
                 swipeLayout2.setVisibility(View.GONE);
@@ -1046,7 +1052,7 @@ public class ReportActivity extends AppCompatActivity {
         String uri = mReport.imageUri;
         if (uri != null && !uri.isEmpty()) {
 
-            textPhoto.setText("Фото загружено!");
+            textPhoto.setText(R.string.photo_uploaded);
         } else
             textPhoto.setText(R.string.text_add_photo);
 
@@ -1089,15 +1095,17 @@ public class ReportActivity extends AppCompatActivity {
     }
 
 
-    private void clearReport() {
+    private void clearReport(boolean clearMK) {
+        mReport.clearReport(clearMK);
 
-        mReport.clearReport();
         updateSeekBars();
         updateMkName();
+        updatePhoto();
         updateComments();
         updateTitle();
-        updatePhoto();
-        Snackbar.make(textRoom60, getString(R.string.toast_report_cleared), Snackbar.LENGTH_SHORT).show();
+
+        if (clearMK)
+            Snackbar.make(textRoom60, getString(R.string.toast_report_cleared), Snackbar.LENGTH_SHORT).show();
     }
 
     /**
@@ -1278,6 +1286,8 @@ public class ReportActivity extends AppCompatActivity {
         mDateStr = mSdf.format(mDate.getTime());
 
         fillDateStr(mDateStr);
+        mIsFuture = Utils.future(mDateStr);
+
     }
 
     private void setDate(String dateStr) {
@@ -1285,6 +1295,8 @@ public class ReportActivity extends AppCompatActivity {
         mDate = getDateFromStr(mDateStr);
 
         fillDateStr(mDateStr);
+        mIsFuture = Utils.future(mDateStr);
+
     }
 
     private void setDate(int year, int monthOfYear, int dayOfMonth) {
@@ -1295,6 +1307,16 @@ public class ReportActivity extends AppCompatActivity {
         mDateStr = mSdf.format(mDate.getTime());
 
         fillDateStr(mDateStr);
+
+        mIsFuture = Utils.future(mDateStr);
+        if (mIsFuture) {
+            swipeLayout.setVisibility(View.GONE);
+            swipeLayout2.setVisibility(View.GONE);
+            swipeLayout3.setVisibility(View.GONE);
+
+            clearReport(false);
+        }
+
     }
 
     private void fillDateStr(String dateStr) {
@@ -1349,11 +1371,12 @@ public class ReportActivity extends AppCompatActivity {
 
             case R.id.action_today: {
                 setDate(Calendar.getInstance());
+
                 break;
             }
 
             case R.id.action_clear_report: {
-                clearReport();
+                clearReport(true);
                 break;
             }
 

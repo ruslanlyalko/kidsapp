@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
         buttonMk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MkActivity.class);
+                Intent intent = new Intent(MainActivity.this, MkTabActivity.class);
                 startActivity(intent);
             }
         });

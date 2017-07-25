@@ -103,38 +103,7 @@
         <item>Листопад</item>
         <item>Грудень</item>
     </string-array>
-    <string name="title_activity_scrolling">ScrollingActivity</string>
 
-    <string name="action_add_favourite">Add to Favourites</string>
-    <string name="action_play_next">Play Next</string>
-    <string name="backdrop_title">LOVE KIDS</string>
-    <string name="backdrop_subtitle">Кращі майстер класи</string>
-
-    <string name="large_text">
-
-        "Рецепт «Яблучні троянди» дуже простий і гранично зрозумілий. \n\n"
-
-        Зате готову страву можна їсти як  окреме і дуже незвичайне ласощі,
-        а можна використовувати в якості оригінального прикраси десертів і святкового столу.
-        Особливо такі хрусткі солодкі квіточки припадають до смаку  дітям
-        "і любителям естетичної  і низькокалорійної кухні.\n\n"
-
-        Інгредієнти для приготування яблучних троянд:\n
-        Яблука – 3 шт.\n
-        Листкове тісто (бездріжджове) – 250 гр.\n
-        Цукор – 300 гр.\n
-        Борошно пшеничне – 3 ст. ложки\n
-        Цукрова пудра для прикраси – 1 ст. ложка\n\n
-
-        Інвентар:\n
-        Гострий ніж\n
-        Обробна дошка\n
-        Каструля\n
-        Друшляк\n
-        Скалка\n
-        Деко\n
-        Пергамент для запікання
-    </string>
     <string name="dialog_delete_mk_title">Видалити майстер клас</string>
     <string name="dialog_delete_mk_message">Після видалення відновити мастер клас буде неможливо</string>
     <string name="dialog_delete_title">Видалити звіт</string>
@@ -193,14 +162,15 @@
     <string name="toast_report_deleted">Звіт видалено</string>
     <string name="action_go_to_calendar">КАЛЕНДАР</string>
     <string name="toast_report_cleared">Звіт очищено</string>
-    <string name="text_mk_full">Майстер клас</string>
+
+
+
     <string name="hint_time">Час роботи</string>
     <string name="action_new_user">Новий користувач</string>
     <string name="text_friend_list">Колеги</string>
     <string name="button_notebook">Приват Нотатки</string>
     <string name="snack_deleted">Видалено</string>
     <string name="action_plan">План МК</string>
-    <string name="title_activity_mk_item">Майстер клас</string>
     <string name="action_save">Зберегти</string>
     <string name="title_activity_edit">Редагування</string>
     <string name="title_activity_add">Добавлення</string>
@@ -210,13 +180,27 @@
     <string name="mk_updated">МК обновлено успішно</string>
     <string name="mk_added">МК створено успішно</string>
     <string name="dialog_mk_edit_text">В тексті є зміни, зберегти їх?</string>
-    <string name="title_activity_mk_plan">Майстер класи</string>
-    <string name="text_mk_list">Майстер класи</string>
     <string name="dialog_choose_mk">Виберіть МК</string>
     <string name="text_add_photo">Добавити Фото</string>
     <string name="action_delete_mk">Видалити МК</string>
     <string name="photo_uploading">"Фото загружається. Зачекайте хвильку.."</string>
     <string name="hint_first_date">Перший робочий день</string>
+    <string name="photo_uploaded">Фото збережено</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
+    <string name="tab_k">КУЛІНАРНІ</string>
+    <string name="tab_t">ТВОРЧІ</string>
+    <string name="tab_d">ДОСЛІДИ</string>
+    <string name="mk_type_k">Кулінарний майстер клас</string>
+    <string name="mk_type_t">Творчий майстер клас</string>
+    <string name="mk_type_d">Досліди та експерименти</string>
+
+    <string name="title_activity_mk_item">Майстер клас</string>
+    <string name="title_activity_mk_plan">Майстер класи</string>
+    <string name="title_activity_mk_tab">Майстер класи</string>
+    <string name="text_mk_list">Майстер класи</string>
+    <string name="text_mk_full">Майстер клас</string>
+    <string name="expand_more">Показати опис</string>
+    <string name="text_mk_share">ПОДІЛИТИСЬ</string>
 
 </resources>

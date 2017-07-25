@@ -19,8 +19,9 @@
     <color name="colorBlack70">#BF000000</color>
 
     <color name="album_title">#4c4c4c</color>
-    <color name="fabColor1">#6a8bbf</color>
+    <color name="fabColor1">#a5cde1</color>
     <color name="fabColor2">#d232c2</color>
+    <color name="fabColor3">#57d232</color>
 
 
 </resources>

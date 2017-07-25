@@ -142,7 +142,7 @@ public class Report {
         return mkt2;
     }
 
-    public void clearReport() {
+    public void clearReport(boolean clearMK) {
         r60 = 0;
         r30 = 0;
         r20 = 0;
@@ -156,14 +156,16 @@ public class Report {
 
         mkMy = true;
         mk1 = 0;
-        mkt1 =0;
+        mkt1 = 0;
         mk2 = 0;
-        mkt2 =0;
-        mkName = "";
-        mkRef = "";
+        mkt2 = 0;
 
         comment = "";
         imageUri = "";
 
+        if (clearMK) {
+            mkName = "";
+            mkRef = "";
+        }
     }
 }
