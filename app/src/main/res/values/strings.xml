@@ -75,14 +75,16 @@
 
     <!-- CALENDAR -->
     <string name="title_activity_calendar">Календар</string>
+    <string name="toast_edit_impossible">Редагувати можна тільки сьогоднішній або майбутні звіти</string>
+    <string name="toast_delete_impossible">Видалити можна тільки сьогоднішній або майбутні звіти</string>
 
 
     <!-- M K -->
     <string name="title_activity_mk">Майстер класи</string>
 
 
-    <!-- Vyt -->
-    <string name="title_activity_vyt">Витрати</string>
+    <!-- Cost -->
+    <string name="title_activity_cost">Витрати</string>
 
 
     <!-- NOTIFICATION-->
@@ -176,12 +178,13 @@
     <string name="hint_description">Детальний опис</string>
     <string name="mk_k">Кулінарний майстер клас</string>
     <string name="mk_art">Творчий майстер клас</string>
-    <string name="mk_updated">МК обновлено успішно</string>
+    <string name="mk_updated">Дані обновлено успішно</string>
     <string name="mk_added">МК створено успішно</string>
+    <string name="not_added">Статтю створено успішно</string>
     <string name="dialog_mk_edit_text">В тексті є зміни, зберегти їх?</string>
     <string name="dialog_choose_mk">Виберіть МК</string>
     <string name="text_add_photo">Добавити Фото</string>
-    <string name="action_delete_mk">Видалити МК</string>
+    <string name="action_delete_mk">Видалити</string>
     <string name="photo_uploading">"Фото загружається. Зачекайте хвильку.."</string>
     <string name="hint_first_date">Перший робочий день</string>
     <string name="photo_uploaded">Фото збережено</string>
@@ -194,25 +197,26 @@
     <string name="mk_type_t">Творчий майстер клас</string>
     <string name="mk_type_d">Досліди та експерименти</string>
 
-    <string name="title_activity_mk_item">Майстер клас</string>
     <string name="title_activity_mk_plan">Майстер класи</string>
     <string name="title_activity_mk_tab">Майстер класи</string>
     <string name="text_mk_list">Майстер класи</string>
     <string name="text_mk_full">Майстер клас</string>
+    <string name="title_activity_mk_item">Майстер клас</string>
+
     <string name="expand_more">Показати опис</string>
     <string name="text_mk_share">ПОДІЛИТИСЬ</string>
-    <string name="toast_edit_impossible">Редагувати можна тільки сьогоднішній або майбутні звіти</string>
-    <string name="toast_delete_impossible">Видалити можна тільки сьогоднішній або майбутні звіти</string>
     <string name="toast_mk_not_set">Майстер клас не вказано</string>
-    <string name="hint_link">Посилання</string>
+    <string name="hint_link">Посилання (http://)</string>
     <string name="text_mk_link">ПОСИЛАННЯ</string>
     <string name="title_activity_about">Про проект</string>
-    <string name="large_text">
+    <string name="text_about_company">
         "Чебурашка КІДС була створена 01,06,2016р.\n"
         "Наша мета:\n"
         "Наша місія:\n"
         "Наша позиція на ринку:\n"
 
     </string>
+    <string name="title_activity_notification_item">Повідомлення</string>
+    <string name="hint_short_description">Короткий опис</string>
 
 </resources>

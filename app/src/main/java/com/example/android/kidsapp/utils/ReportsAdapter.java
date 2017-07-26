@@ -93,7 +93,7 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
 
                 if (report.getMkRef() != null && !report.getMkRef().isEmpty()) {
                     Intent intent = new Intent(mContext, MkItemActivity.class);
-                    intent.putExtra(Constants.EXTRA_MK_ID, report.getMkRef());
+                    intent.putExtra(Constants.EXTRA_ITEM_ID, report.getMkRef());
 
                     mContext.startActivity(intent);
                 }else{

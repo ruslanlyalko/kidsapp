@@ -121,7 +121,7 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MkItemActivity.class);
-                intent.putExtra(Constants.EXTRA_MK_ID, mk.getKey());
+                intent.putExtra(Constants.EXTRA_ITEM_ID, mk.getKey());
                 mContext.startActivity(intent);
 
             }

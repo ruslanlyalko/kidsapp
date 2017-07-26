@@ -72,7 +72,7 @@
         </activity>
         <activity
             android:name=".CostsActivity"
-            android:label="@string/title_activity_vyt"
+            android:label="@string/title_activity_cost"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden">
             <meta-data
@@ -80,7 +80,7 @@
                 android:value="com.example.android.kidsapp.MainActivity" />
         </activity>
         <activity
-            android:name=".NotificationActivity"
+            android:name=".NotActivity"
             android:label="@string/title_activity_notification"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden">
@@ -165,6 +165,28 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.MainActivity" />
+        </activity>
+
+
+        <activity
+            android:name=".NotItemActivity"
+            android:label="@string/title_activity_notification_item"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.NotActivity" />
+        </activity>
+
+        <activity
+            android:name=".NotEditActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Close"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.NotItemActivity" />
         </activity>
     </application>
 

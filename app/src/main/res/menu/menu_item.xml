@@ -9,7 +9,7 @@
         android:title="@string/action_edit"/>
 
     <item
-        android:id="@+id/action_delete_mk"
+        android:id="@+id/action_delete"
         android:icon="@drawable/ic_action_delete_red"
         android:title="@string/action_delete_mk"/>
 

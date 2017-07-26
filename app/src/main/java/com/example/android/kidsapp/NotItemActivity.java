@@ -18,11 +18,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.android.kidsapp.utils.Constants;
-import com.example.android.kidsapp.utils.Mk;
+import com.example.android.kidsapp.utils.Notification;
 import com.example.android.kidsapp.utils.Utils;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,29 +28,28 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 
-public class MkItemActivity extends AppCompatActivity {
+public class NotItemActivity extends AppCompatActivity {
 
     //VIEWS
     private Toolbar toolbar;
     private CollapsingToolbarLayout toolbarLayout;
-    private TextView textDescription, textTitle2;
+    private TextView textDescription;//, textTitle2;
     private ImageView imageView;
     private FloatingActionButton fab;
 
     // VARIABLES
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    String mkKey;
-    Mk mk;
+    String notKey;
+    Notification notification;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mk_item);
+        setContentView(R.layout.activity_not_item);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -60,23 +57,23 @@ public class MkItemActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            mkKey = bundle.getString(Constants.EXTRA_ITEM_ID);
+            notKey = bundle.getString(Constants.EXTRA_NOT_ID);
         }
 
         initRef();
 
-        loadMkFromDB();
+        loadNotFromDB();
     }
 
-    private void loadMkFromDB() {
-        if (mkKey == null || mkKey.isEmpty()) return;
+    private void loadNotFromDB() {
+        if (notKey == null || notKey.isEmpty()) return;
 
-        DatabaseReference ref = database.getReference(Constants.FIREBASE_REF_MK).child(mkKey);
+        DatabaseReference ref = database.getReference(Constants.FIREBASE_REF_NOTIFICATIONS).child(notKey);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mk = dataSnapshot.getValue(Mk.class);
+                notification = dataSnapshot.getValue(Notification.class);
                 updateUI();
             }
 
@@ -89,31 +86,31 @@ public class MkItemActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        if (mk != null) {
+        if (notification != null) {
             if (mMenu != null) {
                 mMenu.findItem(R.id.action_delete).setVisible(Utils.isAdmin()
-                        || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
+                        || notification.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
 
                 mMenu.findItem(R.id.action_edit).setVisible(Utils.isAdmin()
-                        || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
+                        || notification.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
 
             }
-            toolbarLayout.setTitle(mk.getTitle1());
-            textTitle2.setText(mk.getTitle2());
-            textDescription.setText(mk.getDescription());
+            toolbarLayout.setTitle(notification.getTitle1());
+            //textTitle2.setText(notification.getTitle2());
+            textDescription.setText(notification.getDescription());
 
-            fab.setVisibility((mk.getLink() != null && !mk.getLink().isEmpty())
+            fab.setVisibility((notification.getLink() != null && !notification.getLink().isEmpty())
                     ? View.VISIBLE : View.GONE);
+/*
+            if (notification.getImageUri() != null && !notification.getImageUri().isEmpty()) {
 
-            if (mk.getImageUri() != null && !mk.getImageUri().isEmpty()) {
-
-                StorageReference ref = storage.getReference(Constants.FIREBASE_STORAGE_MK).child(mk.getImageUri());
+                StorageReference ref = storage.getReference(Constants.FIREBASE_STORAGE_MK).child(notification.getImageUri());
                 Glide.with(this).using(new FirebaseImageLoader()).load(ref).into(imageView);
-            }
+            }*/
 
         } else {
             // notification == null
-            toolbar.setTitle(R.string.title_activity_mk_item);
+            toolbar.setTitle(R.string.title_activity_notification_item);
         }
     }
 
@@ -121,7 +118,7 @@ public class MkItemActivity extends AppCompatActivity {
 
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         textDescription = (TextView) findViewById(R.id.text_description);
-        textTitle2 = (TextView) findViewById(R.id.text_title2);
+        //textTitle2 = (TextView) findViewById(R.id.text_title2);
         imageView = (ImageView) findViewById(R.id.image_view);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -132,7 +129,7 @@ public class MkItemActivity extends AppCompatActivity {
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 CustomTabsIntent customTabsIntent = builder.build();
                 builder.setToolbarColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
-                customTabsIntent.launchUrl(MkItemActivity.this, Uri.parse(mk.getLink()));
+                customTabsIntent.launchUrl(NotItemActivity.this, Uri.parse(notification.getLink()));
             }
         });
     }
@@ -143,7 +140,7 @@ public class MkItemActivity extends AppCompatActivity {
 
         if (requestCode == Constants.REQUEST_CODE_EDIT) {
 
-            loadMkFromDB();
+            loadNotFromDB();
         }
     }
 
@@ -156,11 +153,11 @@ public class MkItemActivity extends AppCompatActivity {
 
         mMenu = menu;
 
-        if (mk != null) {
+        if (notification != null) {
             mMenu.findItem(R.id.action_delete).setVisible(Utils.isAdmin()
-                    || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
+                    || notification.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
             mMenu.findItem(R.id.action_edit).setVisible(Utils.isAdmin()
-                    || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
+                    || notification.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
         }
         return true;
     }
@@ -175,7 +172,7 @@ public class MkItemActivity extends AppCompatActivity {
         }
         if (id == R.id.action_edit) {
             if (Utils.isAdmin()
-                    || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    || notification.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                 editMk();
                // onBackPressed();
             }
@@ -183,7 +180,7 @@ public class MkItemActivity extends AppCompatActivity {
         if (id == R.id.action_delete) {
 
             if (Utils.isAdmin()
-                    || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    || notification.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                 deleteMk();
 
             }
@@ -192,19 +189,21 @@ public class MkItemActivity extends AppCompatActivity {
     }
 
     private void editMk() {
-        Intent intent = new Intent(MkItemActivity.this, MkEditActivity.class);
-        intent.putExtra(Constants.EXTRA_ITEM_ID, mkKey);
+
+        Intent intent = new Intent(NotItemActivity.this, NotEditActivity.class);
+        intent.putExtra(Constants.EXTRA_ITEM_ID, notKey);
         startActivityForResult(intent, Constants.REQUEST_CODE_EDIT);
     }
 
     private void deleteMk() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MkItemActivity.this);
 
-        AlertDialog dialog = builder.setTitle(R.string.dialog_delete_mk_title)
-                .setMessage(R.string.dialog_delete_mk_title)
+        AlertDialog.Builder builder = new AlertDialog.Builder(NotItemActivity.this);
+
+        AlertDialog dialog = builder.setTitle(R.string.dialog_delete_notification_title)
+                .setMessage(R.string.dialog_delete_notification_message)
                 .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        database.getReference(Constants.FIREBASE_REF_MK).child(mk.getKey()).removeValue();
+                        database.getReference(Constants.FIREBASE_REF_NOTIFICATIONS).child(notification.getKey()).removeValue();
                         onBackPressed();
                     }
                 })
@@ -215,6 +214,7 @@ public class MkItemActivity extends AppCompatActivity {
                 }).create();
 
         dialog.show();
+
     }
 
 

@@ -1,9 +1,6 @@
 package com.example.android.kidsapp;
 
-import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -20,10 +17,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.android.kidsapp.utils.Constants;
-import com.example.android.kidsapp.utils.Mk;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.example.android.kidsapp.utils.Notification;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,13 +28,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MkEditActivity extends AppCompatActivity {
+public class NotEditActivity extends AppCompatActivity {
 
     private EditText textDescription, textTitle1, textTitle2, textLink;
     private ImageView imageView;
@@ -48,8 +41,8 @@ public class MkEditActivity extends AppCompatActivity {
     // VARIABLES
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    String mkKey, mkTitle2;
-    Mk mk = new Mk();
+    String notKey;
+    Notification notification = new Notification();
     boolean isNew = false;
     boolean needToSave = false;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -57,16 +50,15 @@ public class MkEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mk_edit);
+        setContentView(R.layout.activity_not_edit);
 
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            mkKey = bundle.getString(Constants.EXTRA_ITEM_ID);
-            mkTitle2 = bundle.getString(Constants.EXTRA_TITLE2);
+            notKey = bundle.getString(Constants.EXTRA_ITEM_ID);
         }
 
-        isNew = mkKey == null;
+        isNew = notKey == null;
 
         initRef();
 
@@ -86,13 +78,14 @@ public class MkEditActivity extends AppCompatActivity {
         textDescription = (EditText) findViewById(R.id.edit_description);
         imageView = (ImageView) findViewById(R.id.image_view);
 
+        /*
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, Constants.REQUEST_CODE_GALLERY);
             }
-        });
+        });*/
 
         TextWatcher watcher = new TextWatcher() {
             @Override
@@ -116,7 +109,7 @@ public class MkEditActivity extends AppCompatActivity {
         textDescription.addTextChangedListener(watcher);
 
     }
-
+/*
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -132,11 +125,11 @@ public class MkEditActivity extends AppCompatActivity {
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageURI(selectedImage);
 
-            final String imageName = (mkKey != null ? mkKey : "newMK")
+            final String imageName = (notKey != null ? notKey : "newMK")
                     + new SimpleDateFormat("_ddMMyyyy_HHmmss").format(new Date()) + ".jpg";
 
             // save in database
-            mk.setImageUri(imageName);
+            notification.setImageUri(imageName);
 
             // upload to storage
             StorageReference ref = storage.getReference(Constants.FIREBASE_STORAGE_MK).child(imageName);
@@ -148,17 +141,17 @@ public class MkEditActivity extends AppCompatActivity {
             });
 
         }
-    }
+    }*/
 
     private void loadMkItem() {
         if (isNew) return;
 
-        DatabaseReference ref = database.getReference(Constants.FIREBASE_REF_MK).child(mkKey);
+        DatabaseReference ref = database.getReference(Constants.FIREBASE_REF_NOTIFICATIONS).child(notKey);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mk = dataSnapshot.getValue(Mk.class);
+                notification = dataSnapshot.getValue(Notification.class);
                 updateUI();
             }
 
@@ -170,40 +163,42 @@ public class MkEditActivity extends AppCompatActivity {
 
     }
 
-    private void updateMkModel() {
+    private void updateNotModel() {
 
-        mk.setTitle1(textTitle1.getText().toString());
-        mk.setTitle2(textTitle2.getText().toString());
-        mk.setLink(textLink.getText().toString());
-        mk.setDescription(textDescription.getText().toString());
+        notification.setTitle1(textTitle1.getText().toString());
+        notification.setTitle2(textTitle2.getText().toString());
+        notification.setLink(textLink.getText().toString());
+        notification.setDescription(textDescription.getText().toString());
 
     }
 
-    private void addMk() {
-        updateMkModel();
+    private void addNotification() {
+        updateNotModel();
 
         isNew = false;
-        mkKey = database.getReference(Constants.FIREBASE_REF_MK).push().getKey();
-        mk.setKey(mkKey);
-        mk.setUserId(auth.getCurrentUser().getUid());
-        mk.setUserName(auth.getCurrentUser().getDisplayName());
+        notKey = database.getReference(Constants.FIREBASE_REF_NOTIFICATIONS).push().getKey();
 
-        database.getReference(Constants.FIREBASE_REF_MK)
-                .child(mkKey).setValue(mk).addOnCompleteListener(new OnCompleteListener<Void>() {
+        notification.setKey(notKey);
+        notification.setDate(new SimpleDateFormat("d-M-yyyy").format(new Date()));
+        notification.setUserId(auth.getCurrentUser().getUid());
+        notification.setUserName(auth.getCurrentUser().getDisplayName());
+
+        database.getReference(Constants.FIREBASE_REF_NOTIFICATIONS)
+                .child(notKey).setValue(notification).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
 
-                Snackbar.make(imageView, getString(R.string.mk_added), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(imageView, getString(R.string.not_added), Snackbar.LENGTH_SHORT).show();
             }
         });
         needToSave = false;
     }
 
-    private void updateMk() {
-        updateMkModel();
+    private void updateNotification() {
+        updateNotModel();
 
-        database.getReference(Constants.FIREBASE_REF_MK)
-                .child(mk.getKey()).setValue(mk).addOnCompleteListener(new OnCompleteListener<Void>() {
+        database.getReference(Constants.FIREBASE_REF_NOTIFICATIONS)
+                .child(notification.getKey()).setValue(notification).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Snackbar.make(imageView, getString(R.string.mk_updated), Snackbar.LENGTH_SHORT).show();
@@ -216,22 +211,22 @@ public class MkEditActivity extends AppCompatActivity {
     private void updateUI() {
         if (isNew) {
             setTitle(R.string.title_activity_add);
-            textTitle2.setText(mkTitle2);
 
         } else {
             setTitle(R.string.title_activity_edit);
-            if (mk != null) {
-                textTitle1.setText(mk.getTitle1());
-                textTitle2.setText(mk.getTitle2());
-                textLink.setText(mk.getLink());
-                textDescription.setText(mk.getDescription());
+            if (notification != null) {
+                textTitle1.setText(notification.getTitle1());
+                textTitle2.setText(notification.getTitle2());
+                textLink.setText(notification.getLink());
+                textDescription.setText(notification.getDescription());
 
-                if (mk.getImageUri() != null && !mk.getImageUri().isEmpty()) {
+                /*
+                if (notification.getImageUri() != null && !notification.getImageUri().isEmpty()) {
 
-                    StorageReference ref = storage.getReference(Constants.FIREBASE_STORAGE_MK).child(mk.getImageUri());
+                    StorageReference ref = storage.getReference(Constants.FIREBASE_STORAGE_MK).child(notification.getImageUri());
                     imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     Glide.with(this).using(new FirebaseImageLoader()).load(ref).into(imageView);
-                }
+                }*/
             }
         }
         needToSave = false;
@@ -256,9 +251,9 @@ public class MkEditActivity extends AppCompatActivity {
         if (id == R.id.action_save) {
 
             if (isNew)
-                addMk();
+                addNotification();
             else
-                updateMk();
+                updateNotification();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -272,16 +267,16 @@ public class MkEditActivity extends AppCompatActivity {
         }
 
         if (needToSave) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(MkEditActivity.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(NotEditActivity.this);
             builder.setTitle(R.string.dialog_report_save_before_close_title)
                     .setMessage(R.string.dialog_mk_edit_text)
                     .setPositiveButton("ЗБЕРЕГТИ ЗМІНИ", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
                             if (isNew)
-                                addMk();
+                                addNotification();
                             else
-                                updateMk();
+                                updateNotification();
 
                             onBackPressed();
 

@@ -40,9 +40,10 @@ public class Constants {
             , "ЧЕРВЕНЬ", "ЛИПЕНЬ", "СЕРПЕНЬ", "ВЕРЕСЕНЬ", "ЖОВТЕНЬ", "ЛИСТОПАД", "ГРУДЕНЬ"};
 
     public static final String EXTRA_URI = "extra_uri";
-    public static final String EXTRA_MK_ID = "extra_mk_id";
-    public static final String EXTRA_MK_TITLE2 = "extra_title_2";
+    public static final String EXTRA_ITEM_ID = "extra_mk_id";
+    public static final String EXTRA_TITLE2 = "extra_title_2";
     public static final String EXTRA_FOLDER = "extra_folder";
+    public static final String EXTRA_NOT_ID = "extara_not_id";
 
 
     public static int[] COLORS = {Color.GREEN, Color.BLUE, Color.RED, Color.MAGENTA, Color.GRAY, Color.YELLOW};

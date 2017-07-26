@@ -91,7 +91,7 @@ public class MkPlanAdapter extends RecyclerView.Adapter<MkPlanAdapter.MyViewHold
             public void onClick(View v) {
                 if (report.getMkRef() != null && !report.getMkRef().isEmpty()) {
                     Intent intent = new Intent(mContext, MkItemActivity.class);
-                    intent.putExtra(Constants.EXTRA_MK_ID, report.getMkRef());
+                    intent.putExtra(Constants.EXTRA_ITEM_ID, report.getMkRef());
                     mContext.startActivity(intent);
                 }
             }

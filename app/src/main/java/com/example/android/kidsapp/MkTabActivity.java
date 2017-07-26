@@ -111,7 +111,7 @@ public class MkTabActivity extends AppCompatActivity {
                 animateFAB();
 
                 Intent intent = new Intent(MkTabActivity.this, MkEditActivity.class);
-                intent.putExtra(Constants.EXTRA_MK_TITLE2, getString(R.string.mk_type_k));
+                intent.putExtra(Constants.EXTRA_TITLE2, getString(R.string.mk_type_k));
                 startActivity(intent);
             }
         });
@@ -121,7 +121,7 @@ public class MkTabActivity extends AppCompatActivity {
                 animateFAB();
 
                 Intent intent = new Intent(MkTabActivity.this, MkEditActivity.class);
-                intent.putExtra(Constants.EXTRA_MK_TITLE2, getString(R.string.mk_type_t));
+                intent.putExtra(Constants.EXTRA_TITLE2, getString(R.string.mk_type_t));
                 startActivity(intent);
 
             }
@@ -132,7 +132,7 @@ public class MkTabActivity extends AppCompatActivity {
                 animateFAB();
 
                 Intent intent = new Intent(MkTabActivity.this, MkEditActivity.class);
-                intent.putExtra(Constants.EXTRA_MK_TITLE2, getString(R.string.mk_type_d));
+                intent.putExtra(Constants.EXTRA_TITLE2, getString(R.string.mk_type_d));
                 startActivity(intent);
 
             }
@@ -228,7 +228,7 @@ public class MkTabActivity extends AppCompatActivity {
     }
 
     /**
-     * A placeholder fragment containing a mk view.
+     * A placeholder fragment containing a notification view.
      */
     public static class PlaceholderFragment extends Fragment {
         /**

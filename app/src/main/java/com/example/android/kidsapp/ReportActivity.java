@@ -1137,7 +1137,7 @@ public class ReportActivity extends AppCompatActivity {
      * Update View with Mk name if exist
      */
     private void updateMkName() {
-        //mk
+        //notification
         if (mReport.getMkName() != null && !mReport.getMkName().isEmpty())
             textMkName.setText(mReport.getMkName());
         else

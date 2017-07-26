@@ -13,15 +13,29 @@
         android:elevation="3dp"
         card_view:cardCornerRadius="@dimen/card_radius">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/panel_item"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal">
 
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_comment" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/text_panel"
-                android:layout_width="match_parent"
-                android:layout_height="90dp">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/card_mk_title_padding"
+                android:paddingTop="@dimen/card_mk_title_padding">
 
                 <TextView
                     android:id="@+id/title1"
@@ -30,7 +44,6 @@
                     android:layout_toLeftOf="@+id/panel_right"
                     android:paddingLeft="@dimen/card_mk_title_padding"
                     android:paddingRight="@dimen/card_mk_title_padding"
-                    android:paddingTop="20dp"
                     android:text="Text"
                     android:textColor="@color/album_title"
                     android:textSize="24sp" />
@@ -41,137 +54,24 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/title1"
                     android:layout_toLeftOf="@+id/panel_right"
-                    android:paddingBottom="8dp"
                     android:paddingLeft="@dimen/card_mk_title_padding"
                     android:paddingRight="@dimen/card_mk_title_padding"
                     android:text="text"
                     android:textSize="14sp" />
 
-                <EditText
-                    android:id="@+id/input_title1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/card_mk_title_padding"
-                    android:layout_marginRight="@dimen/card_mk_title_padding"
-                    android:layout_toLeftOf="@+id/panel_right"
-                    android:text="Text"
-                    android:textColor="@color/album_title"
-                    android:textSize="24sp"
-                    android:visibility="gone" />
-
-                <EditText
-                    android:id="@+id/input_title2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/input_title1"
-                    android:layout_marginLeft="@dimen/card_mk_title_padding"
-                    android:layout_marginRight="@dimen/card_mk_title_padding"
-                    android:layout_toLeftOf="@+id/panel_right"
-                    android:text="text"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
-
-                <RelativeLayout
-                    android:id="@+id/panel_right"
-                    android:layout_width="70dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:orientation="vertical"
-                    android:paddingTop="24dp"
-                    android:paddingRight="8dp">
-
-
-                    <TextView
-                        android:id="@+id/text_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:gravity="center"
-                        android:text=" 16.05" />
-
-                </RelativeLayout>
-
-            </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/panel_action"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/text_panel"
-                android:padding="8dp">
-
-                <Button
-                    android:id="@+id/button_edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_marginRight="8dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="РЕДАГУВАТИ"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorAccent" />
-
-                <Button
-                    android:id="@+id/button_delete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="ВИДАЛИТИ"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorAccent"
-                    android:visibility="gone" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-                <ImageView
-                    android:id="@+id/image_expand"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:contentDescription="Детальніше"
-                    android:src="@drawable/ic_action_expand_more" />
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/panel_expand"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_date"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/panel_action"
-                android:orientation="vertical"
-                android:paddingBottom="24dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="10dp"
-                android:visibility="gone">
+                android:layout_alignParentRight="true"
+                android:layout_gravity="top"
+                android:padding="8dp"
+                android:text=" 16.05" />
 
-                <TextView
-                    android:id="@+id/text_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Large text her" />
-
-                <EditText
-                    android:id="@+id/input_text_large"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:text="Large text her"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
-
-
-            </LinearLayout>
-
-        </RelativeLayout>
+        </LinearLayout>
 
     </android.support.v7.widget.CardView>
 
