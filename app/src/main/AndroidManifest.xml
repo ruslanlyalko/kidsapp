@@ -157,6 +157,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.MkTabActivity" />
         </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

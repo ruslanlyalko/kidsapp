@@ -2,6 +2,9 @@ package com.example.android.kidsapp.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,12 +35,13 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
         public TextView textTitle1, textTitle2, textDescription;
         public ImageView imageView;
         public ImageButton buttonExpand;
-        public Button buttonShare;
+        public Button buttonShare, buttonLink;
         public LinearLayout expandPanel;
 
         public MyViewHolder(View view) {
             super(view);
             buttonShare = (Button) view.findViewById(R.id.button_share);
+            buttonLink = (Button) view.findViewById(R.id.button_link);
             textTitle1 = (TextView) view.findViewById(R.id.text_title1);
             textTitle2 = (TextView) view.findViewById(R.id.text_title2);
             textDescription = (TextView) view.findViewById(R.id.text_description);
@@ -84,9 +88,19 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_SUBJECT, mk.getTitle1());
-                sendIntent.putExtra(Intent.EXTRA_TEXT, mk.getTitle1()+ "\n"+mk.getTitle2()+ "\n\n"+mk.getDescription());
+                sendIntent.putExtra(Intent.EXTRA_TEXT, mk.getTitle1() + "\n" + mk.getTitle2() + "\n\n" + mk.getDescription());
                 sendIntent.setType("text/plain");
                 mContext.startActivity(sendIntent);
+            }
+        });
+
+        holder.buttonLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                CustomTabsIntent customTabsIntent = builder.build();
+                builder.setToolbarColor(ResourcesCompat.getColor(mContext.getResources(), R.color.colorPrimary, null));
+                customTabsIntent.launchUrl(mContext, Uri.parse(mk.getLink()));
             }
         });
 

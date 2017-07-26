@@ -1,45 +1,29 @@
 package com.example.android.kidsapp;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.User;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.example.android.kidsapp.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,12 +36,12 @@ import java.util.Map;
 
 public class UserSettingsActivity extends AppCompatActivity {
 
-    private static final String TAG = UserSettingsActivity.class.getSimpleName();
-
     EditText inputName, inputEmail, inputPhone, inputBDay, inputCard, inputFirstDate, inputTime;
+    LinearLayout panelFirstDate;
 
     private Calendar mBirthDay = Calendar.getInstance();
 
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
 
 
@@ -76,6 +60,10 @@ public class UserSettingsActivity extends AppCompatActivity {
             mUid = bundle.getString(Constants.EXTRA_UID, FirebaseAuth.getInstance().getCurrentUser().getUid());
         }
 
+        boolean isCurrentUser = mUid.equals(mAuth.getCurrentUser().getUid());
+        // user can change only they own emails
+        inputEmail.setEnabled(isCurrentUser);
+        panelFirstDate.setVisibility(Utils.isAdmin() && !isCurrentUser ? View.VISIBLE : View.GONE);
 
         final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -101,7 +89,6 @@ public class UserSettingsActivity extends AppCompatActivity {
         });
 
         inputCard.addTextChangedListener(mWatcher);
-
 
         initCurrentUserData();
     }
@@ -140,7 +127,7 @@ public class UserSettingsActivity extends AppCompatActivity {
 
     private void initRef() {
 
-
+        panelFirstDate = (LinearLayout) findViewById(R.id.panel_first_date);
         inputTime = (EditText) findViewById(R.id.text_time);
         inputFirstDate = (EditText) findViewById(R.id.text_first_date);
         inputName = (EditText) findViewById(R.id.text_name);
@@ -186,7 +173,7 @@ public class UserSettingsActivity extends AppCompatActivity {
         }
         if (!email.equals(temail)) {
             childUpdates.put("userEmail", email);
-            // mAuth.getCurrentUser().updateEmail(email);
+            mAuth.getCurrentUser().updateEmail(email);
             needUpdate = true;
         }
 
@@ -205,51 +192,47 @@ public class UserSettingsActivity extends AppCompatActivity {
         DatabaseReference ref = mDatabase.getReference(Constants.FIREBASE_REF_USERS).child(mUid);
 
 
-            ref.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    User user = dataSnapshot.getValue(User.class);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
 
-                    inputName.setText(user.getUserName());
-                    inputName.setTag(user.getUserName());
+                inputName.setText(user.getUserName());
+                inputName.setTag(user.getUserName());
 
-                    inputPhone.setText(user.getUserPhone());
-                    inputPhone.setTag(user.getUserPhone());
+                inputPhone.setText(user.getUserPhone());
+                inputPhone.setTag(user.getUserPhone());
 
-                    inputEmail.setText(user.getUserEmail());
-                    inputEmail.setTag(user.getUserEmail());
+                inputEmail.setText(user.getUserEmail());
+                inputEmail.setTag(user.getUserEmail());
 
-                    inputBDay.setText(user.getUserBDay());
-                    inputBDay.setTag(user.getUserBDay());
+                inputBDay.setText(user.getUserBDay());
+                inputBDay.setTag(user.getUserBDay());
 
-                    inputCard.setText(user.getUserCard());
-                    inputCard.setTag(user.getUserCard());
+                inputCard.setText(user.getUserCard());
+                inputCard.setTag(user.getUserCard());
 
-                    inputFirstDate.setText(user.getUserFirstDate());
-                    inputTime.setText(user.getUserTimeStart()+" - "+user.getUserTimeEnd());
+                inputFirstDate.setText(user.getUserFirstDate());
+                inputTime.setText(user.getUserTimeStart() + " - " + user.getUserTimeEnd());
 
 
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
-                    Date dt = new Date();
-                    try {
-                        dt = sdf.parse(user.getUserBDay());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    mBirthDay.setTime(dt);
+                Date dt = new Date();
+                try {
+                    dt = sdf.parse(user.getUserBDay());
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
+                mBirthDay.setTime(dt);
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                    Log.w(TAG, "Failed to load data. " + databaseError.toException());
-                }
-            });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
     }
-
-
 
 
     @Override

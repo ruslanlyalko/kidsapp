@@ -180,7 +180,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorBg"
+            android:background="@color/colorGradient"
             android:orientation="vertical"
             android:paddingTop="16dp">
 

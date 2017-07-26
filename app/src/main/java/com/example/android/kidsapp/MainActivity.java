@@ -1,7 +1,5 @@
 package com.example.android.kidsapp;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
@@ -118,7 +116,8 @@ public class MainActivity extends AppCompatActivity {
 
         String currentVersion = pInfo.versionName;
 
-        if (mLinkActive && !currentVersion.equals(mLatestVersion)) {
+        final boolean isLatestVersion = currentVersion.equals(mLatestVersion);
+        if (mLinkActive && !isLatestVersion) {
             textLink.setText(mLinkText);
             textLinkDetails.setText("Докладніше >");
         } else {
@@ -128,19 +127,18 @@ public class MainActivity extends AppCompatActivity {
         textLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mLinkActive) openBrowser(mLink);
+                if (mLinkActive && !isLatestVersion) openBrowser(mLink);
             }
         });
         textLinkDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mLinkActive) openBrowser(mLink);
+                if (mLinkActive && !isLatestVersion) openBrowser(mLink);
             }
         });
 
         mLinkFb = mRemoteConfig.getString("link_fb");
 
-        //todo
     }
 
 
@@ -242,23 +240,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                PackageInfo pInfo = null;
-                try {
-                    pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
-                String version = pInfo.versionName;
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle(R.string.dialog_about_title)
-                        .setMessage(getString(R.string.dialog_about_message) + "" + version)
-                        .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .show();
+                Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(intent);
             }
         });
 

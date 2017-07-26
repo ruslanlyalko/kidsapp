@@ -11,7 +11,7 @@
         android:layout_marginBottom="@dimen/card_margin"
         android:layout_marginTop="@dimen/card_margin"
         android:elevation="3dp"
-        card_view:cardCornerRadius="@dimen/card_album_radius">
+        card_view:cardCornerRadius="@dimen/card_radius">
 
         <com.example.android.kidsapp.utils.SwipeLayout
             android:id="@+id/swipe_layout"

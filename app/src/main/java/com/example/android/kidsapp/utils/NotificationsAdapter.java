@@ -63,7 +63,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.notification_card, parent, false);
+                .inflate(R.layout.card_notification, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -76,7 +76,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         holder.largeText.setText(notification.getLargeText());
         holder.date.setText(notification.getDate());
 
-        holder.buttonEdit.setVisibility(Utils.isIsAdmin() || notification.getUserId().equals(mAuth.getCurrentUser().getUid()) ?
+        holder.buttonEdit.setVisibility(Utils.isAdmin() || notification.getUserId().equals(mAuth.getCurrentUser().getUid()) ?
                 View.VISIBLE : View.GONE);
 
         holder.imageExpand.setOnClickListener(new View.OnClickListener() {

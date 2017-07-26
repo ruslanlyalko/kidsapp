@@ -108,7 +108,7 @@ public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder
         boolean justAdded = (diff <= Constants.COST_EDIT_MIN);
 
         // Avoid delete
-        if (!Utils.isIsAdmin() && justAdded) {
+        if (!Utils.isAdmin() && justAdded) {
             new Handler().postDelayed(new Runnable() {
 
                 @Override
@@ -121,7 +121,7 @@ public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder
             }, (Constants.COST_EDIT_MIN - diff + 1) * 60 * 1000);
         }
 
-        if (Utils.isIsAdmin() || justAdded) {
+        if (Utils.isAdmin() || justAdded) {
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
             holder.swipeLayout.setRightSwipeEnabled(true);
             holder.swipeLayout.setBottomSwipeEnabled(false);
@@ -130,7 +130,7 @@ public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder
             holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Utils.isIsAdmin() || cost.getUserId().equals(mAuth.getCurrentUser().getUid())) {
+                    if (Utils.isAdmin() || cost.getUserId().equals(mAuth.getCurrentUser().getUid())) {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                         builder.setTitle(R.string.dialog_cost_delete_title)

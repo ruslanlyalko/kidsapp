@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/viewBg"
+    android:background="@color/colorBackground"
     android:orientation="vertical"
     tools:context="com.example.android.kidsapp.DashboardActivity">
 
@@ -21,7 +21,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/card_margin"
         android:elevation="3dp"
-        card_view:cardCornerRadius="@dimen/card_album_radius">
+        card_view:cardCornerRadius="@dimen/card_radius">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -99,7 +99,7 @@
                 android:layout_marginBottom="@dimen/card_margin"
                 android:layout_marginTop="@dimen/card_margin"
                 android:elevation="3dp"
-                card_view:cardCornerRadius="@dimen/card_album_radius">
+                card_view:cardCornerRadius="@dimen/card_radius">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -237,7 +237,7 @@
                 android:layout_marginBottom="@dimen/card_margin"
                 android:layout_marginTop="@dimen/card_margin"
                 android:elevation="3dp"
-                card_view:cardCornerRadius="@dimen/card_album_radius">
+                card_view:cardCornerRadius="@dimen/card_radius">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -355,7 +355,7 @@
                 android:layout_marginBottom="@dimen/card_margin"
                 android:layout_marginTop="@dimen/card_margin"
                 android:elevation="3dp"
-                card_view:cardCornerRadius="@dimen/card_album_radius">
+                card_view:cardCornerRadius="@dimen/card_radius">
 
                 <LinearLayout
                     android:id="@+id/linear_user"
@@ -492,7 +492,7 @@
                 android:layout_marginBottom="@dimen/card_margin"
                 android:layout_marginTop="@dimen/card_margin"
                 android:elevation="3dp"
-                card_view:cardCornerRadius="@dimen/card_album_radius">
+                card_view:cardCornerRadius="@dimen/card_radius">
 
                 <LinearLayout
                     android:id="@+id/panel_comment"
@@ -513,7 +513,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
+                        android:layout_marginLeft="4dp"
                         android:layout_marginRight="8dp"
                         android:orientation="vertical">
 
@@ -525,10 +525,11 @@
                             <EditText
                                 android:id="@+id/edit_comment"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_marginTop="4dp"
-                                android:hint="@string/hint_comment"
                                 android:backgroundTint="@android:color/transparent"
+                                android:hint="@string/hint_comment"
                                 android:inputType="textCapSentences|textMultiLine"
                                 android:textSize="18sp" />
 
@@ -548,7 +549,7 @@
                 android:layout_marginBottom="@dimen/card_margin"
                 android:layout_marginTop="@dimen/card_margin"
                 android:elevation="3dp"
-                card_view:cardCornerRadius="@dimen/card_album_radius">
+                card_view:cardCornerRadius="@dimen/card_radius">
 
                 <LinearLayout
                     android:layout_width="match_parent"

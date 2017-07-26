@@ -11,7 +11,7 @@
         android:layout_marginBottom="@dimen/card_margin"
         android:layout_marginTop="@dimen/card_margin"
         android:elevation="3dp"
-        card_view:cardCornerRadius="@dimen/card_album_radius">
+        card_view:cardCornerRadius="@dimen/card_radius">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,8 +28,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/panel_right"
-                    android:paddingLeft="@dimen/album_title_padding"
-                    android:paddingRight="@dimen/album_title_padding"
+                    android:paddingLeft="@dimen/card_mk_title_padding"
+                    android:paddingRight="@dimen/card_mk_title_padding"
                     android:paddingTop="20dp"
                     android:text="Text"
                     android:textColor="@color/album_title"
@@ -42,8 +42,8 @@
                     android:layout_below="@id/title1"
                     android:layout_toLeftOf="@+id/panel_right"
                     android:paddingBottom="8dp"
-                    android:paddingLeft="@dimen/album_title_padding"
-                    android:paddingRight="@dimen/album_title_padding"
+                    android:paddingLeft="@dimen/card_mk_title_padding"
+                    android:paddingRight="@dimen/card_mk_title_padding"
                     android:text="text"
                     android:textSize="14sp" />
 
@@ -51,8 +51,8 @@
                     android:id="@+id/input_title1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/album_title_padding"
-                    android:layout_marginRight="@dimen/album_title_padding"
+                    android:layout_marginLeft="@dimen/card_mk_title_padding"
+                    android:layout_marginRight="@dimen/card_mk_title_padding"
                     android:layout_toLeftOf="@+id/panel_right"
                     android:text="Text"
                     android:textColor="@color/album_title"
@@ -64,8 +64,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/input_title1"
-                    android:layout_marginLeft="@dimen/album_title_padding"
-                    android:layout_marginRight="@dimen/album_title_padding"
+                    android:layout_marginLeft="@dimen/card_mk_title_padding"
+                    android:layout_marginRight="@dimen/card_mk_title_padding"
                     android:layout_toLeftOf="@+id/panel_right"
                     android:text="text"
                     android:textSize="14sp"

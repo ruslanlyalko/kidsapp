@@ -50,6 +50,11 @@ public class DashboardActivity extends AppCompatActivity {
     private String yearStr;
     private String monthStr;
 
+    private int netIncome;
+    private int incomeTotal;
+    private int costTotal;
+    private int salaryTotal;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +82,7 @@ public class DashboardActivity extends AppCompatActivity {
         loadComment(yearStr, monthStr);
 
     }
+
 
     private void initRef() {
 
@@ -157,12 +163,6 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
-    private void saveCommentToDB(String s) {
-        mDatabase.getReference(Constants.FIREBASE_REF_COMMENTS)
-                .child(yearStr)
-                .child(monthStr).setValue(s);
-    }
-
     private void loadReports(String yearStr, String monthStr) {
 
         reportList.clear();
@@ -218,14 +218,15 @@ public class DashboardActivity extends AppCompatActivity {
             mk += rep.totalMk;
         }
 
-        int total = room + bday + mk;
+        incomeTotal = room + bday + mk;
 
         textRoom.setText(room + " грн");
         textBday.setText(bday + " грн");
         textMk.setText(mk + " грн");
-        textTotal.setText(total + " ГРН (" + (total * 80 / 100) + ")");
+        textTotal.setText(incomeTotal + " ГРН (" + (incomeTotal * 80 / 100) + ")");
 
-        progressBar.setProgress(total);
+        progressBar.setProgress(incomeTotal);
+        updateNetIncome();
     }
 
     private void loadCosts(String yearStr, String monthStr) {
@@ -276,15 +277,16 @@ public class DashboardActivity extends AppCompatActivity {
                 mk += cost.getPrice();
         }
 
-        int total = common + mk;
+        costTotal = common + mk;
 
-        progressBarCost.setMax(total);
+        progressBarCost.setMax(costTotal);
         progressBarCost.setProgress(common);
 
         textCostCommon.setText(common + " грн");
         textCostMk.setText(mk + " грн");
 
-        textCostTotal.setText(total + " ГРН");
+        textCostTotal.setText(costTotal + " ГРН");
+        updateNetIncome();
     }
 
     private void loadUsers() {
@@ -327,7 +329,7 @@ public class DashboardActivity extends AppCompatActivity {
     private void calcSalaryForUsers() {
 
         String birthdays = "";
-        int total = 0;
+        salaryTotal = 0;
         int percent = 0;
         int stavka = 0;
         int mk = 0;
@@ -337,7 +339,7 @@ public class DashboardActivity extends AppCompatActivity {
             for (Report rep : reportList) {
 
                 if (rep.userName.equals(user.userName)) {
-                    if(Utils.future(rep.getDate())) continue;
+                    if (Utils.future(rep.getDate())) continue;
                     //stavka
                     stavka += user.getUserStavka();
                     //percent
@@ -357,13 +359,22 @@ public class DashboardActivity extends AppCompatActivity {
 
         textBirthdays.setText(birthdays);
 
-        total += stavka + percent + mk;
+        salaryTotal += stavka + percent + mk;
         textSalaryStavka.setText(stavka + " грн");
         textSalaryPercent.setText(percent + " грн");
         textSalaryMk.setText(mk + " грн");
 
-        textSalaryTotal.setText(total + " ГРН");
+        textSalaryTotal.setText(salaryTotal + " ГРН");
+
+        updateNetIncome();
     }
+
+    private void updateNetIncome() {
+
+        netIncome = (int) (incomeTotal * 0.8) - costTotal - salaryTotal;
+        setTitle(getString(R.string.title_activity_dashboard) + " (" + netIncome + " ГРН)");
+    }
+
 
     private void loadComment(String yearStr, String monthStr) {
         editComment.setText("");
@@ -382,6 +393,12 @@ public class DashboardActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void saveCommentToDB(String s) {
+        mDatabase.getReference(Constants.FIREBASE_REF_COMMENTS)
+                .child(yearStr)
+                .child(monthStr).setValue(s);
     }
 
 

@@ -143,7 +143,7 @@ public class MkPlanActivity extends AppCompatActivity {
                     // Add to list only current user reports
                     // But if user role - Admin then add all reports
                     if (report != null) {
-                        if (Utils.isIsAdmin() || report.getUserId().equals(uId)) {
+                        if (Utils.isAdmin() || report.getUserId().equals(uId)) {
                             // check if has MK name
                             if (report.getTotalMk() > 0 || (report.getMkRef() != null && !report.getMkRef().isEmpty())) {
                                 reportList.add(report);

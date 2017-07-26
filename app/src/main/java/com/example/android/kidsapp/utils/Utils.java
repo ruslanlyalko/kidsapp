@@ -10,7 +10,7 @@ public class Utils {
 
     private static boolean mIsAdmin;
 
-    public static boolean isIsAdmin() {
+    public static boolean isAdmin() {
         return mIsAdmin;
     }
 

@@ -1,9 +1,14 @@
 package com.example.android.kidsapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -85,15 +90,19 @@ public class MkItemActivity extends AppCompatActivity {
 
     private void updateUI() {
         if (mk != null) {
-            if (mMenu != null)
-                mMenu.findItem(R.id.action_delete_mk).setVisible(Utils.isIsAdmin()
+            if (mMenu != null) {
+                mMenu.findItem(R.id.action_delete_mk).setVisible(Utils.isAdmin()
                         || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
 
+                mMenu.findItem(R.id.action_edit).setVisible(Utils.isAdmin()
+                        || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
+
+            }
             toolbarLayout.setTitle(mk.getTitle1());
             textTitle2.setText(mk.getTitle2());
             textDescription.setText(mk.getDescription());
 
-            fab.setVisibility((Utils.isIsAdmin() || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+            fab.setVisibility((mk.getLink() != null && !mk.getLink().isEmpty())
                     ? View.VISIBLE : View.GONE);
 
             if (mk.getImageUri() != null && !mk.getImageUri().isEmpty()) {
@@ -102,7 +111,6 @@ public class MkItemActivity extends AppCompatActivity {
                 Glide.with(this).using(new FirebaseImageLoader()).load(ref).into(imageView);
             }
 
-            //todo add other fields
         } else {
             // mk == null
             toolbar.setTitle(R.string.title_activity_mk_item);
@@ -121,10 +129,10 @@ public class MkItemActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo add logic for making edit
-                Intent intent = new Intent(MkItemActivity.this, MkEditActivity.class);
-                intent.putExtra(Constants.EXTRA_MK_ID, mkKey);
-                startActivityForResult(intent, Constants.REQUEST_CODE_EDIT);
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                CustomTabsIntent customTabsIntent = builder.build();
+                builder.setToolbarColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
+                customTabsIntent.launchUrl(MkItemActivity.this, Uri.parse(mk.getLink()));
             }
         });
     }
@@ -148,10 +156,12 @@ public class MkItemActivity extends AppCompatActivity {
 
         mMenu = menu;
 
-        if (mk != null)
-            mMenu.findItem(R.id.action_delete_mk).setVisible(Utils.isIsAdmin()
+        if (mk != null) {
+            mMenu.findItem(R.id.action_delete_mk).setVisible(Utils.isAdmin()
                     || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
-
+            mMenu.findItem(R.id.action_edit).setVisible(Utils.isAdmin()
+                    || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
+        }
         return true;
     }
 
@@ -163,20 +173,48 @@ public class MkItemActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         }
+        if (id == R.id.action_edit) {
+            if (Utils.isAdmin()
+                    || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                editMk();
+                onBackPressed();
+            }
+        }
         if (id == R.id.action_delete_mk) {
 
-            if (Utils.isIsAdmin()
+            if (Utils.isAdmin()
                     || mk.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                 deleteMk();
-                onBackPressed();
+
             }
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void deleteMk() {
+    private void editMk() {
+        Intent intent = new Intent(MkItemActivity.this, MkEditActivity.class);
+        intent.putExtra(Constants.EXTRA_MK_ID, mkKey);
+        startActivityForResult(intent, Constants.REQUEST_CODE_EDIT);
+    }
 
-        database.getReference(Constants.FIREBASE_REF_MK).child(mk.getKey()).removeValue();
+    private void deleteMk() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MkItemActivity.this);
+
+        AlertDialog dialog = builder.setTitle(R.string.dialog_delete_mk_title)
+                .setMessage(R.string.dialog_delete_mk_title)
+                .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        database.getReference(Constants.FIREBASE_REF_MK).child(mk.getKey()).removeValue();
+                        onBackPressed();
+                    }
+                })
+                .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                }).create();
+
+        dialog.show();
     }
 
 

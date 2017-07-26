@@ -1,5 +1,6 @@
 package com.example.android.kidsapp;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -149,7 +150,7 @@ public class CalendarActivity extends AppCompatActivity {
                             for (DataSnapshot datDay : datMonth.getChildren()) {
                                 Report report = datDay.getValue(Report.class);
 
-                                if (Utils.isIsAdmin() || report.getUserId().equals(mAuth.getCurrentUser().getUid())) {
+                                if (Utils.isAdmin() || report.getUserId().equals(mAuth.getCurrentUser().getUid())) {
 
                                     int color = getUserColor(report.getUserId());
                                     long date = getDateLongFromStr(report.getDate());
@@ -216,6 +217,7 @@ public class CalendarActivity extends AppCompatActivity {
     private void reloadReportsForDate(){
         showReportsForDate(mCurrentDate);
     }
+
     private void showReportsForDate(Date date) {
 
         mCurrentDate = date;
@@ -238,7 +240,7 @@ public class CalendarActivity extends AppCompatActivity {
                 // Add to list only current user reports
                 // But if user role - Admin then add all reports
                 if (report != null) {
-                    if (Utils.isIsAdmin() || report.getUserId().equals(uId)) {
+                    if (Utils.isAdmin() || report.getUserId().equals(uId)) {
                         reportList.add(report);
                         adapter.notifyDataSetChanged();
                     }
@@ -291,6 +293,13 @@ public class CalendarActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        showReportsOnCalendar();
+        reloadReportsForDate();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

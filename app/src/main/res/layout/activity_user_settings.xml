@@ -190,6 +190,7 @@
 
         <!-- First date-->
         <LinearLayout
+            android:id="@+id/panel_first_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

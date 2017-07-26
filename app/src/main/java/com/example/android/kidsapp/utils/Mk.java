@@ -7,6 +7,7 @@ public class Mk {
     private String title2;
     private String description;
     private String imageUri;
+    private String link;
     private String userId;
     private String userName;
 
@@ -14,24 +15,32 @@ public class Mk {
         //firebase required
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public Mk(String key, String title1, String title2, String description, String imageUri, String userId, String userName) {
+    public Mk(String key, String title1, String title2, String description, String link, String imageUri, String userId, String userName) {
         this.key = key;
         this.title1 = title1;
         this.title2 = title2;
         this.description = description;
         this.imageUri = imageUri;
+        this.link = link;
         this.userId = userId;
         this.userName = userName;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getKey() {
         return key;
     }
-
 
     public String getTitle1() {
         return title1;

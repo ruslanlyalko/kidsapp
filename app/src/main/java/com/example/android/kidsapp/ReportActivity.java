@@ -354,7 +354,7 @@ public class ReportActivity extends AppCompatActivity {
                         mDate.get(Calendar.YEAR), mDate.get(Calendar.MONTH),
                         mDate.get(Calendar.DAY_OF_MONTH));
 
-                if (!Utils.isIsAdmin())
+                if (!Utils.isAdmin())
                     dpd.getDatePicker().setMinDate(mDate.getTime().getTime());
                 dpd.show();
             }

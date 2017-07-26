@@ -55,7 +55,7 @@
         android:layout_marginRight="@dimen/fab_margin"
         android:src="@drawable/ic_action_add_dark1"
         android:visibility="invisible"
-        app:backgroundTint="@color/fabColor3"
+        app:backgroundTint="@color/colorFab3"
         app:elevation="6dp"
         app:pressedTranslationZ="12dp" />
 
@@ -68,7 +68,7 @@
         android:elevation="6dp"
         android:text=" Кулінарний "
         android:textAlignment="textEnd"
-        android:textColor="@color/fabColor3"
+        android:textColor="@color/colorFab3"
         android:textSize="18sp"
         android:textStyle="bold"
         android:visibility="invisible"
@@ -85,7 +85,7 @@
         android:layout_marginRight="@dimen/fab_margin"
         android:src="@drawable/ic_action_add_dark1"
         android:visibility="invisible"
-        app:backgroundTint="@color/fabColor2"
+        app:backgroundTint="@color/colorFab2"
         app:elevation="6dp"
         app:pressedTranslationZ="12dp" />
 
@@ -98,7 +98,7 @@
         android:elevation="6dp"
         android:text=" Творчий "
         android:textAlignment="textEnd"
-        android:textColor="@color/fabColor2"
+        android:textColor="@color/colorFab2"
         android:textSize="18sp"
         android:textStyle="bold"
         android:visibility="invisible"
@@ -114,7 +114,7 @@
         android:layout_marginRight="@dimen/fab_margin"
         android:src="@drawable/ic_action_add_dark1"
         android:visibility="invisible"
-        app:backgroundTint="@color/fabColor1"
+        app:backgroundTint="@color/colorFab1"
         app:elevation="6dp"
         app:pressedTranslationZ="12dp">
 
@@ -128,7 +128,7 @@
         android:elevation="6dp"
         android:text=" Дослід "
         android:textAlignment="textEnd"
-        android:textColor="@color/fabColor1"
+        android:textColor="@color/colorFab1"
         android:textSize="18sp"
         android:textStyle="bold"
         android:visibility="invisible"

@@ -38,6 +38,7 @@
             android:inputType="textCapSentences"
             android:maxLength="20" />
 
+
         <EditText
             android:id="@+id/edit_title2"
             android:layout_width="match_parent"
@@ -59,6 +60,17 @@
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/hint_description"
             android:inputType="textCapSentences|textMultiLine" />
+
+        <EditText
+            android:id="@+id/edit_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
+            android:backgroundTint="@android:color/transparent"
+            android:hint="@string/hint_link"
+            android:inputType="textUri" />
+
 
     </LinearLayout>
 

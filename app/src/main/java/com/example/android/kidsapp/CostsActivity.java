@@ -61,7 +61,7 @@ public class CostsActivity extends AppCompatActivity {
 
     Button buttonDeleteAll;
     ImageButton buttonNext, buttonPrev;
-    TextView textMonth, textTotal, textCommon, textMk;
+    TextView textMonth, textUserName, textTotal, textCommon, textMk;
     ProgressBar progressBar, progressBarUpload;
     CompactCalendarView compactCalendarView;
 
@@ -71,11 +71,11 @@ public class CostsActivity extends AppCompatActivity {
     private FloatingActionButton fab, fab1, fab2;
     private Animation fab_open, fab_close, rotate_forward, rotate_backward, fade, fade_back_quick;
     private TextView textFab1, textFab2;
-    private View fadedBeckground;
+    private View fadedBackground;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private String mTitle1, mTitle2, mPrice;
-    private Uri mImageUri;
+    private String pictureImagePath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +86,13 @@ public class CostsActivity extends AppCompatActivity {
 
         initRef();
 
-        if (Utils.isIsAdmin()) buttonDeleteAll.setVisibility(View.VISIBLE);
-        else buttonDeleteAll.setVisibility(View.GONE);
-
         initRecycle();
 
         initFAB();
+
+        buttonDeleteAll.setVisibility(Utils.isAdmin() ? View.VISIBLE : View.GONE);
+
+        textUserName.setText(mAuth.getCurrentUser().getDisplayName());
 
         Calendar month = Calendar.getInstance();
         textMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);
@@ -140,7 +141,7 @@ public class CostsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (Utils.isIsAdmin()) {
+                if (Utils.isAdmin()) {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(CostsActivity.this);
                     builder.setTitle(R.string.dialog_cost_delete_all_title)
@@ -195,6 +196,8 @@ public class CostsActivity extends AppCompatActivity {
         progressBarUpload = (ProgressBar) findViewById(R.id.progress_bar_upload);
 
         textMonth = (TextView) findViewById(R.id.text_month);
+        textUserName = (TextView) findViewById(R.id.text_user_name);
+
         compactCalendarView = (CompactCalendarView) findViewById(R.id.calendar_view);
         textTotal = (TextView) findViewById(R.id.text_cost_total);
         textCommon = (TextView) findViewById(R.id.text_cost_common);
@@ -206,7 +209,7 @@ public class CostsActivity extends AppCompatActivity {
         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
         textFab1 = (TextView) findViewById(R.id.textFab1);
         textFab2 = (TextView) findViewById(R.id.textFab2);
-        fadedBeckground = (View) findViewById(R.id.fadedbackgroud);
+        fadedBackground = (View) findViewById(R.id.fadedbackgroud);
         buttonNext = (ImageButton) findViewById(R.id.button_next);
         buttonPrev = (ImageButton) findViewById(R.id.button_prev);
         buttonDeleteAll = (Button) findViewById(R.id.button_cost_delete_all);
@@ -231,7 +234,7 @@ public class CostsActivity extends AppCompatActivity {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Cost cost = dataSnapshot.getValue(Cost.class);
-                        if (cost != null && (Utils.isIsAdmin() || cost.getUserId().equals(mAuth.getCurrentUser().getUid()))) {
+                        if (cost != null && (Utils.isAdmin() || cost.getUserId().equals(mAuth.getCurrentUser().getUid()))) {
                             costList.add(0, cost);
                             adapter.notifyItemInserted(0);
                             calcTotal();
@@ -247,7 +250,7 @@ public class CostsActivity extends AppCompatActivity {
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
                         Cost cost = dataSnapshot.getValue(Cost.class);
                         if (cost != null) {
-                            int i =0;
+                            int i = 0;
                             for (Cost cost1 : costList) {
                                 if (cost1.getKey().equals(cost.getKey())) {
                                     costList.remove(cost1);
@@ -325,7 +328,7 @@ public class CostsActivity extends AppCompatActivity {
             }
         });
 
-        fadedBeckground.setOnClickListener(new View.OnClickListener() {
+        fadedBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 animateFAB();
@@ -378,7 +381,6 @@ public class CostsActivity extends AppCompatActivity {
 
     }
 
-    private String pictureImagePath = "";
 
     void startCamera() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -496,25 +498,17 @@ public class CostsActivity extends AppCompatActivity {
     public void animateFAB() {
 
         if (isFabOpen) {
-
             fab.startAnimation(rotate_backward);
             fab1.startAnimation(fab_close);
             fab2.startAnimation(fab_close);
             fab1.setClickable(false);
             fab2.setClickable(false);
-
             textFab1.startAnimation(fab_close);
             textFab2.startAnimation(fab_close);
-//            body.startAnimation(fade_back);
-
-
-            fadedBeckground.setClickable(false);
-            fadedBeckground.startAnimation(fade_back_quick);
-
+            fadedBackground.setClickable(false);
+            fadedBackground.startAnimation(fade_back_quick);
             isFabOpen = false;
-
         } else {
-
             fab.startAnimation(rotate_forward);
             fab1.startAnimation(fab_open);
             fab2.startAnimation(fab_open);
@@ -522,10 +516,8 @@ public class CostsActivity extends AppCompatActivity {
             textFab2.startAnimation(fab_open);
             fab1.setClickable(true);
             fab2.setClickable(true);
-//            body.startAnimation(fade);
-
-            fadedBeckground.setClickable(true);
-            fadedBeckground.startAnimation(fade);
+            fadedBackground.setClickable(true);
+            fadedBackground.startAnimation(fade);
             isFabOpen = true;
         }
     }

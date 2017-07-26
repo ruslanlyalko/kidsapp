@@ -108,7 +108,7 @@ public class SalaryActivity extends AppCompatActivity {
             }
         });
 
-        if (Utils.isIsAdmin()) {
+        if (Utils.isAdmin()) {
             panelDetails.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

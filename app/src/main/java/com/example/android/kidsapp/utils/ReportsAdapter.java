@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.android.kidsapp.CalendarActivity;
 import com.example.android.kidsapp.MkItemActivity;
 import com.example.android.kidsapp.R;
 import com.example.android.kidsapp.ReportActivity;
@@ -65,7 +67,13 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
     public void onBindViewHolder(final ReportsAdapter.MyViewHolder holder, final int position) {
         final Report report = reportList.get(position);
 
-        holder.textUserName.setText(report.userName);
+        String mkName = "";
+        if (report.getTotalMk() > 0)
+            mkName = " (МК)";
+        if (report.getMkName() != null && !report.getMkName().isEmpty())
+            mkName = " (" + report.getMkName() + ")";
+
+        holder.textUserName.setText(report.userName + mkName);
         holder.textTotal.setText(report.total + " ГРН");
         holder.textRoomTotal.setText(report.totalRoom + " грн");
         holder.textBdayTotal.setText(report.totalBday + " грн");
@@ -78,7 +86,7 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
         holder.swipeLayout.setRightSwipeEnabled(true);
         holder.swipeLayout.setBottomSwipeEnabled(false);
 
-        // Open
+        // Open MK Item
         holder.buttonMk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,31 +94,38 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
                 if (report.getMkRef() != null && !report.getMkRef().isEmpty()) {
                     Intent intent = new Intent(mContext, MkItemActivity.class);
                     intent.putExtra(Constants.EXTRA_MK_ID, report.getMkRef());
+
                     mContext.startActivity(intent);
+                }else{
+                    Toast.makeText(mContext, R.string.toast_mk_not_set, Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+        //open Report for editing
         holder.buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (Utils.isIsAdmin() || Utils.todayOrFuture(report.getDate())) {
+                if (Utils.isAdmin() || Utils.todayOrFuture(report.getDate())) {
                     Intent intent = new Intent(mContext, ReportActivity.class);
                     intent.putExtra(Constants.EXTRA_DATE, report.date);
                     intent.putExtra(Constants.EXTRA_UID, report.userId);
                     intent.putExtra(Constants.EXTRA_USER_NAME, report.userName);
 
-                    mContext.startActivity(intent);
+                    ((CalendarActivity)mContext).startActivityForResult(intent,0);
+                } else {
+                    Toast.makeText(mContext, R.string.toast_edit_impossible, Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+        // show confirm dialog before delete
         holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (Utils.isIsAdmin()) {
+                if (Utils.isAdmin() || Utils.todayOrFuture(report.getDate())) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle(R.string.dialog_delete_title)
                             .setMessage(R.string.dialog_delete_message)
@@ -126,7 +141,8 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
                                 }
                             })
                             .show();
-
+                }else{
+                    Toast.makeText(mContext, R.string.toast_delete_impossible, Toast.LENGTH_SHORT).show();
                 }
             }
         });

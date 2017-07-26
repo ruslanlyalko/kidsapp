@@ -41,7 +41,7 @@
     <string name="button_requisites">Витрати</string>
 
     <string name="hint_double_press">Натисніть ще раз аби вийти з додатку</string>
-    <string name="button_about">Про Програму</string>
+    <string name="button_about">Про проект</string>
     <string name="button_contacts">Погода в Іршаві</string>
     <string name="button_fb">Ми в Facebook</string>
     <string name="phone_call">tel:0681990655</string>
@@ -136,7 +136,7 @@
     <string name="dialog_delete_notification_message">Після видаленння відновити статтю буде неможливо</string>
     <string name="dialog_about_title">Про програму</string>
     <string name="dialog_about_message">KIDS APP  \nv </string>
-    <string name="text_copied">Номер картки скопійовано</string>
+    <string name="text_copied">Скопійовано в буфер обміну</string>
     <string name="dialog_report_save_before_close_title">Зберегти зміни</string>
     <string name="dialog_report_save_before_close_text">У звіті є зміни. Натисніть зберегти щоб не втратити їх</string>
     <string name="title_activity_salary">Зарплата</string>
@@ -162,7 +162,6 @@
     <string name="toast_report_deleted">Звіт видалено</string>
     <string name="action_go_to_calendar">КАЛЕНДАР</string>
     <string name="toast_report_cleared">Звіт очищено</string>
-
 
 
     <string name="hint_time">Час роботи</string>
@@ -202,5 +201,18 @@
     <string name="text_mk_full">Майстер клас</string>
     <string name="expand_more">Показати опис</string>
     <string name="text_mk_share">ПОДІЛИТИСЬ</string>
+    <string name="toast_edit_impossible">Редагувати можна тільки сьогоднішній або майбутні звіти</string>
+    <string name="toast_delete_impossible">Видалити можна тільки сьогоднішній або майбутні звіти</string>
+    <string name="toast_mk_not_set">Майстер клас не вказано</string>
+    <string name="hint_link">Посилання</string>
+    <string name="text_mk_link">ПОСИЛАННЯ</string>
+    <string name="title_activity_about">Про проект</string>
+    <string name="large_text">
+        "Чебурашка КІДС була створена 01,06,2016р.\n"
+        "Наша мета:\n"
+        "Наша місія:\n"
+        "Наша позиція на ринку:\n"
+
+    </string>
 
 </resources>

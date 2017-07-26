@@ -41,7 +41,7 @@ import java.util.Date;
 
 public class MkEditActivity extends AppCompatActivity {
 
-    private EditText textDescription, textTitle1, textTitle2;
+    private EditText textDescription, textTitle1, textTitle2, textLink;
     private ImageView imageView;
     private ProgressBar progressBar;
 
@@ -82,6 +82,7 @@ public class MkEditActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         textTitle1 = (EditText) findViewById(R.id.edit_title1);
         textTitle2 = (EditText) findViewById(R.id.edit_title2);
+        textLink = (EditText) findViewById(R.id.edit_link);
         textDescription = (EditText) findViewById(R.id.edit_description);
         imageView = (ImageView) findViewById(R.id.image_view);
 
@@ -111,6 +112,7 @@ public class MkEditActivity extends AppCompatActivity {
         };
         textTitle1.addTextChangedListener(watcher);
         textTitle2.addTextChangedListener(watcher);
+        textLink.addTextChangedListener(watcher);
         textDescription.addTextChangedListener(watcher);
 
     }
@@ -169,8 +171,10 @@ public class MkEditActivity extends AppCompatActivity {
     }
 
     private void updateMkModel() {
+
         mk.setTitle1(textTitle1.getText().toString());
         mk.setTitle2(textTitle2.getText().toString());
+        mk.setLink(textLink.getText().toString());
         mk.setDescription(textDescription.getText().toString());
 
     }
@@ -219,6 +223,7 @@ public class MkEditActivity extends AppCompatActivity {
             if (mk != null) {
                 textTitle1.setText(mk.getTitle1());
                 textTitle2.setText(mk.getTitle2());
+                textLink.setText(mk.getLink());
                 textDescription.setText(mk.getDescription());
 
                 if (mk.getImageUri() != null && !mk.getImageUri().isEmpty()) {

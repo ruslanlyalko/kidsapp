@@ -11,7 +11,7 @@
         android:layout_marginBottom="@dimen/card_mk_margin"
         android:layout_marginTop="@dimen/card_mk_margin"
         android:elevation="3dp"
-        card_view:cardCornerRadius="@dimen/card_album_radius">
+        card_view:cardCornerRadius="@dimen/card_radius">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -36,12 +36,12 @@
                     android:id="@+id/text_title1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/album_title_padding"
-                    android:paddingRight="@dimen/album_title_padding"
+                    android:paddingLeft="@dimen/card_mk_title_padding"
+                    android:paddingRight="@dimen/card_mk_title_padding"
                     android:paddingTop="4dp"
                     android:textColor="@color/album_title"
-                    android:textStyle="bold"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/text_title2"
@@ -49,12 +49,13 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/text_title1"
                     android:paddingBottom="4dp"
-                    android:paddingLeft="@dimen/album_title_padding"
-                    android:paddingRight="@dimen/album_title_padding"
+                    android:paddingLeft="@dimen/card_mk_title_padding"
+                    android:paddingRight="@dimen/card_mk_title_padding"
                     android:textSize="14sp" />
 
             </RelativeLayout>
 
+            <!-- ACTION -->
             <LinearLayout
                 android:id="@+id/panel_action"
                 android:layout_width="match_parent"
@@ -72,6 +73,16 @@
                     android:padding="4dp"
                     android:text="@string/text_mk_share" />
 
+                <Button
+                    android:id="@+id/button_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:drawableStart="@drawable/ic_link_light"
+                    android:padding="4dp"
+                    android:text="@string/text_mk_link" />
+
                 <!-- add any action buttons here-->
 
                 <View
@@ -83,8 +94,8 @@
                     android:id="@+id/button_expand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/expand_more"
                     android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/expand_more"
                     android:padding="8dp"
                     android:src="@drawable/ic_action_expand_more" />
 
@@ -97,8 +108,8 @@
                 android:layout_below="@id/panel_action"
                 android:orientation="vertical"
                 android:paddingBottom="24dp"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
+                android:paddingLeft="@dimen/card_mk_title_padding"
+                android:paddingRight="@dimen/card_mk_title_padding"
                 android:paddingTop="8dp"
                 android:visibility="gone">
 

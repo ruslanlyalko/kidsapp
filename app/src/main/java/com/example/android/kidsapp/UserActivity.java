@@ -1,6 +1,9 @@
 package com.example.android.kidsapp;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -25,6 +28,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.kidsapp.utils.Constants;
 import com.example.android.kidsapp.utils.User;
@@ -47,7 +51,7 @@ public class UserActivity extends AppCompatActivity {
     TextView textEmail, textPhone, textBDay, textCard;
     TextView textTitleName, textTitlePosition, textTime;
     TextView textFirstDate;
-    LinearLayout panelFirstDate;
+    LinearLayout panelFirstDate, panelPhoneCall, panelEmail, panelCard;
     FloatingActionButton fab;
     CardView cardFriends;
 
@@ -60,7 +64,6 @@ public class UserActivity extends AppCompatActivity {
     private List<User> userList = new ArrayList<>();
     private UsersAdapter adapter;
     private RecyclerView recyclerView;
-    private LinearLayout linearPhoneCall;
     private boolean needLoadFriends;
 
     @Override
@@ -87,7 +90,7 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final boolean myPage = mUser.getUserId().equals(mAuth.getCurrentUser().getUid());
-                if (Utils.isIsAdmin() && myPage) {
+                if (Utils.isAdmin() && myPage) {
                     Intent intent = new Intent(UserActivity.this, DashboardActivity.class);
                     startActivity(intent);
                 } else {
@@ -97,6 +100,7 @@ public class UserActivity extends AppCompatActivity {
                 }
             }
         });
+
 
 
         initRecycle();
@@ -164,7 +168,10 @@ public class UserActivity extends AppCompatActivity {
     private void initRef() {
 
         panelFirstDate = (LinearLayout) findViewById(R.id.panel_first_date);
-        textFirstDate = (TextView) findViewById(R.id.text_first_date);
+        panelPhoneCall= (LinearLayout) findViewById(R.id.panel_phone);
+        panelEmail= (LinearLayout) findViewById(R.id.panel_email);
+        panelCard= (LinearLayout) findViewById(R.id.panel_card);
+
 
         imageUserLogo = (ImageView) findViewById(R.id.image_user_logo);
         imageUser1 = (ImageView) findViewById(R.id.image_user1);
@@ -177,12 +184,12 @@ public class UserActivity extends AppCompatActivity {
         textEmail = (TextView) findViewById(R.id.text_email);
         textBDay = (TextView) findViewById(R.id.text_bday);
         textCard = (TextView) findViewById(R.id.text_card);
+        textFirstDate = (TextView) findViewById(R.id.text_first_date);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
         cardFriends = (CardView) findViewById(R.id.card_friends);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        linearPhoneCall = (LinearLayout) findViewById(R.id.linear_phone_call);
     }
 
     private void initCollapsingToolbar() {
@@ -225,7 +232,7 @@ public class UserActivity extends AppCompatActivity {
         final boolean myPage = mUser.getUserId().equals(mAuth.getCurrentUser().getUid());
 
         // if current user is admin or open his friends
-        fab.setVisibility(Utils.isIsAdmin() || myPage ? View.VISIBLE : View.GONE);
+        fab.setVisibility(Utils.isAdmin() || myPage ? View.VISIBLE : View.GONE);
 
         textTitleName.setText(user.getUserName());
         textTitlePosition.setText(user.getUserPositionTitle());
@@ -237,7 +244,7 @@ public class UserActivity extends AppCompatActivity {
         textFirstDate.setText(user.getUserFirstDate());
 
         final String phone = user.getUserPhone();
-        linearPhoneCall.setOnClickListener(new View.OnClickListener() {
+        panelPhoneCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
@@ -245,10 +252,32 @@ public class UserActivity extends AppCompatActivity {
                 startActivity(callIntent);
             }
         });
+        final String email = user.getUserEmail();
+        panelEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(email, email);
+                clipboard.setPrimaryClip(clip);
 
-        if (Utils.isIsAdmin() && !user.getUserId().equals(mAuth.getCurrentUser().getUid())) {
+                Toast.makeText(UserActivity.this, getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+            }
+        });
+        final String card = user.getUserCard();
+        panelCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(card, card);
+                clipboard.setPrimaryClip(clip);
+
+                Toast.makeText(UserActivity.this, getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+            }
+        });
+        if (Utils.isAdmin() && !user.getUserId().equals(mAuth.getCurrentUser().getUid())) {
             panelFirstDate.setVisibility(View.VISIBLE);
         }
+
 
        /* StorageReference storageRef = storage.getReference(Constants.FIREBASE_STORAGE_PICTURES)
                 .child("cover5.png");
@@ -297,8 +326,8 @@ public class UserActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_user, menu);
 
-        menu.findItem(R.id.action_add_user).setVisible(Utils.isIsAdmin());
-        menu.findItem(R.id.action_settings).setVisible(Utils.isIsAdmin()||mUID.equals(mAuth.getCurrentUser().getUid()));
+        menu.findItem(R.id.action_add_user).setVisible(Utils.isAdmin());
+        menu.findItem(R.id.action_settings).setVisible(Utils.isAdmin()||mUID.equals(mAuth.getCurrentUser().getUid()));
         return true;
     }
 

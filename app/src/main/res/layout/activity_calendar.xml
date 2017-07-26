@@ -11,17 +11,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/viewBg"
+        android:background="@color/colorBackground"
         android:orientation="vertical">
 
 
+        <!-- tile TIME -->
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="2dp"
-            android:elevation="3dp"
-            card_view:cardCornerRadius="@dimen/card_album_radius">
+            android:layout_marginBottom="@dimen/card_margin"
+            android:elevation="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,6 +80,7 @@
 
         </android.support.v7.widget.CardView>
 
+        <!-- tile CALENDAR-->
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -87,14 +88,14 @@
             android:layout_marginBottom="@dimen/card_margin"
             android:layout_marginTop="@dimen/card_margin"
             android:elevation="3dp"
-            card_view:cardCornerRadius="@dimen/card_album_radius">
+            card_view:cardCornerRadius="@dimen/card_radius">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:orientation="vertical">
+                android:paddingTop="8dp">
 
                 <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/calendar_view"
@@ -106,7 +107,7 @@
                     app:compactCalendarCurrentDayBackgroundColor="@color/colorBlack12"
                     app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorGray"
                     app:compactCalendarCurrentSelectedDayTextColor="@color/colorAccent"
-                    app:compactCalendarMultiEventIndicatorColor="#fff"
+                    app:compactCalendarMultiEventIndicatorColor="@color/colorAccent"
                     app:compactCalendarOtherMonthDaysTextColor="@color/colorBlack12"
                     app:compactCalendarTargetHeight="220dp"
                     app:compactCalendarTextColor="@color/colorBlack50"
