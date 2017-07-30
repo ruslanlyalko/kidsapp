@@ -230,7 +230,7 @@ public class DashboardActivity extends AppCompatActivity {
         textTotal.setText(String.format(getString(R.string.income), income100Str, income80Str));
 
         progressBar.setProgress(room);
-        progressBar.setSecondaryProgress(room+bday);
+        progressBar.setSecondaryProgress(room + bday);
         progressBar.setMax(incomeTotal);
         updateNetIncome();
     }
@@ -287,7 +287,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         progressBarCost.setMax(costTotal);
         progressBarCost.setProgress(common);
-        progressBarCost.setSecondaryProgress(common+mk);
+        progressBarCost.setSecondaryProgress(common + mk);
 
         textCostCommon.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(common)));
         textCostMk.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(mk)));
@@ -353,30 +353,45 @@ public class DashboardActivity extends AppCompatActivity {
 
         for (User user : userList) {
             int percentTotal = 0;
+            //init hrn
+            int userStavka = Constants.SALARY_DEFAULT_STAVKA;
+            int userPercent = Constants.SALARY_DEFAULT_PERCENT;
+            int userMkBirthday = Constants.SALARY_DEFAULT_MK;
+            int userMkBdChild = Constants.SALARY_DEFAULT_MK_CHILD;
+            int userMkArtChild = Constants.SALARY_DEFAULT_ART_MK_CHILD;
 
+
+            boolean isDefault = true;
             for (Report rep : reportList) {
-
                 //required only for Dashboard calc salary
-                if(!rep.getUserId().equals(user.getUserId())) continue;
+                if (!rep.getUserId().equals(user.getUserId())) continue;
+
+                if (isDefault && user.getMkSpecCalc() && Utils.isTodayOrFuture(rep.getDate(), user.getMkSpecCalcDate())) {
+                    userStavka = user.getUserStavka();
+                    userPercent = user.getUserPercent();
+                    userMkBirthday = user.getMkBd();
+                    userMkBdChild = user.getMkBdChild();
+                    userMkArtChild = user.getMkArtChild();
+                    isDefault = false;
+                }
 
                 if (Utils.future(rep.getDate())) continue;
-
                 // stavka
-                stavka += user.getUserStavka();
+                stavka += userStavka;
 
                 // percent
                 percentTotal += rep.total;
 
                 //Birthdays Mk
-                mkBirthday += rep.bMk * user.getMkBd();
-                mkBirthday += rep.b30 * user.getMkBdChild();
+                mkBirthday += rep.bMk * userMkBirthday;
+                mkBirthday += rep.b30 * userMkBdChild;
 
                 mkBirthdayCount += rep.bMk;
                 mkBirthdayChildren += rep.b30;
 
                 // Art MK
                 if (rep.mkMy) {
-                    mkArt += (rep.mk1 + rep.mk2) * user.getMkArtChild();
+                    mkArt += (rep.mk1 + rep.mk2) * userMkArtChild;
 
                     if (rep.mk1 != 0 || rep.mk2 != 0)
                         mkArtCount += 1;
@@ -385,9 +400,10 @@ public class DashboardActivity extends AppCompatActivity {
                     mkArtChildren += rep.mk2;
                 }
             }
-            percent += (percentTotal * user.getUserPercent() / 100);
+            percent += (percentTotal * userPercent / 100);
 
 
+            // birthdays list
             if (!user.getUserIsAdmin())
                 birthdays += user.getUserBDay() + " - " + user.getUserName() + "\n";
         }
@@ -395,13 +411,14 @@ public class DashboardActivity extends AppCompatActivity {
         textBirthdays.setText(birthdays);
 
         salaryTotal += stavka + percent + mkBirthday + mkArt;
+
         textSalaryStavka.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(stavka)));
         textSalaryPercent.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(percent)));
-        textSalaryMk.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(mkBirthday+ mkArt)));
+        textSalaryMk.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(mkBirthday + mkArt)));
 
         textSalaryTotal.setText(String.format(getString(R.string.HRN), Utils.getIntWithSpace(salaryTotal)));
         progressBarSalary.setProgress(stavka);
-        progressBarSalary.setSecondaryProgress(stavka+percent);
+        progressBarSalary.setSecondaryProgress(stavka + percent);
         progressBarSalary.setMax(salaryTotal);
 
         updateNetIncome();

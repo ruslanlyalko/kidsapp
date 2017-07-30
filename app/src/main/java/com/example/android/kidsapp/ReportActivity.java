@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -27,7 +26,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -56,9 +54,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -655,6 +650,16 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
+        View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    EditText ed = (EditText) v;
+                    ed.setSelection(ed.getText().length());
+                }
+            }
+        };
+
         seekMkT2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -676,7 +681,6 @@ public class ReportActivity extends AppCompatActivity {
 
             }
         });
-
         seekMk1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -698,7 +702,6 @@ public class ReportActivity extends AppCompatActivity {
 
             }
         });
-
         seekMk2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -721,6 +724,7 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
+        inputRoom60.setOnFocusChangeListener(focusChangeListener);
         inputRoom60.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -742,9 +746,15 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s == null || s.toString().isEmpty())
+                    return;
+                String sub = s.toString().substring(0, 1);
+                if (s.length() == 2 && sub.equals("0"))
+                    s.delete(0, 1);
             }
         });
+
+        inputRoom30.setOnFocusChangeListener(focusChangeListener);
         inputRoom30.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -766,9 +776,14 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s == null || s.toString().isEmpty())
+                    return;
+                String sub = s.toString().substring(0, 1);
+                if (s.length() == 2 && sub.equals("0"))
+                    s.delete(0, 1);
             }
         });
+        inputRoom20.setOnFocusChangeListener(focusChangeListener);
         inputRoom20.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -790,9 +805,14 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s == null || s.toString().isEmpty())
+                    return;
+                String sub = s.toString().substring(0, 1);
+                if (s.length() == 2 && sub.equals("0"))
+                    s.delete(0, 1);
             }
         });
+        inputRoom10.setOnFocusChangeListener(focusChangeListener);
         inputRoom10.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -814,10 +834,15 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s == null || s.toString().isEmpty())
+                    return;
+                String sub = s.toString().substring(0, 1);
+                if (s.length() == 2 && sub.equals("0"))
+                    s.delete(0, 1);
             }
         });
 
+        inputBday50.setOnFocusChangeListener(focusChangeListener);
         inputBday50.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -839,9 +864,44 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s == null || s.toString().isEmpty())
+                    return;
+                String sub = s.toString().substring(0, 1);
+                if (s.length() == 2 && sub.equals("0"))
+                    s.delete(0, 1);
             }
         });
+        inputBday10.setOnFocusChangeListener(focusChangeListener);
+        inputBday10.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                int value = 0;
+                try {
+                    value = Integer.parseInt(String.valueOf(s));
+                } catch (Exception e) {
+                    //eat it
+                }
+
+                mReport.b10 = value;
+                updateSeekBars();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s == null || s.toString().isEmpty())
+                    return;
+                String sub = s.toString().substring(0, 1);
+                if (s.length() == 2 && sub.equals("0"))
+                    s.delete(0, 1);
+            }
+        });
+        inputBday30.setOnFocusChangeListener(focusChangeListener);
         inputBday30.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -863,10 +923,15 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s == null || s.toString().isEmpty())
+                    return;
+                String sub = s.toString().substring(0, 1);
+                if (s.length() == 2 && sub.equals("0"))
+                    s.delete(0, 1);
             }
         });
 
+        inputMk1.setOnFocusChangeListener(focusChangeListener);
         inputMk1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -888,9 +953,14 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s == null || s.toString().isEmpty())
+                    return;
+                String sub = s.toString().substring(0, 1);
+                if (s.length() == 2 && sub.equals("0"))
+                    s.delete(0, 1);
             }
         });
+        inputMk2.setOnFocusChangeListener(focusChangeListener);
         inputMk2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -912,7 +982,11 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s == null || s.toString().isEmpty())
+                    return;
+                String sub = s.toString().substring(0, 1);
+                if (s.length() == 2 && sub.equals("0"))
+                    s.delete(0, 1);
             }
         });
 

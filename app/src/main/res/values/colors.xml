@@ -26,4 +26,19 @@
     <color name="colorFab3">#57d232</color>
 
 
+    <color name="colorBlue500">#2196F3</color>
+    <color name="colorIndigo500">#3F51B5</color>
+    <color name="colorTeal500">#009688</color>
+    <color name="colorDeepOrange500">#FF5722</color>
+
+
+    <integer-array name="colors">
+        <item>@color/colorPrimary</item>
+        <item>@color/colorAccent</item>
+        <item>@color/colorBlue500</item>
+        <item>@color/colorIndigo500</item>
+        <item>@color/colorTeal500</item>
+        <item>@color/colorDeepOrange500</item>
+    </integer-array>
+
 </resources>

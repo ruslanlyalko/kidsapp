@@ -1,7 +1,6 @@
 package com.example.android.kidsapp;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -207,17 +206,15 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
         int index = usersList.indexOf(userId);
-        if(index==0)
-            return ContextCompat.getColor(this, R.color.colorPrimary);
-        else if(index==1)
-            return ContextCompat.getColor(this, R.color.colorAccent);
-        else if (index < 8)
-            return Constants.COLORS[index-2];
+
+        int [] colors = getResources().getIntArray(R.array.colors);
+        if (index < 6)
+            return colors[index];
         else
             return Color.GREEN;
     }
 
-    private void reloadReportsForDate(){
+    private void reloadReportsForDate() {
         showReportsForDate(mCurrentDate);
     }
 
@@ -312,8 +309,6 @@ public class CalendarActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         }
-
-
 
 
         return super.onOptionsItemSelected(item);

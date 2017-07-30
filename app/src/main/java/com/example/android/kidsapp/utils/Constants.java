@@ -49,9 +49,6 @@ public class Constants {
     public static final String EXTRA_ABOUT = "extra_about";
 
 
-    public static int[] COLORS = {Color.BLUE
-            , Color.RED, Color.GREEN, Color.MAGENTA, Color.GRAY, Color.YELLOW};
-
     public static int COST_EDIT_MIN = 5;
 
     public static int SALARY_DEFAULT_STAVKA = 60;

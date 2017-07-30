@@ -547,7 +547,7 @@
                                     android:id="@+id/seek_bday_mk_done"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:max="3"
+                                    android:max="5"
                                     android:progress="0" />
 
                             </LinearLayout>
@@ -793,7 +793,7 @@
                                             android:id="@+id/seek_mk_1"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:max="15"
+                                            android:max="20"
                                             android:progress="0" />
 
                                         <TextView
@@ -808,7 +808,7 @@
                                             android:id="@+id/seek_mk_2"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:max="15"
+                                            android:max="20"
                                             android:progress="0" />
                                     </LinearLayout>
 
