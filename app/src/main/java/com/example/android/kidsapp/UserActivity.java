@@ -6,7 +6,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -69,10 +68,8 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
         setContentView(R.layout.activity_user);
-
 
         initCollapsingToolbar();
 
@@ -100,7 +97,6 @@ public class UserActivity extends AppCompatActivity {
                 }
             }
         });
-
 
 
         initRecycle();
@@ -145,7 +141,13 @@ public class UserActivity extends AppCompatActivity {
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                        User user = dataSnapshot.getValue(User.class);
+                        if (user != null) {
+                            if (user.getUserId().equals(mUID)) {
+                                mUser = user;
+                                updateUI(user);
+                            }
+                        }
                     }
 
                     @Override
@@ -168,9 +170,9 @@ public class UserActivity extends AppCompatActivity {
     private void initRef() {
 
         panelFirstDate = (LinearLayout) findViewById(R.id.panel_first_date);
-        panelPhoneCall= (LinearLayout) findViewById(R.id.panel_phone);
-        panelEmail= (LinearLayout) findViewById(R.id.panel_email);
-        panelCard= (LinearLayout) findViewById(R.id.panel_card);
+        panelPhoneCall = (LinearLayout) findViewById(R.id.panel_phone);
+        panelEmail = (LinearLayout) findViewById(R.id.panel_email);
+        panelCard = (LinearLayout) findViewById(R.id.panel_card);
 
 
         imageUserLogo = (ImageView) findViewById(R.id.image_user_logo);
@@ -233,6 +235,8 @@ public class UserActivity extends AppCompatActivity {
 
         // if current user is admin or open his friends
         fab.setVisibility(Utils.isAdmin() || myPage ? View.VISIBLE : View.GONE);
+        if (mUser.getUserIsAdmin() && myPage)
+            fab.setImageResource(R.drawable.ic_action_money);
 
         textTitleName.setText(user.getUserName());
         textTitlePosition.setText(user.getUserPositionTitle());
@@ -326,8 +330,11 @@ public class UserActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_user, menu);
 
-        menu.findItem(R.id.action_add_user).setVisible(Utils.isAdmin());
-        menu.findItem(R.id.action_settings).setVisible(Utils.isAdmin()||mUID.equals(mAuth.getCurrentUser().getUid()));
+        boolean isCurrentUserPage = mUID.equals(mAuth.getCurrentUser().getUid());
+
+        menu.findItem(R.id.action_add_user).setVisible(Utils.isAdmin() && isCurrentUserPage);
+        menu.findItem(R.id.action_settings).setVisible(Utils.isAdmin() || isCurrentUserPage);
+        menu.findItem(R.id.action_logout).setVisible(isCurrentUserPage);
         return true;
     }
 
@@ -347,10 +354,10 @@ public class UserActivity extends AppCompatActivity {
                 return true;
             }
             case R.id.action_settings: {
-                // todo start activity settings
                 Intent intent = new Intent(UserActivity.this, UserSettingsActivity.class);
                 intent.putExtra(Constants.EXTRA_UID, mUID);
                 startActivity(intent);
+
 
                 return true;
             }

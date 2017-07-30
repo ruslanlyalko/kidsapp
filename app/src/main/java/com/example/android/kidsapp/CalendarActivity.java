@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,8 +57,6 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
         setContentView(R.layout.activity_calendar);
 
         initRef();
@@ -208,8 +207,12 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
         int index = usersList.indexOf(userId);
-        if (index < 6)
-            return Constants.COLORS[index];
+        if(index==0)
+            return ContextCompat.getColor(this, R.color.colorPrimary);
+        else if(index==1)
+            return ContextCompat.getColor(this, R.color.colorAccent);
+        else if (index < 8)
+            return Constants.COLORS[index-2];
         else
             return Color.GREEN;
     }
@@ -319,6 +322,5 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
     }
 }

@@ -107,6 +107,11 @@
                     android:orientation="horizontal"
                     android:paddingBottom="16dp">
 
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:visibility="invisible" />
+
                     <ImageView
                         android:id="@+id/imageView"
                         android:layout_width="24dp"
@@ -134,6 +139,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginBottom="-4dp"
                             android:layout_marginTop="16dp"
                             android:text="Всього"
                             android:textColor="@color/colorBlack" />
@@ -150,9 +156,10 @@
                             android:id="@+id/progress_bar"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="25000"
-                            android:progress="0" />
+                            android:layout_height="@dimen/progress_height"
+                            android:layout_marginBottom="@dimen/progress_margin"
+                            android:layout_marginTop="@dimen/progress_margin"
+                            android:progressDrawable="@drawable/progress" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -229,124 +236,6 @@
 
             </android.support.v7.widget.CardView>
 
-            <!-- tile COST-->
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/card_margin"
-                android:layout_marginTop="@dimen/card_margin"
-                android:elevation="3dp"
-                card_view:cardCornerRadius="@dimen/card_radius">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingBottom="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_margin="16dp"
-                        android:src="@drawable/ic_cart" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:orientation="vertical">
-
-
-                        <TextView
-                            android:id="@+id/text_month2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:layout_weight="5"
-                            android:text="@string/text_cost_total1"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="16dp"
-                            android:text="Всього"
-                            android:textColor="@color/colorBlack" />
-
-                        <TextView
-                            android:id="@+id/text_cost_total"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="0 грн"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="32sp" />
-
-                        <ProgressBar
-                            android:id="@+id/progress_bar_cost"
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="2000"
-                            android:progress="0" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:text="@string/text_cost_common"
-                                    android:textColor="@color/colorBlack" />
-
-                                <TextView
-                                    android:id="@+id/text_cost_common"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:text="0 грн" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/textView3"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:text="@string/text_cost_mk"
-                                    android:textColor="@color/colorBlack" />
-
-                                <TextView
-                                    android:id="@+id/text_cost_mk"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:text="0 грн" />
-
-                            </LinearLayout>
-
-                            \
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
             <!-- tile SALARY-->
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -390,6 +279,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginBottom="-4dp"
                             android:layout_marginTop="16dp"
                             android:text="Всього"
                             android:textColor="@color/colorBlack" />
@@ -406,9 +296,10 @@
                             android:id="@+id/progress_bar_salary"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="5000"
-                            android:progress="0" />
+                            android:layout_height="@dimen/progress_height"
+                            android:layout_marginBottom="@dimen/progress_margin"
+                            android:layout_marginTop="@dimen/progress_margin"
+                            android:progressDrawable="@drawable/progress" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -475,6 +366,126 @@
 
                             </LinearLayout>
 
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <!-- tile COST-->
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/card_margin"
+                android:layout_marginTop="@dimen/card_margin"
+                android:elevation="3dp"
+                card_view:cardCornerRadius="@dimen/card_radius">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="16dp"
+                        android:src="@drawable/ic_cart" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/text_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_weight="5"
+                            android:text="@string/text_cost_total1"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="-4dp"
+                            android:layout_marginTop="16dp"
+                            android:text="Всього"
+                            android:textColor="@color/colorBlack" />
+
+                        <TextView
+                            android:id="@+id/text_cost_total"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="0 грн"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="32sp" />
+
+                        <ProgressBar
+                            android:id="@+id/progress_bar_cost"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/progress_height"
+                            android:layout_marginBottom="@dimen/progress_margin"
+                            android:layout_marginTop="@dimen/progress_margin"
+                            android:progressDrawable="@drawable/progress" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:text="@string/text_cost_common"
+                                    android:textColor="@color/colorBlack" />
+
+                                <TextView
+                                    android:id="@+id/text_cost_common"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:text="0 грн" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textView3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:text="@string/text_cost_mk"
+                                    android:textColor="@color/colorBlack" />
+
+                                <TextView
+                                    android:id="@+id/text_cost_mk"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:text="0 грн" />
+
+                            </LinearLayout>
+
+                            \
                         </LinearLayout>
 
                     </LinearLayout>
@@ -585,7 +596,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="18dp"
-                            android:textColor="@color/colorBlack" />
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp" />
 
 
                     </LinearLayout>

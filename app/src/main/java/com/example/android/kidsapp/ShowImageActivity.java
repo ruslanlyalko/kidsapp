@@ -6,9 +6,12 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.android.kidsapp.utils.Constants;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.FirebaseStorage;
@@ -18,44 +21,32 @@ public class ShowImageActivity extends AppCompatActivity {
 
     private String uri = "";
     private String userName = "";
-    private String folder= "";
+    private String folder = "";
     private float mx, my;
     boolean scroll = false;
+    ImageView imageView;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.fadein, R.anim.nothing);
         setContentView(R.layout.activity_show_image);
+
+        imageView = (ImageView) findViewById(R.id.imageView);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         final Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             uri = bundle.getString(Constants.EXTRA_URI);
             userName = bundle.getString(Constants.EXTRA_USER_NAME);
             folder = bundle.getString(Constants.EXTRA_FOLDER, Constants.FIREBASE_STORAGE_COST);
-
         }
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+        loadWithGlide(uri);
 
-        loadImage(uri);
-    }
-
-
-    private void loadImage(String uri) {
-        if (uri.isEmpty()) return;
-
-        StorageReference ref = FirebaseStorage.getInstance().getReference(folder).child(uri);
-        final ImageView image = (ImageView) findViewById(R.id.imageView);
-        //load image using Glide
-        Glide.with(ShowImageActivity.this).using(new FirebaseImageLoader()).load(ref).into(image);
-
-        setTitle("Фото (" + userName + ")");
-
-        // scroll image
-        image.setOnTouchListener(new View.OnTouchListener() {
+        // scroll imageView
+        imageView.setOnTouchListener(new View.OnTouchListener() {
 
             public boolean onTouch(View arg0, MotionEvent event) {
                 if (scroll) {
@@ -69,14 +60,14 @@ public class ShowImageActivity extends AppCompatActivity {
                         case MotionEvent.ACTION_MOVE:
                             curX = event.getX();
                             curY = event.getY();
-                            image.scrollBy((int) (mx - curX), (int) (my - curY));
+                            imageView.scrollBy((int) (mx - curX), (int) (my - curY));
                             mx = curX;
                             my = curY;
                             break;
                         case MotionEvent.ACTION_UP:
                             curX = event.getX();
                             curY = event.getY();
-                            image.scrollBy((int) (mx - curX), (int) (my - curY));
+                            imageView.scrollBy((int) (mx - curX), (int) (my - curY));
                             break;
                     }
                 }
@@ -85,16 +76,58 @@ public class ShowImageActivity extends AppCompatActivity {
         });
 
 
-        image.setOnClickListener(new View.OnClickListener() {
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                image.setScaleType(ImageView.ScaleType.CENTER);
+                imageView.setScaleType(ImageView.ScaleType.CENTER);
                 scroll = true;
             }
         });
+    }
 
 
-        Toast.makeText(this, "Загрузка....", Toast.LENGTH_SHORT).show();
+    private void loadWithGlide(String uri) {
+        if (uri == null || uri.isEmpty()) return;
+        setTitle("Загрузка....");
+
+        if (uri.contains("http")) {
+            Glide.with(ShowImageActivity.this).load(uri).listener(new RequestListener<String, GlideDrawable>() {
+                @Override
+                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    setTitle("Помилка при загрузці");
+                    progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    setTitle("Автор: " + userName);
+                    progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+            }).into(imageView);
+
+
+        } else {
+            StorageReference ref = FirebaseStorage.getInstance().getReference(folder).child(uri);
+            //load imageView using Glide
+
+            Glide.with(ShowImageActivity.this).using(new FirebaseImageLoader()).load(ref).listener(new RequestListener<StorageReference, GlideDrawable>() {
+                @Override
+                public boolean onException(Exception e, StorageReference model, com.bumptech.glide.request.target.Target<GlideDrawable> target, boolean isFirstResource) {
+                    setTitle("Помилка при загрузці");
+                    progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(GlideDrawable resource, StorageReference model, com.bumptech.glide.request.target.Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    setTitle("Автор: " + userName);
+                    progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+            }).into(imageView);
+        }
     }
 
     @Override
@@ -109,4 +142,9 @@ public class ShowImageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.nothing, R.anim.fadeout);
+    }
 }

@@ -50,6 +50,7 @@ public class NotEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.fadein, R.anim.nothing);
         setContentView(R.layout.activity_not_edit);
 
         Bundle bundle = getIntent().getExtras();
@@ -120,12 +121,12 @@ public class NotEditActivity extends AppCompatActivity {
             needToSave = true;
             progressBar.setVisibility(View.VISIBLE);
 
-            //upload to image view
+            //upload to imageView view
             Uri selectedImage = data.getData();
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageURI(selectedImage);
 
-            final String imageName = (notKey != null ? notKey : "newMK")
+            final String imageName = (key != null ? key : "newMK")
                     + new SimpleDateFormat("_ddMMyyyy_HHmmss").format(new Date()) + ".jpg";
 
             // save in database
@@ -293,6 +294,7 @@ public class NotEditActivity extends AppCompatActivity {
 
         } else {
             super.onBackPressed();
+            overridePendingTransition(R.anim.nothing, R.anim.fadeout);
         }
 
     }

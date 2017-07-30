@@ -94,7 +94,7 @@ public class MkTabActivity extends AppCompatActivity {
         textFab1 = (TextView) findViewById(R.id.textFab1);
         textFab2 = (TextView) findViewById(R.id.textFab2);
         textFab3 = (TextView) findViewById(R.id.textFab3);
-        fadedBeckground = findViewById(R.id.fadedbackgroud);
+        fadedBeckground = findViewById(R.id.faded_background);
     }
 
     private void initFAB() {
@@ -224,7 +224,6 @@ public class MkTabActivity extends AppCompatActivity {
             return;
         }
         super.onBackPressed();
-        overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
     }
 
     /**

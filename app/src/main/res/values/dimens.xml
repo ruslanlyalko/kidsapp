@@ -16,4 +16,8 @@
     <dimen name="card_mk_margin">1dp</dimen>
 
 
+    <dimen name="progress_height">3dp</dimen>
+    <dimen name="progress_margin">4dp</dimen>
+
+
 </resources>

@@ -3,16 +3,14 @@ package com.example.android.kidsapp;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.pm.ActivityInfo;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -43,29 +41,24 @@ public class SalaryActivity extends AppCompatActivity {
     CompactCalendarView compactCalendarView;
     LinearLayout panelSalary;
 
-    TextView textSalaryStavka, textSalaryPercent, textSalaryArt, textSalaryMk, textSalaryMk2;
+    TextView textSalaryStavka, textSalaryPercent, textSalaryArt, textSalaryMk, textSalaryMkChildren;
     TextView textTotal, textPercent, textStavka, textMk, textMonth;
     ProgressBar progressBar;
 
-    LinearLayout panelDetails;
+    TextView textCard, textExpand, textName;
+    LinearLayout panelCopy, panelAction;
 
-    TextView textCard, textExpand;
-    LinearLayout panelCopy;
-
+    ImageView imageView;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     List<Report> reportList = new ArrayList<>();
     private User mUser = new User();
     private String mUId;
-    private boolean uploaded = false;
-    private LinearLayout panelExpand;
-
+    private Date currentMonth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
         setContentView(R.layout.activity_salary);
 
         initRef();
@@ -89,10 +82,13 @@ public class SalaryActivity extends AppCompatActivity {
         Calendar month = Calendar.getInstance();
         textMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);
 
-        String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date()).toString();
-        String monthStr = new SimpleDateFormat("M", Locale.US).format(new Date()).toString();
+        String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date());
+        String monthStr = new SimpleDateFormat("M", Locale.US).format(new Date());
 
         loadReports(yearStr, monthStr);
+        currentMonth = new Date();
+        currentMonth.setDate(1);
+        updateConditionUI(currentMonth);
     }
 
     private void initOnClick() {
@@ -107,95 +103,6 @@ public class SalaryActivity extends AppCompatActivity {
                 Toast.makeText(SalaryActivity.this, getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
             }
         });
-
-        if (Utils.isAdmin()) {
-            panelDetails.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    editSalaryStavkaDialog();
-                }
-            });
-        }
-        panelSalary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (panelExpand.getVisibility() != View.VISIBLE) {
-                    panelExpand.setVisibility(View.VISIBLE);
-
-                } else {
-                    panelExpand.setVisibility(View.GONE);
-
-                }
-            }
-        });
-    }
-
-    private void editSalaryStavkaDialog() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.dialog_salary_title);
-
-
-        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_salary, null, false);
-        builder.setView(viewInflated);
-        final EditText inputStavka = (EditText) viewInflated.findViewById(R.id.input_salary_stavka);
-        final EditText inputPercent = (EditText) viewInflated.findViewById(R.id.input_salary_percent);
-        final EditText inputArt = (EditText) viewInflated.findViewById(R.id.input_salary_art);
-        final EditText inputMk = (EditText) viewInflated.findViewById(R.id.input_salary_mk);
-
-        inputStavka.setText(mUser.getUserStavka() + "");
-        inputPercent.setText(mUser.getUserPercent() + "");
-        inputArt.setText(mUser.getUserArt() + "");
-        inputMk.setText(mUser.getUserMk() + "");
-
-        builder.setPositiveButton("Ок", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                String stavka = inputStavka.getText().toString();
-                String percent = inputPercent.getText().toString();
-                String art = inputArt.getText().toString();
-                String mk = inputMk.getText().toString();
-
-                try {
-                    mUser.userStavka = Integer.parseInt(stavka);
-                } catch (Exception e) {
-                }
-                try {
-                    mUser.userPercent = Integer.parseInt(percent);
-                } catch (Exception e) {
-                }
-                try {
-                    mUser.userArt = Integer.parseInt(art);
-                } catch (Exception e) {
-                }
-                try {
-                    mUser.userMk = Integer.parseInt(mk);
-                } catch (Exception e) {
-                }
-
-                saveCurrentUser();
-
-            }
-        });
-        builder.setNegativeButton("Відмінити", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-
-    }
-
-
-    private void saveCurrentUser() {
-        if (uploaded) {
-            mDatabase.getReference(Constants.FIREBASE_REF_USERS).child(mUId).setValue(mUser);
-        }
-
     }
 
     private void loadCurrentUser() {
@@ -205,15 +112,7 @@ public class SalaryActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         mUser = dataSnapshot.getValue(User.class);
 
-                        textCard.setText(mUser.userCard.toString());
-
-                        textSalaryStavka.setText(mUser.getUserStavka() + " грн/день");
-                        textSalaryPercent.setText(mUser.getUserPercent() + " %");
-                        textSalaryArt.setText(mUser.getUserArt() + " грн/дитина");
-                        textSalaryMk.setText(mUser.getUserMk() + " грн");
-                        textSalaryMk2.setText(mUser.getUserMk() * 2 + " грн");
-
-                        uploaded = true;
+                        updateUI();
                         calcSalary();
                     }
 
@@ -224,6 +123,31 @@ public class SalaryActivity extends AppCompatActivity {
                 });
     }
 
+    private void updateUI() {
+        textName.setText(mUser.getUserName());
+        textCard.setText(mUser.getUserCard());
+
+
+    }
+
+    private void updateConditionUI(Date firstDayOfNewMonth) {
+
+        if (mUser == null) return;
+        String date = new SimpleDateFormat("d-M-yyyy", Locale.US).format(firstDayOfNewMonth);
+
+        boolean isSpecCalc = mUser.getMkSpecCalc() && Utils.isTodayOrFuture(date, mUser.getMkSpecCalcDate());
+
+        textSalaryStavka.setText(String.format(getString(R.string.hrn_day), String.valueOf(
+                isSpecCalc ? mUser.getUserStavka() : Constants.SALARY_DEFAULT_STAVKA)));
+        textSalaryPercent.setText(String.format(getString(R.string.hrn_percent), String.valueOf(
+                isSpecCalc ? mUser.getUserPercent() : Constants.SALARY_DEFAULT_PERCENT)));
+        textSalaryMk.setText(String.format(getString(R.string.hrn), String.valueOf(
+                isSpecCalc ? mUser.getMkBd() : Constants.SALARY_DEFAULT_MK)));
+        textSalaryMkChildren.setText(String.format(getString(R.string.hrn_child), String.valueOf(
+                isSpecCalc ? mUser.getMkBdChild() : Constants.SALARY_DEFAULT_MK_CHILD)));
+        textSalaryArt.setText(String.format(getString(R.string.hrn_child), String.valueOf(
+                isSpecCalc ? mUser.getMkArtChild() : Constants.SALARY_DEFAULT_ART_MK_CHILD)));
+    }
 
     private void initCalendar() {
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
@@ -236,7 +160,8 @@ public class SalaryActivity extends AppCompatActivity {
                 Calendar month = Calendar.getInstance();
                 month.setTime(firstDayOfNewMonth);
 
-                String yearSimple = new SimpleDateFormat("yy", Locale.US).format(firstDayOfNewMonth).toString();
+
+                String yearSimple = new SimpleDateFormat("yy", Locale.US).format(firstDayOfNewMonth);
 
                 String str = Constants.MONTH_FULL[month.get(Calendar.MONTH)];
 
@@ -245,10 +170,15 @@ public class SalaryActivity extends AppCompatActivity {
 
                 textMonth.setText(str);
 
-                String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(firstDayOfNewMonth).toString();
-                String monthStr = new SimpleDateFormat("M", Locale.US).format(firstDayOfNewMonth).toString();
+                String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(firstDayOfNewMonth);
+                String monthStr = new SimpleDateFormat("M", Locale.US).format(firstDayOfNewMonth);
 
                 loadReports(yearStr, monthStr);
+
+                currentMonth = firstDayOfNewMonth;
+                updateConditionUI(firstDayOfNewMonth);
+
+
             }
         });
         buttonNext.setOnClickListener(new View.OnClickListener() {
@@ -310,19 +240,38 @@ public class SalaryActivity extends AppCompatActivity {
 
     private void initRef() {
 
-        textExpand = (TextView) findViewById(R.id.text_salary_expand);
-        panelExpand = (LinearLayout) findViewById(R.id.panel_expand);
+        textName = (TextView) findViewById(R.id.text_name);
         panelSalary = (LinearLayout) findViewById(R.id.panel_salary);
-        panelDetails = (LinearLayout) findViewById(R.id.panel_details);
         buttonNext = (ImageButton) findViewById(R.id.button_next);
         buttonPrev = (ImageButton) findViewById(R.id.button_prev);
         compactCalendarView = (CompactCalendarView) findViewById(R.id.calendar_view);
+
+        textExpand = (TextView) findViewById(R.id.text_salary_expand);
+        panelAction = (LinearLayout) findViewById(R.id.panel_action);
+
+        imageView = (ImageView) findViewById(R.id.image_expand);
+
+        panelAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (textExpand.getVisibility() == View.VISIBLE) {
+                    //textExpand.setVisibility(View.GONE);
+                    imageView.setImageResource(R.drawable.ic_action_expand_more);
+                    Utils.collapse(textExpand);
+
+                } else {
+                    Utils.expand(textExpand);
+                    //textExpand.setVisibility(View.VISIBLE);
+                    imageView.setImageResource(R.drawable.ic_action_expand_less);
+                }
+            }
+        });
 
         textSalaryStavka = (TextView) findViewById(R.id.text_salary_stavka);
         textSalaryPercent = (TextView) findViewById(R.id.text_salary_percent);
         textSalaryArt = (TextView) findViewById(R.id.text_salary_art);
         textSalaryMk = (TextView) findViewById(R.id.text_salary_mk1);
-        textSalaryMk2 = (TextView) findViewById(R.id.text_salary_mk2);
+        textSalaryMkChildren = (TextView) findViewById(R.id.text_salary_mk_children);
 
         textMonth = (TextView) findViewById(R.id.text_month);
         textTotal = (TextView) findViewById(R.id.text_total);
@@ -336,55 +285,95 @@ public class SalaryActivity extends AppCompatActivity {
     }
 
     private void calcSalary() {
+        //init hrn
+        int userStavka = Constants.SALARY_DEFAULT_STAVKA;
+        int userPercent = Constants.SALARY_DEFAULT_PERCENT;
+        int userMkBirthday = Constants.SALARY_DEFAULT_MK;
+        int userMkBdChild = Constants.SALARY_DEFAULT_MK_CHILD;
+        int userMkArtChild = Constants.SALARY_DEFAULT_ART_MK_CHILD;
+        //check what exactly we have
 
-        int percent = 0;
+
         int stavka = 0;
-        int mk = 0;
-        int total1 = 0;
-        int mkCount = 0;
-        int birthMkCount = 0;
-        int childOnArtMk = 0;
+
+        int percentTotal = 0;
+        int percent;
+
+        int mkBirthday = 0;
+        int mkBirthdayCount = 0;
+        int mkBirthdayChildren = 0;
+
+        int mkArt = 0;
+        int mkArtCount = 0;
+        int mkArtChildren = 0;
+
+
+        if (mUser.getMkSpecCalc()
+                && reportList.size() > 0
+                && Utils.isTodayOrFuture(reportList.get(0).getDate(), mUser.getMkSpecCalcDate())) {
+            userStavka = mUser.getUserStavka();
+            userPercent = mUser.getUserPercent();
+            userMkBirthday = mUser.getMkBd();
+            userMkBdChild = mUser.getMkBdChild();
+            userMkArtChild = mUser.getMkArtChild();
+        }
 
         for (Report rep : reportList) {
-            if(Utils.future(rep.getDate())) continue;
+            if (Utils.future(rep.getDate())) continue;
 
-            total1 += rep.total;
-            stavka += mUser.getUserStavka();
+            // stavka
+            stavka += userStavka;
+
+            // percent
+            percentTotal += rep.total;
+
             //Birthdays Mk
-            mk += rep.bMk * mUser.getUserMk();
-            if (rep.bMk != 0) {
-                birthMkCount += 1;
-            }
+            mkBirthday += rep.bMk * userMkBirthday;
+            mkBirthday += rep.b30 * userMkBdChild;
+
+            mkBirthdayCount += rep.bMk;
+            mkBirthdayChildren += rep.b30;
+
             // Art MK
             if (rep.mkMy) {
-                mk += (rep.mk1 + rep.mk2) * mUser.getUserArt();
-                if (rep.mk1 != 0 || rep.mk2 != 0) {
-                    mkCount += 1;
-                }
-                childOnArtMk += rep.mk1;
-                childOnArtMk += rep.mk2;
+                mkArt += (rep.mk1 + rep.mk2) * userMkArtChild;
+
+                if (rep.mk1 != 0 || rep.mk2 != 0)
+                    mkArtCount += 1;
+
+                mkArtChildren += rep.mk1;
+                mkArtChildren += rep.mk2;
             }
         }
 
-        percent = (total1 * mUser.getUserPercent() / 100);
+        percent = (percentTotal * userPercent / 100);
 
-        int total = stavka + percent + mk;
+        int total = stavka + percent + mkBirthday + mkArt;
 
-        textStavka.setText(stavka + " грн");
-        textPercent.setText(percent + " грн");
-        textMk.setText(mk + " грн");
-        textTotal.setText(total + " ГРН");
+        textStavka.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(stavka)));
+        textPercent.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(percent)));
+        textMk.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(mkBirthday + mkArt)));
+
+        textTotal.setText(String.format(getString(R.string.HRN), Utils.getIntWithSpace(total)));
 
         String text1 = "В цьоу місяці було " + reportList.size() + " робочих днів \n";
-        text1 += "Загальна виручка " + total1 + " грн \n\n";
-        text1 += "Проведено " + birthMkCount + " МК на Днях Народженнях \n\n";
-        text1 += "Проведено " + mkCount + " Творчих та Кулінарних МК \n";
-        text1 += " На яких було присутньо " + childOnArtMk + " дітей \n\n";
+        text1 += "Загальна виручка " + percentTotal + " грн \n\n";
+
+        text1 += "Проведено " + mkBirthdayCount + " МК на Днях Народженнях \n";
+        text1 += "На яких було присутньо " + mkBirthdayChildren + " дітей \n";
+        text1 += "Зароблено " + mkBirthday + " грн\n\n";
+
+        text1 += "Проведено " + mkArtCount + " Творчих та Кулінарних МК \n";
+        text1 += "На яких було присутньо " + mkArtChildren + " дітей \n";
+        text1 += "Зароблено " + mkArt + " грн\n\n";
+
         text1 += "Аванс: до 20-го чиса;  ЗП: до 5-го числа\n";
 
         textExpand.setText(text1);
 
-        progressBar.setProgress(total);
+        progressBar.setMax(total);
+        progressBar.setProgress(stavka);
+        progressBar.setSecondaryProgress(stavka + percent);
     }
 
 
@@ -396,6 +385,15 @@ public class SalaryActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        if (Utils.isAdmin())
+            getMenuInflater().inflate(R.menu.menu_salary, menu);
+
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -403,13 +401,25 @@ public class SalaryActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         }
+        if (id == R.id.action_edit) {
+            Intent intent = new Intent(this, SalaryEditActivity.class);
+            intent.putExtra(Constants.EXTRA_UID, mUId);
+            startActivityForResult(intent, 0);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        updateUI();
+        updateConditionUI(currentMonth);
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
     }
 }

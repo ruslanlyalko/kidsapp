@@ -2,7 +2,8 @@ package com.example.android.kidsapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -44,10 +45,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -80,8 +79,6 @@ public class CostsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
         setContentView(R.layout.activity_costs);
 
         initRef();
@@ -209,7 +206,7 @@ public class CostsActivity extends AppCompatActivity {
         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
         textFab1 = (TextView) findViewById(R.id.textFab1);
         textFab2 = (TextView) findViewById(R.id.textFab2);
-        fadedBackground = (View) findViewById(R.id.fadedbackgroud);
+        fadedBackground = (View) findViewById(R.id.faded_background);
         buttonNext = (ImageButton) findViewById(R.id.button_next);
         buttonPrev = (ImageButton) findViewById(R.id.button_prev);
         buttonDeleteAll = (Button) findViewById(R.id.button_cost_delete_all);
@@ -292,10 +289,10 @@ public class CostsActivity extends AppCompatActivity {
         progressBar.setMax(total);
         progressBar.setProgress(common);
 
-        textCommon.setText(common + " грн");
-        textMk.setText(mk + " грн");
+        textCommon.setText(Utils.getIntWithSpace(common) + " грн");
+        textMk.setText(Utils.getIntWithSpace(mk) + " грн");
 
-        textTotal.setText(total + " ГРН");
+        textTotal.setText(Utils.getIntWithSpace(total) + " ГРН");
     }
 
 
@@ -414,25 +411,27 @@ public class CostsActivity extends AppCompatActivity {
         if (requestCode == Constants.REQUEST_CODE_CAMERA) {
             if (resultCode == RESULT_OK) {
 
-                InputStream stream = null;
-                try {
-                    stream = new FileInputStream(new File(pictureImagePath));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                // Meta data for image
+
+                Bitmap bitmap = BitmapFactory.decodeFile(pictureImagePath);//= imageView.getDrawingCache();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+                byte[] bytes = baos.toByteArray();
+
+                // Meta data for imageView
                 StorageMetadata metadata = new StorageMetadata.Builder()
-                        .setContentType("image/jpg")
-                        .setCustomMetadata(mTitle1, mTitle2)
+                        .setContentType("imageView/jpg")
+                        .setCustomMetadata("Title1", mTitle1)
+                        .setCustomMetadata("Title2", mTitle2)
+                        .setCustomMetadata("Uid", mAuth.getCurrentUser().getUid())
                         .build();
 
                 // name of file in Storage
-                final String filename = Utils.getCurrentTimeStamp() + ".jpg";
+                final String filename = Utils.getCurrentTimeStamp() + "_" + mAuth.getCurrentUser().getUid() + ".jpg";
 
                 UploadTask uploadTask = FirebaseStorage.getInstance()
                         .getReference(Constants.FIREBASE_STORAGE_COST)
                         .child(filename)
-                        .putStream(stream, metadata);
+                        .putBytes(bytes, metadata);
 
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -541,6 +540,5 @@ public class CostsActivity extends AppCompatActivity {
             return;
         }
         super.onBackPressed();
-        overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
     }
 }

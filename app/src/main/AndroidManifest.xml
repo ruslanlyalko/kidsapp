@@ -3,6 +3,10 @@
     package="com.example.android.kidsapp">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- Include following permission if you load images from Internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Include following permission if you want to cache images on SD card -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -14,6 +18,7 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +33,7 @@
             android:name=".UserActivity"
             android:label="@string/title_activity_user"
             android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
             <meta-data
@@ -38,6 +44,7 @@
             android:name=".ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
             android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -47,6 +54,7 @@
             android:name=".SignupActivity"
             android:label="@string/title_activity_signup"
             android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -56,6 +64,8 @@
             android:name=".ReportActivity"
             android:label="@string/title_activity_report"
             android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -65,6 +75,7 @@
             android:name=".CalendarActivity"
             android:label="@string/title_activity_calendar"
             android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -74,6 +85,7 @@
             android:name=".CostsActivity"
             android:label="@string/title_activity_cost"
             android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -83,6 +95,7 @@
             android:name=".NotActivity"
             android:label="@string/title_activity_notification"
             android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -92,6 +105,7 @@
             android:name=".SalaryActivity"
             android:label="@string/title_activity_salary"
             android:parentActivityName=".UserActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -101,12 +115,15 @@
             android:name=".DashboardActivity"
             android:label="@string/title_activity_dashboard"
             android:parentActivityName=".UserActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.UserActivity" />
         </activity>
-        <activity android:name=".ShowImageActivity">
+
+        <activity android:name=".ShowImageActivity"
+            android:theme="@style/AppTheme.BlackClose">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.CostsActivity" />
@@ -143,6 +160,7 @@
             android:name=".UserSettingsActivity"
             android:label="@string/action_settings"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Close"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -187,6 +205,16 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.kidsapp.NotItemActivity" />
+        </activity>
+
+        <activity
+            android:name=".SalaryEditActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Close"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.kidsapp.SalaryActivity" />
         </activity>
     </application>
 

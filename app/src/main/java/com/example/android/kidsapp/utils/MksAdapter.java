@@ -97,10 +97,12 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
         holder.buttonLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                CustomTabsIntent customTabsIntent = builder.build();
-                builder.setToolbarColor(ResourcesCompat.getColor(mContext.getResources(), R.color.colorPrimary, null));
-                customTabsIntent.launchUrl(mContext, Uri.parse(mk.getLink()));
+                if (mk.getLink() != null && !mk.getLink().isEmpty()) {
+                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                    CustomTabsIntent customTabsIntent = builder.build();
+                    builder.setToolbarColor(ResourcesCompat.getColor(mContext.getResources(), R.color.colorPrimary, null));
+                    customTabsIntent.launchUrl(mContext, Uri.parse(mk.getLink()));
+                }
             }
         });
 

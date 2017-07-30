@@ -28,8 +28,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();

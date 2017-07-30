@@ -112,7 +112,7 @@
     <string name="dialog_delete_message">Після видалення відновити звіт буде неможливо</string>
 
 
-    <string name="title_activity_dashboard">Адмін панель</string>
+    <string name="title_activity_dashboard">"Адмін панель (%1$s ГРН)"</string>
     <string name="hint_date">Дата</string>
     <string name="mk_done">Проведено Майстер Класів: </string>
     <string name="month_prev"><![CDATA[ < ]]></string>
@@ -140,21 +140,23 @@
     <string name="dialog_about_message">KIDS APP  \nv </string>
     <string name="text_copied">Скопійовано в буфер обміну</string>
     <string name="dialog_report_save_before_close_title">Зберегти зміни</string>
-    <string name="dialog_report_save_before_close_text">У звіті є зміни. Натисніть зберегти щоб не втратити їх</string>
-    <string name="title_activity_salary">Зарплата</string>
+    <string name="dialog_report_save_before_close_text">Ви хочете зберегти зміни у звіті?</string>
+    <string name="title_activity_salary">Заробітна плата</string>
     <string name="text_mk">МК</string>
     <string name="text_stavka">Ставка</string>
-    <string name="text_percent">Проценти</string>
+    <string name="text_percent">Відсотки</string>
     <string name="text_oborot">Оборот</string>
     <string name="text_cost_total1">Витрати</string>
     <string name="text_salary">Зарплата</string>
     <string name="text_salary_detail_title">Деталі</string>
+    <string name="text_salary_condition_title">Умови</string>
 
     <string name="text_salary_detail_stavka">"Ставка:"</string>
-    <string name="text_salary_detail_percent">"Процент від обороту:"</string>
+    <string name="text_salary_detail_percent">"Відсоток від обороту:"</string>
+    <string name="text_salary_detail_mk1">"МК:"</string>
+    <string name="text_salary_detail_bd_children">МК за одну дитину:</string>
     <string name="text_salary_detail_art">"Арт МК:"</string>
-    <string name="text_salary_detail_mk1">"МК на ДН:"</string>
-    <string name="text_salary_detail_mk2">"МК на ДН(>10 дітей):"</string>
+
     <string name="dialog_salary_title">Введіть значення</string>
     <string name="hint_comment">Добавити Коментар</string>
     <string name="action_clear_report">Очистити</string>
@@ -218,5 +220,28 @@
     </string>
     <string name="title_activity_notification_item">Повідомлення</string>
     <string name="hint_short_description">Короткий опис</string>
+    <string name="hint_password_one_more">Пароль (ще раз)</string>
+    <string name="toast_different_password">Паролі не співпадають</string>
+    <string name="text_password_change">Зміна паролю</string>
+    <string name="action_change_password">ЗМІНИТИ ПАРОЛЬ</string>
+    <string name="text_user_details">Основні дані</string>
+    <string name="toast_nothing_to_change">Немає змін в даних</string>
+    <string name="button_link">Скачати останню версію</string>
+    <string name="button_choose">ВИБРАТИ</string>
+
+
+
+
+    <string name="hrn_percent">"%1$s відсотків"</string>
+    <string name="hrn_child">"%1$s грн/дитина"</string>
+    <string name="hrn_day">"%1$s грн/день"</string>
+    <string name="hrn">"%1$s грн"</string>
+    <string name="HRN">"%1$s ГРН"</string>
+    <string name="income">"%1$s (%2$s) ГРН"</string>
+    <string name="action_save_changes">ЗБЕРЕГТИ ЗМІНИ</string>
+    <string name="no">НІ</string>
+    <string name="text_show_details">Показати детальніше</string>
+    <string name="text_salary_switch">Використовувати спеціальні умови</string>
+
 
 </resources>

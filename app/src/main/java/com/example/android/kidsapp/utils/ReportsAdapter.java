@@ -1,9 +1,8 @@
 package com.example.android.kidsapp.utils;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +43,7 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
             progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
             buttonMk = (ImageButton) view.findViewById(R.id.button_user);
             buttonEdit = (ImageButton) view.findViewById(R.id.button_edit);
-            buttonDelete = (ImageButton) view.findViewById(R.id.button_delete);
+            buttonDelete = (ImageButton) view.findViewById(R.id.button_comment);
 
         }
     }
@@ -67,13 +66,15 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
     public void onBindViewHolder(final ReportsAdapter.MyViewHolder holder, final int position) {
         final Report report = reportList.get(position);
 
+        final boolean commentsExist = report.getComment() != null & !report.getComment().isEmpty();
+
         String mkName = "";
         if (report.getTotalMk() > 0)
             mkName = " (МК)";
         if (report.getMkName() != null && !report.getMkName().isEmpty())
             mkName = " (" + report.getMkName() + ")";
 
-        holder.textUserName.setText(report.userName + mkName);
+        holder.textUserName.setText(report.userName + mkName + (commentsExist ? "*" : ""));
         holder.textTotal.setText(report.total + " ГРН");
         holder.textRoomTotal.setText(report.totalRoom + " грн");
         holder.textBdayTotal.setText(report.totalBday + " грн");
@@ -81,7 +82,16 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
 
         holder.progressBar.setMax(report.total);
         holder.progressBar.setProgress(report.totalRoom);
+        holder.progressBar.setSecondaryProgress(report.totalRoom + report.totalBday);
+        holder.progressBar.setSecondaryProgressTintMode(PorterDuff.Mode.OVERLAY);
 
+        /*holder.swipeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (commentsExist)
+                    Toast.makeText(mContext, report.getComment(), Toast.LENGTH_SHORT).show();
+            }
+        });*/
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
         holder.swipeLayout.setRightSwipeEnabled(true);
         holder.swipeLayout.setBottomSwipeEnabled(false);
@@ -96,7 +106,7 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
                     intent.putExtra(Constants.EXTRA_ITEM_ID, report.getMkRef());
 
                     mContext.startActivity(intent);
-                }else{
+                } else {
                     Toast.makeText(mContext, R.string.toast_mk_not_set, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -113,7 +123,7 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
                     intent.putExtra(Constants.EXTRA_UID, report.userId);
                     intent.putExtra(Constants.EXTRA_USER_NAME, report.userName);
 
-                    ((CalendarActivity)mContext).startActivityForResult(intent,0);
+                    ((CalendarActivity) mContext).startActivityForResult(intent, 0);
                 } else {
                     Toast.makeText(mContext, R.string.toast_edit_impossible, Toast.LENGTH_SHORT).show();
                 }
@@ -124,26 +134,8 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
         holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (Utils.isAdmin() || Utils.todayOrFuture(report.getDate())) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle(R.string.dialog_delete_title)
-                            .setMessage(R.string.dialog_delete_message)
-                            .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    removeReport(report, position);
-                                }
-
-                            })
-                            .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
-                                }
-                            })
-                            .show();
-                }else{
-                    Toast.makeText(mContext, R.string.toast_delete_impossible, Toast.LENGTH_SHORT).show();
-                }
+                if (commentsExist)
+                    Toast.makeText(mContext, report.getComment(), Toast.LENGTH_SHORT).show();
             }
         });
 

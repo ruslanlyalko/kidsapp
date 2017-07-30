@@ -4,7 +4,8 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -25,6 +27,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -51,6 +54,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -104,8 +108,6 @@ public class ReportActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
         setContentView(R.layout.activity_report);
 
         initRef();
@@ -137,7 +139,6 @@ public class ReportActivity extends AppCompatActivity {
 
         }
 
-
         initDatePicker();
 
         initSwipesAndExpandPanels();
@@ -167,7 +168,6 @@ public class ReportActivity extends AppCompatActivity {
                     intent.putExtra(Constants.EXTRA_USER_NAME, mReport.getUserName());
                     intent.putExtra(Constants.EXTRA_FOLDER, Constants.FIREBASE_STORAGE_REPORT);
                     startActivity(intent);
-
                 } else {
                     // start camera to take photo
                     startCamera();
@@ -222,31 +222,32 @@ public class ReportActivity extends AppCompatActivity {
                 showProgressBarUpload();
                 isChanged = true;
 
-                InputStream stream = null;
-                try {
-                    stream = new FileInputStream(new File(pictureImagePath));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                // Meta data for image
+                Bitmap bitmap = BitmapFactory.decodeFile(pictureImagePath);//= imageView.getDrawingCache();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+                byte[] bytes = baos.toByteArray();
+
+                // Meta data for imageView
                 StorageMetadata metadata = new StorageMetadata.Builder()
-                        .setContentType("image/jpg")
-                        .setCustomMetadata(mReport.getUserName(), mReport.getDate())
+                        .setContentType("imageView/jpg")
+                        .setCustomMetadata("Date", mReport.getDate())
+                        .setCustomMetadata("UserName", mReport.getUserName())
                         .build();
 
                 // name of file in Storage
-                final String filename = mReport.getUserId() + "_" + Utils.getCurrentTimeStamp() + ".jpg";
+                final String filename = Utils.getCurrentTimeStamp() + "_" + mReport.getUserId() + ".jpg";
 
                 UploadTask uploadTask = FirebaseStorage.getInstance()
                         .getReference(Constants.FIREBASE_STORAGE_REPORT)
                         .child(filename)
-                        .putStream(stream, metadata);
+                        .putBytes(bytes, metadata);
 
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         //    addCost(mTitle1, mTitle2, mPrice, filename);
-                        mReport.imageUri = filename;
+
+                        mReport.imageUri = filename;//taskSnapshot.getDownloadUrl().toString();//filename;
                         hideProgressBarUpload();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -1177,7 +1178,7 @@ public class ReportActivity extends AppCompatActivity {
 
         mReport.totalRoom = mReport.r60 * 60 + mReport.r30 * 30 + mReport.r20 * 20 + mReport.r10 * 10;
 
-        String total = mReport.totalRoom + " ГРН";
+        String total = Utils.getIntWithSpace(mReport.totalRoom) + " ГРН";
         textRoomTotal.setText(total);
 
         updateTitle();
@@ -1206,7 +1207,7 @@ public class ReportActivity extends AppCompatActivity {
 
         mReport.totalBday = mReport.b50 * 50 + mReport.b10 * 10 + mReport.b30 * 30;
 
-        String total = (mReport.totalBday) + " ГРН";
+        String total = Utils.getIntWithSpace(mReport.totalBday) + " ГРН";
         textBdayTotal.setText(total);
 
         updateTitle();
@@ -1235,7 +1236,7 @@ public class ReportActivity extends AppCompatActivity {
             inputMk2.setText(String.valueOf(mReport.mk2));
 
 
-        String total = mReport.totalMk + " ГРН";
+        String total = Utils.getIntWithSpace(mReport.totalMk) + " ГРН";
         textMkTotal.setText(total);
         updateTitle();
     }
@@ -1246,7 +1247,7 @@ public class ReportActivity extends AppCompatActivity {
     void updateTitle() {
 
         mReport.total = (mReport.totalRoom + mReport.totalBday + mReport.totalMk);
-        setTitle(getResources().getString(R.string.title_activity_report) + " (" + mReport.total + " ГРН)");
+        setTitle(getResources().getString(R.string.title_activity_report) + " (" + Utils.getIntWithSpace(mReport.total) + " ГРН)");
         isChanged = true;
     }
 
@@ -1402,7 +1403,7 @@ public class ReportActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
             builder.setTitle(R.string.dialog_report_save_before_close_title)
                     .setMessage(R.string.dialog_report_save_before_close_text)
-                    .setPositiveButton("ЗБЕРЕГТИ ЗМІНИ", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.action_save, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
                             saveReportToDB();
@@ -1411,7 +1412,7 @@ public class ReportActivity extends AppCompatActivity {
                         }
 
                     })
-                    .setNegativeButton("НЕ ЗБЕРІГАТИ", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // do nothing
                             isChanged = false;
@@ -1422,7 +1423,6 @@ public class ReportActivity extends AppCompatActivity {
         } else {
 
             super.onBackPressed();
-            overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
         }
     }
 }

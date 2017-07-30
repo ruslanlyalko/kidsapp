@@ -45,7 +45,7 @@
                     android:src="@drawable/ic_user_dark" />
 
                 <ImageButton
-                    android:id="@+id/button_delete"
+                    android:id="@+id/button_comment"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -105,6 +105,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginBottom="-4dp"
                         android:layout_marginTop="16dp"
                         android:text="Всього"
                         android:textColor="@color/colorBlack" />
@@ -121,9 +122,10 @@
                         android:id="@+id/progress_bar"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:max="20"
-                        android:progress="5" />
+                        android:layout_height="@dimen/progress_height"
+                        android:layout_marginBottom="@dimen/progress_margin"
+                        android:layout_marginTop="@dimen/progress_margin"
+                        android:progressDrawable="@drawable/progress" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

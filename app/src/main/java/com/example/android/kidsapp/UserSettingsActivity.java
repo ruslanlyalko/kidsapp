@@ -1,16 +1,24 @@
 package com.example.android.kidsapp;
 
 import android.app.DatePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.kidsapp.utils.Constants;
@@ -36,22 +44,23 @@ import java.util.Map;
 
 public class UserSettingsActivity extends AppCompatActivity {
 
-    EditText inputName, inputEmail, inputPhone, inputBDay, inputCard, inputFirstDate, inputTime;
-    LinearLayout panelFirstDate;
+    EditText inputEmail, inputPhone, inputBDay, inputCard, inputFirstDate, inputPassword1, inputPassword2;
+    TextView textName;
+    LinearLayout panelFirstDate, panelPassword;
+    Button buttonChangePassword;
 
     private Calendar mBirthDay = Calendar.getInstance();
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-
-
-    String mUid;
+    private String mNumber = "";
+    private String mUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.fadein, R.anim.nothing);
         setContentView(R.layout.activity_user_settings);
-
         initRef();
 
 
@@ -62,7 +71,19 @@ public class UserSettingsActivity extends AppCompatActivity {
 
         boolean isCurrentUser = mUid.equals(mAuth.getCurrentUser().getUid());
         // user can change only they own emails
+
         inputEmail.setEnabled(isCurrentUser);
+        inputPassword1.setEnabled(isCurrentUser);
+        inputPassword2.setEnabled(isCurrentUser);
+        panelPassword.setEnabled(isCurrentUser);
+        buttonChangePassword.setEnabled(isCurrentUser);
+        buttonChangePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changePassword();
+            }
+        });
+
         panelFirstDate.setVisibility(Utils.isAdmin() && !isCurrentUser ? View.VISIBLE : View.GONE);
 
         final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -93,7 +114,40 @@ public class UserSettingsActivity extends AppCompatActivity {
         initCurrentUserData();
     }
 
-    private String mNumber = "";
+    private void changePassword() {
+        final String password1 = inputPassword1.getText().toString().trim();
+        final String password2 = inputPassword2.getText().toString().trim();
+        inputPassword1.setError(null);
+        inputPassword2.setError(null);
+
+        if (password1.length() <= 0) {
+            return;
+        }
+
+        if (password1.length() < 6) {
+            inputPassword1.setError(getString(R.string.toast_minimum_password));
+            inputPassword1.requestFocus();
+            return;
+        }
+
+        if (!password1.equals(password2)) {
+            inputPassword2.setError(getString(R.string.toast_different_password));
+            inputPassword2.requestFocus();
+            return;
+        }
+
+        mAuth.getCurrentUser().updatePassword(password1);
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("userPassword", password1);
+        mDatabase.getReference(Constants.FIREBASE_REF_USERS).child(mUid).updateChildren(childUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(UserSettingsActivity.this, R.string.toast_data_updated, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     private TextWatcher mWatcher = new TextWatcher() {
         @Override
@@ -127,55 +181,56 @@ public class UserSettingsActivity extends AppCompatActivity {
 
     private void initRef() {
 
+        panelPassword = (LinearLayout) findViewById(R.id.panel_password);
+        buttonChangePassword = (Button) findViewById(R.id.button_change_password);
         panelFirstDate = (LinearLayout) findViewById(R.id.panel_first_date);
-        inputTime = (EditText) findViewById(R.id.text_time);
+        textName = (TextView) findViewById(R.id.text_name);
         inputFirstDate = (EditText) findViewById(R.id.text_first_date);
-        inputName = (EditText) findViewById(R.id.text_name);
         inputPhone = (EditText) findViewById(R.id.text_phone);
         inputEmail = (EditText) findViewById(R.id.text_email);
         inputBDay = (EditText) findViewById(R.id.text_bday);
         inputCard = (EditText) findViewById(R.id.text_card);
+        inputPassword1 = (EditText) findViewById(R.id.text_password1);
+        inputPassword2 = (EditText) findViewById(R.id.text_password2);
 
     }
 
     private void saveChanges() {
 
-        final String name = inputName.getText().toString().trim();
         final String phone = inputPhone.getText().toString().trim();
         final String email = inputEmail.getText().toString().trim();
-        final String bday = inputBDay.getText().toString().trim();
+        final String birthday = inputBDay.getText().toString().trim();
         final String card = inputCard.getText().toString().trim();
 
-        final String tname = inputName.getTag().toString().trim();
-        final String tphone = inputPhone.getTag().toString().trim();
-        final String temail = inputEmail.getTag().toString().trim();
-        final String tbday = inputBDay.getTag().toString().trim();
-        final String tcard = inputCard.getTag().toString().trim();
+        final String tPhone = inputPhone.getTag().toString().trim();
+        final String tEmail = inputEmail.getTag().toString().trim();
+        final String tBirthday = inputBDay.getTag().toString().trim();
+        final String tCard = inputCard.getTag().toString().trim();
+
 
         Map<String, Object> childUpdates = new HashMap<>();
 
         boolean needUpdate = false;
-        if (!name.equals(tname)) {
-            childUpdates.put("userName", name);
-            needUpdate = true;
-        }
-        if (!phone.equals(tphone)) {
+
+
+        if (!phone.equals(tPhone)) {
             childUpdates.put("userPhone", phone);
             needUpdate = true;
         }
-        if (!bday.equals(tbday)) {
-            childUpdates.put("userBDay", bday);
+        if (!birthday.equals(tBirthday)) {
+            childUpdates.put("userBDay", birthday);
             needUpdate = true;
         }
-        if (!card.equals(tcard)) {
+        if (!card.equals(tCard)) {
             childUpdates.put("userCard", card);
             needUpdate = true;
         }
-        if (!email.equals(temail)) {
+        if (!email.equals(tEmail)) {
             childUpdates.put("userEmail", email);
             mAuth.getCurrentUser().updateEmail(email);
             needUpdate = true;
         }
+
 
         if (needUpdate)
             mDatabase.getReference(Constants.FIREBASE_REF_USERS).child(mUid).updateChildren(childUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -184,7 +239,8 @@ public class UserSettingsActivity extends AppCompatActivity {
                     Toast.makeText(UserSettingsActivity.this, R.string.toast_data_updated, Toast.LENGTH_SHORT).show();
                 }
             });
-
+        else
+            Toast.makeText(UserSettingsActivity.this, R.string.toast_nothing_to_change, Toast.LENGTH_SHORT).show();
     }
 
     private void initCurrentUserData() {
@@ -197,8 +253,7 @@ public class UserSettingsActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
 
-                inputName.setText(user.getUserName());
-                inputName.setTag(user.getUserName());
+                textName.setText(user.getUserName());
 
                 inputPhone.setText(user.getUserPhone());
                 inputPhone.setTag(user.getUserPhone());
@@ -213,7 +268,6 @@ public class UserSettingsActivity extends AppCompatActivity {
                 inputCard.setTag(user.getUserCard());
 
                 inputFirstDate.setText(user.getUserFirstDate());
-                inputTime.setText(user.getUserTimeStart() + " - " + user.getUserTimeEnd());
 
 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -234,6 +288,14 @@ public class UserSettingsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_edit, menu);
+        return true;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -241,6 +303,10 @@ public class UserSettingsActivity extends AppCompatActivity {
 
         if (id == android.R.id.home) {
             onBackPressed();
+            return true;
+        }
+        if (id == R.id.action_save) {
+            saveChanges();
             return true;
         }
 
@@ -251,6 +317,7 @@ public class UserSettingsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        saveChanges();
+        overridePendingTransition(R.anim.nothing, R.anim.fadeout);
     }
+
 }

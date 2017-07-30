@@ -42,7 +42,7 @@ public class MkPlanAdapter extends RecyclerView.Adapter<MkPlanAdapter.MyViewHold
             progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
             buttonMK = (ImageButton) view.findViewById(R.id.button_user);
             buttonUser = (ImageButton) view.findViewById(R.id.button_edit);
-            buttonDelete = (ImageButton) view.findViewById(R.id.button_delete);
+            buttonDelete = (ImageButton) view.findViewById(R.id.button_comment);
 
         }
     }

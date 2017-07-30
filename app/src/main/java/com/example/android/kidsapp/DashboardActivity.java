@@ -1,6 +1,5 @@
 package com.example.android.kidsapp;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -42,7 +41,7 @@ public class DashboardActivity extends AppCompatActivity {
     EditText editComment;
 
     private List<Cost> costList = new ArrayList<>();
-    ProgressBar progressBar, progressBarCost;
+    ProgressBar progressBar, progressBarCost, progressBarSalary;
     List<Report> reportList = new ArrayList<>();
 
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -54,13 +53,12 @@ public class DashboardActivity extends AppCompatActivity {
     private int incomeTotal;
     private int costTotal;
     private int salaryTotal;
+    private String mComment;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
         setContentView(R.layout.activity_dashboard);
 
         initRef();
@@ -98,6 +96,7 @@ public class DashboardActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
 
+        progressBarSalary = (ProgressBar) findViewById(R.id.progress_bar_salary);
         progressBarCost = (ProgressBar) findViewById(R.id.progress_bar_cost);
         textCostTotal = (TextView) findViewById(R.id.text_cost_total);
         textCostCommon = (TextView) findViewById(R.id.text_cost_common);
@@ -166,7 +165,7 @@ public class DashboardActivity extends AppCompatActivity {
     private void loadReports(String yearStr, String monthStr) {
 
         reportList.clear();
-        calcOborot();
+        calcIncome();
         mDatabase.getReference(Constants.FIREBASE_REF_REPORTS)
                 .child(yearStr)
                 .child(monthStr)
@@ -179,7 +178,7 @@ public class DashboardActivity extends AppCompatActivity {
                             Report report = ds.getValue(Report.class);
                             if (report != null) {
                                 reportList.add(report);
-                                calcOborot();
+                                calcIncome();
                             }
                         }
                     }
@@ -206,7 +205,7 @@ public class DashboardActivity extends AppCompatActivity {
                 });
     }
 
-    private void calcOborot() {
+    private void calcIncome() {
 
         int room = 0;
         int bday = 0;
@@ -220,12 +219,19 @@ public class DashboardActivity extends AppCompatActivity {
 
         incomeTotal = room + bday + mk;
 
-        textRoom.setText(room + " грн");
-        textBday.setText(bday + " грн");
-        textMk.setText(mk + " грн");
-        textTotal.setText(incomeTotal + " ГРН (" + (incomeTotal * 80 / 100) + ")");
+        textRoom.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(room)));
+        textBday.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(bday)));
+        textMk.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(mk)));
 
-        progressBar.setProgress(incomeTotal);
+        String income100Str = Utils.getIntWithSpace(incomeTotal);
+
+        String income80Str = Utils.getIntWithSpace(incomeTotal * 80 / 100);
+
+        textTotal.setText(String.format(getString(R.string.income), income100Str, income80Str));
+
+        progressBar.setProgress(room);
+        progressBar.setSecondaryProgress(room+bday);
+        progressBar.setMax(incomeTotal);
         updateNetIncome();
     }
 
@@ -281,11 +287,12 @@ public class DashboardActivity extends AppCompatActivity {
 
         progressBarCost.setMax(costTotal);
         progressBarCost.setProgress(common);
+        progressBarCost.setSecondaryProgress(common+mk);
 
-        textCostCommon.setText(common + " грн");
-        textCostMk.setText(mk + " грн");
+        textCostCommon.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(common)));
+        textCostMk.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(mk)));
 
-        textCostTotal.setText(costTotal + " ГРН");
+        textCostTotal.setText(String.format(getString(R.string.HRN), Utils.getIntWithSpace(costTotal)));
         updateNetIncome();
     }
 
@@ -330,41 +337,72 @@ public class DashboardActivity extends AppCompatActivity {
 
         String birthdays = "";
         salaryTotal = 0;
-        int percent = 0;
+
         int stavka = 0;
-        int mk = 0;
+
+        int percent = 0;
+
+        int mkBirthday = 0;
+        int mkBirthdayCount = 0;
+        int mkBirthdayChildren = 0;
+
+        int mkArt = 0;
+        int mkArtCount = 0;
+        int mkArtChildren = 0;
+
 
         for (User user : userList) {
-            int total1 = 0;
+            int percentTotal = 0;
+
             for (Report rep : reportList) {
 
-                if (rep.userName.equals(user.userName)) {
-                    if (Utils.future(rep.getDate())) continue;
-                    //stavka
-                    stavka += user.getUserStavka();
-                    //percent
-                    total1 += rep.total;
-                    // Birthdays Mk
-                    mk += rep.bMk * user.getUserMk();
-                    // Art Mk
-                    if (rep.mkMy)
-                        mk += (rep.mk1 + rep.mk2) * user.getUserArt();
+                //required only for Dashboard calc salary
+                if(!rep.getUserId().equals(user.getUserId())) continue;
+
+                if (Utils.future(rep.getDate())) continue;
+
+                // stavka
+                stavka += user.getUserStavka();
+
+                // percent
+                percentTotal += rep.total;
+
+                //Birthdays Mk
+                mkBirthday += rep.bMk * user.getMkBd();
+                mkBirthday += rep.b30 * user.getMkBdChild();
+
+                mkBirthdayCount += rep.bMk;
+                mkBirthdayChildren += rep.b30;
+
+                // Art MK
+                if (rep.mkMy) {
+                    mkArt += (rep.mk1 + rep.mk2) * user.getMkArtChild();
+
+                    if (rep.mk1 != 0 || rep.mk2 != 0)
+                        mkArtCount += 1;
+
+                    mkArtChildren += rep.mk1;
+                    mkArtChildren += rep.mk2;
                 }
             }
-            percent += total1 * user.getUserPercent() / 100;
+            percent += (percentTotal * user.getUserPercent() / 100);
 
-            if (!user.userIsAdmin)
-                birthdays += user.getUserName() + " - " + user.userBDay + "\n";
+
+            if (!user.getUserIsAdmin())
+                birthdays += user.getUserBDay() + " - " + user.getUserName() + "\n";
         }
 
         textBirthdays.setText(birthdays);
 
-        salaryTotal += stavka + percent + mk;
-        textSalaryStavka.setText(stavka + " грн");
-        textSalaryPercent.setText(percent + " грн");
-        textSalaryMk.setText(mk + " грн");
+        salaryTotal += stavka + percent + mkBirthday + mkArt;
+        textSalaryStavka.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(stavka)));
+        textSalaryPercent.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(percent)));
+        textSalaryMk.setText(String.format(getString(R.string.hrn), Utils.getIntWithSpace(mkBirthday+ mkArt)));
 
-        textSalaryTotal.setText(salaryTotal + " ГРН");
+        textSalaryTotal.setText(String.format(getString(R.string.HRN), Utils.getIntWithSpace(salaryTotal)));
+        progressBarSalary.setProgress(stavka);
+        progressBarSalary.setSecondaryProgress(stavka+percent);
+        progressBarSalary.setMax(salaryTotal);
 
         updateNetIncome();
     }
@@ -372,20 +410,26 @@ public class DashboardActivity extends AppCompatActivity {
     private void updateNetIncome() {
 
         netIncome = (int) (incomeTotal * 0.8) - costTotal - salaryTotal;
-        setTitle(getString(R.string.title_activity_dashboard) + " (" + netIncome + " ГРН)");
+        setTitle(String.format(getString(R.string.title_activity_dashboard), Utils.getIntWithSpace(netIncome)));
     }
 
 
     private void loadComment(String yearStr, String monthStr) {
-        editComment.setText("");
+        //editComment.setText("");
 
         mDatabase.getReference(Constants.FIREBASE_REF_COMMENTS)
                 .child(yearStr)
                 .child(monthStr).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null && !dataSnapshot.getValue().toString().isEmpty())
-                    editComment.setText(dataSnapshot.getValue().toString());
+                if (dataSnapshot.getValue() != null) {
+                    String s = dataSnapshot.getValue().toString();
+                    mComment = s;
+                    editComment.setText(s);
+                } else {
+                    mComment = "";
+                    editComment.setText("");
+                }
             }
 
             @Override
@@ -396,9 +440,11 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void saveCommentToDB(String s) {
-        mDatabase.getReference(Constants.FIREBASE_REF_COMMENTS)
-                .child(yearStr)
-                .child(monthStr).setValue(s);
+
+        if (!s.equals(mComment))
+            mDatabase.getReference(Constants.FIREBASE_REF_COMMENTS)
+                    .child(yearStr)
+                    .child(monthStr).setValue(s);
     }
 
 
@@ -406,7 +452,7 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        calcOborot();
+        calcIncome();
         calcCostTotal();
     }
 
@@ -428,6 +474,5 @@ public class DashboardActivity extends AppCompatActivity {
         saveCommentToDB(editComment.getText().toString());
 
         super.onBackPressed();
-        overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
     }
 }

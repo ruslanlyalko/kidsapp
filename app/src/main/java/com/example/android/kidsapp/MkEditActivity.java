@@ -57,6 +57,7 @@ public class MkEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.fadein, R.anim.nothing);
         setContentView(R.layout.activity_mk_edit);
 
         Bundle bundle = getIntent().getExtras();
@@ -127,7 +128,7 @@ public class MkEditActivity extends AppCompatActivity {
             needToSave = true;
             progressBar.setVisibility(View.VISIBLE);
 
-            //upload to image view
+            //upload to imageView view
             Uri selectedImage = data.getData();
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageURI(selectedImage);
@@ -146,6 +147,7 @@ public class MkEditActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                 }
             });
+
 
         }
     }
@@ -298,6 +300,8 @@ public class MkEditActivity extends AppCompatActivity {
 
         } else {
             super.onBackPressed();
+            overridePendingTransition(R.anim.nothing, R.anim.fadeout);
+
         }
 
     }

@@ -1,15 +1,24 @@
 package com.example.android.kidsapp;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +43,8 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
 
     Button buttonUser, buttonEvents, buttonReport, buttonCalendar, buttonMk, buttonVyt;
-    Button buttonSwipe, buttonAbout, buttonFB, buttonNotebook, buttonWeather;
-    TextView textSnoopy, textLink, textLinkDetails;
+    Button buttonSwipe, buttonAbout, buttonFB, buttonLink, buttonWeather;
+    TextView textAppName, textLink, textLinkDetails;
     SwipeLayout swipeLayout;
 
     boolean mDoubleBackToExitPressedOnce = false;
@@ -54,13 +63,52 @@ public class MainActivity extends AppCompatActivity {
     private String mLinkText;
     private String mLinkFb;
     private String mLatestVersion;
+    private String mAboutText = "";
+
+    // swipe
+    private float x1, x2, y1, y2;
+    static final int MIN_DISTANCE = 150;
+
+    public static int getStatusBarHeight(Activity context) {
+        int result = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
+/*
+        Context context =this;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        {
+            Window w = getWindow();
+            w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //status bar height
+            int statusBarHeight = getStatusBarHeight(this);
 
+            View view = new View(context);
+            view.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            view.getLayoutParams().height = statusBarHeight;
+            ((ViewGroup) w.getDecorView()).addView(view);
+            view.setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        }*/
+       /* Window window = getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorPrimaryDark));
+*/
         initRef();
 
         initRemoteConfig();
@@ -241,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+                intent.putExtra(Constants.EXTRA_ABOUT, mAboutText);
                 startActivity(intent);
             }
         });
@@ -252,11 +301,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        buttonNotebook.setOnClickListener(new View.OnClickListener() {
+        buttonLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                // todo private notebook
+                openBrowser(mLink);
             }
         });
 
@@ -282,7 +330,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User user = dataSnapshot.getValue(User.class);
-                    //todo user
                     Utils.setIsAdmin(user.getUserIsAdmin());
                 }
 
@@ -296,6 +343,21 @@ public class MainActivity extends AppCompatActivity {
         } else {
             onDestroy();
         }
+
+        mDatabase.getReference(Constants.FIREBASE_REF_ABOUT).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null)
+                    mAboutText = dataSnapshot.getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
 
@@ -309,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
      * Set references to Buttons etc
      */
     private void initRef() {
-        textSnoopy = (TextView) findViewById(R.id.text_snoopy);
+        textAppName = (TextView) findViewById(R.id.text_app_name);
         textLink = (TextView) findViewById(R.id.text_link);
         textLinkDetails = (TextView) findViewById(R.id.text_link_details);
 
@@ -322,12 +384,53 @@ public class MainActivity extends AppCompatActivity {
 
         buttonSwipe = (Button) findViewById(R.id.button_swipe);
         buttonAbout = (Button) findViewById(R.id.button_about);
-        buttonNotebook = (Button) findViewById(R.id.button_notebook);
+        buttonLink = (Button) findViewById(R.id.button_link);
         buttonFB = (Button) findViewById(R.id.button_fb);
         buttonWeather = (Button) findViewById(R.id.button_weather);
         swipeLayout = (SwipeLayout) findViewById(R.id.swipe_layout);
 
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                y1 = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                float deltaX = x2 - x1;
+                if (deltaX > MIN_DISTANCE) {
+                    // left2right
+                    Intent intent = new Intent(MainActivity.this, UserActivity.class);
+                    startActivity(intent);
+                    break;
+                } else if (deltaX < (0 - MIN_DISTANCE)) {
+                    // right2left
+                    Intent intent = new Intent(MainActivity.this, NotActivity.class);
+                    startActivity(intent);
+                    break;
+                } else {
+                    // consider as something else - a screen tap for example
+
+                }
+                y2 = event.getY();
+                float deltaY = y2 - y1;
+                if (deltaY > MIN_DISTANCE) {
+                    // top2bottom
+                    swipeLayout.close();
+                } else if (deltaY < (0 - MIN_DISTANCE)) {
+                    // bottom2top
+                    swipeLayout.open();
+                } else {
+                    // consider as something else - a screen tap for example
+                }
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
+
 
     @Override
     protected void onStart() {

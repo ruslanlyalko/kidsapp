@@ -53,7 +53,7 @@ public class CostsAdapter extends RecyclerView.Adapter<CostsAdapter.MyViewHolder
 
             swipeLayout = (SwipeLayout) view.findViewById(R.id.swipe_layout);
 
-            buttonDelete = (ImageButton) view.findViewById(R.id.button_delete);
+            buttonDelete = (ImageButton) view.findViewById(R.id.button_comment);
             linearUser = (LinearLayout) view.findViewById(R.id.linear_user);
             linearMenu = (LinearLayout) view.findViewById(R.id.swipe_menu);
             imageView = (ImageView) view.findViewById(R.id.image_view);
