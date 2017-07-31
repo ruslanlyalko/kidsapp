@@ -25,6 +25,10 @@
             android:layout_marginTop="-50dp"
             android:visibility="gone" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorDividersDark" />
 
         <EditText
             android:id="@+id/edit_title1"
@@ -36,7 +40,6 @@
             android:maxLength="20"
             android:padding="@dimen/text_margin"
             android:textSize="@dimen/text_name_size" />
-
 
         <TextView
             android:id="@+id/text_title2"
@@ -50,21 +53,26 @@
             android:textSize="@dimen/text_subtitle_size" />
 
         <EditText
-            android:id="@+id/edit_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/transparent"
-            android:hint="@string/hint_description"
-            android:inputType="textCapSentences|textMultiLine"
-            android:padding="@dimen/text_margin" />
-
-        <EditText
             android:id="@+id/edit_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/hint_link"
             android:inputType="textUri"
+            android:padding="@dimen/text_margin" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorDividersDark" />
+
+        <EditText
+            android:id="@+id/edit_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:hint="@string/hint_description"
+            android:inputType="textCapSentences|textMultiLine"
             android:padding="@dimen/text_margin" />
 
 

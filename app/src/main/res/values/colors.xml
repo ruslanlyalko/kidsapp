@@ -10,6 +10,7 @@
     <color name="colorBgGray">#f4f4f4</color>
     <color name="colorGradient">#fafafa</color>
     <color name="colorDividers">#1F000000</color>
+    <color name="colorDividersDark">#3C000000</color>
     <color name="album_title">#4c4c4c</color>
 
     <color name="colorWhite">#FFFFFF</color>
