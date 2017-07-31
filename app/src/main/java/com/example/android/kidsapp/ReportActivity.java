@@ -1486,7 +1486,7 @@ public class ReportActivity extends AppCompatActivity {
                         }
 
                     })
-                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.action_no, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // do nothing
                             isChanged = false;

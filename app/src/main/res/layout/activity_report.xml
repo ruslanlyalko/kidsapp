@@ -626,7 +626,7 @@
                                     android:background="?android:attr/selectableItemBackground"
                                     android:paddingRight="8dp"
                                     android:paddingStart="8dp"
-                                    android:text="@string/button_choose"
+                                    android:text="@string/action_choose"
                                     android:textColor="@color/colorAccent" />
                             </LinearLayout>
 

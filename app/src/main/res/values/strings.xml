@@ -227,7 +227,6 @@
     <string name="text_user_details">Основні дані</string>
     <string name="toast_nothing_to_change">Немає змін в даних</string>
     <string name="button_link">Скачати останню версію</string>
-    <string name="button_choose">ВИБРАТИ</string>
 
 
 
@@ -238,10 +237,19 @@
     <string name="hrn">"%1$s грн"</string>
     <string name="HRN">"%1$s ГРН"</string>
     <string name="income">"%1$s (%2$s) ГРН"</string>
-    <string name="action_save_changes">ЗБЕРЕГТИ ЗМІНИ</string>
-    <string name="no">НІ</string>
     <string name="text_show_details">Показати детальніше</string>
     <string name="text_salary_switch">Використовувати спеціальні умови</string>
+    <string name="dialog_discart_changes">Скинути всі зміни</string>
+
+
+
+
+
+    <string name="action_discard">СКИНУТИ</string>
+    <string name="action_cancel">СКАСУВАТИ</string>
+    <string name="action_save_changes">ЗБЕРЕГТИ ЗМІНИ</string>
+    <string name="action_no">НІ</string>
+    <string name="action_choose">ВИБРАТИ</string>
 
 
 </resources>

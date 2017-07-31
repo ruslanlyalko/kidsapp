@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -41,10 +42,10 @@ import java.util.Date;
 
 public class MkEditActivity extends AppCompatActivity {
 
-    private EditText textDescription, textTitle1, textTitle2, textLink;
+    private EditText textDescription, textTitle1, textLink;
     private ImageView imageView;
     private ProgressBar progressBar;
-
+    private TextView textTitle2;
     // VARIABLES
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -82,7 +83,7 @@ public class MkEditActivity extends AppCompatActivity {
 
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         textTitle1 = (EditText) findViewById(R.id.edit_title1);
-        textTitle2 = (EditText) findViewById(R.id.edit_title2);
+        textTitle2 = (TextView) findViewById(R.id.text_title2);
         textLink = (EditText) findViewById(R.id.edit_link);
         textDescription = (EditText) findViewById(R.id.edit_description);
         imageView = (ImageView) findViewById(R.id.image_view);
@@ -275,25 +276,17 @@ public class MkEditActivity extends AppCompatActivity {
 
         if (needToSave) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MkEditActivity.this);
-            builder.setTitle(R.string.dialog_report_save_before_close_title)
-                    .setMessage(R.string.dialog_mk_edit_text)
-                    .setPositiveButton("ЗБЕРЕГТИ ЗМІНИ", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            if (isNew)
-                                addMk();
-                            else
-                                updateMk();
-
-                            onBackPressed();
-
-                        }
-
-                    })
-                    .setNegativeButton("НЕ ЗБЕРІГАТИ", new DialogInterface.OnClickListener() {
+            builder.setTitle(R.string.dialog_discart_changes)
+                    .setPositiveButton(R.string.action_discard, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             needToSave = false;
                             onBackPressed();
+                        }
+
+                    })
+                    .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
                         }
                     })
                     .show();

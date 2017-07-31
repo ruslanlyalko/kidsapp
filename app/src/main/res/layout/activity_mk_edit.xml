@@ -14,7 +14,7 @@
             android:id="@+id/image_view"
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height"
-            android:scaleType="fitCenter"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_add_photo" />
 
         <ProgressBar
@@ -26,51 +26,46 @@
             android:visibility="gone" />
 
 
-
         <EditText
             android:id="@+id/edit_title1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:layout_marginRight="@dimen/text_margin"
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/hint_title1"
-            android:textStyle="bold"
             android:inputType="textCapSentences"
-            android:maxLength="20" />
+            android:maxLength="20"
+            android:padding="@dimen/text_margin"
+            android:textSize="@dimen/text_name_size" />
 
 
-        <EditText
-            android:id="@+id/edit_title2"
+        <TextView
+            android:id="@+id/text_title2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:layout_marginRight="@dimen/text_margin"
-            android:backgroundTint="@android:color/transparent"
+            android:background="@color/colorPrimary"
             android:hint="@string/hint_title2"
-            android:enabled="false"
-            android:inputType="textCapSentences"
-            android:maxLength="30" />
+            android:maxLength="30"
+            android:padding="@dimen/text_margin"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_subtitle_size" />
 
         <EditText
             android:id="@+id/edit_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:layout_marginRight="@dimen/text_margin"
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/hint_description"
-            android:inputType="textCapSentences|textMultiLine" />
+            android:inputType="textCapSentences|textMultiLine"
+            android:padding="@dimen/text_margin" />
 
         <EditText
             android:id="@+id/edit_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:layout_marginRight="@dimen/text_margin"
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/hint_link"
-            android:inputType="textUri" />
+            android:inputType="textUri"
+            android:padding="@dimen/text_margin" />
 
 
     </LinearLayout>

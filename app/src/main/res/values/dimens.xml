@@ -11,13 +11,15 @@
 
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="card_margin">3dp</dimen>
-    <dimen name="card_radius">3dp</dimen>
+    <dimen name="card_radius">2dp</dimen>
     <dimen name="card_mk_title_padding">8dp</dimen>
     <dimen name="card_mk_margin">1dp</dimen>
 
 
     <dimen name="progress_height">3dp</dimen>
     <dimen name="progress_margin">4dp</dimen>
+    <dimen name="text_name_size">24sp</dimen>
+    <dimen name="text_subtitle_size">16sp</dimen>
 
 
 </resources>
