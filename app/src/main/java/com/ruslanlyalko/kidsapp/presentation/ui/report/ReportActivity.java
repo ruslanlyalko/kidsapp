@@ -345,16 +345,16 @@ public class ReportActivity extends AppCompatActivity {
      */
     private void initRef() {
         progressBarUpload = findViewById(R.id.progress_bar_upload);
-        panelPhoto = (LinearLayout) findViewById(R.id.panel_photo);
-        panelRoomExpand = (LinearLayout) findViewById(R.id.panel_room_expand);
-        panelRoomExpand2 = (LinearLayout) findViewById(R.id.panel_room_expand2);
-        panelRoomExpand3 = (LinearLayout) findViewById(R.id.panel_room_expand3);
+        panelPhoto = findViewById(R.id.panel_photo);
+        panelRoomExpand = findViewById(R.id.panel_room_expand);
+        panelRoomExpand2 = findViewById(R.id.panel_room_expand2);
+        panelRoomExpand3 = findViewById(R.id.panel_room_expand3);
         textDate = findViewById(R.id.text_date);
         editComment = findViewById(R.id.edit_comment);
         textPhoto = findViewById(R.id.edit_photo);
-        panelDate = (LinearLayout) findViewById(R.id.panel_date);
+        panelDate = findViewById(R.id.panel_date);
         // Room
-        swipeLayout = (SwipeLayout) findViewById(R.id.swipe_layout);
+        swipeLayout = findViewById(R.id.swipe_layout);
         textRoomTotal = findViewById(R.id.text_room_total);
         textRoom60 = findViewById(R.id.text_room_60);
         textRoom30 = findViewById(R.id.text_room_30);
@@ -369,7 +369,7 @@ public class ReportActivity extends AppCompatActivity {
         inputRoom20 = findViewById(R.id.input_room_20);
         inputRoom10 = findViewById(R.id.input_room_10);
         // BirthDay
-        swipeLayout2 = (SwipeLayout) findViewById(R.id.swipe_layout2);
+        swipeLayout2 = findViewById(R.id.swipe_layout2);
         textBdayTotal = findViewById(R.id.text_bday_total);
         textBday50 = findViewById(R.id.text_bday_50);
         textBday10 = findViewById(R.id.text_bday_10);
@@ -383,7 +383,7 @@ public class ReportActivity extends AppCompatActivity {
         inputBday10 = findViewById(R.id.input_bday_10);
         inputBday30 = findViewById(R.id.input_bday_30);
         // MK
-        swipeLayout3 = (SwipeLayout) findViewById(R.id.swipe_layout3);
+        swipeLayout3 = findViewById(R.id.swipe_layout3);
         textMkName = findViewById(R.id.text_mk_name);
         seekMk1 = (SeekBar) findViewById(R.id.seek_mk_1);
         seekMk2 = (SeekBar) findViewById(R.id.seek_mk_2);

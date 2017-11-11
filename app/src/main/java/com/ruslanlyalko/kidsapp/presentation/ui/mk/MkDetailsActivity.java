@@ -54,7 +54,7 @@ public class MkDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mk_item);
+        setContentView(R.layout.activity_mk_details);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -109,7 +109,7 @@ public class MkDetailsActivity extends AppCompatActivity {
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         textDescription = findViewById(R.id.text_description);
         textTitle2 = findViewById(R.id.text_title2);
-        imageView = (ImageView) findViewById(R.id.image_view);
+        imageView = findViewById(R.id.image_view);
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

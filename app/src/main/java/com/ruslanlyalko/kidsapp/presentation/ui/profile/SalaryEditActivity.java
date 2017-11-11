@@ -101,7 +101,7 @@ public class SalaryEditActivity extends AppCompatActivity {
         editMkBirthday.addTextChangedListener(watcher);
         editMkArt.addTextChangedListener(watcher);
         editMkChild.addTextChangedListener(watcher);
-        panelDate = (LinearLayout) findViewById(R.id.panel_date);
+        panelDate = findViewById(R.id.panel_date);
     }
 
     private void initDatePicker() {

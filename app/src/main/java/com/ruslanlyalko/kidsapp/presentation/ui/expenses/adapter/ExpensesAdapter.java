@@ -52,15 +52,15 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
 
         public MyViewHolder(View view) {
             super(view);
-            textTitle1 = (TextView) view.findViewById(R.id.text_title1);
-            textTitle2 = (TextView) view.findViewById(R.id.text_title2);
-            textDate = (TextView) view.findViewById(R.id.text_date);
-            textPrice = (TextView) view.findViewById(R.id.text_total);
-            swipeLayout = (SwipeLayout) view.findViewById(R.id.swipe_layout);
-            buttonDelete = (ImageButton) view.findViewById(R.id.button_comment);
-            linearUser = (LinearLayout) view.findViewById(R.id.linear_user);
-            linearMenu = (LinearLayout) view.findViewById(R.id.swipe_menu);
-            imageView = (ImageView) view.findViewById(R.id.image_view);
+            textTitle1 = view.findViewById(R.id.text_title1);
+            textTitle2 = view.findViewById(R.id.text_title2);
+            textDate = view.findViewById(R.id.text_date);
+            textPrice = view.findViewById(R.id.text_total);
+            swipeLayout = view.findViewById(R.id.swipe_layout);
+            buttonDelete = view.findViewById(R.id.button_comment);
+            linearUser = view.findViewById(R.id.linear_user);
+            linearMenu = view.findViewById(R.id.swipe_menu);
+            imageView = view.findViewById(R.id.image_view);
         }
     }
 
@@ -72,7 +72,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
     @Override
     public ExpensesAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_cost, parent, false);
+                .inflate(R.layout.card_expense, parent, false);
         return new ExpensesAdapter.MyViewHolder(itemView);
     }
 

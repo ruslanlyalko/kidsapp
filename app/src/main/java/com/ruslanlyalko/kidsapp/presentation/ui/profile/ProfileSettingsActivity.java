@@ -57,7 +57,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fadein, R.anim.nothing);
-        setContentView(R.layout.activity_user_settings);
+        setContentView(R.layout.activity_profile_settings);
         initRef();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -158,9 +158,9 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     };
 
     private void initRef() {
-        panelPassword = (LinearLayout) findViewById(R.id.panel_password);
+        panelPassword = findViewById(R.id.panel_password);
         buttonChangePassword = findViewById(R.id.button_change_password);
-        panelFirstDate = (LinearLayout) findViewById(R.id.panel_first_date);
+        panelFirstDate = findViewById(R.id.panel_first_date);
         textName = findViewById(R.id.text_name);
         inputFirstDate = findViewById(R.id.text_first_date);
         inputPhone = findViewById(R.id.text_phone);

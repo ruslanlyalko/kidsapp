@@ -71,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.activity_profile);
         initCollapsingToolbar();
         initRef();
         Bundle bundle = getIntent().getExtras();
@@ -96,6 +96,58 @@ public class ProfileActivity extends AppCompatActivity {
         });
         initRecycle();
         loadUsers();
+    }
+
+    private void initCollapsingToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final CollapsingToolbarLayout collapsingToolbar =
+                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle(" ");
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        appBarLayout.setExpanded(true);
+        // hiding & showing the title when toolbar expanded & collapsed
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbar.setTitle(mUser.getUserName());
+                    fab.hide();
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbar.setTitle(" ");
+                    fab.show();
+                    isShow = false;
+                }
+            }
+        });
+    }
+
+    private void initRef() {
+        panelFirstDate = findViewById(R.id.panel_first_date);
+        panelPhoneCall = findViewById(R.id.panel_phone);
+        panelEmail = findViewById(R.id.panel_email);
+        panelCard = findViewById(R.id.panel_card);
+        imageUserLogo = findViewById(R.id.image_user_logo);
+        imageUser1 = findViewById(R.id.image_user1);
+        textTitleName = findViewById(R.id.text_title_name);
+        textTitlePosition = findViewById(R.id.text_position_title);
+        textTime = findViewById(R.id.text_time);
+        textPhone = findViewById(R.id.text_phone);
+        textEmail = findViewById(R.id.text_email);
+        textBDay = findViewById(R.id.text_bday);
+        textCard = findViewById(R.id.text_card);
+        textFirstDate = findViewById(R.id.text_first_date);
+        fab = findViewById(R.id.fab);
+        cardFriends = (CardView) findViewById(R.id.card_friends);
+        recyclerView = findViewById(R.id.recycler_view);
     }
 
     private void initRecycle() {
@@ -152,58 +204,6 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
-    }
-
-    private void initRef() {
-        panelFirstDate = (LinearLayout) findViewById(R.id.panel_first_date);
-        panelPhoneCall = (LinearLayout) findViewById(R.id.panel_phone);
-        panelEmail = (LinearLayout) findViewById(R.id.panel_email);
-        panelCard = (LinearLayout) findViewById(R.id.panel_card);
-        imageUserLogo = (ImageView) findViewById(R.id.image_user_logo);
-        imageUser1 = (ImageView) findViewById(R.id.image_user1);
-        textTitleName = findViewById(R.id.text_title_name);
-        textTitlePosition = findViewById(R.id.text_position_title);
-        textTime = findViewById(R.id.text_time);
-        textPhone = findViewById(R.id.text_phone);
-        textEmail = findViewById(R.id.text_email);
-        textBDay = findViewById(R.id.text_bday);
-        textCard = findViewById(R.id.text_card);
-        textFirstDate = findViewById(R.id.text_first_date);
-        fab = findViewById(R.id.fab);
-        cardFriends = (CardView) findViewById(R.id.card_friends);
-        recyclerView = findViewById(R.id.recycler_view);
-    }
-
-    private void initCollapsingToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        final CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(" ");
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        appBarLayout.setExpanded(true);
-        // hiding & showing the title when toolbar expanded & collapsed
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false;
-            int scrollRange = -1;
-
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle(mUser.getUserName());
-                    fab.setVisibility(View.GONE);
-                    isShow = true;
-                } else if (isShow) {
-                    collapsingToolbar.setTitle(" ");
-                    fab.setVisibility(View.VISIBLE);
-                    isShow = false;
-                }
-            }
-        });
     }
 
     private void updateUI(User user) {
@@ -270,29 +270,6 @@ public class ProfileActivity extends AppCompatActivity {
         imageUserLogo.setImageBitmap(bitmap);
     }
 
-    private void logout() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.dialog_logout_title)
-                .setMessage(R.string.dialog_logout_message)
-                .setPositiveButton("Вийти", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        mAuth.signOut();
-                        Intent intent = new Intent(ProfileActivity.this,
-                                LoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
-                    }
-                })
-                .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .show();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -334,5 +311,28 @@ public class ProfileActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+    }
+
+    private void logout() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.dialog_logout_title)
+                .setMessage(R.string.dialog_logout_message)
+                .setPositiveButton("Вийти", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        mAuth.signOut();
+                        Intent intent = new Intent(ProfileActivity.this,
+                                LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .show();
     }
 }

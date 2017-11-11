@@ -51,7 +51,8 @@
                     android:layout_height="match_parent"
                     android:background="@color/colorPrimary"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/cover" />
+                    android:src="@drawable/cover"
+                    android:visibility="invisible"/>
 
                 <TextView
                     android:id="@+id/text_title_name"

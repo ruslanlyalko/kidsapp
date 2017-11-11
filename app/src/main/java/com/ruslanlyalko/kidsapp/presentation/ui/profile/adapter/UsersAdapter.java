@@ -30,9 +30,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
 
         public MyViewHolder(View view) {
             super(view);
-            textUserName = (TextView) view.findViewById(R.id.text_user_name);
-            textPositionTitle = (TextView) view.findViewById(R.id.text_position_title);
-            linearUser = (LinearLayout) view.findViewById(R.id.linear_user);
+            textUserName = view.findViewById(R.id.text_user_name);
+            textPositionTitle = view.findViewById(R.id.text_position_title);
+            linearUser = view.findViewById(R.id.linear_user);
         }
     }
 
@@ -44,7 +44,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
     @Override
     public UsersAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_user, parent, false);
+                .inflate(R.layout.card_profile, parent, false);
         return new UsersAdapter.MyViewHolder(itemView);
     }
 

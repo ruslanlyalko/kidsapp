@@ -246,7 +246,8 @@ public class ExpensesActivity extends AppCompatActivity {
         for (Expense expense : mExpenseList) {
             if (expense.getTitle2().equals(getString(R.string.text_cost_common)))
                 common += expense.getPrice();
-            if (expense.getTitle2().equals(getString(R.string.text_cost_mk))) mk += expense.getPrice();
+            if (expense.getTitle2().equals(getString(R.string.text_cost_mk)))
+                mk += expense.getPrice();
         }
         int total = common + mk;
         progressBar.setMax(total);
@@ -295,7 +296,7 @@ public class ExpensesActivity extends AppCompatActivity {
         final String title22 = title2;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Введіть опис");
-        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_cost, null, false);
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_expense, null, false);
         builder.setView(viewInflated);
         final EditText inputTitle1 = viewInflated.findViewById(R.id.text_title1);
         final EditText inputPrice = viewInflated.findViewById(R.id.text_price);

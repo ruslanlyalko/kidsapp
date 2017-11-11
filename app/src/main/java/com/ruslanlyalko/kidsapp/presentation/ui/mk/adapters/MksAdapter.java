@@ -45,12 +45,12 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
             super(view);
             buttonShare = (Button) view.findViewById(R.id.button_share);
             buttonLink = (Button) view.findViewById(R.id.button_link);
-            textTitle1 = (TextView) view.findViewById(R.id.text_title1);
-            textTitle2 = (TextView) view.findViewById(R.id.text_title2);
-            textDescription = (TextView) view.findViewById(R.id.text_description);
-            imageView = (ImageView) view.findViewById(R.id.image_view);
-            expandPanel = (LinearLayout) view.findViewById(R.id.panel_expand);
-            buttonExpand = (ImageButton) view.findViewById(R.id.button_expand);
+            textTitle1 = view.findViewById(R.id.text_title1);
+            textTitle2 = view.findViewById(R.id.text_title2);
+            textDescription = view.findViewById(R.id.text_description);
+            imageView = view.findViewById(R.id.image_view);
+            expandPanel = view.findViewById(R.id.panel_expand);
+            buttonExpand = view.findViewById(R.id.button_expand);
         }
     }
 

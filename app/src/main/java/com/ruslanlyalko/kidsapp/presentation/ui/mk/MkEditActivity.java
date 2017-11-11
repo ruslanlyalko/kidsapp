@@ -80,7 +80,7 @@ public class MkEditActivity extends AppCompatActivity {
         textTitle2 = findViewById(R.id.text_title2);
         textLink = findViewById(R.id.edit_link);
         textDescription = findViewById(R.id.edit_description);
-        imageView = (ImageView) findViewById(R.id.image_view);
+        imageView = findViewById(R.id.image_view);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

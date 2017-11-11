@@ -13,7 +13,7 @@
         android:layout_height="1dp"
         android:visibility="gone" />
 
-   <include layout="@layout/content_cost"/>
+   <include layout="@layout/content_expense"/>
 
     <View
         android:id="@+id/faded_background"

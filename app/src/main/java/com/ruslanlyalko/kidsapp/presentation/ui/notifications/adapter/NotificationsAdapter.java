@@ -28,10 +28,10 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         MyViewHolder(View view) {
             super(view);
-            title1 = (TextView) view.findViewById(R.id.title1);
-            title2 = (TextView) view.findViewById(R.id.title2);
-            date = (TextView) view.findViewById(R.id.text_date);
-            panelItem = (LinearLayout) view.findViewById(R.id.panel_item);
+            title1 = view.findViewById(R.id.title1);
+            title2 = view.findViewById(R.id.title2);
+            date = view.findViewById(R.id.text_date);
+            panelItem = view.findViewById(R.id.panel_item);
         }
     }
 

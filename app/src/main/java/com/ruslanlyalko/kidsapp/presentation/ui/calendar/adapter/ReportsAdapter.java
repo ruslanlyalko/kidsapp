@@ -41,16 +41,16 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
 
         public MyViewHolder(View view) {
             super(view);
-            textUserName = (TextView) view.findViewById(R.id.text_user_name);
-            textTotal = (TextView) view.findViewById(R.id.text_total);
-            textBdayTotal = (TextView) view.findViewById(R.id.text_bday_total);
-            textRoomTotal = (TextView) view.findViewById(R.id.text_room_total);
-            textMkTotal = (TextView) view.findViewById(R.id.text_mk_total);
-            swipeLayout = (SwipeLayout) view.findViewById(R.id.swipe_layout);
-            progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-            buttonMk = (ImageButton) view.findViewById(R.id.button_user);
-            buttonEdit = (ImageButton) view.findViewById(R.id.button_edit);
-            buttonDelete = (ImageButton) view.findViewById(R.id.button_comment);
+            textUserName = view.findViewById(R.id.text_user_name);
+            textTotal = view.findViewById(R.id.text_total);
+            textBdayTotal = view.findViewById(R.id.text_bday_total);
+            textRoomTotal = view.findViewById(R.id.text_room_total);
+            textMkTotal = view.findViewById(R.id.text_mk_total);
+            swipeLayout = view.findViewById(R.id.swipe_layout);
+            progressBar = view.findViewById(R.id.progress_bar);
+            buttonMk = view.findViewById(R.id.button_user);
+            buttonEdit = view.findViewById(R.id.button_edit);
+            buttonDelete = view.findViewById(R.id.button_comment);
         }
     }
 

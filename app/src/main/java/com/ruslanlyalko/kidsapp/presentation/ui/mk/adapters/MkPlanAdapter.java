@@ -37,18 +37,18 @@ public class MkPlanAdapter extends RecyclerView.Adapter<MkPlanAdapter.MyViewHold
 
         public MyViewHolder(View view) {
             super(view);
-            textT1 = (TextView) view.findViewById(R.id.text_t1);
-            textT2 = (TextView) view.findViewById(R.id.text_t2);
-            textMkTitleUserName = (TextView) view.findViewById(R.id.text_user_name);
-            textDate = (TextView) view.findViewById(R.id.text_date);
-            textTotal = (TextView) view.findViewById(R.id.text_total);
-            textT2Total = (TextView) view.findViewById(R.id.text_bday_total);
-            textT1Total = (TextView) view.findViewById(R.id.text_room_total);
-            swipeLayout = (SwipeLayout) view.findViewById(R.id.swipe_layout);
-            progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-            buttonMK = (ImageButton) view.findViewById(R.id.button_user);
-            buttonUser = (ImageButton) view.findViewById(R.id.button_edit);
-            buttonDelete = (ImageButton) view.findViewById(R.id.button_comment);
+            textT1 = view.findViewById(R.id.text_t1);
+            textT2 = view.findViewById(R.id.text_t2);
+            textMkTitleUserName = view.findViewById(R.id.text_user_name);
+            textDate = view.findViewById(R.id.text_date);
+            textTotal = view.findViewById(R.id.text_total);
+            textT2Total = view.findViewById(R.id.text_bday_total);
+            textT1Total = view.findViewById(R.id.text_room_total);
+            swipeLayout = view.findViewById(R.id.swipe_layout);
+            progressBar = view.findViewById(R.id.progress_bar);
+            buttonMK = view.findViewById(R.id.button_user);
+            buttonUser = view.findViewById(R.id.button_edit);
+            buttonDelete = view.findViewById(R.id.button_comment);
         }
     }
 

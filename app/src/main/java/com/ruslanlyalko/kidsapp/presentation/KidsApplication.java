@@ -2,8 +2,9 @@ package com.ruslanlyalko.kidsapp.presentation;
 
 import android.app.Application;
 
-import com.google.firebase.database.FirebaseDatabase;
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.database.FirebaseDatabase;
+
 import io.fabric.sdk.android.Fabric;
 
 /**

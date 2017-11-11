@@ -53,7 +53,7 @@ public class NotificationsEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fadein, R.anim.nothing);
-        setContentView(R.layout.activity_not_edit);
+        setContentView(R.layout.activity_notification_edit);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             notKey = bundle.getString(Keys.Extras.EXTRA_ITEM_ID);
@@ -70,7 +70,7 @@ public class NotificationsEditActivity extends AppCompatActivity {
         textTitle2 = findViewById(R.id.edit_title2);
         textLink = findViewById(R.id.edit_link);
         textDescription = findViewById(R.id.edit_description);
-        imageView = (ImageView) findViewById(R.id.image_view);
+        imageView = findViewById(R.id.image_view);
 
         /*
         imageView.setOnClickListener(new View.OnClickListener() {

@@ -27,8 +27,8 @@ import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Constants;
 import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.common.Keys;
-import com.ruslanlyalko.kidsapp.data.Utils;
 import com.ruslanlyalko.kidsapp.common.ViewUtils;
+import com.ruslanlyalko.kidsapp.data.Utils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Report;
 import com.ruslanlyalko.kidsapp.data.models.User;
@@ -207,13 +207,13 @@ public class SalaryActivity extends AppCompatActivity {
 
     private void initRef() {
         textName = findViewById(R.id.text_name);
-        panelSalary = (LinearLayout) findViewById(R.id.panel_salary);
+        panelSalary = findViewById(R.id.panel_salary);
         buttonNext = findViewById(R.id.button_next);
         buttonPrev = findViewById(R.id.button_prev);
         compactCalendarView = findViewById(R.id.calendar_view);
         textExpand = findViewById(R.id.text_salary_expand);
-        panelAction = (LinearLayout) findViewById(R.id.panel_action);
-        imageView = (ImageView) findViewById(R.id.image_expand);
+        panelAction = findViewById(R.id.panel_action);
+        imageView = findViewById(R.id.image_expand);
         panelAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,7 +239,7 @@ public class SalaryActivity extends AppCompatActivity {
         textPercent = findViewById(R.id.text_percent_total);
         textMk = findViewById(R.id.text_mk_total);
         progressBar = findViewById(R.id.progress_bar);
-        panelCopy = (LinearLayout) findViewById(R.id.panel_copy);
+        panelCopy = findViewById(R.id.panel_copy);
         textCard = findViewById(R.id.text_card);
     }
 
