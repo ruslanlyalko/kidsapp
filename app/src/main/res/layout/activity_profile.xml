@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.ruslanlyalko.kidsapp.presentation.ui.profile.ProfileActivity">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 tools:context="com.ruslanlyalko.kidsapp.presentation.ui.profile.ProfileActivity">
 
     <!-- HEADER -->
     <android.support.design.widget.AppBarLayout
@@ -26,7 +26,6 @@
             app:expandedTitleTextAppearance="@android:color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -42,7 +41,7 @@
                     <ImageView
                         android:id="@+id/image_user_logo"
                         android:layout_width="70dp"
-                        android:layout_height="70dp" />
+                        android:layout_height="70dp"/>
                 </android.support.v7.widget.CardView>
 
                 <ImageView
@@ -62,7 +61,7 @@
                     android:text=""
                     android:textColor="@color/colorWhite"
                     android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/text_position_title"
@@ -72,7 +71,7 @@
                     android:layout_centerHorizontal="true"
                     android:paddingBottom="64dp"
                     android:text=""
-                    android:textColor="@color/colorWhite70" />
+                    android:textColor="@color/colorWhite70"/>
 
             </RelativeLayout>
 
@@ -81,19 +80,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
-
 
     <!-- CONTENT -->
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -127,7 +124,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_margin="16dp"
-                            android:src="@drawable/ic_user_phone" />
+                            android:src="@drawable/ic_user_phone"/>
 
                         <TextView
                             android:id="@+id/text_phone"
@@ -138,7 +135,7 @@
                             android:gravity="center_vertical"
                             android:hint="@string/hint_phone"
                             android:textAlignment="textStart"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"/>
 
                     </LinearLayout>
 
@@ -155,7 +152,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_margin="16dp"
-                            android:src="@drawable/ic_user_email" />
+                            android:src="@drawable/ic_user_email"/>
 
                         <TextView
                             android:id="@+id/text_email"
@@ -166,7 +163,7 @@
                             android:gravity="center_vertical"
                             android:hint="@string/hint_email"
                             android:textAlignment="textStart"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"/>
 
                     </LinearLayout>
 
@@ -182,7 +179,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_margin="16dp"
-                            android:src="@drawable/ic_user_birthday" />
+                            android:src="@drawable/ic_user_birthday"/>
 
                         <TextView
                             android:id="@+id/text_bday"
@@ -194,7 +191,7 @@
                             android:gravity="center_vertical"
                             android:hint="@string/hint_date_birth"
                             android:textAlignment="textStart"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"/>
 
                     </LinearLayout>
 
@@ -211,7 +208,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_margin="16dp"
-                            android:src="@drawable/ic_user_card" />
+                            android:src="@drawable/ic_user_card"/>
 
                         <TextView
                             android:id="@+id/text_card"
@@ -223,7 +220,7 @@
                             android:hint="@string/hint_card"
                             android:maxLength="19"
                             android:textAlignment="textStart"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"/>
 
                     </LinearLayout>
 
@@ -239,7 +236,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_margin="16dp"
-                            android:src="@drawable/ic_time" />
+                            android:src="@drawable/ic_time"/>
 
                         <TextView
                             android:id="@+id/text_time"
@@ -251,7 +248,7 @@
                             android:hint="@string/hint_time"
                             android:maxLength="19"
                             android:textAlignment="textStart"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"/>
 
                     </LinearLayout>
 
@@ -269,7 +266,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_margin="16dp"
-                            android:src="@drawable/ic_user_birthday" />
+                            android:src="@drawable/ic_user_birthday"/>
 
                         <TextView
                             android:id="@+id/text_first_date"
@@ -281,10 +278,9 @@
                             android:gravity="center_vertical"
                             android:hint="@string/hint_first_date"
                             android:textAlignment="textStart"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"/>
 
                     </LinearLayout>
-
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -318,7 +314,6 @@
                             android:textSize="16sp"
                             android:textStyle="bold"/>
 
-
                     </LinearLayout>
 
                     <android.support.v7.widget.RecyclerView
@@ -327,7 +322,7 @@
                         android:layout_height="match_parent"
                         android:clipToPadding="false"
                         android:paddingBottom="8dp"
-                        android:scrollbars="vertical" />
+                        android:scrollbars="vertical"/>
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -346,7 +341,7 @@
         app:layout_anchor="@id/image_user1"
         app:layout_anchorGravity="bottom|end"
         app:pressedTranslationZ="12dp"
-        app:srcCompat="@drawable/ic_balance" />
+        app:srcCompat="@drawable/ic_balance"/>
 
 </android.support.design.widget.CoordinatorLayout>
 

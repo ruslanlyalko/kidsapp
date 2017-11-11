@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.ruslanlyalko.kidsapp.presentation.ui.login.SignupActivity">
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.ruslanlyalko.kidsapp.presentation.ui.login.SignupActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,13 +12,12 @@
         android:orientation="vertical"
         android:padding="8dp">
 
-
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="30dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"/>
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -26,8 +25,7 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:layout_marginTop="-30dp"
-            android:visibility="gone" />
-
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,7 +36,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_name" />
+                android:src="@drawable/ic_user_name"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -51,7 +49,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:hint="@string/hint_first_name"
-                    android:inputType="textPersonName|textCapWords" />
+                    android:inputType="textPersonName|textCapWords"/>
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
@@ -65,7 +63,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_phone" />
+                android:src="@drawable/ic_user_phone"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -78,7 +76,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:hint="@string/hint_phone"
-                    android:inputType="phone" />
+                    android:inputType="phone"/>
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
@@ -92,7 +90,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_email" />
+                android:src="@drawable/ic_user_email"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -105,7 +103,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:hint="@string/hint_email"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"/>
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
         <!--
@@ -142,7 +140,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_password" />
+                android:src="@drawable/ic_user_password"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -156,10 +154,9 @@
                     android:layout_marginRight="16dp"
                     android:hint="@string/hint_password"
                     android:inputType="textPassword"
-                    android:maxLength="19" />
+                    android:maxLength="19"/>
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
-
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -175,10 +172,9 @@
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
                 android:text="@string/button_sign_up"
-                android:textColor="@color/colorWhite" />
+                android:textColor="@color/colorWhite"/>
 
         </RelativeLayout>
-
 
         <Button
             android:id="@+id/button_reset_password"
@@ -188,8 +184,7 @@
             android:background="?android:attr/selectableItemBackground"
             android:text="@string/button_forgot_password"
             android:textAllCaps="false"
-            android:textColor="@color/colorAccent" />
-
+            android:textColor="@color/colorAccent"/>
 
     </LinearLayout>
 </ScrollView>

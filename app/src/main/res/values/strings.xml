@@ -88,7 +88,7 @@
 
 
     <!-- NOTIFICATION-->
-    <string name="title_activity_notification">Статті</string>
+    <string name="title_activity_notification">Повідомлення</string>
 
 
     <string-array name="month_array">

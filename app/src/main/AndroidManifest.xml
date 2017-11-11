@@ -18,8 +18,8 @@
 
         <activity
             android:name=".presentation.ui.splash.SplashActivity"
-            android:theme="@style/AppTheme.Splash"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -61,170 +61,103 @@
             android:label="@string/title_activity_signup"
             android:parentActivityName="com.ruslanlyalko.kidsapp.presentation.ui.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.MainActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.report.ReportActivity"
             android:label="@string/title_activity_report"
             android:parentActivityName="com.ruslanlyalko.kidsapp.presentation.ui.MainActivity"
             android:screenOrientation="portrait"
 
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.MainActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.calendar.CalendarActivity"
             android:label="@string/title_activity_calendar"
             android:parentActivityName="com.ruslanlyalko.kidsapp.presentation.ui.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.MainActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.expenses.ExpensesActivity"
             android:label="@string/title_activity_cost"
             android:parentActivityName="com.ruslanlyalko.kidsapp.presentation.ui.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.MainActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.notifications.NotificationsActivity"
             android:label="@string/title_activity_notification"
             android:parentActivityName="com.ruslanlyalko.kidsapp.presentation.ui.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.MainActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.profile.SalaryActivity"
             android:label="@string/title_activity_salary"
             android:parentActivityName="com.ruslanlyalko.kidsapp.presentation.ui.profile.ProfileActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.profile.ProfileActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.profile.DashboardActivity"
             android:label="@string/title_activity_dashboard"
             android:parentActivityName="com.ruslanlyalko.kidsapp.presentation.ui.profile.ProfileActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.profile.ProfileActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.widget.PhotoPreviewActivity"
-            android:theme="@style/AppTheme.BlackClose">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.expenses.ExpensesActivity"/>
-        </activity>
+            android:theme="@style/AppTheme.BlackClose"/>
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.mk.MkDetailsActivity"
             android:label="@string/title_activity_mk_item"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.mk.MkTabActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.mk.MkEditActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Close"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.mk.MkTabActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.mk.MkPlanActivity"
             android:label="@string/title_activity_mk_plan"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.mk.MkTabActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.profile.ProfileSettingsActivity"
             android:label="@string/action_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Close"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.profile.ProfileActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.mk.MkTabActivity"
             android:label="@string/title_activity_mk_tab"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.mk.MkTabActivity"/>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.about.AboutActivity"
             android:label="@string/title_activity_about"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.MainActivity"/>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.notifications.NotificationDetailsActivity"
             android:label="@string/title_activity_notification_item"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.notifications.NotificationsActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.notifications.NotificationsEditActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Close"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.notifications.NotificationDetailsActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.profile.SalaryEditActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Close"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ruslanlyalko.kidsapp.presentation.ui.profile.SalaryActivity"/>
-        </activity>
+            android:windowSoftInputMode="stateHidden"/>
+
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="52ba750a54b6b9f14ef3239631d128c3b628ee05" />
+            android:value="52ba750a54b6b9f14ef3239631d128c3b628ee05"/>
     </application>
 
 </manifest>

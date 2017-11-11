@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:orientation="vertical"
-    tools:context="com.ruslanlyalko.kidsapp.presentation.ui.mk.MkPlanActivity">
+              xmlns:card_view="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/colorBackground"
+              android:orientation="vertical"
+              tools:context="com.ruslanlyalko.kidsapp.presentation.ui.mk.MkPlanActivity">
 
     <!-- invisible calendar-->
     <com.github.sundeepk.compactcalendarview.CompactCalendarView
         android:id="@+id/calendar_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <!-- tile DATE -->
     <android.support.v7.widget.CardView
@@ -34,7 +34,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_birthday" />
+                android:src="@drawable/ic_user_birthday"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_weight="4"
                         android:text=""
-                        android:textSize="18sp" />
+                        android:textSize="18sp"/>
 
                     <ImageButton
                         android:id="@+id/button_prev"
@@ -63,7 +63,7 @@
                         android:layout_height="56dp"
                         android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackground"
-                        android:src="@drawable/ic_action_left" />
+                        android:src="@drawable/ic_action_left"/>
 
                     <ImageButton
                         android:id="@+id/button_next"
@@ -71,11 +71,10 @@
                         android:layout_height="56dp"
                         android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackground"
-                        android:src="@drawable/ic_action_right" />
+                        android:src="@drawable/ic_action_right"/>
                 </LinearLayout>
 
             </LinearLayout>
-
 
         </LinearLayout>
 
@@ -88,14 +87,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingBottom="8dp"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"/>
 
     </LinearLayout>
 

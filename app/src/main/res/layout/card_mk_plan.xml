@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+              xmlns:card_view="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:src="@drawable/ic_mk_dark" />
+                    android:src="@drawable/ic_mk_dark"/>
 
                 <ImageButton
                     android:id="@+id/button_edit"
@@ -42,7 +42,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:src="@drawable/ic_user_dark" />
+                    android:src="@drawable/ic_user_dark"/>
 
                 <ImageButton
                     android:id="@+id/button_comment"
@@ -51,7 +51,7 @@
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
                     android:src="@drawable/ic_calendar"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"/>
 
             </LinearLayout>
 
@@ -65,7 +65,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_margin="16dp"
-                    android:src="@drawable/ic_action_mk" />
+                    android:src="@drawable/ic_action_mk"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -86,19 +86,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Майстер клас"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"/>
 
                         <View
                             android:layout_width="0dp"
                             android:layout_height="1dp"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"/>
 
                         <TextView
                             android:id="@+id/text_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="24-7"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"/>
 
                     </LinearLayout>
 
@@ -108,7 +108,7 @@
                         android:layout_marginBottom="-4dp"
                         android:layout_marginTop="16dp"
                         android:text="Всього"
-                        android:textColor="@color/colorBlack" />
+                        android:textColor="@color/colorBlack"/>
 
                     <TextView
                         android:id="@+id/text_total"
@@ -116,7 +116,7 @@
                         android:layout_height="match_parent"
                         android:text="1570 ГРН"
                         android:textColor="@color/colorBlack"
-                        android:textSize="32sp" />
+                        android:textSize="32sp"/>
 
                     <ProgressBar
                         android:id="@+id/progress_bar"
@@ -125,7 +125,7 @@
                         android:layout_height="@dimen/progress_height"
                         android:layout_marginBottom="@dimen/progress_margin"
                         android:layout_marginTop="@dimen/progress_margin"
-                        android:progressDrawable="@drawable/progress" />
+                        android:progressDrawable="@drawable/progress"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -143,13 +143,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:text="Кімната"
-                                android:textColor="@color/colorBlack" />
+                                android:textColor="@color/colorBlack"/>
 
                             <TextView
                                 android:id="@+id/text_room_total"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="500 грн" />
+                                android:text="500 грн"/>
 
                         </LinearLayout>
 
@@ -164,22 +164,19 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:text="День народження"
-                                android:textColor="@color/colorBlack" />
+                                android:textColor="@color/colorBlack"/>
 
                             <TextView
                                 android:id="@+id/text_bday_total"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="540 грн" />
+                                android:text="540 грн"/>
 
                         </LinearLayout>
 
-
                     </LinearLayout>
 
-
                 </LinearLayout>
-
 
             </LinearLayout>
 

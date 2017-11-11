@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:orientation="vertical"
-    tools:context="com.ruslanlyalko.kidsapp.presentation.ui.profile.DashboardActivity">
+              xmlns:card_view="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/colorBackground"
+              android:orientation="vertical"
+              tools:context="com.ruslanlyalko.kidsapp.presentation.ui.profile.DashboardActivity">
 
     <com.github.sundeepk.compactcalendarview.CompactCalendarView
         android:id="@+id/calendar_view"
         android:layout_width="1dp"
         android:layout_height="1dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <!-- tile TIME-->
     <android.support.v7.widget.CardView
@@ -33,7 +33,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_birthday" />
+                android:src="@drawable/ic_user_birthday"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_weight="4"
                         android:text=""
-                        android:textSize="18sp" />
+                        android:textSize="18sp"/>
 
                     <ImageButton
                         android:id="@+id/button_prev"
@@ -62,7 +62,7 @@
                         android:layout_height="56dp"
                         android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackground"
-                        android:src="@drawable/ic_action_left" />
+                        android:src="@drawable/ic_action_left"/>
 
                     <ImageButton
                         android:id="@+id/button_next"
@@ -70,11 +70,10 @@
                         android:layout_height="56dp"
                         android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackground"
-                        android:src="@drawable/ic_action_right" />
+                        android:src="@drawable/ic_action_right"/>
                 </LinearLayout>
 
             </LinearLayout>
-
 
         </LinearLayout>
 
@@ -84,12 +83,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
 
             <!-- tile OBOROT-->
             <android.support.v7.widget.CardView
@@ -110,14 +107,14 @@
                     <EditText
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:visibility="invisible" />
+                        android:visibility="invisible"/>
 
                     <ImageView
                         android:id="@+id/imageView"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_margin="16dp"
-                        android:src="@drawable/ic_action_vyruchka" />
+                        android:src="@drawable/ic_action_vyruchka"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -126,7 +123,6 @@
                         android:layout_marginRight="8dp"
                         android:orientation="vertical">
 
-
                         <TextView
                             android:id="@+id/text_month1"
                             android:layout_width="wrap_content"
@@ -134,7 +130,7 @@
                             android:layout_marginTop="16dp"
                             android:layout_weight="5"
                             android:text="@string/text_oborot"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -142,7 +138,7 @@
                             android:layout_marginBottom="-4dp"
                             android:layout_marginTop="16dp"
                             android:text="Всього"
-                            android:textColor="@color/colorBlack" />
+                            android:textColor="@color/colorBlack"/>
 
                         <TextView
                             android:id="@+id/text_total"
@@ -150,7 +146,7 @@
                             android:layout_height="match_parent"
                             android:text="0 грн"
                             android:textColor="@color/colorBlack"
-                            android:textSize="32sp" />
+                            android:textSize="32sp"/>
 
                         <ProgressBar
                             android:id="@+id/progress_bar"
@@ -159,7 +155,7 @@
                             android:layout_height="@dimen/progress_height"
                             android:layout_marginBottom="@dimen/progress_margin"
                             android:layout_marginTop="@dimen/progress_margin"
-                            android:progressDrawable="@drawable/progress" />
+                            android:progressDrawable="@drawable/progress"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -176,13 +172,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:text="@string/text_room"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textColor="@color/colorBlack"/>
 
                                 <TextView
                                     android:id="@+id/text_room_total"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:text="0 грн" />
+                                    android:text="0 грн"/>
 
                             </LinearLayout>
 
@@ -197,13 +193,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:text="@string/text_birthdays"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textColor="@color/colorBlack"/>
 
                                 <TextView
                                     android:id="@+id/text_bday_total"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:text="0 грн" />
+                                    android:text="0 грн"/>
 
                             </LinearLayout>
 
@@ -217,20 +213,19 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:text="@string/text_mk"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textColor="@color/colorBlack"/>
 
                                 <TextView
                                     android:id="@+id/text_mk_total"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:text="0 грн" />
+                                    android:text="0 грн"/>
 
                             </LinearLayout>
 
                         </LinearLayout>
 
                     </LinearLayout>
-
 
                 </LinearLayout>
 
@@ -257,7 +252,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_margin="16dp"
-                        android:src="@drawable/ic_action_vyruchka" />
+                        android:src="@drawable/ic_action_vyruchka"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -266,15 +261,13 @@
                         android:layout_marginRight="8dp"
                         android:orientation="vertical">
 
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:layout_weight="5"
                             android:text="@string/text_salary"
-                            android:textSize="18sp" />
-
+                            android:textSize="18sp"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -282,7 +275,7 @@
                             android:layout_marginBottom="-4dp"
                             android:layout_marginTop="16dp"
                             android:text="Всього"
-                            android:textColor="@color/colorBlack" />
+                            android:textColor="@color/colorBlack"/>
 
                         <TextView
                             android:id="@+id/text_salary_total"
@@ -290,7 +283,7 @@
                             android:layout_height="match_parent"
                             android:text="0 грн"
                             android:textColor="@color/colorBlack"
-                            android:textSize="32sp" />
+                            android:textSize="32sp"/>
 
                         <ProgressBar
                             android:id="@+id/progress_bar_salary"
@@ -299,7 +292,7 @@
                             android:layout_height="@dimen/progress_height"
                             android:layout_marginBottom="@dimen/progress_margin"
                             android:layout_marginTop="@dimen/progress_margin"
-                            android:progressDrawable="@drawable/progress" />
+                            android:progressDrawable="@drawable/progress"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -316,13 +309,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:text="@string/text_stavka"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textColor="@color/colorBlack"/>
 
                                 <TextView
                                     android:id="@+id/text_stavka_total"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:text="0 грн" />
+                                    android:text="0 грн"/>
 
                             </LinearLayout>
 
@@ -336,13 +329,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:text="@string/text_percent"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textColor="@color/colorBlack"/>
 
                                 <TextView
                                     android:id="@+id/text_percent_total"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:text="0 грн" />
+                                    android:text="0 грн"/>
 
                             </LinearLayout>
 
@@ -356,20 +349,19 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:text="@string/text_mk"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textColor="@color/colorBlack"/>
 
                                 <TextView
                                     android:id="@+id/text_salary_mk_total"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:text="0 грн" />
+                                    android:text="0 грн"/>
 
                             </LinearLayout>
 
                         </LinearLayout>
 
                     </LinearLayout>
-
 
                 </LinearLayout>
 
@@ -395,7 +387,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_margin="16dp"
-                        android:src="@drawable/ic_cart" />
+                        android:src="@drawable/ic_cart"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -404,7 +396,6 @@
                         android:layout_marginRight="8dp"
                         android:orientation="vertical">
 
-
                         <TextView
                             android:id="@+id/text_name"
                             android:layout_width="wrap_content"
@@ -412,7 +403,7 @@
                             android:layout_marginTop="16dp"
                             android:layout_weight="5"
                             android:text="@string/text_cost_total1"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -420,7 +411,7 @@
                             android:layout_marginBottom="-4dp"
                             android:layout_marginTop="16dp"
                             android:text="Всього"
-                            android:textColor="@color/colorBlack" />
+                            android:textColor="@color/colorBlack"/>
 
                         <TextView
                             android:id="@+id/text_cost_total"
@@ -428,7 +419,7 @@
                             android:layout_height="match_parent"
                             android:text="0 грн"
                             android:textColor="@color/colorBlack"
-                            android:textSize="32sp" />
+                            android:textSize="32sp"/>
 
                         <ProgressBar
                             android:id="@+id/progress_bar_cost"
@@ -437,7 +428,7 @@
                             android:layout_height="@dimen/progress_height"
                             android:layout_marginBottom="@dimen/progress_margin"
                             android:layout_marginTop="@dimen/progress_margin"
-                            android:progressDrawable="@drawable/progress" />
+                            android:progressDrawable="@drawable/progress"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -454,13 +445,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:text="@string/text_cost_common"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textColor="@color/colorBlack"/>
 
                                 <TextView
                                     android:id="@+id/text_cost_common"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:text="0 грн" />
+                                    android:text="0 грн"/>
 
                             </LinearLayout>
 
@@ -475,13 +466,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:text="@string/text_cost_mk"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textColor="@color/colorBlack"/>
 
                                 <TextView
                                     android:id="@+id/text_cost_mk"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:text="0 грн" />
+                                    android:text="0 грн"/>
 
                             </LinearLayout>
 
@@ -489,7 +480,6 @@
                         </LinearLayout>
 
                     </LinearLayout>
-
 
                 </LinearLayout>
 
@@ -514,12 +504,11 @@
                     android:focusable="true"
                     android:orientation="horizontal">
 
-
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_margin="16dp"
-                        android:src="@drawable/ic_comment" />
+                        android:src="@drawable/ic_comment"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -542,7 +531,7 @@
                                 android:backgroundTint="@android:color/transparent"
                                 android:hint="@string/hint_comment"
                                 android:inputType="textCapSentences|textMultiLine"
-                                android:textSize="18sp" />
+                                android:textSize="18sp"/>
 
                         </LinearLayout>
 
@@ -572,7 +561,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_margin="16dp"
-                        android:src="@drawable/ic_user_birthday" />
+                        android:src="@drawable/ic_user_birthday"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -581,15 +570,13 @@
                         android:layout_marginRight="8dp"
                         android:orientation="vertical">
 
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:layout_weight="5"
                             android:text="@string/text_birthdays"
-                            android:textSize="18sp" />
-
+                            android:textSize="18sp"/>
 
                         <TextView
                             android:id="@+id/text_birthdays"
@@ -597,11 +584,9 @@
                             android:layout_height="match_parent"
                             android:layout_marginTop="18dp"
                             android:textColor="@color/colorBlack"
-                            android:textSize="18sp" />
-
+                            android:textSize="18sp"/>
 
                     </LinearLayout>
-
 
                 </LinearLayout>
 
