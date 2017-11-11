@@ -3,7 +3,7 @@
 
 
     <!-- LOGIN -->
-    <string name="title_activity_login">KIDS APP</string>
+    <string name="title_activity_login">Вхід в KIDS APP</string>
     <string name="toast_minimum_password">Пароль за короткий. Мінімальна довжина 6 символів!</string>
     <string name="toast_auth_failed">Не вдається ввійти! Перевірте, будь ласка, правильність введених даних</string>
     <string name="button_login">ВВІЙТИ</string>
