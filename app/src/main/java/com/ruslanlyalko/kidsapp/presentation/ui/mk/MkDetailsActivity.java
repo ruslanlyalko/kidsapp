@@ -106,7 +106,7 @@ public class MkDetailsActivity extends AppCompatActivity {
     }
 
     private void initRef() {
-        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        toolbarLayout =  findViewById(R.id.toolbar_layout);
         textDescription = findViewById(R.id.text_description);
         textTitle2 = findViewById(R.id.text_title2);
         imageView = findViewById(R.id.image_view);
