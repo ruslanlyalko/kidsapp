@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBlack"
-    tools:context="com.example.android.kidsapp.ShowImageActivity">
+    tools:context="com.ruslanlyalko.kidsapp.presentation.widget.ShowImageActivity">
 
     <ImageView
         android:id="@+id/imageView"

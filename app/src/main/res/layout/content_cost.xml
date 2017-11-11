@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorBackground"
             android:orientation="vertical"
-            tools:context="com.example.android.kidsapp.CostsActivity"
+            tools:context="com.ruslanlyalko.kidsapp.presentation.ui.expenses.ExpensesActivity"
             tools:showIn="@layout/activity_costs">
 
 

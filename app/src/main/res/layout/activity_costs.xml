@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.kidsapp.CostsActivity">
+    tools:context="com.ruslanlyalko.kidsapp.presentation.ui.expenses.ExpensesActivity">
 
     <com.github.sundeepk.compactcalendarview.CompactCalendarView
         android:id="@+id/calendar_view"

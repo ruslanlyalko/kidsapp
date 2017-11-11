@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:orientation="vertical"
-    tools:context="com.example.android.kidsapp.ReportActivity">
+    tools:context="com.ruslanlyalko.kidsapp.presentation.ui.report.ReportActivity">
 
 
     <EditText
@@ -209,7 +209,7 @@
                     </LinearLayout>
 
                     <!-- Body  Room -->
-                    <com.example.android.kidsapp.utils.SwipeLayout
+                    <com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout
                         android:id="@+id/swipe_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -348,7 +348,7 @@
 
                         </LinearLayout>
 
-                    </com.example.android.kidsapp.utils.SwipeLayout>
+                    </com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout>
 
                 </LinearLayout>
 
@@ -423,7 +423,7 @@
                     </LinearLayout>
 
                     <!-- Body  BirthDay-->
-                    <com.example.android.kidsapp.utils.SwipeLayout
+                    <com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout
                         android:id="@+id/swipe_layout2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -555,7 +555,7 @@
                         </LinearLayout>
 
 
-                    </com.example.android.kidsapp.utils.SwipeLayout>
+                    </com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout>
 
                 </LinearLayout>
 
@@ -671,7 +671,7 @@
                     </LinearLayout>
 
                     <!-- Body  Mk -->
-                    <com.example.android.kidsapp.utils.SwipeLayout
+                    <com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout
                         android:id="@+id/swipe_layout3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -818,7 +818,7 @@
 
                         </LinearLayout>
 
-                    </com.example.android.kidsapp.utils.SwipeLayout>
+                    </com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout>
 
                 </LinearLayout>
 
