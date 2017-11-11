@@ -111,6 +111,7 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.mk.MkEditActivity"
+            android:parentActivityName="com.ruslanlyalko.kidsapp.presentation.ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Close"
             android:windowSoftInputMode="stateHidden"/>
@@ -122,6 +123,7 @@
         <activity
             android:name="com.ruslanlyalko.kidsapp.presentation.ui.profile.ProfileSettingsActivity"
             android:label="@string/action_settings"
+            android:parentActivityName="com.ruslanlyalko.kidsapp.presentation.ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Close"
             android:windowSoftInputMode="stateHidden"/>

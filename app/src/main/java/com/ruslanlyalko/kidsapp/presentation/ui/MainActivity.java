@@ -304,16 +304,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Swipe down
         if (mSwipeOpened) {
             mSwipeLayout.close();
-            mSwipeOpened = false;
             return;
         }
         if (mDoubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            int pid = android.os.Process.myPid();
-            android.os.Process.killProcess(pid);
+            finish();
             return;
         }
         mDoubleBackToExitPressedOnce = true;

@@ -85,12 +85,9 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final boolean myPage = mUser.getUserId().equals(mAuth.getCurrentUser().getUid());
                 if (Utils.isAdmin() && myPage) {
-                    Intent intent = new Intent(ProfileActivity.this, DashboardActivity.class);
-                    startActivity(intent);
+                    startActivity(DashboardActivity.getLaunchIntent(ProfileActivity.this));
                 } else {
-                    Intent intent = new Intent(ProfileActivity.this, SalaryActivity.class);
-                    intent.putExtra(Keys.Extras.EXTRA_UID, mUID);
-                    startActivity(intent);
+                    startActivity(SalaryActivity.getLaunchIntent(ProfileActivity.this, mUID, mUser));
                 }
             }
         });
@@ -103,9 +100,9 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         final CollapsingToolbarLayout collapsingToolbar =
-                 findViewById(R.id.collapsing_toolbar);
+                findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle(" ");
-        AppBarLayout appBarLayout =  findViewById(R.id.appbar);
+        AppBarLayout appBarLayout = findViewById(R.id.appbar);
         appBarLayout.setExpanded(true);
         // hiding & showing the title when toolbar expanded & collapsed
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {

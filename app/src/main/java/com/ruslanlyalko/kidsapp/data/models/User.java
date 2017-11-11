@@ -1,6 +1,8 @@
 package com.ruslanlyalko.kidsapp.data.models;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private String userId;
     private String userName;
@@ -60,123 +62,123 @@ public class User {
         this.mkBdChild = mkBdChild;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public void setUserBDay(String userBDay) {
-        this.userBDay = userBDay;
-    }
-
-    public void setUserCard(String userCard) {
-        this.userCard = userCard;
-    }
-
-    public void setUserIsAdmin(boolean userIsAdmin) {
-        this.userIsAdmin = userIsAdmin;
-    }
-
-    public void setUserPositionTitle(String userPositionTitle) {
-        this.userPositionTitle = userPositionTitle;
-    }
-
-    public void setUserFirstDate(String userFirstDate) {
-        this.userFirstDate = userFirstDate;
-    }
-
-    public void setUserTimeStart(String userTimeStart) {
-        this.userTimeStart = userTimeStart;
-    }
-
-    public void setUserTimeEnd(String userTimeEnd) {
-        this.userTimeEnd = userTimeEnd;
-    }
-
-    public void setUserStavka(int userStavka) {
-        this.userStavka = userStavka;
-    }
-
-    public void setUserPercent(int userPercent) {
-        this.userPercent = userPercent;
-    }
-
-    public void setMkArtChild(int mkArtChild) {
-        this.mkArtChild = mkArtChild;
-    }
-
-    public void setMkBd(int mkBd) {
-        this.mkBd = mkBd;
-    }
-
     public String getUserId() {
         return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public int getUserStavka() {
         return userStavka;
     }
 
+    public void setUserStavka(int userStavka) {
+        this.userStavka = userStavka;
+    }
+
     public int getUserPercent() {
         return userPercent;
+    }
+
+    public void setUserPercent(int userPercent) {
+        this.userPercent = userPercent;
     }
 
     public int getMkArtChild() {
         return mkArtChild;
     }
 
+    public void setMkArtChild(int mkArtChild) {
+        this.mkArtChild = mkArtChild;
+    }
+
     public int getMkBd() {
         return mkBd;
+    }
+
+    public void setMkBd(int mkBd) {
+        this.mkBd = mkBd;
     }
 
     public boolean getUserIsAdmin() {
         return userIsAdmin;
     }
 
+    public void setUserIsAdmin(boolean userIsAdmin) {
+        this.userIsAdmin = userIsAdmin;
+    }
+
     public String getUserBDay() {
         return userBDay;
+    }
+
+    public void setUserBDay(String userBDay) {
+        this.userBDay = userBDay;
     }
 
     public String getUserPhone() {
         return userPhone;
     }
 
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
     public String getUserName() {
         return this.userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getUserEmail() {
         return this.userEmail;
     }
 
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
     public String getUserCard() {
         return this.userCard;
+    }
+
+    public void setUserCard(String userCard) {
+        this.userCard = userCard;
     }
 
     public String getUserPositionTitle() {
         return userPositionTitle;
     }
 
+    public void setUserPositionTitle(String userPositionTitle) {
+        this.userPositionTitle = userPositionTitle;
+    }
+
     public String getUserFirstDate() {
         return userFirstDate;
+    }
+
+    public void setUserFirstDate(String userFirstDate) {
+        this.userFirstDate = userFirstDate;
     }
 
     public String getUserTimeStart() {
         return userTimeStart;
     }
 
+    public void setUserTimeStart(String userTimeStart) {
+        this.userTimeStart = userTimeStart;
+    }
+
     public String getUserTimeEnd() {
         return userTimeEnd;
+    }
+
+    public void setUserTimeEnd(String userTimeEnd) {
+        this.userTimeEnd = userTimeEnd;
     }
 }
