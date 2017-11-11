@@ -3,6 +3,8 @@ package com.ruslanlyalko.kidsapp.presentation;
 import android.app.Application;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Ruslan Lyalko
@@ -14,6 +16,7 @@ public class KidsApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 }

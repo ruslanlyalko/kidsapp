@@ -45,7 +45,7 @@ import com.ruslanlyalko.kidsapp.common.Constants;
 import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.data.Utils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
-import com.ruslanlyalko.kidsapp.data.models.Cost;
+import com.ruslanlyalko.kidsapp.data.models.Expense;
 import com.ruslanlyalko.kidsapp.presentation.ui.expenses.adapter.ExpensesAdapter;
 
 import java.io.ByteArrayOutputStream;
@@ -68,7 +68,7 @@ public class ExpensesActivity extends AppCompatActivity {
     CompactCalendarView compactCalendarView;
 
     private ExpensesAdapter adapter;
-    private List<Cost> costList = new ArrayList<>();
+    private List<Expense> mExpenseList = new ArrayList<>();
     private Boolean isFabOpen = false;
     private FloatingActionButton fab, fab1, fab2;
     private Animation fab_open, fab_close, rotate_forward, rotate_backward, fade, fade_back_quick;
@@ -132,7 +132,7 @@ public class ExpensesActivity extends AppCompatActivity {
                             .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     removeAllCost();
-                                    costList.clear();
+                                    mExpenseList.clear();
                                     adapter.notifyDataSetChanged();
                                 }
                             })
@@ -187,22 +187,22 @@ public class ExpensesActivity extends AppCompatActivity {
     }
 
     private void initRecycle() {
-        adapter = new ExpensesAdapter(this, costList);
+        adapter = new ExpensesAdapter(this, mExpenseList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
 
     private void loadCosts(String yearStr, String monthStr) {
-        costList.clear();
+        mExpenseList.clear();
         adapter.notifyDataSetChanged();
         calcTotal();
         mDatabase.getReference(DefaultConfigurations.DB_COSTS).child(yearStr).child(monthStr)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Cost cost = dataSnapshot.getValue(Cost.class);
-                        if (cost != null && (Utils.isAdmin() || cost.getUserId().equals(mAuth.getCurrentUser().getUid()))) {
-                            costList.add(0, cost);
+                        Expense expense = dataSnapshot.getValue(Expense.class);
+                        if (expense != null && (Utils.isAdmin() || expense.getUserId().equals(mAuth.getCurrentUser().getUid()))) {
+                            mExpenseList.add(0, expense);
                             adapter.notifyItemInserted(0);
                             calcTotal();
                         }
@@ -214,12 +214,12 @@ public class ExpensesActivity extends AppCompatActivity {
 
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        Cost cost = dataSnapshot.getValue(Cost.class);
-                        if (cost != null) {
+                        Expense expense = dataSnapshot.getValue(Expense.class);
+                        if (expense != null) {
                             int i = 0;
-                            for (Cost cost1 : costList) {
-                                if (cost1.getKey().equals(cost.getKey())) {
-                                    costList.remove(cost1);
+                            for (Expense expense1 : mExpenseList) {
+                                if (expense1.getKey().equals(expense.getKey())) {
+                                    mExpenseList.remove(expense1);
                                     adapter.notifyItemRemoved(i);
                                     adapter.notifyDataSetChanged();
                                     calcTotal();
@@ -243,10 +243,10 @@ public class ExpensesActivity extends AppCompatActivity {
     private void calcTotal() {
         int common = 0;
         int mk = 0;
-        for (Cost cost : costList) {
-            if (cost.getTitle2().equals(getString(R.string.text_cost_common)))
-                common += cost.getPrice();
-            if (cost.getTitle2().equals(getString(R.string.text_cost_mk))) mk += cost.getPrice();
+        for (Expense expense : mExpenseList) {
+            if (expense.getTitle2().equals(getString(R.string.text_cost_common)))
+                common += expense.getPrice();
+            if (expense.getTitle2().equals(getString(R.string.text_cost_mk))) mk += expense.getPrice();
         }
         int total = common + mk;
         progressBar.setMax(total);
@@ -368,7 +368,7 @@ public class ExpensesActivity extends AppCompatActivity {
                 // name of file in Storage
                 final String filename = DateUtils.getCurrentTimeStamp() + "_" + mAuth.getCurrentUser().getUid() + ".jpg";
                 UploadTask uploadTask = FirebaseStorage.getInstance()
-                        .getReference(DefaultConfigurations.STORAGE_COST)
+                        .getReference(DefaultConfigurations.STORAGE_EXPENSES)
                         .child(filename)
                         .putBytes(bytes, metadata);
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -396,16 +396,16 @@ public class ExpensesActivity extends AppCompatActivity {
     private void addCost(String title1, String title22, String price, String uri) {
         if (price == null || price.isEmpty())
             price = "0";
-        Cost cost = new Cost(title1, title22,
+        Expense expense = new Expense(title1, title22,
                 new SimpleDateFormat("d-M-yyyy", Locale.US).format(new Date()).toString(),
                 uri,
                 mAuth.getCurrentUser().getUid(),
                 mAuth.getCurrentUser().getDisplayName(),
                 Integer.parseInt(price));
-        addCostToDb(cost);
+        addCostToDb(expense);
     }
 
-    private void addCostToDb(Cost newCost) {
+    private void addCostToDb(Expense newExpense) {
         String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date()).toString();
         String monthStr = new SimpleDateFormat("M", Locale.US).format(new Date()).toString();
         String time = new SimpleDateFormat("HH:mm", Locale.US).format(new Date()).toString();
@@ -413,9 +413,9 @@ public class ExpensesActivity extends AppCompatActivity {
                 .child(yearStr)
                 .child(monthStr);
         String key = ref.push().getKey();
-        newCost.setKey(key);
-        newCost.setTime(time);
-        ref.child(key).setValue(newCost).addOnCompleteListener(new OnCompleteListener<Void>() {
+        newExpense.setKey(key);
+        newExpense.setTime(time);
+        ref.child(key).setValue(newExpense).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 recyclerView.smoothScrollToPosition(0);

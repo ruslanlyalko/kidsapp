@@ -129,7 +129,7 @@
         </activity>
 
         <activity
-            android:name="com.ruslanlyalko.kidsapp.presentation.widget.ShowImageActivity"
+            android:name="com.ruslanlyalko.kidsapp.presentation.widget.PhotoPreviewActivity"
             android:theme="@style/AppTheme.BlackClose">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -222,6 +222,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ruslanlyalko.kidsapp.presentation.ui.profile.SalaryActivity"/>
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="52ba750a54b6b9f14ef3239631d128c3b628ee05" />
     </application>
 
 </manifest>

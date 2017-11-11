@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.text_app_name) TextView mAppNameText;
     @BindView(R.id.text_link) TextView mLinkText;
     @BindView(R.id.text_link_details) TextView mLinkDetailsText;
-    @BindView(R.id.button_swipe) Button mArrowButton;
+    @BindView(R.id.button_arrow) Button mArrowButton;
     @BindView(R.id.swipe_layout) SwipeLayout mSwipeLayout;
 
     boolean mDoubleBackToExitPressedOnce = false;
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @OnClick(R.id.button_swipe)
+    @OnClick(R.id.button_arrow)
     void onArrowClicked() {
         if (mSwipeOpened)
             mSwipeLayout.close();

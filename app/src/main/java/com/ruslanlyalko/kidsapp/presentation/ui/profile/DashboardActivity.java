@@ -19,7 +19,7 @@ import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Constants;
 import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
-import com.ruslanlyalko.kidsapp.data.models.Cost;
+import com.ruslanlyalko.kidsapp.data.models.Expense;
 import com.ruslanlyalko.kidsapp.data.models.Report;
 import com.ruslanlyalko.kidsapp.data.models.User;
 
@@ -42,7 +42,7 @@ public class DashboardActivity extends AppCompatActivity {
     TextView textBirthdays;
     EditText editComment;
 
-    private List<Cost> costList = new ArrayList<>();
+    private List<Expense> mExpenseList = new ArrayList<>();
     ProgressBar progressBar, progressBarCost, progressBarSalary;
     List<Report> reportList = new ArrayList<>();
 
@@ -196,15 +196,15 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void loadCosts(String yearStr, String monthStr) {
-        costList.clear();
+        mExpenseList.clear();
         calcCostTotal();
         mDatabase.getReference(DefaultConfigurations.DB_COSTS).child(yearStr).child(monthStr)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Cost cost = dataSnapshot.getValue(Cost.class);
-                        if (cost != null) {
-                            costList.add(0, cost);
+                        Expense expense = dataSnapshot.getValue(Expense.class);
+                        if (expense != null) {
+                            mExpenseList.add(0, expense);
                             calcCostTotal();
                         }
                     }
@@ -230,11 +230,11 @@ public class DashboardActivity extends AppCompatActivity {
     private void calcCostTotal() {
         int common = 0;
         int mk = 0;
-        for (Cost cost : costList) {
-            if (cost.getTitle2().equals(getString(R.string.text_cost_common)))
-                common += cost.getPrice();
-            if (cost.getTitle2().equals(getString(R.string.text_cost_mk)))
-                mk += cost.getPrice();
+        for (Expense expense : mExpenseList) {
+            if (expense.getTitle2().equals(getString(R.string.text_cost_common)))
+                common += expense.getPrice();
+            if (expense.getTitle2().equals(getString(R.string.text_cost_mk)))
+                mk += expense.getPrice();
         }
         costTotal = common + mk;
         progressBarCost.setMax(costTotal);

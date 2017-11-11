@@ -25,8 +25,8 @@ import com.ruslanlyalko.kidsapp.common.Constants;
 import com.ruslanlyalko.kidsapp.common.Keys;
 import com.ruslanlyalko.kidsapp.data.Utils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
-import com.ruslanlyalko.kidsapp.data.models.Cost;
-import com.ruslanlyalko.kidsapp.presentation.widget.ShowImageActivity;
+import com.ruslanlyalko.kidsapp.data.models.Expense;
+import com.ruslanlyalko.kidsapp.presentation.widget.PhotoPreviewActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout;
 
 import java.text.ParseException;
@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<Cost> costList;
+    private List<Expense> mExpenseList;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -64,9 +64,9 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
         }
     }
 
-    public ExpensesAdapter(Context mContext, List<Cost> reportList) {
+    public ExpensesAdapter(Context mContext, List<Expense> reportList) {
         this.mContext = mContext;
-        this.costList = reportList;
+        this.mExpenseList = reportList;
     }
 
     @Override
@@ -78,22 +78,22 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
 
     @Override
     public void onBindViewHolder(final ExpensesAdapter.MyViewHolder holder, final int position) {
-        final Cost cost = costList.get(position);
-        boolean isCurrentUserCost = cost.getUserId().endsWith(mAuth.getCurrentUser().getUid());
-        holder.textTitle1.setText(cost.getTitle1());
-        holder.textTitle2.setText(isCurrentUserCost ? cost.getTitle2() : cost.getTitle2() + "  (" + cost.getUserName() + ")");
-        holder.textPrice.setText(cost.getPrice() + " грн");
-        holder.textDate.setText(cost.getDate().substring(0, cost.getDate().length() - 5) + " о " + cost.getTime());
+        final Expense expense = mExpenseList.get(position);
+        boolean isCurrentUserCost = expense.getUserId().endsWith(mAuth.getCurrentUser().getUid());
+        holder.textTitle1.setText(expense.getTitle1());
+        holder.textTitle2.setText(isCurrentUserCost ? expense.getTitle2() : expense.getTitle2() + "  (" + expense.getUserName() + ")");
+        holder.textPrice.setText(expense.getPrice() + " грн");
+        holder.textDate.setText(expense.getDate().substring(0, expense.getDate().length() - 5) + " о " + expense.getTime());
         // click on item to open photo
-        if (cost.getUri() != null && !cost.getUri().isEmpty()) {
+        if (expense.getUri() != null && !expense.getUri().isEmpty()) {
             holder.linearUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // open new Activity and load image from storage
-                    String uri = cost.getUri();
-                    Intent intent = new Intent(mContext, ShowImageActivity.class);
+                    String uri = expense.getUri();
+                    Intent intent = new Intent(mContext, PhotoPreviewActivity.class);
                     intent.putExtra(Keys.Extras.EXTRA_URI, uri);
-                    intent.putExtra(Keys.Extras.EXTRA_USER_NAME, cost.getUserName());
+                    intent.putExtra(Keys.Extras.EXTRA_USER_NAME, expense.getUserName());
                     mContext.startActivity(intent);
                 }
             });
@@ -101,7 +101,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
             holder.imageView.setImageResource(R.drawable.ic_image_light);
         }
         //check if just added
-        int diff = getDifference(cost.getDate(), cost.getTime());
+        int diff = getDifference(expense.getDate(), expense.getTime());
         boolean justAdded = (diff <= Constants.COST_EDIT_MIN);
         // Avoid delete
         if (!Utils.isAdmin() && justAdded) {
@@ -123,13 +123,13 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
             holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Utils.isAdmin() || cost.getUserId().equals(mAuth.getCurrentUser().getUid())) {
+                    if (Utils.isAdmin() || expense.getUserId().equals(mAuth.getCurrentUser().getUid())) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                         builder.setTitle(R.string.dialog_cost_delete_title)
                                 .setMessage(R.string.dialog_cost_delete_message)
                                 .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        removeCost(cost, holder.buttonDelete);
+                                        removeCost(expense, holder.buttonDelete);
                                         holder.swipeLayout.close();
                                     }
                                 })
@@ -165,11 +165,11 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
         return diffMinutes;
     }
 
-    private void removeCost(Cost cost, final View view) {
-        // costList.remove(position);
+    private void removeCost(Expense expense, final View view) {
+        // mExpenseList.remove(position);
         mDatabase.getReference(DefaultConfigurations.DB_COSTS)
-                .child(getYearFromStr(cost.date)).child(getMonthFromStr(cost.date))
-                .child(cost.getKey()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                .child(getYearFromStr(expense.date)).child(getMonthFromStr(expense.date))
+                .child(expense.getKey()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Snackbar.make(view, mContext.getString(R.string.snack_deleted), Snackbar.LENGTH_LONG).show();
@@ -196,6 +196,6 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return costList.size();
+        return mExpenseList.size();
     }
 }

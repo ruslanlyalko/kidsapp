@@ -55,7 +55,7 @@ import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Mk;
 import com.ruslanlyalko.kidsapp.data.models.Report;
 import com.ruslanlyalko.kidsapp.presentation.ui.calendar.CalendarActivity;
-import com.ruslanlyalko.kidsapp.presentation.widget.ShowImageActivity;
+import com.ruslanlyalko.kidsapp.presentation.widget.PhotoPreviewActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout;
 
 import java.io.ByteArrayOutputStream;
@@ -144,7 +144,7 @@ public class ReportActivity extends AppCompatActivity {
                 String uri = mReport.imageUri;
                 if (uri != null && !uri.isEmpty()) {
                     // show photo
-                    Intent intent = new Intent(ReportActivity.this, ShowImageActivity.class);
+                    Intent intent = new Intent(ReportActivity.this, PhotoPreviewActivity.class);
                     intent.putExtra(Keys.Extras.EXTRA_URI, uri);
                     intent.putExtra(Keys.Extras.EXTRA_USER_NAME, mReport.getUserName());
                     intent.putExtra(Keys.Extras.EXTRA_FOLDER, DefaultConfigurations.STORAGE_REPORT);

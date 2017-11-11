@@ -14,7 +14,7 @@ public interface DefaultConfigurations {
     String DB_NOTIFICATIONS = "NOTIFICATIONS";
     String DB_ABOUT = "text_about";
   
-    String STORAGE_COST = "COST";
+    String STORAGE_EXPENSES = "COST";
     String STORAGE_MK = "MK";
     String STORAGE_REPORT = "REPORT";
 }
