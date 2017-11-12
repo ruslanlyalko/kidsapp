@@ -21,17 +21,14 @@
     <color name="colorBlack50">#7F000000</color>
     <color name="colorBlack70">#BF000000</color>
 
-
     <color name="colorFab1">#a5cde1</color>
     <color name="colorFab2">#d232c2</color>
     <color name="colorFab3">#57d232</color>
-
 
     <color name="colorBlue500">#2196F3</color>
     <color name="colorIndigo500">#3F51B5</color>
     <color name="colorTeal500">#009688</color>
     <color name="colorDeepOrange500">#FF5722</color>
-
 
     <integer-array name="colors">
         <item>@color/colorPrimary</item>

@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">KIDS APP</string>
 
-
     <!-- LOGIN -->
     <string name="title_activity_login">Вхід в KIDS APP</string>
     <string name="toast_minimum_password">Пароль за короткий. Мінімальна довжина 6 символів!</string>
@@ -17,7 +16,6 @@
     <string name="toast_user_created">"Готово. Ввійдіть з допомогою Вашого Email: "</string>
     <string name="button_reset_password">Відновити пароль</string>
 
-
     <!-- SIGN UP-->
     <string name="title_activity_signup">Реєстрація</string>
     <string name="button_sign_up">Зареєструвати</string>
@@ -29,7 +27,6 @@
     <string name="hint_date_birth">Дата народження</string>
     <string name="hint_card">Номер картки</string>
     <string name="hint_password">Пароль</string>
-
 
     <!-- MAIN -->
     <string name="app_title">KIDS APP</string>
@@ -78,18 +75,14 @@
     <string name="toast_edit_impossible">Редагувати можна тільки сьогоднішній або майбутні звіти</string>
     <string name="toast_delete_impossible">Видалити можна тільки сьогоднішній або майбутні звіти</string>
 
-
     <!-- M K -->
     <string name="title_activity_mk">Майстер класи</string>
-
 
     <!-- Expense-->
     <string name="title_activity_cost">Витрати</string>
 
-
     <!-- NOTIFICATION-->
     <string name="title_activity_notification">Повідомлення</string>
-
 
     <string-array name="month_array">
         <item>Січень</item>
@@ -110,7 +103,6 @@
     <string name="dialog_delete_mk_message">Після видалення відновити мастер клас буде неможливо</string>
     <string name="dialog_delete_title">Видалити звіт</string>
     <string name="dialog_delete_message">Після видалення відновити звіт буде неможливо</string>
-
 
     <string name="title_activity_dashboard">"Адмін панель (%1$s ГРН)"</string>
     <string name="hint_date">Дата</string>
@@ -166,7 +158,6 @@
     <string name="toast_report_deleted">Звіт видалено</string>
     <string name="action_go_to_calendar">КАЛЕНДАР</string>
     <string name="toast_report_cleared">Звіт очищено</string>
-
 
     <string name="hint_time">Час роботи</string>
     <string name="action_new_user">Новий користувач</string>
@@ -228,9 +219,6 @@
     <string name="toast_nothing_to_change">Немає змін в даних</string>
     <string name="button_link">Скачати останню версію</string>
 
-
-
-
     <string name="hrn_percent">"%1$s відсотків"</string>
     <string name="hrn_child">"%1$s грн/дитина"</string>
     <string name="hrn_day">"%1$s грн/день"</string>
@@ -241,15 +229,10 @@
     <string name="text_salary_switch">Використовувати спеціальні умови</string>
     <string name="dialog_discart_changes">Скинути всі зміни</string>
 
-
-
-
-
     <string name="action_discard">СКИНУТИ</string>
     <string name="action_cancel">СКАСУВАТИ</string>
     <string name="action_save_changes">ЗБЕРЕГТИ ЗМІНИ</string>
     <string name="action_no">НІ</string>
     <string name="action_choose">ВИБРАТИ</string>
-
 
 </resources>

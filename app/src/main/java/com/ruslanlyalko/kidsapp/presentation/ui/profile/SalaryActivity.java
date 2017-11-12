@@ -90,24 +90,7 @@ public class SalaryActivity extends AppCompatActivity {
         String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date());
         String monthStr = new SimpleDateFormat("M", Locale.US).format(new Date());
         loadReports(yearStr, monthStr);
-        mCurrentMonth = new Date();
-        mCurrentMonth.setDate(1);
-        updateConditionUI(mCurrentMonth);
-    }
-
-    private void initSwitcher() {
-        mTotalSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-            public View makeView() {
-                TextView myText = new TextView(SalaryActivity.this);
-                myText.setTextSize(32);
-                myText.setTextColor(Color.BLACK);
-                return myText;
-            }
-        });
-        Animation in = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
-        Animation out = AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right);
-        mTotalSwitcher.setInAnimation(in);
-        mTotalSwitcher.setOutAnimation(out);
+        updateConditionUI(DateUtils.getCurrentMonthFirstDate());
     }
 
     private void parseExtras() {
@@ -142,13 +125,40 @@ public class SalaryActivity extends AppCompatActivity {
         });
     }
 
+    private void initSwitcher() {
+        mTotalSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+            public View makeView() {
+                TextView myText = new TextView(SalaryActivity.this);
+                myText.setTextSize(32);
+                myText.setTextColor(Color.BLACK);
+                return myText;
+            }
+        });
+    }
+
     @OnClick(R.id.button_prev)
     void onPrevClicked() {
+        setSwitcherAnim(true);
         mCompactCalendarView.showPreviousMonth();
+    }
+
+    private void setSwitcherAnim(final boolean right) {
+        Animation in;
+        Animation out;
+        if (right) {
+            in = AnimationUtils.loadAnimation(this, R.anim.trans_right_in);
+            out = AnimationUtils.loadAnimation(this, R.anim.trans_right_out);
+        } else {
+            in = AnimationUtils.loadAnimation(this, R.anim.trans_left_in);
+            out = AnimationUtils.loadAnimation(this, R.anim.trans_left_out);
+        }
+        mTotalSwitcher.setInAnimation(in);
+        mTotalSwitcher.setOutAnimation(out);
     }
 
     @OnClick(R.id.button_next)
     void onNextClicked() {
+        setSwitcherAnim(false);
         mCompactCalendarView.showNextMonth();
     }
 

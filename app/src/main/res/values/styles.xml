@@ -24,7 +24,7 @@
     <style name="AppTheme.Splash" parent="AppTheme.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>
     </style>
-    
+
     <!-- Theme with Close icon instead UpButton icon -->
     <style name="AppTheme.Close" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:homeAsUpIndicator">@drawable/ic_close</item>
@@ -34,7 +34,7 @@
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
     </style>
 
-<!-- Theme with Close icon instead UpButton icon -->
+    <!-- Theme with Close icon instead UpButton icon -->
     <style name="AppTheme.BlackClose" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:homeAsUpIndicator">@drawable/ic_close</item>
         <item name="colorPrimary">@color/colorBlack</item>
@@ -47,10 +47,9 @@
 
     </style>
 
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
 </resources>
 

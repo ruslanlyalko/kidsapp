@@ -10,6 +10,8 @@ import com.ruslanlyalko.kidsapp.data.models.Report;
 public interface OnReportClickListener {
 
     void onCommentClicked(Report report);
+
     void onMkClicked(Report report);
+
     void onEditClicked(Report report);
 }

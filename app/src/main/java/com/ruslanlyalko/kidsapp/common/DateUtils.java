@@ -72,6 +72,12 @@ public class DateUtils {
     }
 
     public static boolean isCurrentYear(final Date date) {
-        return  date.getYear() == new Date().getYear();
+        return date.getYear() == new Date().getYear();
+    }
+
+    public static Date getCurrentMonthFirstDate() {
+        Date mCurrentMonth = new Date();
+        mCurrentMonth.setDate(1);
+        return mCurrentMonth;
     }
 }

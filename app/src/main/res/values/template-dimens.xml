@@ -32,5 +32,4 @@
     <dimen name="dot_width">@dimen/margin_tiny</dimen>
     <dimen name="dot_height">@dimen/margin_tiny</dimen>
 
-
 </resources>
