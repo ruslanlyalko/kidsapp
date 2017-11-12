@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Ruslan Lyalko
@@ -79,5 +80,31 @@ public class DateUtils {
         Date mCurrentMonth = new Date();
         mCurrentMonth.setDate(1);
         return mCurrentMonth;
+    }
+
+    public static String getYearFromStr(String date) {
+        int last = date.lastIndexOf('-');
+        return date.substring(last + 1);
+    }
+
+    public static String getMonthFromStr(String date) {
+        int first = date.indexOf('-');
+        int last = date.lastIndexOf('-');
+        return date.substring(first + 1, last);
+    }
+
+    public static int getDifference(String date, String time) {
+        if (time == null || time.isEmpty()) return 10;
+        SimpleDateFormat format = new SimpleDateFormat("d-M-yyyy HH:mm", Locale.US);
+        Date d1 = new Date();
+        Date d2 = new Date();
+        try {
+            d2 = format.parse(date + " " + time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        // Get msec from each, and subtract.
+        long diff = d1.getTime() - d2.getTime();
+        return (int) TimeUnit.MILLISECONDS.toMinutes(diff);
     }
 }

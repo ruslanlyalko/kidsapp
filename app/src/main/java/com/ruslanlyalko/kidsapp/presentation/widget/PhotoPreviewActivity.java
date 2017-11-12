@@ -1,5 +1,6 @@
 package com.ruslanlyalko.kidsapp.presentation.widget;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -28,6 +29,21 @@ public class PhotoPreviewActivity extends AppCompatActivity {
     private String uri = "";
     private String userName = "";
     private String folder = "";
+
+    public static Intent getLaunchIntent(final AppCompatActivity launchActivity, String uri, String userName) {
+        Intent intent = new Intent(launchActivity, PhotoPreviewActivity.class);
+        intent.putExtra(Keys.Extras.EXTRA_URI, uri);
+        intent.putExtra(Keys.Extras.EXTRA_USER_NAME, userName);
+        return intent;
+    }
+
+    public static Intent getLaunchIntent(final AppCompatActivity launchActivity, final String uri, final String userName, final String storage) {
+        Intent intent = new Intent(launchActivity, PhotoPreviewActivity.class);
+        intent.putExtra(Keys.Extras.EXTRA_URI, uri);
+        intent.putExtra(Keys.Extras.EXTRA_USER_NAME, userName);
+        intent.putExtra(Keys.Extras.EXTRA_FOLDER, storage);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

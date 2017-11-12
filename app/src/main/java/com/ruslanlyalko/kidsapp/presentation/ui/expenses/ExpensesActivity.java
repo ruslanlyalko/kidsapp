@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -51,6 +52,8 @@ import com.ruslanlyalko.kidsapp.data.Utils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Expense;
 import com.ruslanlyalko.kidsapp.presentation.ui.expenses.adapter.ExpensesAdapter;
+import com.ruslanlyalko.kidsapp.presentation.ui.expenses.adapter.OnExpenseClickListener;
+import com.ruslanlyalko.kidsapp.presentation.widget.PhotoPreviewActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,7 +68,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ExpensesActivity extends AppCompatActivity {
+public class ExpensesActivity extends AppCompatActivity implements OnExpenseClickListener {
 
     @BindView(R.id.text_cost_total) TextSwitcher mTotalSwitcher;
     CompactCalendarView mCompactCalendarView;
@@ -481,5 +484,35 @@ public class ExpensesActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRemoveClicked(final Expense expense) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle(R.string.dialog_cost_delete_title)
+                .setMessage(R.string.dialog_cost_delete_message)
+                .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        removeCost(expense);
+                    }
+                })
+                .setNegativeButton("Повернутись", null)
+                .show();
+    }
+
+    @Override
+    public void onPhotoPreviewClicked(final Expense expense) {
+        startActivity(PhotoPreviewActivity.getLaunchIntent(this, expense.getUri(), expense.getUserName()));
+    }
+
+    private void removeCost(Expense expense) {
+        mDatabase.getReference(DefaultConfigurations.DB_COSTS)
+                .child(DateUtils.getYearFromStr(expense.date)).child(DateUtils.getMonthFromStr(expense.date))
+                .child(expense.getKey()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Snackbar.make(mExpensesList, getString(R.string.snack_deleted), Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 }
