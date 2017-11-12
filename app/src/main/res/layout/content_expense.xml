@@ -128,7 +128,7 @@
                             android:text="Всього"
                             android:textColor="@color/colorBlack"/>
 
-                        <TextView
+                        <TextSwitcher
                             android:id="@+id/text_cost_total"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
