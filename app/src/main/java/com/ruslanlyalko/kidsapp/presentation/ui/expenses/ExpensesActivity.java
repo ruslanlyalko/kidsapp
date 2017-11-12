@@ -102,7 +102,7 @@ public class ExpensesActivity extends AppCompatActivity {
                 month.setTime(firstDayOfNewMonth);
                 String yearSimple = new SimpleDateFormat("yy", Locale.US).format(firstDayOfNewMonth).toString();
                 String str = Constants.MONTH_FULL[month.get(Calendar.MONTH)];
-                if (firstDayOfNewMonth.getYear() != new Date().getYear())
+                if (!DateUtils.isCurrentYear(firstDayOfNewMonth))
                     str = str + "'" + yearSimple;
                 textMonth.setText(str);
                 String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(firstDayOfNewMonth).toString();

@@ -8,6 +8,7 @@ package com.ruslanlyalko.kidsapp.common;
 public interface Keys {
 
     interface Extras {
+
         String EXTRA_UID = "extra_uid";
         String EXTRA_USER_NAME = "extra_user_name";
         String EXTRA_DATE = "extra_date";
@@ -19,5 +20,4 @@ public interface Keys {
         String EXTRA_ABOUT = "extra_about";
         String EXTRA_USER = "EXTRA_USER";
     }
-
 }

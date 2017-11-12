@@ -6,12 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,11 +18,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Constants;
 import com.ruslanlyalko.kidsapp.common.DateUtils;
+import com.ruslanlyalko.kidsapp.common.ViewUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Expense;
 import com.ruslanlyalko.kidsapp.data.models.Report;
 import com.ruslanlyalko.kidsapp.data.models.User;
-import com.ruslanlyalko.kidsapp.presentation.ui.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,42 +31,57 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class DashboardActivity extends AppCompatActivity {
 
-    TextView textTotal, textRoom, textBday, textMk, textMonth;
-    ImageButton buttonPrev, buttonNext;
-    CompactCalendarView compactCalendarView;
+    @BindView(R.id.calendar_view) CompactCalendarView mCompactCalendarView;
+    @BindView(R.id.text_total) TextView textTotal;
+    @BindView(R.id.text_room_total) TextView textRoom;
+    @BindView(R.id.text_bday_total) TextView textBday;
+    @BindView(R.id.text_mk_total) TextView textMk;
+    @BindView(R.id.text_month) TextView textMonth;
+    @BindView(R.id.text_cost_total) TextView textCostTotal;
+    @BindView(R.id.text_cost_common) TextView textCostCommon;
+    @BindView(R.id.text_cost_mk) TextView textCostMk;
+    @BindView(R.id.text_salary_total) TextView textSalaryTotal;
+    @BindView(R.id.text_stavka_total) TextView textSalaryStavka;
+    @BindView(R.id.text_percent_total) TextView textSalaryPercent;
+    @BindView(R.id.text_salary_mk_total) TextView textSalaryMk;
+    @BindView(R.id.text_birthdays) TextView textBirthdays;
+    @BindView(R.id.edit_comment) EditText editComment;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindView(R.id.progress_bar_cost) ProgressBar progressBarCost;
+    @BindView(R.id.progress_bar_salary) ProgressBar progressBarSalary;
+    @BindView(R.id.text_salary_expand) TextView mTextExpand;
+    @BindView(R.id.image_expand) ImageView mImageView;
 
-    TextView textCostTotal, textCostCommon, textCostMk;
-    TextView textSalaryTotal, textSalaryStavka, textSalaryPercent, textSalaryMk;
-
-    TextView textBirthdays;
-    EditText editComment;
-    ProgressBar progressBar, progressBarCost, progressBarSalary;
-    List<Report> reportList = new ArrayList<>();
-    private List<Expense> mExpenseList = new ArrayList<>();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    private List<Report> reportList = new ArrayList<>();
+    private List<Expense> mExpenseList = new ArrayList<>();
     private List<User> userList = new ArrayList<>();
     private String yearStr;
-    private String monthStr;
 
-    private int netIncome;
+    private String monthStr;
     private int incomeTotal;
     private int costTotal;
     private int salaryTotal;
+
     private String mComment;
 
     public static Intent getLaunchIntent(final AppCompatActivity launchActivity) {
         return new Intent(launchActivity, DashboardActivity.class);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        initRef();
+        ButterKnife.bind(this);
         initCalendar();
-        Calendar month = Calendar.getInstance();
-        textMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);
+        textMonth.setText(Constants.MONTH_FULL[Calendar.getInstance().get(Calendar.MONTH)]);
         yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date()).toString();
         monthStr = new SimpleDateFormat("M", Locale.US).format(new Date()).toString();
         loadReports(yearStr, monthStr);
@@ -76,31 +90,8 @@ public class DashboardActivity extends AppCompatActivity {
         loadComment(yearStr, monthStr);
     }
 
-    private void initRef() {
-        buttonNext = findViewById(R.id.button_next);
-        buttonPrev = findViewById(R.id.button_prev);
-        compactCalendarView = findViewById(R.id.calendar_view);
-        textMonth = findViewById(R.id.text_month);
-        textTotal = findViewById(R.id.text_total);
-        textRoom = findViewById(R.id.text_room_total);
-        textBday = findViewById(R.id.text_bday_total);
-        textMk = findViewById(R.id.text_mk_total);
-        progressBar = findViewById(R.id.progress_bar);
-        progressBarSalary = findViewById(R.id.progress_bar_salary);
-        progressBarCost = findViewById(R.id.progress_bar_cost);
-        textCostTotal = findViewById(R.id.text_cost_total);
-        textCostCommon = findViewById(R.id.text_cost_common);
-        textCostMk = findViewById(R.id.text_cost_mk);
-        textSalaryTotal = findViewById(R.id.text_salary_total);
-        textSalaryStavka = findViewById(R.id.text_stavka_total);
-        textSalaryPercent = findViewById(R.id.text_percent_total);
-        textSalaryMk = findViewById(R.id.text_salary_mk_total);
-        textBirthdays = findViewById(R.id.text_birthdays);
-        editComment = findViewById(R.id.edit_comment);
-    }
-
     private void initCalendar() {
-        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+        mCompactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
             }
@@ -111,7 +102,7 @@ public class DashboardActivity extends AppCompatActivity {
                 month.setTime(firstDayOfNewMonth);
                 String yearSimple = new SimpleDateFormat("yy", Locale.US).format(firstDayOfNewMonth).toString();
                 String str = Constants.MONTH_FULL[month.get(Calendar.MONTH)];
-                if (firstDayOfNewMonth.getYear() != new Date().getYear())
+                if (!DateUtils.isCurrentYear(firstDayOfNewMonth))
                     str = str + "'" + yearSimple;
                 textMonth.setText(str);
                 yearStr = new SimpleDateFormat("yyyy", Locale.US).format(firstDayOfNewMonth).toString();
@@ -122,189 +113,105 @@ public class DashboardActivity extends AppCompatActivity {
                 loadComment(yearStr, monthStr);
             }
         });
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // save comment
-                saveCommentToDB(editComment.getText().toString());
-                compactCalendarView.showNextMonth();
-            }
-        });
-        buttonPrev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // save comment
-                saveCommentToDB(editComment.getText().toString());
-                compactCalendarView.showPreviousMonth();
-            }
-        });
+    }
+
+    @OnClick(R.id.panel_action)
+    void onExpandClicked() {
+        if (mTextExpand.getVisibility() == View.VISIBLE) {
+            mImageView.setImageResource(R.drawable.ic_action_expand_more);
+            ViewUtils.collapse(mTextExpand);
+        } else {
+            ViewUtils.expand(mTextExpand);
+            mImageView.setImageResource(R.drawable.ic_action_expand_less);
+        }
+    }
+
+    @OnClick(R.id.button_prev)
+    void onPrevClicked() {
+        saveCommentToDB(editComment.getText().toString());
+        mCompactCalendarView.showPreviousMonth();
+    }
+
+    private void saveCommentToDB(String s) {
+        if (!s.equals(mComment))
+            mDatabase.getReference(DefaultConfigurations.DB_COMMENTS)
+                    .child(yearStr)
+                    .child(monthStr).setValue(s);
+    }
+
+    @OnClick(R.id.button_next)
+    void onNextClicked() {
+        saveCommentToDB(editComment.getText().toString());
+        mCompactCalendarView.showNextMonth();
     }
 
     private void loadReports(String yearStr, String monthStr) {
-        reportList.clear();
-        calcIncome();
         mDatabase.getReference(DefaultConfigurations.DB_REPORTS)
                 .child(yearStr)
                 .child(monthStr)
-                .addChildEventListener(new ChildEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                            Report report = ds.getValue(Report.class);
-                            if (report != null) {
-                                reportList.add(report);
-                                calcIncome();
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        reportList.clear();
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
+                            for (DataSnapshot ds : data.getChildren()) {
+                                Report report = ds.getValue(Report.class);
+                                if (report != null) {
+                                    reportList.add(report);
+                                }
                             }
                         }
+                        calcIncome();
                     }
 
                     @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(final DatabaseError databaseError) {
                     }
                 });
     }
 
     private void loadCosts(String yearStr, String monthStr) {
-        mExpenseList.clear();
-        calcCostTotal();
-        mDatabase.getReference(DefaultConfigurations.DB_COSTS).child(yearStr).child(monthStr)
-                .addChildEventListener(new ChildEventListener() {
+        mDatabase.getReference(DefaultConfigurations.DB_COSTS)
+                .child(yearStr)
+                .child(monthStr)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Expense expense = dataSnapshot.getValue(Expense.class);
-                        if (expense != null) {
-                            mExpenseList.add(0, expense);
-                            calcCostTotal();
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        mExpenseList.clear();
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
+                            Expense expense = data.getValue(Expense.class);
+                            if (expense != null) {
+                                mExpenseList.add(0, expense);
+                            }
                         }
+                        calcCostTotal();
                     }
 
                     @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(final DatabaseError databaseError) {
                     }
                 });
     }
 
     private void loadUsers() {
-        userList.clear();
-        calcSalaryForUsers();
         mDatabase.getReference(DefaultConfigurations.DB_USERS)
-                .addChildEventListener(new ChildEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        User user = dataSnapshot.getValue(User.class);
-                        if (user != null) {
-                            userList.add(0, user);
-                            calcSalaryForUsers();
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        userList.clear();
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
+                            User user = data.getValue(User.class);
+                            if (user != null) {
+                                userList.add(0, user);
+                            }
                         }
+                        calcSalaryForUsers();
                     }
 
                     @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(final DatabaseError databaseError) {
                     }
                 });
-    }
-
-    private void calcSalaryForUsers() {
-        String birthdays = "";
-        salaryTotal = 0;
-        int stavka = 0;
-        int percent = 0;
-        int mkBirthday = 0;
-        int mkBirthdayCount = 0;
-        int mkBirthdayChildren = 0;
-        int mkArt = 0;
-        int mkArtCount = 0;
-        int mkArtChildren = 0;
-        for (User user : userList) {
-            int percentTotal = 0;
-            //init hrn
-            int userStavka = Constants.SALARY_DEFAULT_STAVKA;
-            int userPercent = Constants.SALARY_DEFAULT_PERCENT;
-            int userMkBirthday = Constants.SALARY_DEFAULT_MK;
-            int userMkBdChild = Constants.SALARY_DEFAULT_MK_CHILD;
-            int userMkArtChild = Constants.SALARY_DEFAULT_ART_MK_CHILD;
-            boolean isDefault = true;
-            for (Report rep : reportList) {
-                //required only for Dashboard calc salary
-                if (!rep.getUserId().equals(user.getUserId())) continue;
-                if (isDefault && user.getMkSpecCalc() && DateUtils.isTodayOrFuture(rep.getDate(), user.getMkSpecCalcDate())) {
-                    userStavka = user.getUserStavka();
-                    userPercent = user.getUserPercent();
-                    userMkBirthday = user.getMkBd();
-                    userMkBdChild = user.getMkBdChild();
-                    userMkArtChild = user.getMkArtChild();
-                    isDefault = false;
-                }
-                if (DateUtils.future(rep.getDate())) continue;
-                // stavka
-                stavka += userStavka;
-                // percent
-                percentTotal += rep.total;
-                //Birthdays Mk
-                mkBirthday += rep.bMk * userMkBirthday;
-                mkBirthday += rep.b30 * userMkBdChild;
-                mkBirthdayCount += rep.bMk;
-                mkBirthdayChildren += rep.b30;
-                // Art MK
-                if (rep.mkMy) {
-                    mkArt += (rep.mk1 + rep.mk2) * userMkArtChild;
-                    if (rep.mk1 != 0 || rep.mk2 != 0)
-                        mkArtCount += 1;
-                    mkArtChildren += rep.mk1;
-                    mkArtChildren += rep.mk2;
-                }
-            }
-            percent += (percentTotal * userPercent / 100);
-            // birthdays list
-            if (!user.getUserIsAdmin())
-                birthdays += user.getUserBDay() + " - " + user.getUserName() + "\n";
-        }
-        textBirthdays.setText(birthdays);
-        salaryTotal += stavka + percent + mkBirthday + mkArt;
-        textSalaryStavka.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(stavka)));
-        textSalaryPercent.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(percent)));
-        textSalaryMk.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(mkBirthday + mkArt)));
-        textSalaryTotal.setText(String.format(getString(R.string.HRN), DateUtils.getIntWithSpace(salaryTotal)));
-        progressBarSalary.setProgress(stavka);
-        progressBarSalary.setSecondaryProgress(stavka + percent);
-        progressBarSalary.setMax(salaryTotal);
-        updateNetIncome();
     }
 
     private void loadComment(String yearStr, String monthStr) {
@@ -347,13 +254,6 @@ public class DashboardActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void saveCommentToDB(String s) {
-        if (!s.equals(mComment))
-            mDatabase.getReference(DefaultConfigurations.DB_COMMENTS)
-                    .child(yearStr)
-                    .child(monthStr).setValue(s);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -377,9 +277,9 @@ public class DashboardActivity extends AppCompatActivity {
         String income100Str = DateUtils.getIntWithSpace(incomeTotal);
         String income80Str = DateUtils.getIntWithSpace(incomeTotal * 80 / 100);
         textTotal.setText(String.format(getString(R.string.income), income100Str, income80Str));
+        progressBar.setMax(incomeTotal);
         progressBar.setProgress(room);
         progressBar.setSecondaryProgress(room + bday);
-        progressBar.setMax(incomeTotal);
         updateNetIncome();
     }
 
@@ -403,7 +303,86 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void updateNetIncome() {
-        netIncome = (int) (incomeTotal * 0.8) - costTotal - salaryTotal;
+        int netIncome = (int) (incomeTotal * 0.8) - costTotal - salaryTotal;
         setTitle(String.format(getString(R.string.title_activity_dashboard), DateUtils.getIntWithSpace(netIncome)));
+    }
+
+    private void calcSalaryForUsers() {
+        String birthdays = "";
+        salaryTotal = 0;
+        int stavka = 0;
+        int percent = 0;
+        int mkBirthday = 0;
+        int mkArt = 0;
+        int mkBirthdayCount = 0;
+        int mkBirthdayChildren = 0;
+        int mkArtCount = 0;
+        int mkArtChildren = 0;
+        String usersSalary = "";
+        for (User user : userList) {
+            int uPercentTotal = 0;
+            int uStavka = 0;
+            int uMkArt = 0;
+            int uMkBirth = 0;
+            //init hrn
+            int userStavka = Constants.SALARY_DEFAULT_STAVKA;
+            int userPercent = Constants.SALARY_DEFAULT_PERCENT;
+            int userMkBirthday = Constants.SALARY_DEFAULT_MK;
+            int userMkBdChild = Constants.SALARY_DEFAULT_MK_CHILD;
+            int userMkArtChild = Constants.SALARY_DEFAULT_ART_MK_CHILD;
+            boolean isDefault = true;
+            for (Report rep : reportList) {
+                //required only for Dashboard calc salary
+                if (!rep.getUserId().equals(user.getUserId())) continue;
+                if (isDefault && user.getMkSpecCalc() && DateUtils.isTodayOrFuture(rep.getDate(), user.getMkSpecCalcDate())) {
+                    userStavka = user.getUserStavka();
+                    userPercent = user.getUserPercent();
+                    userMkBirthday = user.getMkBd();
+                    userMkBdChild = user.getMkBdChild();
+                    userMkArtChild = user.getMkArtChild();
+                    isDefault = false;
+                }
+                if (DateUtils.future(rep.getDate())) continue;
+                // stavka
+                uStavka += userStavka;
+                // percent
+                uPercentTotal += rep.total;
+                //Birthdays Mk
+                uMkBirth += rep.bMk * userMkBirthday;
+                uMkBirth += rep.b30 * userMkBdChild;
+                mkBirthdayCount += rep.bMk;
+                mkBirthdayChildren += rep.b30;
+                // Art MK
+                if (rep.mkMy) {
+                    uMkArt += (rep.mk1 + rep.mk2) * userMkArtChild;
+                    if (rep.mk1 != 0 || rep.mk2 != 0)
+                        mkArtCount += 1;
+                    mkArtChildren += rep.mk1;
+                    mkArtChildren += rep.mk2;
+                }
+            }
+            int uPercent = (uPercentTotal * userPercent / 100);
+            stavka += uStavka;
+            mkArt += uMkArt;
+            mkBirthday += uMkBirth;
+            percent += uPercent;
+            int uTotal = (uMkArt + uMkBirth + uStavka + uPercent);
+            if (uTotal > 0)
+                usersSalary += uTotal + " - " + user.getUserName() + "\n";
+            // birthdays list
+            if (!user.getUserIsAdmin())
+                birthdays += user.getUserBDay() + " - " + user.getUserName() + "\n";
+        }
+        mTextExpand.setText(usersSalary);
+        textBirthdays.setText(birthdays);
+        salaryTotal = stavka + percent + mkBirthday + mkArt;
+        textSalaryStavka.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(stavka)));
+        textSalaryPercent.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(percent)));
+        textSalaryMk.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(mkBirthday + mkArt)));
+        textSalaryTotal.setText(String.format(getString(R.string.HRN), DateUtils.getIntWithSpace(salaryTotal)));
+        progressBarSalary.setMax(salaryTotal);
+        progressBarSalary.setProgress(stavka);
+        progressBarSalary.setSecondaryProgress(stavka + percent);
+        updateNetIncome();
     }
 }

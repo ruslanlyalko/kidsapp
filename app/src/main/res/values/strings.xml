@@ -236,7 +236,7 @@
     <string name="hrn_day">"%1$s грн/день"</string>
     <string name="hrn">"%1$s грн"</string>
     <string name="HRN">"%1$s ГРН"</string>
-    <string name="income">"%1$s (%2$s) ГРН"</string>
+    <string name="income">"%1$s/%2$s ГРН"</string>
     <string name="text_show_details">Показати детальніше</string>
     <string name="text_salary_switch">Використовувати спеціальні умови</string>
     <string name="dialog_discart_changes">Скинути всі зміни</string>

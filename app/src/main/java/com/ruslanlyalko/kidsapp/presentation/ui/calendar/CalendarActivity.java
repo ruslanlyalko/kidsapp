@@ -11,21 +11,26 @@ import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Constants;
+import com.ruslanlyalko.kidsapp.common.DateUtils;
+import com.ruslanlyalko.kidsapp.common.Keys;
 import com.ruslanlyalko.kidsapp.data.Utils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Report;
+import com.ruslanlyalko.kidsapp.presentation.ui.calendar.adapter.OnReportClickListener;
 import com.ruslanlyalko.kidsapp.presentation.ui.calendar.adapter.ReportsAdapter;
+import com.ruslanlyalko.kidsapp.presentation.ui.mk.MkDetailsActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.report.ReportActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,20 +44,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends AppCompatActivity implements OnReportClickListener {
 
-    @BindView(R.id.recycler_view) RecyclerView recyclerView;
-    @BindView(R.id.calendar_view) CompactCalendarView compactCalendarView;
-    @BindView(R.id.swipere_fresh) SwipeRefreshLayout swipeRefresh;
-    @BindView(R.id.button_prev) ImageButton buttonPrev;
-    @BindView(R.id.button_next) ImageButton buttonNext;
-    @BindView(R.id.text_month) TextView textMonth;
+    @BindView(R.id.recycler_view) RecyclerView mReportsList;
+    @BindView(R.id.calendar_view) CompactCalendarView mCompactCalendarView;
+    @BindView(R.id.swipere_fresh) SwipeRefreshLayout mSwipeRefresh;
+    @BindView(R.id.button_prev) ImageButton mButtonPrev;
+    @BindView(R.id.button_next) ImageButton mButtonNext;
+    @BindView(R.id.text_month) TextView mTextMonth;
 
     private ReportsAdapter mReportsAdapter;
     private List<Report> mReportList = new ArrayList<>();
     private ArrayList<String> mUsersList = new ArrayList<>();
     private Date mCurrentDate;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String mUserId;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
 
     //private String mDay, mMonth, mYear;
@@ -63,6 +68,7 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
         ButterKnife.bind(this);
+        mUserId = FirebaseAuth.getInstance().getUid();
         initRecycle();
         initCalendarView();
         showReportsOnCalendar();
@@ -72,23 +78,23 @@ public class CalendarActivity extends AppCompatActivity {
 
     @OnClick(R.id.button_prev)
     void onPrevClicked() {
-        compactCalendarView.showPreviousMonth();
+        mCompactCalendarView.showPreviousMonth();
     }
 
     @OnClick(R.id.button_next)
     void onNextClicked() {
-        compactCalendarView.showNextMonth();
+        mCompactCalendarView.showNextMonth();
     }
 
     private void initCalendarView() {
-        compactCalendarView.setUseThreeLetterAbbreviation(true);
-        compactCalendarView.shouldDrawIndicatorsBelowSelectedDays(true);
-        compactCalendarView.shouldScrollMonth(false);
-        compactCalendarView.displayOtherMonthDays(true);
+        mCompactCalendarView.setUseThreeLetterAbbreviation(true);
+        mCompactCalendarView.shouldDrawIndicatorsBelowSelectedDays(true);
+        mCompactCalendarView.shouldScrollMonth(false);
+        mCompactCalendarView.displayOtherMonthDays(true);
         Calendar month = Calendar.getInstance();
-        textMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);
+        mTextMonth.setText(Constants.MONTH_FULL[month.get(Calendar.MONTH)]);
         // define a listener to receive callbacks when certain events happen.
-        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+        mCompactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
                 showReportsForDate(dateClicked);
@@ -98,14 +104,14 @@ public class CalendarActivity extends AppCompatActivity {
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 Calendar month = Calendar.getInstance();
                 month.setTime(firstDayOfNewMonth);
-                String yearSimple = new SimpleDateFormat("yy", Locale.US).format(firstDayOfNewMonth).toString();
+                String yearSimple = new SimpleDateFormat("yy", Locale.US).format(firstDayOfNewMonth);
                 String str = Constants.MONTH_FULL[month.get(Calendar.MONTH)];
-                if (firstDayOfNewMonth.getYear() != new Date().getYear())
+                if (!DateUtils.isCurrentYear(firstDayOfNewMonth))
                     str = str + "'" + yearSimple;
-                textMonth.setText(str);
+                mTextMonth.setText(str);
             }
         });
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 showReportsOnCalendar();
@@ -117,8 +123,8 @@ public class CalendarActivity extends AppCompatActivity {
     private void initRecycle() {
         mReportList = new ArrayList<>();
         mReportsAdapter = new ReportsAdapter(this, mReportList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(mReportsAdapter);
+        mReportsList.setLayoutManager(new LinearLayoutManager(this));
+        mReportsList.setAdapter(mReportsAdapter);
     }
 
     @Override
@@ -129,43 +135,34 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void showReportsOnCalendar() {
-        swipeRefresh.setRefreshing(true);
-        mUsersList.clear();
-        compactCalendarView.removeAllEvents();
+        mSwipeRefresh.setRefreshing(true);
         String yearStr = DateFormat.format("yyyy", Calendar.getInstance()).toString();
-        mDatabase.getReference(DefaultConfigurations.DB_REPORTS).child(yearStr)
-                .addChildEventListener(new ChildEventListener() {
+        mDatabase.getReference(DefaultConfigurations.DB_REPORTS)
+                .child(yearStr)
+                .addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        for (DataSnapshot datMonth : dataSnapshot.getChildren()) {
-                            for (DataSnapshot datDay : datMonth.getChildren()) {
-                                Report report = datDay.getValue(Report.class);
-                                if (Utils.isAdmin() || report.getUserId().equals(mAuth.getCurrentUser().getUid())) {
-                                    int color = getUserColor(report.getUserId());
-                                    long date = getDateLongFromStr(report.getDate());
-                                    String uId = report.getUserId();
-                                    compactCalendarView.addEvent(
-                                            new Event(color, date, uId), true);
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        mUsersList.clear();
+                        mCompactCalendarView.removeAllEvents();
+                        for (DataSnapshot datYear : dataSnapshot.getChildren()) {
+                            for (DataSnapshot datMonth : datYear.getChildren()) {
+                                for (DataSnapshot datDay : datMonth.getChildren()) {
+                                    Report report = datDay.getValue(Report.class);
+                                    if (report != null && (Utils.isAdmin() || report.getUserId().equals(mUserId))) {
+                                        int color = getUserColor(report.getUserId());
+                                        long date = getDateLongFromStr(report.getDate());
+                                        String uId = report.getUserId();
+                                        mCompactCalendarView.addEvent(
+                                                new Event(color, date, uId), true);
+                                    }
                                 }
                             }
                         }
-                        swipeRefresh.setRefreshing(false);
+                        mSwipeRefresh.setRefreshing(false);
                     }
 
                     @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(final DatabaseError databaseError) {
                     }
                 });
     }
@@ -203,41 +200,29 @@ public class CalendarActivity extends AppCompatActivity {
         String mDay = DateFormat.format("d", date).toString();
         String mMonth = DateFormat.format("M", date).toString();
         String mYear = DateFormat.format("yyyy", date).toString();
-        final String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        mReportList.clear();
-        mReportsAdapter.notifyDataSetChanged();
-        DatabaseReference listOfUsersReports = mDatabase.getReference(DefaultConfigurations.DB_REPORTS)
-                .child(mYear).child(mMonth).child(mDay);
-        listOfUsersReports.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Report report = dataSnapshot.getValue(Report.class);
-                // Add to list only current user reports
-                // But if user role - Admin then add all reports
-                if (report != null) {
-                    if (Utils.isAdmin() || report.getUserId().equals(uId)) {
-                        mReportList.add(report);
+        mDatabase.getReference(DefaultConfigurations.DB_REPORTS)
+                .child(mYear)
+                .child(mMonth)
+                .child(mDay)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        mReportList.clear();
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
+                            Report report = data.getValue(Report.class);
+                            if (report != null) {
+                                if (Utils.isAdmin() || report.getUserId().equals(mUserId)) {
+                                    mReportList.add(report);
+                                }
+                            }
+                        }
                         mReportsAdapter.notifyDataSetChanged();
                     }
-                }
-            }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+                    @Override
+                    public void onCancelled(final DatabaseError databaseError) {
+                    }
+                });
     }
 
     @Override
@@ -253,5 +238,36 @@ public class CalendarActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCommentClicked(final Report report) {
+        final boolean commentsExist = report.getComment() != null & !report.getComment().isEmpty();
+        if (commentsExist)
+            Toast.makeText(this, report.getComment(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onMkClicked(final Report report) {
+        if (report.getMkRef() != null && !report.getMkRef().isEmpty()) {
+            Intent intent = new Intent(this, MkDetailsActivity.class);
+            intent.putExtra(Keys.Extras.EXTRA_ITEM_ID, report.getMkRef());
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, R.string.toast_mk_not_set, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onEditClicked(final Report report) {
+        if (Utils.isAdmin() || DateUtils.todayOrFuture(report.getDate())) {
+            Intent intent = new Intent(this, ReportActivity.class);
+            intent.putExtra(Keys.Extras.EXTRA_DATE, report.date);
+            intent.putExtra(Keys.Extras.EXTRA_UID, report.userId);
+            intent.putExtra(Keys.Extras.EXTRA_USER_NAME, report.userName);
+            startActivityForResult(intent, 0);
+        } else {
+            Toast.makeText(this, R.string.toast_edit_impossible, Toast.LENGTH_SHORT).show();
+        }
     }
 }

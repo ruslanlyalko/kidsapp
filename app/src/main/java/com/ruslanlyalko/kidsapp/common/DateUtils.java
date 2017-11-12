@@ -70,4 +70,8 @@ public class DateUtils {
                     + resultStr.substring(resultStr.length() - 3, resultStr.length());
         return resultStr;
     }
+
+    public static boolean isCurrentYear(final Date date) {
+        return  date.getYear() == new Date().getYear();
+    }
 }

@@ -1,7 +1,6 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.calendar.adapter;
 
-import android.content.Context;
-import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,53 +9,25 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.database.FirebaseDatabase;
 import com.ruslanlyalko.kidsapp.R;
-import com.ruslanlyalko.kidsapp.common.DateUtils;
-import com.ruslanlyalko.kidsapp.common.Keys;
-import com.ruslanlyalko.kidsapp.data.Utils;
-import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Report;
-import com.ruslanlyalko.kidsapp.presentation.ui.calendar.CalendarActivity;
-import com.ruslanlyalko.kidsapp.presentation.ui.mk.MkDetailsActivity;
-import com.ruslanlyalko.kidsapp.presentation.ui.report.ReportActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHolder> {
 
-    private Context mContext;
-    private List<Report> reportList;
-    private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    private final List<Report> mReports;
+    private final OnReportClickListener mOnReportClickListener;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView textUserName, textTotal, textBdayTotal, textRoomTotal, textMkTotal;
-        public SwipeLayout swipeLayout;
-        public ProgressBar progressBar;
-        public ImageButton buttonMk, buttonEdit, buttonDelete;
-
-        public MyViewHolder(View view) {
-            super(view);
-            textUserName = view.findViewById(R.id.text_user_name);
-            textTotal = view.findViewById(R.id.text_total);
-            textBdayTotal = view.findViewById(R.id.text_bday_total);
-            textRoomTotal = view.findViewById(R.id.text_room_total);
-            textMkTotal = view.findViewById(R.id.text_mk_total);
-            swipeLayout = view.findViewById(R.id.swipe_layout);
-            progressBar = view.findViewById(R.id.progress_bar);
-            buttonMk = view.findViewById(R.id.button_user);
-            buttonEdit = view.findViewById(R.id.button_edit);
-            buttonDelete = view.findViewById(R.id.button_comment);
-        }
-    }
-
-    public ReportsAdapter(Context mContext, List<Report> reportList) {
-        this.mContext = mContext;
-        this.reportList = reportList;
+    public ReportsAdapter(OnReportClickListener onReportClickListener, List<Report> reports) {
+        mOnReportClickListener = onReportClickListener;
+        mReports = reports;
     }
 
     @Override
@@ -68,98 +39,72 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(final ReportsAdapter.MyViewHolder holder, final int position) {
-        final Report report = reportList.get(position);
-        final boolean commentsExist = report.getComment() != null & !report.getComment().isEmpty();
-        String mkName = "";
-        if (report.getTotalMk() > 0)
-            mkName = " (МК)";
-        if (report.getMkName() != null && !report.getMkName().isEmpty())
-            mkName = " (" + report.getMkName() + ")";
-        holder.textUserName.setText(report.userName + mkName + (commentsExist ? "*" : ""));
-        holder.textTotal.setText(report.total + " ГРН");
-        holder.textRoomTotal.setText(report.totalRoom + " грн");
-        holder.textBdayTotal.setText(report.totalBday + " грн");
-        holder.textMkTotal.setText(report.totalMk + " грн");
-        holder.progressBar.setMax(report.total);
-        holder.progressBar.setProgress(report.totalRoom);
-        holder.progressBar.setSecondaryProgress(report.totalRoom + report.totalBday);
-        holder.progressBar.setSecondaryProgressTintMode(PorterDuff.Mode.OVERLAY);
-
-        /*holder.swipeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (commentsExist)
-                    Toast.makeText(mContext, report.getComment(), Toast.LENGTH_SHORT).show();
-            }
-        });*/
-        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
-        holder.swipeLayout.setRightSwipeEnabled(true);
-        holder.swipeLayout.setBottomSwipeEnabled(false);
-        // Open MK Item
-        holder.buttonMk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (report.getMkRef() != null && !report.getMkRef().isEmpty()) {
-                    Intent intent = new Intent(mContext, MkDetailsActivity.class);
-                    intent.putExtra(Keys.Extras.EXTRA_ITEM_ID, report.getMkRef());
-                    mContext.startActivity(intent);
-                } else {
-                    Toast.makeText(mContext, R.string.toast_mk_not_set, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        //open Report for editing
-        holder.buttonEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Utils.isAdmin() || DateUtils.todayOrFuture(report.getDate())) {
-                    Intent intent = new Intent(mContext, ReportActivity.class);
-                    intent.putExtra(Keys.Extras.EXTRA_DATE, report.date);
-                    intent.putExtra(Keys.Extras.EXTRA_UID, report.userId);
-                    intent.putExtra(Keys.Extras.EXTRA_USER_NAME, report.userName);
-                    ((CalendarActivity) mContext).startActivityForResult(intent, 0);
-                } else {
-                    Toast.makeText(mContext, R.string.toast_edit_impossible, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        // show confirm dialog before delete
-        holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (commentsExist)
-                    Toast.makeText(mContext, report.getComment(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void removeReport(Report report, int position) {
-        reportList.remove(position);
-        notifyDataSetChanged();
-        // Delete item from DB
-        mDatabase.getReference(DefaultConfigurations.DB_REPORTS)
-                .child(getYearFromStr(report.date)).child(getMonthFromStr(report.date)).child(getDayFromStr(report.date))
-                .child(report.userId).removeValue();
-    }
-
-    private String getDayFromStr(String date) {
-        int first = date.indexOf('-');
-        return date.substring(0, first);
-    }
-
-    private String getMonthFromStr(String date) {
-        int first = date.indexOf('-');
-        int last = date.lastIndexOf('-');
-        return date.substring(first + 1, last);
-    }
-
-    private String getYearFromStr(String date) {
-        int last = date.lastIndexOf('-');
-        return date.substring(last + 1);
+        final Report report = mReports.get(position);
+        holder.bindData(report);
     }
 
     @Override
     public int getItemCount() {
-        return reportList.size();
+        return mReports.size();
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
+
+        private final Resources mResources;
+        @BindView(R.id.text_user_name) TextView textUserName;
+        @BindView(R.id.text_total) TextView textTotal;
+        @BindView(R.id.text_bday_total) TextView textBdayTotal;
+        @BindView(R.id.text_room_total) TextView textRoomTotal;
+        @BindView(R.id.text_mk_total) TextView textMkTotal;
+        @BindView(R.id.swipe_layout) SwipeLayout swipeLayout;
+        @BindView(R.id.progress_bar) ProgressBar progressBar;
+        @BindView(R.id.button_comment) ImageButton buttonComment;
+        @BindView(R.id.button_mk) ImageButton buttonMk;
+        @BindView(R.id.button_edit) ImageButton buttonEdit;
+
+        MyViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+            mResources = view.getResources();
+        }
+
+        void bindData(final Report report) {
+            final boolean commentsExist = report.getComment() != null & !report.getComment().isEmpty();
+            String mkName = "";
+            if (report.getTotalMk() > 0)
+                mkName = " (МК)";
+            if (report.getMkName() != null && !report.getMkName().isEmpty())
+                mkName = " (" + report.getMkName() + ")";
+            textUserName.setText(String.format("%s%s%s", report.userName, mkName, commentsExist ? "*" : ""));
+            textTotal.setText(mResources.getString(R.string.HRN, "" + report.total));
+            textRoomTotal.setText(mResources.getString(R.string.hrn, "" + report.totalRoom));
+            textBdayTotal.setText(mResources.getString(R.string.hrn, "" + report.totalBday));
+            textMkTotal.setText(mResources.getString(R.string.hrn, "" + report.totalMk));
+            progressBar.setMax(report.total);
+            progressBar.setProgress(report.totalRoom);
+            progressBar.setSecondaryProgress(report.totalRoom + report.totalBday);
+            progressBar.setSecondaryProgressTintMode(PorterDuff.Mode.OVERLAY);
+            swipeLayout.addDrag(SwipeLayout.DragEdge.Right, R.id.swipe_menu);
+            swipeLayout.setRightSwipeEnabled(true);
+            swipeLayout.setBottomSwipeEnabled(false);
+        }
+
+        @OnClick(R.id.button_comment)
+        void onCommentsClicked() {
+            if (mOnReportClickListener != null)
+                mOnReportClickListener.onCommentClicked(mReports.get(getAdapterPosition()));
+        }
+
+        @OnClick(R.id.button_mk)
+        void onMkClicked() {
+            if (mOnReportClickListener != null)
+                mOnReportClickListener.onMkClicked(mReports.get(getAdapterPosition()));
+        }
+
+        @OnClick(R.id.button_edit)
+        void onEditClicked() {
+            if (mOnReportClickListener != null)
+                mOnReportClickListener.onEditClicked(mReports.get(getAdapterPosition()));
+        }
     }
 }
