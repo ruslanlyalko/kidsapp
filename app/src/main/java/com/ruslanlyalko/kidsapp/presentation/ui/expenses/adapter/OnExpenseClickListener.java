@@ -8,7 +8,8 @@ import com.ruslanlyalko.kidsapp.data.models.Expense;
  */
 
 public interface OnExpenseClickListener {
-    void onRemoveClicked(Expense expense);
-    void onPhotoPreviewClicked(Expense expense);
 
+    void onRemoveClicked(Expense expense);
+
+    void onPhotoPreviewClicked(Expense expense);
 }

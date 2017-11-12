@@ -24,11 +24,11 @@ import butterknife.ButterKnife;
 
 public class PhotoPreviewActivity extends AppCompatActivity {
 
-    @BindView(R.id.photo_view) PhotoView imageView;
-    @BindView(R.id.progress_bar) ProgressBar progressBar;
-    private String uri = "";
-    private String userName = "";
-    private String folder = "";
+    @BindView(R.id.photo_view) PhotoView mPhotoView;
+    @BindView(R.id.progress_bar) ProgressBar mProgressBar;
+    private String mUri = "";
+    private String mUserName = "";
+    private String mFolder = "";
 
     public static Intent getLaunchIntent(final AppCompatActivity launchActivity, String uri, String userName) {
         Intent intent = new Intent(launchActivity, PhotoPreviewActivity.class);
@@ -51,13 +51,17 @@ public class PhotoPreviewActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.fadein, R.anim.nothing);
         setContentView(R.layout.activity_show_image);
         ButterKnife.bind(this);
+        parseExtras();
+        loadWithGlide(mUri);
+    }
+
+    private void parseExtras() {
         final Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            uri = bundle.getString(Keys.Extras.EXTRA_URI);
-            userName = bundle.getString(Keys.Extras.EXTRA_USER_NAME);
-            folder = bundle.getString(Keys.Extras.EXTRA_FOLDER, DefaultConfigurations.STORAGE_EXPENSES);
+            mUri = bundle.getString(Keys.Extras.EXTRA_URI);
+            mUserName = bundle.getString(Keys.Extras.EXTRA_USER_NAME);
+            mFolder = bundle.getString(Keys.Extras.EXTRA_FOLDER, DefaultConfigurations.STORAGE_EXPENSES);
         }
-        loadWithGlide(uri);
     }
 
     private void loadWithGlide(String uri) {
@@ -68,35 +72,35 @@ public class PhotoPreviewActivity extends AppCompatActivity {
                 @Override
                 public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
                     setTitle("Помилка при загрузці");
-                    progressBar.setVisibility(View.GONE);
+                    mProgressBar.setVisibility(View.GONE);
                     return false;
                 }
 
                 @Override
                 public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                    setTitle("Автор: " + userName);
-                    progressBar.setVisibility(View.GONE);
+                    setTitle("Автор: " + mUserName);
+                    mProgressBar.setVisibility(View.GONE);
                     return false;
                 }
-            }).into(imageView);
+            }).into(mPhotoView);
         } else {
-            StorageReference ref = FirebaseStorage.getInstance().getReference(folder).child(uri);
-            //load imageView using Glide
+            StorageReference ref = FirebaseStorage.getInstance().getReference(mFolder).child(uri);
+            //load mPhotoView using Glide
             Glide.with(PhotoPreviewActivity.this).using(new FirebaseImageLoader()).load(ref).listener(new RequestListener<StorageReference, GlideDrawable>() {
                 @Override
                 public boolean onException(Exception e, StorageReference model, com.bumptech.glide.request.target.Target<GlideDrawable> target, boolean isFirstResource) {
                     setTitle("Помилка при загрузці");
-                    progressBar.setVisibility(View.GONE);
+                    mProgressBar.setVisibility(View.GONE);
                     return false;
                 }
 
                 @Override
                 public boolean onResourceReady(GlideDrawable resource, StorageReference model, com.bumptech.glide.request.target.Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                    setTitle("Автор: " + userName);
-                    progressBar.setVisibility(View.GONE);
+                    setTitle("Автор: " + mUserName);
+                    mProgressBar.setVisibility(View.GONE);
                     return false;
                 }
-            }).into(imageView);
+            }).into(mPhotoView);
         }
     }
 
