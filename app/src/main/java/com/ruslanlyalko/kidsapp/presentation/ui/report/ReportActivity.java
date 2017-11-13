@@ -70,20 +70,55 @@ import java.util.Locale;
 
 public class ReportActivity extends AppCompatActivity {
 
-    TextView textRoom60, textRoom30, textRoom20, textRoom10, textRoomTotal;
-    TextView textBday50, textBday10, textBday30, textBdayTotal, textBdayMk;
-    TextView textMk1, textMk2, textMkT1, textMkT2, textMkTotal;
+    TextView textRoom60;
+    TextView textRoom30;
+    TextView textRoom20;
+    TextView textRoom10;
+    TextView textRoomTotal;
+    TextView textBday50;
+    TextView textBday10;
+    TextView textBday30;
+    TextView textBdayTotal;
+    TextView textBdayMk;
+    TextView textMk1;
+    TextView textMk2;
+    TextView textMkT1;
+    TextView textMkT2;
+    TextView textMkTotal;
 
-    TextView textDate, textMkName;
-    LinearLayout panelDate, panelRoomExpand, panelRoomExpand2, panelRoomExpand3, panelPhoto;
+    TextView textDate;
+    TextView textMkName;
+    LinearLayout panelDate;
+    LinearLayout panelRoomExpand;
+    LinearLayout panelRoomExpand2;
+    LinearLayout panelRoomExpand3;
+    LinearLayout panelPhoto;
 
-    SeekBar seekRoom60, seekRoom30, seekRoom20, seekRoom10;
-    SeekBar seekBday50, seekBday10, seekBday30, seekBdayMk;
-    SeekBar seekMkT1, seekMkT2, seekMk1, seekMk2;
+    SeekBar seekRoom60;
+    SeekBar seekRoom30;
+    SeekBar seekRoom20;
+    SeekBar seekRoom10;
+    SeekBar seekBday50;
+    SeekBar seekBday10;
+    SeekBar seekBday30;
+    SeekBar seekBdayMk;
+    SeekBar seekMkT1;
+    SeekBar seekMkT2;
+    SeekBar seekMk1;
+    SeekBar seekMk2;
 
-    EditText inputRoom60, inputRoom30, inputRoom20, inputRoom10;
-    EditText inputBday50, inputBday10, inputBday30, inputMk1, inputMk2;
-    SwipeLayout swipeLayout, swipeLayout2, swipeLayout3;
+    EditText inputRoom60;
+    EditText inputRoom30;
+    EditText inputRoom20;
+    EditText inputRoom10;
+    EditText inputBday50;
+    EditText inputBday10;
+    EditText inputBday30;
+    EditText inputMk1;
+    EditText inputMk2;
+    SwipeLayout swipeLayout;
+    SwipeLayout swipeLayout2;
+    SwipeLayout swipeLayout3;
 
     EditText editComment;
     TextView textPhoto;
@@ -95,9 +130,7 @@ public class ReportActivity extends AppCompatActivity {
     private String mUId, mUserName;
     private Calendar mDate;
     private String mDateStr, mDateMonth, mDateYear, mDateDay;
-
     private Report mReport;
-
     private SimpleDateFormat mSdf = new SimpleDateFormat("d-M-yyyy", Locale.US);
     private boolean isChanged;
     private List<Mk> mkList = new ArrayList<>();
@@ -110,23 +143,7 @@ public class ReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         initRef();
-        Bundle bundle = getIntent().getExtras();
-        // If there are next extras then we need to operate with them
-        if (bundle == null) {
-            if (mAuth.getCurrentUser() != null)
-                mUId = mAuth.getCurrentUser().getUid();
-            if (mAuth.getCurrentUser() != null)
-                mUserName = mAuth.getCurrentUser().getDisplayName();
-            setDate(Calendar.getInstance());
-        } else {
-            mUId = bundle.getString(Keys.Extras.EXTRA_UID, mAuth.getCurrentUser().getUid());
-            mUserName = bundle.getString(Keys.Extras.EXTRA_USER_NAME, mAuth.getCurrentUser().getDisplayName());
-            String date = bundle.getString(Keys.Extras.EXTRA_DATE);
-            if (date != null)
-                setDate(date);
-            else
-                setDate(Calendar.getInstance());
-        }
+        parseExtras();
         initDatePicker();
         initSwipesAndExpandPanels();
         initSeeks();
@@ -158,6 +175,25 @@ public class ReportActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void parseExtras() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle == null) {
+            if (mAuth.getCurrentUser() != null)
+                mUId = mAuth.getCurrentUser().getUid();
+            if (mAuth.getCurrentUser() != null)
+                mUserName = mAuth.getCurrentUser().getDisplayName();
+            setDate(Calendar.getInstance());
+        } else {
+            mUId = bundle.getString(Keys.Extras.EXTRA_UID, mAuth.getCurrentUser().getUid());
+            mUserName = bundle.getString(Keys.Extras.EXTRA_USER_NAME, mAuth.getCurrentUser().getDisplayName());
+            String date = bundle.getString(Keys.Extras.EXTRA_DATE);
+            if (date != null)
+                setDate(date);
+            else
+                setDate(Calendar.getInstance());
+        }
     }
 
     void startCamera() {
