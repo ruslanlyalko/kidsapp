@@ -22,8 +22,8 @@ android {
         applicationId "com.ruslanlyalko.kidsapp"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 5
-        versionName "2.5"
+        versionCode 6
+        versionName "2.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -83,5 +83,8 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true;
     }
+
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+
 }
 apply plugin: 'com.google.gms.google-services'
