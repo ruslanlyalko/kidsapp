@@ -22,14 +22,38 @@ android {
         applicationId "com.ruslanlyalko.kidsapp"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
-        versionName "2.0"
+        versionCode 5
+        versionName "2.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+    signingConfigs {
+
+        release {
+            def propsFile = file('keystore.properties')
+            if (propsFile.exists()) {
+                def props = new Properties()
+                props.load(new FileInputStream(propsFile))
+                storeFile file('keystore/keystore0.jks')
+                keyAlias = props['keyAlias']
+                storePassword = props['storePassword']
+                keyPassword = props['keyPassword']
+            }
+        }
+
+        debug {
+            storeFile file('keystore/debug.keystore')
+            keyAlias 'androiddebugkey'
+            storePassword 'android'
+            keyPassword 'android'
         }
     }
 }
