@@ -119,3 +119,6 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/android,intellij
 app/google-services.json
+app/keystore.properties
+app/keystore/debug.keystore
+app/release/output.json
