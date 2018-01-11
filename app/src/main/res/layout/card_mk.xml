@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:card_view="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
@@ -8,6 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:focusable="true"
+        android:clickable="true"
         android:layout_marginBottom="@dimen/card_mk_margin"
         android:layout_marginTop="@dimen/card_mk_margin"
         android:elevation="3dp"
@@ -21,9 +25,8 @@
                 android:id="@+id/image_view"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/app_bar_height"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription" />
 
             <RelativeLayout
                 android:id="@+id/text_panel"

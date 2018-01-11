@@ -1,4 +1,4 @@
-package com.ruslanlyalko.kidsapp.presentation.ui.profile;
+package com.ruslanlyalko.kidsapp.presentation.ui.profile.salary;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -33,6 +33,7 @@ import com.ruslanlyalko.kidsapp.data.Utils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Report;
 import com.ruslanlyalko.kidsapp.data.models.User;
+import com.ruslanlyalko.kidsapp.presentation.ui.profile.salary.edit.SalaryEditActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,7 +91,8 @@ public class SalaryActivity extends AppCompatActivity {
         String yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date());
         String monthStr = new SimpleDateFormat("M", Locale.US).format(new Date());
         loadReports(yearStr, monthStr);
-        updateConditionUI(DateUtils.getCurrentMonthFirstDate());
+        mCurrentMonth = DateUtils.getCurrentMonthFirstDate();
+        updateConditionUI(mCurrentMonth);
     }
 
     private void parseExtras() {

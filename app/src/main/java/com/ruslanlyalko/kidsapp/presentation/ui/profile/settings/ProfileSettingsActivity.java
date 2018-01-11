@@ -1,4 +1,4 @@
-package com.ruslanlyalko.kidsapp.presentation.ui.profile;
+package com.ruslanlyalko.kidsapp.presentation.ui.profile.settings;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;

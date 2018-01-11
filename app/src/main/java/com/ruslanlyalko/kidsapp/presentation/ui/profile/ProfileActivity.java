@@ -43,6 +43,9 @@ import com.ruslanlyalko.kidsapp.data.models.User;
 import com.ruslanlyalko.kidsapp.presentation.ui.login.LoginActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.login.SignupActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.profile.adapter.UsersAdapter;
+import com.ruslanlyalko.kidsapp.presentation.ui.profile.dashboard.DashboardActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.profile.salary.SalaryActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.profile.settings.ProfileSettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;

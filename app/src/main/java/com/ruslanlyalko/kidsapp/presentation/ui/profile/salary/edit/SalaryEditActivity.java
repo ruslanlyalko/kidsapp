@@ -1,4 +1,4 @@
-package com.ruslanlyalko.kidsapp.presentation.ui.profile;
+package com.ruslanlyalko.kidsapp.presentation.ui.profile.salary.edit;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;

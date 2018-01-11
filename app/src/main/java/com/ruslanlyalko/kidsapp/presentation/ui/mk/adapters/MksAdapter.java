@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,32 +28,14 @@ import com.ruslanlyalko.kidsapp.presentation.ui.mk.MkDetailsActivity;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
 
     private Context mContext;
     private List<Mk> mkList;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView textTitle1, textTitle2, textDescription;
-        public ImageView imageView;
-        public ImageButton buttonExpand;
-        public Button buttonShare, buttonLink;
-        public LinearLayout expandPanel;
-
-        public MyViewHolder(View view) {
-            super(view);
-            buttonShare = (Button) view.findViewById(R.id.button_share);
-            buttonLink = (Button) view.findViewById(R.id.button_link);
-            textTitle1 = view.findViewById(R.id.text_title1);
-            textTitle2 = view.findViewById(R.id.text_title2);
-            textDescription = view.findViewById(R.id.text_description);
-            imageView = view.findViewById(R.id.image_view);
-            expandPanel = view.findViewById(R.id.panel_expand);
-            buttonExpand = view.findViewById(R.id.button_expand);
-        }
-    }
 
     public MksAdapter(Context mContext, List<Mk> mkList) {
         this.mContext = mContext;
@@ -69,62 +52,84 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Mk mk = mkList.get(position);
-        holder.textTitle1.setText(mk.getTitle1());
-        holder.textTitle2.setText(mk.getTitle2());
-        holder.textDescription.setText(mk.getDescription());
-        //load image if already defined
-        if (mk.getImageUri() != null && !mk.getImageUri().isEmpty()) {
-            StorageReference ref = storage.getReference(DefaultConfigurations.STORAGE_MK).child(mk.getImageUri());
-            Glide.with(mContext).using(new FirebaseImageLoader()).load(ref).into(holder.imageView);
-        }
-        // button share
-        holder.buttonShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, mk.getTitle1());
-                sendIntent.putExtra(Intent.EXTRA_TEXT, mk.getTitle1() + "\n" + mk.getTitle2() + "\n\n" + mk.getDescription());
-                sendIntent.setType("text/plain");
-                mContext.startActivity(sendIntent);
-            }
-        });
-        holder.buttonLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mk.getLink() != null && !mk.getLink().isEmpty()) {
-                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                    CustomTabsIntent customTabsIntent = builder.build();
-                    builder.setToolbarColor(ResourcesCompat.getColor(mContext.getResources(), R.color.colorPrimary, null));
-                    customTabsIntent.launchUrl(mContext, Uri.parse(mk.getLink()));
-                }
-            }
-        });
-        // expand to show description
-        holder.buttonExpand.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.expandPanel.getVisibility() == View.VISIBLE) {
-                    holder.buttonExpand.setImageResource(R.drawable.ic_action_expand_more);
-                    holder.expandPanel.setVisibility(View.GONE);
-                } else {
-                    holder.buttonExpand.setImageResource(R.drawable.ic_action_expand_less);
-                    holder.expandPanel.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, MkDetailsActivity.class);
-                intent.putExtra(Keys.Extras.EXTRA_ITEM_ID, mk.getKey());
-                mContext.startActivity(intent);
-            }
-        });
+        holder.bindData(mk);
     }
 
     @Override
     public int getItemCount() {
         return mkList.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.text_title1) TextView textTitle1;
+        @BindView(R.id.text_title2) TextView textTitle2;
+        @BindView(R.id.text_description) TextView textDescription;
+        @BindView(R.id.image_view) ImageView imageView;
+        @BindView(R.id.button_expand) ImageButton buttonExpand;
+        @BindView(R.id.button_share) Button buttonShare;
+        @BindView(R.id.button_link) Button buttonLink;
+        @BindView(R.id.panel_expand) LinearLayout expandPanel;
+        @BindView(R.id.card_view) CardView cardView;
+
+        public MyViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
+        void bindData(final Mk mk) {
+            textTitle1.setText(mk.getTitle1());
+            textTitle2.setText(mk.getTitle2());
+            textDescription.setText(mk.getDescription());
+            //load image if already defined
+            if (mk.getImageUri() != null && !mk.getImageUri().isEmpty()) {
+                StorageReference ref = storage.getReference(DefaultConfigurations.STORAGE_MK).child(mk.getImageUri());
+                Glide.with(mContext).using(new FirebaseImageLoader()).load(ref).into(imageView);
+            }
+            // button share
+            buttonShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, mk.getTitle1());
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, mk.getTitle1() + "\n" + mk.getTitle2() + "\n\n" + mk.getDescription());
+                    sendIntent.setType("text/plain");
+                    mContext.startActivity(sendIntent);
+                }
+            });
+            buttonLink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mk.getLink() != null && !mk.getLink().isEmpty()) {
+                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                        CustomTabsIntent customTabsIntent = builder.build();
+                        builder.setToolbarColor(ResourcesCompat.getColor(mContext.getResources(), R.color.colorPrimary, null));
+                        customTabsIntent.launchUrl(mContext, Uri.parse(mk.getLink()));
+                    }
+                }
+            });
+            // expand to show description
+            buttonExpand.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (expandPanel.getVisibility() == View.VISIBLE) {
+                        buttonExpand.setImageResource(R.drawable.ic_action_expand_more);
+                        expandPanel.setVisibility(View.GONE);
+                    } else {
+                        buttonExpand.setImageResource(R.drawable.ic_action_expand_less);
+                        expandPanel.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, MkDetailsActivity.class);
+                    intent.putExtra(Keys.Extras.EXTRA_ITEM_ID, mk.getKey());
+                    mContext.startActivity(intent);
+                }
+            });
+        }
     }
 }

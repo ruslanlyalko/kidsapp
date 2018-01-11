@@ -1,4 +1,4 @@
-package com.ruslanlyalko.kidsapp.presentation.ui.profile;
+package com.ruslanlyalko.kidsapp.presentation.ui.profile.dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -138,22 +138,23 @@ public class CalendarActivity extends AppCompatActivity implements OnReportClick
         mSwipeRefresh.setRefreshing(true);
         String yearStr = DateFormat.format("yyyy", Calendar.getInstance()).toString();
         mDatabase.getReference(DefaultConfigurations.DB_REPORTS)
-                .child(yearStr)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(final DataSnapshot dataSnapshot) {
                         mUsersList.clear();
                         mCompactCalendarView.removeAllEvents();
-                        for (DataSnapshot datYear : dataSnapshot.getChildren()) {
-                            for (DataSnapshot datMonth : datYear.getChildren()) {
-                                for (DataSnapshot datDay : datMonth.getChildren()) {
-                                    Report report = datDay.getValue(Report.class);
-                                    if (report != null && (Utils.isAdmin() || report.getUserId().equals(mUserId))) {
-                                        int color = getUserColor(report.getUserId());
-                                        long date = getDateLongFromStr(report.getDate());
-                                        String uId = report.getUserId();
-                                        mCompactCalendarView.addEvent(
-                                                new Event(color, date, uId), true);
+                        for (DataSnapshot datYears : dataSnapshot.getChildren()) {
+                            for (DataSnapshot datYear : datYears.getChildren()) {
+                                for (DataSnapshot datMonth : datYear.getChildren()) {
+                                    for (DataSnapshot datDay : datMonth.getChildren()) {
+                                        Report report = datDay.getValue(Report.class);
+                                        if (report != null && (Utils.isAdmin() || report.getUserId().equals(mUserId))) {
+                                            int color = getUserColor(report.getUserId());
+                                            long date = getDateLongFromStr(report.getDate());
+                                            String uId = report.getUserId();
+                                            mCompactCalendarView.addEvent(
+                                                    new Event(color, date, uId), true);
+                                        }
                                     }
                                 }
                             }
