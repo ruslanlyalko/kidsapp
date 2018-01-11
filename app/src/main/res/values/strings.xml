@@ -126,6 +126,7 @@
     <string name="text_room">Кімната</string>
     <string name="text_all">Всього</string>
     <string name="text_birthdays">Дні Народження</string>
+    <string name="text_charts">Графік (чистий прибуток)</string>
     <string name="dialog_delete_notification_title">Видалити статтю</string>
     <string name="dialog_delete_notification_message">Після видаленння відновити статтю буде неможливо</string>
     <string name="dialog_about_title">Про програму</string>

@@ -14,6 +14,7 @@ public interface DefaultConfigurations {
     String DB_COMMENTS = "COMMENTS";
     String DB_NOTIFICATIONS = "NOTIFICATIONS";
     String DB_ABOUT = "text_about";
+    String DB_RESULTS = "RESULTS";
 
     String STORAGE_EXPENSES = "COST";
     String STORAGE_MK = "MK";

@@ -1,8 +1,11 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.profile.dashboard;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -10,6 +13,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +33,7 @@ import com.ruslanlyalko.kidsapp.common.ViewUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Expense;
 import com.ruslanlyalko.kidsapp.data.models.Report;
+import com.ruslanlyalko.kidsapp.data.models.Result;
 import com.ruslanlyalko.kidsapp.data.models.User;
 
 import java.text.SimpleDateFormat;
@@ -57,6 +69,7 @@ public class DashboardActivity extends AppCompatActivity {
     @BindView(R.id.progress_bar_salary) ProgressBar progressBarSalary;
     @BindView(R.id.text_salary_expand) TextView mTextExpand;
     @BindView(R.id.image_expand) ImageView mImageView;
+    @BindView(R.id.bar_chart) BarChart mBarChart;
 
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private List<Report> reportList = new ArrayList<>();
@@ -70,6 +83,7 @@ public class DashboardActivity extends AppCompatActivity {
     private int salaryTotal;
 
     private String mComment;
+    private List<Result> mResults;
 
     public static Intent getLaunchIntent(final AppCompatActivity launchActivity) {
         return new Intent(launchActivity, DashboardActivity.class);
@@ -81,13 +95,65 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         ButterKnife.bind(this);
         initCalendar();
+        initBarChart();
         textMonth.setText(Constants.MONTH_FULL[Calendar.getInstance().get(Calendar.MONTH)]);
-        yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date()).toString();
-        monthStr = new SimpleDateFormat("M", Locale.US).format(new Date()).toString();
+        yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date());
+        monthStr = new SimpleDateFormat("M", Locale.US).format(new Date());
         loadReports(yearStr, monthStr);
         loadCosts(yearStr, monthStr);
         loadUsers();
         loadComment(yearStr, monthStr);
+        loadResults();
+    }
+
+    private void loadResults() {
+        mDatabase.getReference(DefaultConfigurations.DB_RESULTS)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        List<Result> results = new ArrayList<>();
+                        for (DataSnapshot year : dataSnapshot.getChildren()) {
+                            for (DataSnapshot month : year.getChildren()) {
+                                Result result = month.getValue(Result.class);
+                                if (result != null) {
+                                    results.add(result);
+                                }
+                            }
+                            updateBarChart(results);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(final DatabaseError databaseError) {
+                    }
+                });
+    }
+
+    private void initBarChart() {
+        mBarChart.setDrawGridBackground(false);
+        mBarChart.getLegend().setEnabled(false);
+        mBarChart.getDescription().setEnabled(false);
+        mBarChart.getXAxis().setEnabled(true);
+        mBarChart.getAxisRight().setEnabled(false);
+        mBarChart.getAxisLeft().setAxisLineColor(Color.TRANSPARENT);
+        mBarChart.getAxisLeft().enableGridDashedLine(1, 1, 10);
+        mBarChart.setMaxVisibleValueCount(150);
+        mBarChart.setDrawValueAboveBar(true);
+        mBarChart.setDoubleTapToZoomEnabled(false);
+        mBarChart.setPinchZoom(false);
+        mBarChart.setScaleEnabled(false);
+        mBarChart.setTouchEnabled(false);
+        mBarChart.setDrawBarShadow(false);
+        mBarChart.getAxisLeft().setAxisMinimum(0);
+        XAxis xAxis = mBarChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return mResults.get((int) value).getMonth();
+            }
+        });
     }
 
     private void initCalendar() {
@@ -100,13 +166,13 @@ public class DashboardActivity extends AppCompatActivity {
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 Calendar month = Calendar.getInstance();
                 month.setTime(firstDayOfNewMonth);
-                String yearSimple = new SimpleDateFormat("yy", Locale.US).format(firstDayOfNewMonth).toString();
+                String yearSimple = new SimpleDateFormat("yy", Locale.US).format(firstDayOfNewMonth);
                 String str = Constants.MONTH_FULL[month.get(Calendar.MONTH)];
                 if (!DateUtils.isCurrentYear(firstDayOfNewMonth))
                     str = str + "'" + yearSimple;
                 textMonth.setText(str);
-                yearStr = new SimpleDateFormat("yyyy", Locale.US).format(firstDayOfNewMonth).toString();
-                monthStr = new SimpleDateFormat("M", Locale.US).format(firstDayOfNewMonth).toString();
+                yearStr = new SimpleDateFormat("yyyy", Locale.US).format(firstDayOfNewMonth);
+                monthStr = new SimpleDateFormat("M", Locale.US).format(firstDayOfNewMonth);
                 loadReports(yearStr, monthStr);
                 loadCosts(yearStr, monthStr);
                 loadUsers();
@@ -303,8 +369,16 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void updateNetIncome() {
-        int netIncome = (int) (incomeTotal * 0.8) - costTotal - salaryTotal;
+        int income80 = (int) (incomeTotal * 0.8);
+        int netIncome = income80 - costTotal - salaryTotal;
         setTitle(String.format(getString(R.string.title_activity_dashboard), DateUtils.getIntWithSpace(netIncome)));
+        Result result = new Result(incomeTotal, income80, salaryTotal, costTotal, netIncome, yearStr, monthStr);
+        if (incomeTotal != 0 && salaryTotal != 0)
+            FirebaseDatabase.getInstance()
+                    .getReference(DefaultConfigurations.DB_RESULTS)
+                    .child(yearStr)
+                    .child(monthStr)
+                    .setValue(result);
     }
 
     private void calcSalaryForUsers() {
@@ -384,5 +458,43 @@ public class DashboardActivity extends AppCompatActivity {
         progressBarSalary.setProgress(stavka);
         progressBarSalary.setSecondaryProgress(stavka + percent);
         updateNetIncome();
+    }
+
+    private void updateBarChart(List<Result> resultList) {
+        mResults = resultList;
+        ArrayList<BarEntry> values = new ArrayList<>();
+        int[] colors = new int[resultList.size()];
+        String yearStr = DateFormat.format("yyyy", Calendar.getInstance()).toString();
+        for (int i = 0; i < resultList.size(); i++) {
+            Result current = resultList.get(i);
+            float val = current.getProfit();
+            colors[i] = current.getYear().equals(yearStr)
+                    ? ContextCompat.getColor(this, R.color.colorAccent)
+                    : ContextCompat.getColor(this, R.color.colorPrimary);
+            values.add(new BarEntry(i, val, val));
+        }
+        BarDataSet set1;
+        if (mBarChart.getData() != null &&
+                mBarChart.getData().getDataSetCount() > 0) {
+            set1 = (BarDataSet) mBarChart.getData().getDataSetByIndex(0);
+            set1.setValues(values);
+        } else {
+            set1 = new BarDataSet(values, "");
+            set1.setColors(colors);
+            set1.setDrawIcons(true);
+            set1.setDrawValues(true);
+            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+            dataSets.add(set1);
+            BarData data = new BarData(dataSets);
+            data.setBarWidth(0.9f);
+            data.setDrawValues(true);
+            // data.setValueFormatter(new LabelValueFormatter());
+            data.setValueTextColor(Color.BLACK);
+            set1.setValueTextSize(10f);
+            mBarChart.setData(data);
+        }
+        mBarChart.getData().notifyDataChanged();
+        mBarChart.notifyDataSetChanged();
+        mBarChart.invalidate();
     }
 }
