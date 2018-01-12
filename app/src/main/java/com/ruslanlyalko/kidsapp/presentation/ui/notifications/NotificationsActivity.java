@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ruslanlyalko.kidsapp.R;
+import com.ruslanlyalko.kidsapp.data.Utils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Notif;
 import com.ruslanlyalko.kidsapp.data.models.Notification;
@@ -51,6 +52,7 @@ public class NotificationsActivity extends AppCompatActivity {
         mNotificationsList.setItemAnimator(new DefaultItemAnimator());
         mNotificationsList.setAdapter(mNotificationsAdapter);
         loadNotifications();
+        fab.setVisibility(Utils.isAdmin() ? View.VISIBLE : View.GONE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

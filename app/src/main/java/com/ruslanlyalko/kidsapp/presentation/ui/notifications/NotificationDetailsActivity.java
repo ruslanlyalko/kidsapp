@@ -180,6 +180,7 @@ public class NotificationDetailsActivity extends AppCompatActivity {
                 .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         database.getReference(DefaultConfigurations.DB_NOTIFICATIONS).child(notification.getKey()).removeValue();
+                        Utils.clearNotificationsForAllUsers(notification.getKey());
                         onBackPressed();
                     }
                 })

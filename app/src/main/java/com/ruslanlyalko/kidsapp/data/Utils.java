@@ -45,6 +45,29 @@ public class Utils {
                 });
     }
 
+    public static void clearNotificationsForAllUsers(final String notKey) {
+        FirebaseDatabase.getInstance()
+                .getReference(DefaultConfigurations.DB_USERS)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        for (DataSnapshot userSS : dataSnapshot.getChildren()) {
+                            User user = userSS.getValue(User.class);
+                            if (user != null)
+                                FirebaseDatabase.getInstance()
+                                        .getReference(DefaultConfigurations.DB_USERS_NOTIFICATIONS)
+                                        .child(user.getUserId())
+                                        .child(notKey)
+                                        .removeValue();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(final DatabaseError databaseError) {
+                    }
+                });
+    }
+
     public static void markNotificationsAsRead(String key) {
         FirebaseDatabase.getInstance()
                 .getReference(DefaultConfigurations.DB_USERS_NOTIFICATIONS)
