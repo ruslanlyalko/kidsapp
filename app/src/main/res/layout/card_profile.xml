@@ -16,7 +16,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_user_name"/>
+            android:src="@drawable/ic_user_name" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/colorDividers"/>
+                android:background="@color/colorDividers" />
 
             <TextView
                 android:id="@+id/text_user_name"
@@ -36,12 +36,12 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/colorBlack70"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/text_position_title"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 

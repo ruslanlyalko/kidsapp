@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 
@@ -29,6 +29,6 @@
         android:src="@drawable/ic_action_add_dark1"
         app:backgroundTint="@color/colorAccent"
         app:elevation="6dp"
-        app:pressedTranslationZ="12dp"/>
+        app:pressedTranslationZ="12dp" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -14,7 +14,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_action_vyruchka"/>
+            android:src="@drawable/ic_action_vyruchka" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:hint="@string/text_stavka"
-                android:inputType="number"/>
+                android:inputType="number" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -43,7 +43,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_action_vyruchka"/>
+            android:src="@drawable/ic_action_vyruchka" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -56,7 +56,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:hint="@string/text_percent"
-                android:inputType="number"/>
+                android:inputType="number" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
@@ -70,7 +70,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_action_vyruchka"/>
+            android:src="@drawable/ic_action_vyruchka" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -83,7 +83,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:hint="@string/text_salary_detail_art"
-                android:inputType="number"/>
+                android:inputType="number" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
@@ -97,7 +97,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_action_vyruchka"/>
+            android:src="@drawable/ic_action_vyruchka" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -110,7 +110,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:hint="@string/text_salary_detail_mk1"
-                android:inputType="number"/>
+                android:inputType="number" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 

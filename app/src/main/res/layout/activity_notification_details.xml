@@ -26,19 +26,19 @@
                 android:id="@+id/image_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_notification_item"/>
+    <include layout="@layout/content_notification_item" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -47,6 +47,6 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_link"/>
+        app:srcCompat="@drawable/ic_link" />
 
 </android.support.design.widget.CoordinatorLayout>

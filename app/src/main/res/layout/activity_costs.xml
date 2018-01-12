@@ -10,9 +10,9 @@
         android:id="@+id/calendar_view"
         android:layout_width="1dp"
         android:layout_height="1dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
-    <include layout="@layout/content_expense"/>
+    <include layout="@layout/content_expense" />
 
     <View
         android:id="@+id/faded_background"
@@ -34,7 +34,7 @@
         android:visibility="invisible"
         app:backgroundTint="@color/colorFab2"
         app:elevation="6dp"
-        app:pressedTranslationZ="12dp"/>
+        app:pressedTranslationZ="12dp" />
 
     <TextView
         android:id="@+id/textFab2"
@@ -49,7 +49,7 @@
         android:textStyle="bold"
         android:visibility="invisible"
         app:layout_anchor="@id/fab2"
-        app:layout_anchorGravity="center|left"/>
+        app:layout_anchorGravity="center|left" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab1"
@@ -79,7 +79,7 @@
         android:textStyle="bold"
         android:visibility="invisible"
         app:layout_anchor="@id/fab1"
-        app:layout_anchorGravity="center|left"/>
+        app:layout_anchorGravity="center|left" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -90,13 +90,13 @@
         android:src="@drawable/ic_action_add_dark1"
         app:backgroundTint="@color/colorAccent"
         app:elevation="6dp"
-        app:pressedTranslationZ="12dp"/>
+        app:pressedTranslationZ="12dp" />
 
     <ProgressBar
         android:id="@+id/progress_bar_upload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </android.support.design.widget.CoordinatorLayout>

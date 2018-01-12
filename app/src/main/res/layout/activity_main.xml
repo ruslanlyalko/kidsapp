@@ -21,7 +21,7 @@
             android:layout_alignParentTop="true"
             android:background="?android:attr/selectableItemBackground"
             android:drawableTop="@drawable/ic_user1"
-            android:paddingTop="10dp"/>
+            android:paddingTop="10dp" />
 
         <Button
             android:id="@+id/button_events"
@@ -31,7 +31,7 @@
             android:layout_alignParentTop="true"
             android:background="?android:attr/selectableItemBackground"
             android:drawableTop="@drawable/ic_event1"
-            android:paddingTop="10dp"/>
+            android:paddingTop="10dp" />
 
         <TextView
             android:id="@+id/text_link"
@@ -45,7 +45,7 @@
             android:text=""
             android:textAlignment="center"
             android:textColor="@color/colorWhite"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/text_link_details"
@@ -57,7 +57,7 @@
             android:maxLines="1"
             android:text=""
             android:textAlignment="center"
-            android:textColor="@color/colorWhite"/>
+            android:textColor="@color/colorWhite" />
 
         <TextView
             android:id="@+id/text_app_name"
@@ -68,7 +68,7 @@
             android:layout_margin="16dp"
             android:text="@string/app_title"
             android:textColor="@color/colorWhite"
-            android:textSize="56sp"/>
+            android:textSize="56sp" />
 
         <View
             android:id="@+id/myRectangleView"
@@ -77,7 +77,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="-10dp"
-            android:background="@drawable/rectangle"/>
+            android:background="@drawable/rectangle" />
 
         <TextView
             android:id="@+id/textEA"
@@ -89,7 +89,7 @@
             android:text="@string/app_motto"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
@@ -109,7 +109,23 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/gradient"/>
+                android:background="@drawable/gradient" />
+
+            <Button
+                android:id="@+id/button_calc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="@string/button_calc" />
+
+            <View
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="1dp"
+                android:background="@drawable/gradient" />
 
             <Button
                 android:id="@+id/button_about"
@@ -118,44 +134,12 @@
                 android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="@string/button_about"/>
+                android:text="@string/button_about" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/gradient"/>
-
-            <Button
-                android:id="@+id/button_weather"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:background="?android:attr/selectableItemBackground"
-                android:text="@string/button_contacts"
-
-                android:visibility="gone"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@drawable/gradient"
-
-                android:visibility="gone"/>
-
-            <Button
-                android:id="@+id/button_link"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:background="?android:attr/selectableItemBackground"
-                android:text="@string/button_link"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@drawable/gradient"/>
+                android:background="@drawable/gradient" />
 
             <Button
                 android:id="@+id/button_fb"
@@ -164,7 +148,21 @@
                 android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="@string/button_fb"/>
+                android:text="@string/button_fb" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/gradient" />
+
+            <Button
+                android:id="@+id/button_link"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="@string/button_link" />
 
         </LinearLayout>
 
@@ -193,12 +191,12 @@
                     android:drawableTop="@mipmap/ic_button_report"
                     android:paddingBottom="16dp"
                     android:paddingTop="32dp"
-                    android:text="@string/button_zvit"/>
+                    android:text="@string/button_zvit" />
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/gradient_v"/>
+                    android:background="@drawable/gradient_v" />
 
                 <!-- Right Top Button -->
                 <Button
@@ -211,7 +209,7 @@
                     android:drawableTop="@mipmap/ic_button_mk"
                     android:paddingBottom="15dp"
                     android:paddingTop="32dp"
-                    android:text="@string/button_calendar"/>
+                    android:text="@string/button_calendar" />
 
             </LinearLayout>
 
@@ -237,7 +235,7 @@
                     android:drawableTop="@mipmap/ic_button_calendar"
                     android:paddingBottom="16dp"
                     android:paddingTop="32dp"
-                    android:text="@string/button_team"/>
+                    android:text="@string/button_team" />
 
                 <View
                     android:layout_width="1dp"
@@ -255,7 +253,7 @@
                     android:drawableTop="@mipmap/ic_button_cost"
                     android:paddingBottom="16dp"
                     android:paddingTop="32dp"
-                    android:text="@string/button_requisites"/>
+                    android:text="@string/button_requisites" />
             </LinearLayout>
 
             <View
@@ -274,7 +272,7 @@
                     android:layout_height="match_parent"
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableTop="@drawable/ic_up3"
-                    android:paddingTop="14dp"/>
+                    android:paddingTop="14dp" />
 
             </LinearLayout>
 

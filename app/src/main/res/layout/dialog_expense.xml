@@ -14,7 +14,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_user_name"/>
+            android:src="@drawable/ic_user_name" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:hint="@string/hint_title1"
-                android:inputType="text|textCapSentences"/>
+                android:inputType="text|textCapSentences" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
@@ -41,7 +41,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_action_vyruchka"/>
+            android:src="@drawable/ic_action_vyruchka" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:hint="@string/hint_price"
-                android:inputType="number"/>
+                android:inputType="number" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 

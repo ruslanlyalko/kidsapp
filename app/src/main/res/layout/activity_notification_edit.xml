@@ -16,7 +16,7 @@
             android:layout_height="@dimen/app_bar_height"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_add_photo"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -24,7 +24,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginTop="-50dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/edit_title1"
@@ -35,12 +35,12 @@
             android:inputType="textCapSentences"
             android:maxLength="20"
             android:padding="@dimen/text_margin"
-            android:textSize="24sp"/>
+            android:textSize="24sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorDividersDark"/>
+            android:background="@color/colorDividersDark" />
 
         <EditText
             android:id="@+id/edit_title2"
@@ -50,12 +50,12 @@
             android:hint="@string/hint_short_description"
             android:inputType="textCapSentences"
             android:maxLength="50"
-            android:padding="@dimen/text_margin"/>
+            android:padding="@dimen/text_margin" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorDividersDark"/>
+            android:background="@color/colorDividersDark" />
 
         <EditText
             android:id="@+id/edit_description"
@@ -64,12 +64,12 @@
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/hint_description"
             android:inputType="textCapSentences|textMultiLine"
-            android:padding="@dimen/text_margin"/>
+            android:padding="@dimen/text_margin" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorDividersDark"/>
+            android:background="@color/colorDividersDark" />
 
         <EditText
             android:id="@+id/edit_link"
@@ -78,7 +78,7 @@
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/hint_link"
             android:inputType="textUri"
-            android:padding="@dimen/text_margin"/>
+            android:padding="@dimen/text_margin" />
 
     </LinearLayout>
 

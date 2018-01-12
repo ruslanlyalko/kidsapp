@@ -32,7 +32,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_margin="16dp"
-                    android:src="@drawable/ic_user_birthday"/>
+                    android:src="@drawable/ic_user_birthday" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                             android:layout_marginTop="16dp"
                             android:layout_weight="4"
                             android:text=""
-                            android:textSize="18sp"/>
+                            android:textSize="18sp" />
 
                         <ImageButton
                             android:id="@+id/button_prev"
@@ -61,7 +61,7 @@
                             android:layout_height="56dp"
                             android:layout_weight="1"
                             android:background="?android:attr/selectableItemBackground"
-                            android:src="@drawable/ic_action_left"/>
+                            android:src="@drawable/ic_action_left" />
 
                         <ImageButton
                             android:id="@+id/button_next"
@@ -69,7 +69,7 @@
                             android:layout_height="56dp"
                             android:layout_weight="1"
                             android:background="?android:attr/selectableItemBackground"
-                            android:src="@drawable/ic_action_right"/>
+                            android:src="@drawable/ic_action_right" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -109,7 +109,7 @@
                                                                              app:compactCalendarOtherMonthDaysTextColor="@color/colorBlack12"
                                                                              app:compactCalendarTargetHeight="220dp"
                                                                              app:compactCalendarTextColor="@color/colorBlack50"
-                                                                             app:compactCalendarTextSize="14sp"/>
+                                                                             app:compactCalendarTextSize="14sp" />
 
             </LinearLayout>
 
@@ -128,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
-                android:scrollbars="vertical"/>
+                android:scrollbars="vertical" />
 
         </LinearLayout>
     </LinearLayout>

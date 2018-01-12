@@ -43,7 +43,7 @@
                     android:paddingTop="4dp"
                     android:textColor="@color/album_title"
                     android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/text_title2"
@@ -53,7 +53,7 @@
                     android:paddingBottom="4dp"
                     android:paddingLeft="@dimen/card_mk_title_padding"
                     android:paddingRight="@dimen/card_mk_title_padding"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
             </RelativeLayout>
 
@@ -73,7 +73,7 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableStart="@drawable/ic_share_light"
                     android:padding="4dp"
-                    android:text="@string/text_mk_share"/>
+                    android:text="@string/text_mk_share" />
 
                 <Button
                     android:id="@+id/button_link"
@@ -83,14 +83,14 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:drawableStart="@drawable/ic_link_light"
                     android:padding="4dp"
-                    android:text="@string/text_mk_link"/>
+                    android:text="@string/text_mk_link" />
 
                 <!-- add any action buttons here-->
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <ImageButton
                     android:id="@+id/button_expand"
@@ -99,7 +99,7 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/expand_more"
                     android:padding="8dp"
-                    android:src="@drawable/ic_action_expand_more"/>
+                    android:src="@drawable/ic_action_expand_more" />
 
             </LinearLayout>
 
@@ -118,7 +118,7 @@
                 <TextView
                     android:id="@+id/text_description"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 

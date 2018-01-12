@@ -18,19 +18,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:textColor="@color/colorBlack50"/>
+            android:textColor="@color/colorBlack50" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorDividersDark"/>
+            android:background="@color/colorDividersDark" />
 
         <TextView
             android:id="@+id/text_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

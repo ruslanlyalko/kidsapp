@@ -39,7 +39,7 @@
 
     <string name="hint_double_press">Натисніть ще раз аби вийти з додатку</string>
     <string name="button_about">Про проект</string>
-    <string name="button_contacts">Погода в Іршаві</string>
+    <string name="button_calc">Тарифний Калькулятор</string>
     <string name="button_fb">Ми в Facebook</string>
     <string name="phone_call">tel:0681990655</string>
 
@@ -218,7 +218,7 @@
     <string name="action_change_password">ЗМІНИТИ ПАРОЛЬ</string>
     <string name="text_user_details">Основні дані</string>
     <string name="toast_nothing_to_change">Немає змін в даних</string>
-    <string name="button_link">Перейти в плеймаркет</string>
+    <string name="button_link">Поділитись</string>
 
     <string name="hrn_percent">"%1$s відсотків"</string>
     <string name="hrn_child">"%1$s грн/дитина"</string>
@@ -235,5 +235,6 @@
     <string name="action_save_changes">ЗБЕРЕГТИ ЗМІНИ</string>
     <string name="action_no">НІ</string>
     <string name="action_choose">ВИБРАТИ</string>
+    <string name="title_activity_calc">Тарифний Калькулятор</string>
 
 </resources>

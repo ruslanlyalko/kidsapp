@@ -5,6 +5,6 @@
         android:startColor="@color/colorGradient"
         android:centerColor="@color/colorGray"
         android:endColor="@color/colorGradient"
-        android:angle="0"/>
+        android:angle="0" />
 
 </shape>

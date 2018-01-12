@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/edit_about"
@@ -27,7 +27,7 @@
             android:layout_margin="@dimen/text_margin"
             android:inputType="textMultiLine|textCapSentences"
             android:textSize="16sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/text_version"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/text_margin"
             android:layout_marginRight="@dimen/text_margin"
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
 
     </LinearLayout>
 

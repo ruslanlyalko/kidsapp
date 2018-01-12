@@ -22,11 +22,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.ruslanlyalko.kidsapp.R;
-import com.ruslanlyalko.kidsapp.common.Keys;
 import com.ruslanlyalko.kidsapp.data.Utils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.User;
 import com.ruslanlyalko.kidsapp.presentation.ui.about.AboutActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.calc.CalcActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.calendar.CalendarActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.expenses.ExpensesActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.mk.MkTabActivity;
@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseRemoteConfig mRemoteConfig = FirebaseRemoteConfig.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private boolean mLinkActive = false;
-    private String mLink;
-    private String mLinkFb;
+    private String mLink = "https://play.google.com/store/apps/details?id=com.ruslanlyalko.kidsapp";
+    private String mLinkFb = "https://www.facebook.com/groups/cheburashka.kids/";
     private String mAboutText = "";
     private float x1;
     private float y1;
@@ -85,9 +85,9 @@ public class MainActivity extends AppCompatActivity {
         HashMap<String, Object> defaults = new HashMap<>();
         defaults.put("link_show", false);
         defaults.put("latest_version", "1.7");
-        defaults.put("link", "https://www.fb.com/snoopyagency");
+        defaults.put("link", "https://play.google.com/store/apps/details?id=com.ruslanlyalko.kidsapp");
         defaults.put("link_text", "Відвідайте нашу сторінку у ФБ!");
-        defaults.put("link_fb", "https://www.fb.com/snoopyagency");
+        defaults.put("link_fb", "https://www.facebook.com/groups/cheburashka.kids/");
         mRemoteConfig.setDefaults(defaults);
         final Task<Void> fetch = mRemoteConfig.fetch(0);
         fetch.addOnSuccessListener(this, new OnSuccessListener<Void>() {
@@ -246,9 +246,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.button_about)
     void onAboutClicked() {
-        Intent intent = new Intent(MainActivity.this, AboutActivity.class);
-        intent.putExtra(Keys.Extras.EXTRA_ABOUT, mAboutText);
-        startActivity(intent);
+        startActivity(AboutActivity.getLaunchIntent(this, mAboutText));
     }
 
     @OnClick(R.id.button_fb)
@@ -257,8 +255,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.button_link)
-    void onLinkClicked() {
-        openBrowser(mLink);
+    void onShareClicked() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+        sendIntent.putExtra(Intent.EXTRA_TEXT, mLink);
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+    }
+
+    @OnClick(R.id.button_calc)
+    void onCalcClicked() {
+        startActivity(CalcActivity.getLaunchIntent(this));
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.about;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -22,6 +24,12 @@ import com.ruslanlyalko.kidsapp.data.Utils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 
 public class AboutActivity extends AppCompatActivity {
+
+    public static Intent getLaunchIntent(Context context, String text) {
+        Intent intent = new Intent(context, AboutActivity.class);
+        intent.putExtra(Keys.Extras.EXTRA_ABOUT, text);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

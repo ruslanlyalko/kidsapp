@@ -11,7 +11,7 @@
     <EditText
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
     <!-- TILE  Date picker -->
     <android.support.v7.widget.CardView
@@ -36,7 +36,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_birthday"/>
+                android:src="@drawable/ic_user_birthday" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -56,7 +56,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="16dp"
                         android:text=""
-                        android:textSize="18sp"/>
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -98,7 +98,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_margin="16dp"
-                        android:src="@drawable/ic_add_photo"/>
+                        android:src="@drawable/ic_add_photo" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -109,7 +109,7 @@
 
                         <EditText
                             android:layout_width="0dp"
-                            android:layout_height="0dp"/>
+                            android:layout_height="0dp" />
 
                         <ProgressBar
                             android:id="@+id/progress_bar_upload"
@@ -117,7 +117,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginRight="8dp"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/edit_photo"
@@ -127,7 +127,7 @@
                             android:gravity="center_vertical"
                             android:text="@string/text_add_photo"
                             android:textAlignment="textStart"
-                            android:textSize="18sp"/>
+                            android:textSize="18sp" />
 
                     </LinearLayout>
 
@@ -165,7 +165,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_margin="16dp"
-                            android:src="@drawable/ic_action_room"/>
+                            android:src="@drawable/ic_action_room" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -179,7 +179,7 @@
                                 android:layout_height="48dp"
                                 android:gravity="center|left"
                                 android:text="@string/text_room"
-                                android:textSize="18sp"/>
+                                android:textSize="18sp" />
 
                             <TextView
                                 android:id="@+id/textView"
@@ -188,7 +188,7 @@
                                 android:layout_marginBottom="-4dp"
                                 android:layout_marginTop="0dp"
                                 android:text="@string/text_all"
-                                android:textColor="@color/colorBlack"/>
+                                android:textColor="@color/colorBlack" />
 
                             <TextView
                                 android:id="@+id/text_room_total"
@@ -196,7 +196,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="0 ГРН"
                                 android:textColor="@color/colorBlack"
-                                android:textSize="32sp"/>
+                                android:textSize="32sp" />
 
                         </LinearLayout>
 
@@ -227,7 +227,7 @@
                                 android:layout_height="64dp"
                                 android:inputType="number"
                                 android:text="0"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center" />
 
                             <EditText
                                 android:id="@+id/input_room_30"
@@ -235,7 +235,7 @@
                                 android:layout_height="64dp"
                                 android:inputType="number"
                                 android:text="0"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center" />
 
                             <EditText
                                 android:id="@+id/input_room_20"
@@ -243,7 +243,7 @@
                                 android:layout_height="64dp"
                                 android:inputType="number"
                                 android:text="0"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center" />
 
                             <EditText
                                 android:id="@+id/input_room_10"
@@ -251,12 +251,12 @@
                                 android:layout_height="64dp"
                                 android:inputType="number"
                                 android:text="0"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center" />
 
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1"/>
+                                android:layout_weight="1" />
 
                         </LinearLayout>
 
@@ -281,14 +281,14 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
                                     android:text="60 грн х 0 = 0 ГРН"
-                                    android:textColor="@color/colorBlack"/>
+                                    android:textColor="@color/colorBlack" />
 
                                 <SeekBar
                                     android:id="@+id/seek_room_60"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:max="40"
-                                    android:progress="0"/>
+                                    android:progress="0" />
 
                                 <TextView
                                     android:id="@+id/text_room_30"
@@ -296,14 +296,14 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="16dp"
                                     android:text="30 грн х 0 = 0 ГРН"
-                                    android:textColor="@color/colorBlack"/>
+                                    android:textColor="@color/colorBlack" />
 
                                 <SeekBar
                                     android:id="@+id/seek_room_30"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:max="40"
-                                    android:progress="0"/>
+                                    android:progress="0" />
 
                                 <TextView
                                     android:id="@+id/text_room_20"
@@ -311,14 +311,14 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="16dp"
                                     android:text="20 грн х 0 = 0 ГРН"
-                                    android:textColor="@color/colorBlack"/>
+                                    android:textColor="@color/colorBlack" />
 
                                 <SeekBar
                                     android:id="@+id/seek_room_20"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:max="40"
-                                    android:progress="0"/>
+                                    android:progress="0" />
 
                                 <TextView
                                     android:id="@+id/text_room_10"
@@ -326,14 +326,14 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="16dp"
                                     android:text="10 грн х 0 = 0 ГРН"
-                                    android:textColor="@color/colorBlack"/>
+                                    android:textColor="@color/colorBlack" />
 
                                 <SeekBar
                                     android:id="@+id/seek_room_10"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:max="40"
-                                    android:progress="0"/>
+                                    android:progress="0" />
 
                             </LinearLayout>
 
@@ -376,7 +376,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_margin="16dp"
-                            android:src="@drawable/ic_action_birthday"/>
+                            android:src="@drawable/ic_action_birthday" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -390,7 +390,7 @@
                                 android:layout_height="48dp"
                                 android:gravity="center|left"
                                 android:text="@string/text_birthdays"
-                                android:textSize="18sp"/>
+                                android:textSize="18sp" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -398,7 +398,7 @@
                                 android:layout_marginBottom="-4dp"
                                 android:layout_marginTop="0dp"
                                 android:text="@string/text_all"
-                                android:textColor="@color/colorBlack"/>
+                                android:textColor="@color/colorBlack" />
 
                             <TextView
                                 android:id="@+id/text_bday_total"
@@ -406,7 +406,7 @@
                                 android:layout_height="match_parent"
                                 android:text="0 ГРН"
                                 android:textColor="@color/colorBlack"
-                                android:textSize="32sp"/>
+                                android:textSize="32sp" />
 
                         </LinearLayout>
 
@@ -433,7 +433,7 @@
 
                             <EditText
                                 android:layout_width="0dp"
-                                android:layout_height="0dp"/>
+                                android:layout_height="0dp" />
 
                             <EditText
                                 android:id="@+id/input_bday_50"
@@ -441,7 +441,7 @@
                                 android:layout_height="64dp"
                                 android:inputType="number"
                                 android:text="0"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center" />
 
                             <EditText
                                 android:id="@+id/input_bday_10"
@@ -449,7 +449,7 @@
                                 android:layout_height="64dp"
                                 android:inputType="number"
                                 android:text="0"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center" />
 
                             <EditText
                                 android:id="@+id/input_bday_30"
@@ -457,12 +457,12 @@
                                 android:layout_height="64dp"
                                 android:inputType="number"
                                 android:text="0"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center" />
 
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1"/>
+                                android:layout_weight="1" />
                         </LinearLayout>
                         <!-- SeekBars  BirthDay-->
                         <LinearLayout
@@ -486,14 +486,14 @@
                                     android:layout_height="match_parent"
                                     android:layout_marginTop="8dp"
                                     android:text="Кімната: 50 грн х 0 = 0 ГРН"
-                                    android:textColor="@color/colorBlack"/>
+                                    android:textColor="@color/colorBlack" />
 
                                 <SeekBar
                                     android:id="@+id/seek_bday_50"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:max="40"
-                                    android:progress="0"/>
+                                    android:progress="0" />
 
                                 <TextView
                                     android:id="@+id/text_bday_10"
@@ -501,14 +501,14 @@
                                     android:layout_height="match_parent"
                                     android:layout_marginTop="16dp"
                                     android:text="Кімната: 10 грн х 0 = 0 ГРН"
-                                    android:textColor="@color/colorBlack"/>
+                                    android:textColor="@color/colorBlack" />
 
                                 <SeekBar
                                     android:id="@+id/seek_bday_10"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:max="40"
-                                    android:progress="0"/>
+                                    android:progress="0" />
 
                                 <TextView
                                     android:id="@+id/text_bday_30"
@@ -516,14 +516,14 @@
                                     android:layout_height="match_parent"
                                     android:layout_marginTop="16dp"
                                     android:text="МК: 30 грн х 0 = 0 ГРН"
-                                    android:textColor="@color/colorBlack"/>
+                                    android:textColor="@color/colorBlack" />
 
                                 <SeekBar
                                     android:id="@+id/seek_bday_30"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:max="40"
-                                    android:progress="0"/>
+                                    android:progress="0" />
 
                                 <TextView
                                     android:id="@+id/text_bday_mk_done"
@@ -531,14 +531,14 @@
                                     android:layout_height="match_parent"
                                     android:layout_marginTop="16dp"
                                     android:text="Проведено Майстер Класів: 0"
-                                    android:textColor="@color/colorBlack"/>
+                                    android:textColor="@color/colorBlack" />
 
                                 <SeekBar
                                     android:id="@+id/seek_bday_mk_done"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:max="5"
-                                    android:progress="0"/>
+                                    android:progress="0" />
 
                             </LinearLayout>
 
@@ -580,7 +580,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_margin="16dp"
-                            android:src="@drawable/ic_action_mk"/>
+                            android:src="@drawable/ic_action_mk" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -600,12 +600,12 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="Майстер клас"
-                                    android:textSize="18sp"/>
+                                    android:textSize="18sp" />
 
                                 <View
                                     android:layout_width="0dp"
                                     android:layout_height="1dp"
-                                    android:layout_weight="1"/>
+                                    android:layout_weight="1" />
 
                                 <Button
                                     android:id="@+id/button_choose_mk"
@@ -615,7 +615,7 @@
                                     android:paddingRight="8dp"
                                     android:paddingStart="8dp"
                                     android:text="@string/action_choose"
-                                    android:textColor="@color/colorAccent"/>
+                                    android:textColor="@color/colorAccent" />
                             </LinearLayout>
 
                             <TextView
@@ -624,7 +624,7 @@
                                 android:layout_marginBottom="-4dp"
                                 android:layout_marginTop="0dp"
                                 android:text="@string/text_all"
-                                android:textColor="@color/colorBlack"/>
+                                android:textColor="@color/colorBlack" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -637,19 +637,19 @@
                                     android:layout_height="wrap_content"
                                     android:text="0 ГРН"
                                     android:textColor="@color/colorBlack"
-                                    android:textSize="32sp"/>
+                                    android:textSize="32sp" />
 
                                 <View
                                     android:layout_width="0dp"
                                     android:layout_height="1dp"
-                                    android:layout_weight="1"/>
+                                    android:layout_weight="1" />
 
                                 <Switch
                                     android:id="@+id/switch_my_mk"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:checked="true"
-                                    android:text="Мій МК"/>
+                                    android:text="Мій МК" />
 
                             </LinearLayout>
 
@@ -681,7 +681,7 @@
                                 android:layout_height="64dp"
                                 android:inputType="number"
                                 android:text="0"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center" />
 
                             <EditText
                                 android:id="@+id/input_mk_2"
@@ -689,12 +689,12 @@
                                 android:layout_height="64dp"
                                 android:inputType="number"
                                 android:text="0"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center" />
 
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1"/>
+                                android:layout_weight="1" />
 
                         </LinearLayout>
 
@@ -730,14 +730,14 @@
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="8dp"
                                             android:text="Тариф 1: 30 грн x"
-                                            android:textColor="@color/colorBlack"/>
+                                            android:textColor="@color/colorBlack" />
 
                                         <SeekBar
                                             android:id="@+id/seek_mk_t1"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:max="5"
-                                            android:progress="0"/>
+                                            android:progress="0" />
 
                                         <TextView
                                             android:id="@+id/text_mk_t2"
@@ -745,14 +745,14 @@
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="16dp"
                                             android:text="Тариф 2: 30 грн x"
-                                            android:textColor="@color/colorBlack"/>
+                                            android:textColor="@color/colorBlack" />
 
                                         <SeekBar
                                             android:id="@+id/seek_mk_t2"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:max="5"
-                                            android:progress="0"/>
+                                            android:progress="0" />
 
                                     </LinearLayout>
 
@@ -768,14 +768,14 @@
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="8dp"
                                             android:text="  0 = 0 ГРН"
-                                            android:textColor="@color/colorBlack"/>
+                                            android:textColor="@color/colorBlack" />
 
                                         <SeekBar
                                             android:id="@+id/seek_mk_1"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:max="20"
-                                            android:progress="0"/>
+                                            android:progress="0" />
 
                                         <TextView
                                             android:id="@+id/text_mk_2"
@@ -783,14 +783,14 @@
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="16dp"
                                             android:text="  0 = 0 ГРН"
-                                            android:textColor="@color/colorBlack"/>
+                                            android:textColor="@color/colorBlack" />
 
                                         <SeekBar
                                             android:id="@+id/seek_mk_2"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:max="20"
-                                            android:progress="0"/>
+                                            android:progress="0" />
                                     </LinearLayout>
 
                                 </LinearLayout>
@@ -828,7 +828,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_margin="16dp"
-                        android:src="@drawable/ic_comment"/>
+                        android:src="@drawable/ic_comment" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -846,7 +846,7 @@
                             android:backgroundTint="@android:color/transparent"
                             android:hint="@string/hint_comment"
                             android:inputType="textCapSentences|textMultiLine"
-                            android:textSize="18sp"/>
+                            android:textSize="18sp" />
 
                     </LinearLayout>
 
