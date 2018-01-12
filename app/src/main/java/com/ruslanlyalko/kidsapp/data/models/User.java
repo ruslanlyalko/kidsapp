@@ -23,6 +23,7 @@ public class User implements Serializable {
     private int mkArtChild = 10;
     private boolean mkSpecCalc = false;
     private String mkSpecCalcDate = "1-8-2017";
+    private String avatar;
 
     public User(String userId, String userName, String userPhone, String userEmail, String userBDay, String userCard, boolean userIsAdmin) {
         this.userId = userId;
@@ -36,6 +37,14 @@ public class User implements Serializable {
 
     public User() {
         // Default constructor required
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(final String avatar) {
+        this.avatar = avatar;
     }
 
     public String getMkSpecCalcDate() {

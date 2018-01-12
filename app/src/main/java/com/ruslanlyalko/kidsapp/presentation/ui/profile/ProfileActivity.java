@@ -6,15 +6,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,13 +24,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ruslanlyalko.kidsapp.R;
-import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.common.Keys;
 import com.ruslanlyalko.kidsapp.data.Utils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
@@ -50,24 +45,36 @@ import com.ruslanlyalko.kidsapp.presentation.ui.profile.settings.ProfileSettings
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class ProfileActivity extends AppCompatActivity {
 
-    ImageView imageUser1, imageUserLogo;
-    TextView textEmail, textPhone, textBDay, textCard;
-    TextView textTitleName, textTitlePosition, textTime;
-    TextView textFirstDate;
-    LinearLayout panelFirstDate, panelPhoneCall, panelEmail, panelCard;
-    FloatingActionButton fab;
-    CardView cardFriends;
+    @BindView(R.id.text_email) TextView mEmailText;
+    @BindView(R.id.text_phone) TextView mPhoneText;
+    @BindView(R.id.text_bday) TextView mBDayText;
+    @BindView(R.id.text_card) TextView mCardText;
+    @BindView(R.id.text_position_title) TextView mTitlePositionText;
+    @BindView(R.id.text_time) TextView mTimeText;
+    @BindView(R.id.text_first_date) TextView mFirstDateText;
+    @BindView(R.id.panel_first_date) LinearLayout mFirsDateLayout;
+    @BindView(R.id.panel_phone) LinearLayout mPhoneLayout;
+    @BindView(R.id.panel_email) LinearLayout mEmailLayout;
+    @BindView(R.id.panel_card) LinearLayout mCardLayout;
+    @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.card_friends) CardView mCardView;
+    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.image_view_ava) ImageView mAvaImageView;
+    @BindView(R.id.image_view_back) ImageView mBackImageView;
 
+    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-
     private String mUID;
     private User mUser;
     private List<User> userList = new ArrayList<>();
     private UsersAdapter adapter;
-    private RecyclerView recyclerView;
     private boolean needLoadFriends;
 
     @Override
@@ -75,89 +82,36 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
         setContentView(R.layout.activity_profile);
-        initCollapsingToolbar();
-        initRef();
+        ButterKnife.bind(this);
+        parseExtras();
+        initToolbar();
+        initRecycle();
+        loadUsers();
+    }
+
+    private void parseExtras() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             mUID = bundle.getString(Keys.Extras.EXTRA_UID, FirebaseAuth.getInstance().getCurrentUser().getUid());
         } else
             mUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         needLoadFriends = mUID.equals(mAuth.getCurrentUser().getUid());
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final boolean myPage = mUser.getUserId().equals(mAuth.getCurrentUser().getUid());
-                if (Utils.isAdmin() && myPage) {
-                    startActivity(DashboardActivity.getLaunchIntent(ProfileActivity.this));
-                } else {
-                    startActivity(SalaryActivity.getLaunchIntent(ProfileActivity.this, mUID, mUser));
-                }
-            }
-        });
-        initRecycle();
-        loadUsers();
     }
 
-    private void initCollapsingToolbar() {
+    private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        final CollapsingToolbarLayout collapsingToolbar =
-                findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(" ");
-        AppBarLayout appBarLayout = findViewById(R.id.appbar);
-        appBarLayout.setExpanded(true);
-        // hiding & showing the title when toolbar expanded & collapsed
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false;
-            int scrollRange = -1;
-
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle(mUser.getUserName());
-                    fab.hide();
-                    isShow = true;
-                } else if (isShow) {
-                    collapsingToolbar.setTitle(" ");
-                    fab.show();
-                    isShow = false;
-                }
-            }
-        });
-    }
-
-    private void initRef() {
-        panelFirstDate = findViewById(R.id.panel_first_date);
-        panelPhoneCall = findViewById(R.id.panel_phone);
-        panelEmail = findViewById(R.id.panel_email);
-        panelCard = findViewById(R.id.panel_card);
-        imageUserLogo = findViewById(R.id.image_user_logo);
-        imageUser1 = findViewById(R.id.image_user1);
-        textTitleName = findViewById(R.id.text_title_name);
-        textTitlePosition = findViewById(R.id.text_position_title);
-        textTime = findViewById(R.id.text_time);
-        textPhone = findViewById(R.id.text_phone);
-        textEmail = findViewById(R.id.text_email);
-        textBDay = findViewById(R.id.text_bday);
-        textCard = findViewById(R.id.text_card);
-        textFirstDate = findViewById(R.id.text_first_date);
-        fab = findViewById(R.id.fab);
-        cardFriends = (CardView) findViewById(R.id.card_friends);
-        recyclerView = findViewById(R.id.recycler_view);
     }
 
     private void initRecycle() {
         if (needLoadFriends) {
-            cardFriends.setVisibility(View.VISIBLE);
+            mCardView.setVisibility(View.VISIBLE);
             adapter = new UsersAdapter(this, userList);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setAdapter(adapter);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            mRecyclerView.setAdapter(adapter);
         } else {
-            cardFriends.setVisibility(View.GONE);
+            mCardView.setVisibility(View.GONE);
         }
     }
 
@@ -213,16 +167,16 @@ public class ProfileActivity extends AppCompatActivity {
         fab.setVisibility(Utils.isAdmin() || myPage ? View.VISIBLE : View.GONE);
         if (mUser.getUserIsAdmin() && myPage)
             fab.setImageResource(R.drawable.ic_action_money);
-        textTitleName.setText(user.getUserName());
-        textTitlePosition.setText(user.getUserPositionTitle());
-        textPhone.setText(user.getUserPhone());
-        textEmail.setText(user.getUserEmail());
-        textBDay.setText(user.getUserBDay());
-        textCard.setText(user.getUserCard());
-        textTime.setText(user.getUserTimeStart() + " - " + user.getUserTimeEnd());
-        textFirstDate.setText(user.getUserFirstDate());
+        mTitlePositionText.setText(user.getUserPositionTitle());
+        collapsingToolbar.setTitle(user.getUserName());
+        mPhoneText.setText(user.getUserPhone());
+        mEmailText.setText(user.getUserEmail());
+        mBDayText.setText(user.getUserBDay());
+        mCardText.setText(user.getUserCard());
+        mTimeText.setText(user.getUserTimeStart() + " - " + user.getUserTimeEnd());
+        mFirstDateText.setText(user.getUserFirstDate());
         final String phone = user.getUserPhone();
-        panelPhoneCall.setOnClickListener(new View.OnClickListener() {
+        mPhoneLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
@@ -231,7 +185,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         final String email = user.getUserEmail();
-        panelEmail.setOnClickListener(new View.OnClickListener() {
+        mEmailLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -241,7 +195,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         final String card = user.getUserCard();
-        panelCard.setOnClickListener(new View.OnClickListener() {
+        mCardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -251,23 +205,26 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         if (Utils.isAdmin() && !user.getUserId().equals(mAuth.getCurrentUser().getUid())) {
-            panelFirstDate.setVisibility(View.VISIBLE);
+            mFirsDateLayout.setVisibility(View.VISIBLE);
         }
+        if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
+            mAvaImageView.setVisibility(View.VISIBLE);
+            mBackImageView.setVisibility(View.VISIBLE);
+            Glide.with(this).load(mUser.getAvatar()).into(mAvaImageView);
+        } else {
+            mAvaImageView.setVisibility(View.GONE);
+            mBackImageView.setVisibility(View.GONE);
+        }
+    }
 
-
-       /* StorageReference storageRef = storage.getReference(Constants.STORAGE_PICTURES)
-                .child("cover5.png");
-        Glide.with(ProfileActivity.this).using(new FirebaseImageLoader()).load(storageRef).into(imageUser1);
-*/
-        // draw First Letters from UserName
-        Bitmap bitmap = Bitmap.createBitmap(70, 70, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        String textToDraw = DateUtils.getFirstLetters(user.getUserName());
-        Paint paint = new Paint();
-        paint.setColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
-        paint.setTextSize(32);
-        canvas.drawText(textToDraw, 15, 46, paint);
-        imageUserLogo.setImageBitmap(bitmap);
+    @OnClick(R.id.fab)
+    void onFabClicked() {
+        final boolean myPage = mUser.getUserId().equals(mAuth.getCurrentUser().getUid());
+        if (Utils.isAdmin() && myPage) {
+            startActivity(DashboardActivity.getLaunchIntent(ProfileActivity.this));
+        } else {
+            startActivity(SalaryActivity.getLaunchIntent(ProfileActivity.this, mUID, mUser));
+        }
     }
 
     @Override
