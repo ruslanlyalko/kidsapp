@@ -1,14 +1,21 @@
 package com.ruslanlyalko.kidsapp.presentation.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +31,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.data.Utils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
+import com.ruslanlyalko.kidsapp.data.models.Notif;
 import com.ruslanlyalko.kidsapp.data.models.User;
 import com.ruslanlyalko.kidsapp.presentation.ui.about.AboutActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.calc.CalcActivity;
@@ -35,11 +43,16 @@ import com.ruslanlyalko.kidsapp.presentation.ui.profile.ProfileActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.report.ReportActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout;
 
+import java.util.AbstractCollection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.ruslanlyalko.kidsapp.common.ViewUtils.viewToDrawable;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.text_link_details) TextView mLinkDetailsText;
     @BindView(R.id.button_arrow) Button mArrowButton;
     @BindView(R.id.swipe_layout) SwipeLayout mSwipeLayout;
+    @BindView(R.id.button_events) ImageView mEventsButton;
 
     boolean mDoubleBackToExitPressedOnce = false;
     boolean mSwipeOpened = false;
@@ -63,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private float x1;
     private float y1;
     private boolean mIsLatestVersion;
+    private List<Notif> mNotifications = new ArrayList<>();
 
     public static Intent getLaunchIntent(final AppCompatActivity launchActivity) {
         return new Intent(launchActivity, MainActivity.class);
@@ -76,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         initRemoteConfig();
         initCurrentUser();
         initSwipes();
+        loadBadge();
     }
 
     private void initRemoteConfig() {
@@ -103,12 +119,13 @@ public class MainActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
             mDatabase.getReference(DefaultConfigurations.DB_USERS)
                     .child(mAuth.getCurrentUser().getUid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                    .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(final DataSnapshot dataSnapshot) {
                             User user = dataSnapshot.getValue(User.class);
-                            if (user != null)
+                            if (user != null) {
                                 Utils.setIsAdmin(user.getUserIsAdmin());
+                            }
                         }
 
                         @Override
@@ -187,6 +204,41 @@ public class MainActivity extends AppCompatActivity {
             mLinkDetailsText.setText("");
         }
         mLinkFb = mRemoteConfig.getString("link_fb");
+    }
+
+    private void loadBadge() {
+        mDatabase.getReference(DefaultConfigurations.DB_USERS_NOTIFICATIONS)
+                .child(mAuth.getCurrentUser().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        mNotifications.clear();
+                        for (DataSnapshot notifSS : dataSnapshot.getChildren()) {
+                            Notif notif = notifSS.getValue(Notif.class);
+                            mNotifications.add(notif);
+                        }
+                        redrawCountOfNotifications(mNotifications.size());
+                    }
+
+                    @Override
+                    public void onCancelled(final DatabaseError databaseError) {
+                    }
+                });
+    }
+
+    public void redrawCountOfNotifications(int count) {
+        if (count == 0) {
+            mEventsButton.setImageDrawable(getDrawable(R.drawable.ic_event1));
+            return;
+        }
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        android.view.View view = inflater.inflate(R.layout.drawable_event_badge, null);
+        TextView badgeCount = view.findViewById(R.id.badge);
+        badgeCount.setVisibility(View.VISIBLE);
+        badgeCount.setText(String.valueOf(count));
+        Bitmap bitmap = viewToDrawable(view);
+        Drawable icon = new BitmapDrawable(getResources(), bitmap);
+        mEventsButton.setImageDrawable(icon);
     }
 
     @OnClick({R.id.text_link, R.id.text_link_details})

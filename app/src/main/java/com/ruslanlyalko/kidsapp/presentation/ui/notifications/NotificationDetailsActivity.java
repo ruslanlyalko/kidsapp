@@ -34,17 +34,16 @@ import com.ruslanlyalko.kidsapp.data.models.Notification;
 
 public class NotificationDetailsActivity extends AppCompatActivity {
 
+    // VARIABLES
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    String notKey;
+    Notification notification;
     //VIEWS
     private Toolbar toolbar;
     private CollapsingToolbarLayout toolbarLayout;
     private TextView textDescription;//, textTitle2;
     private ImageView imageView;
     private FloatingActionButton fab;
-
-    // VARIABLES
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    String notKey;
-    Notification notification;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private Menu mMenu;
 
@@ -59,8 +58,26 @@ public class NotificationDetailsActivity extends AppCompatActivity {
         if (bundle != null) {
             notKey = bundle.getString(Keys.Extras.EXTRA_NOT_ID);
         }
+        Utils.markNotificationsAsRead(notKey);
         initRef();
         loadNotFromDB();
+    }
+
+    private void initRef() {
+        toolbarLayout = findViewById(R.id.toolbar_layout);
+        textDescription = findViewById(R.id.text_description);
+        //textTitle2 =  findViewById(R.id.text_title2);
+        imageView = findViewById(R.id.image_view);
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                CustomTabsIntent customTabsIntent = builder.build();
+                builder.setToolbarColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
+                customTabsIntent.launchUrl(NotificationDetailsActivity.this, Uri.parse(notification.getLink()));
+            }
+        });
     }
 
     private void loadNotFromDB() {
@@ -102,23 +119,6 @@ public class NotificationDetailsActivity extends AppCompatActivity {
             // notification == null
             toolbar.setTitle(R.string.title_activity_notification_item);
         }
-    }
-
-    private void initRef() {
-        toolbarLayout = findViewById(R.id.toolbar_layout);
-        textDescription = findViewById(R.id.text_description);
-        //textTitle2 =  findViewById(R.id.text_title2);
-        imageView = findViewById(R.id.image_view);
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                CustomTabsIntent customTabsIntent = builder.build();
-                builder.setToolbarColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
-                customTabsIntent.launchUrl(NotificationDetailsActivity.this, Uri.parse(notification.getLink()));
-            }
-        });
     }
 
     @Override

@@ -23,15 +23,19 @@
             android:drawableTop="@drawable/ic_user1"
             android:paddingTop="10dp" />
 
-        <Button
+        <ImageView
             android:id="@+id/button_events"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:background="?android:attr/selectableItemBackground"
-            android:drawableTop="@drawable/ic_event1"
-            android:paddingTop="10dp" />
+            android:background="@color/colorPrimary"
+            android:clickable="true"
+            android:contentDescription="@string/title_activity_events"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="8dp"
+            android:src="@drawable/ic_event1" />
 
         <TextView
             android:id="@+id/text_link"
@@ -39,8 +43,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginTop="8dp"
-            android:layout_toLeftOf="@id/button_events"
-            android:layout_toRightOf="@id/button_profile"
+            android:layout_toStartOf="@id/button_events"
+            android:layout_toEndOf="@id/button_profile"
             android:maxLines="1"
             android:text=""
             android:textAlignment="center"
@@ -52,8 +56,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_link"
-            android:layout_toLeftOf="@id/button_events"
-            android:layout_toRightOf="@id/button_profile"
+            android:layout_toStartOf="@id/button_events"
+            android:layout_toEndOf="@id/button_profile"
             android:maxLines="1"
             android:text=""
             android:textAlignment="center"
@@ -117,15 +121,15 @@
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:visibility="gone"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="@string/button_calc" />
+                android:text="@string/button_calc"
+                android:visibility="gone" />
 
             <View
                 android:layout_width="match_parent"
-                android:visibility="gone"
                 android:layout_height="1dp"
-                android:background="@drawable/gradient" />
+                android:background="@drawable/gradient"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/button_about"

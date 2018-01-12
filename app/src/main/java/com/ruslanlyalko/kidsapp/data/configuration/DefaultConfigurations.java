@@ -9,6 +9,7 @@ public interface DefaultConfigurations {
 
     String DB_REPORTS = "REPORTS";
     String DB_USERS = "USERS";
+    String DB_USERS_NOTIFICATIONS = "USERS_NOTIFICATIONS";
     String DB_MK = "MK";
     String DB_COSTS = "COSTS";
     String DB_COMMENTS = "COMMENTS";

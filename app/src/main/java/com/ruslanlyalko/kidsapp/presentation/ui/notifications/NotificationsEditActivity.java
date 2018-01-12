@@ -28,15 +28,20 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Keys;
+import com.ruslanlyalko.kidsapp.data.Utils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Notification;
+import com.ruslanlyalko.kidsapp.data.models.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class NotificationsEditActivity extends AppCompatActivity {
 
-    private EditText textDescription, textTitle1, textTitle2, textLink;
+    private EditText textDescription;
+    private EditText textTitle1;
+    private EditText textTitle2;
+    private EditText textLink;
     private ImageView imageView;
     private ProgressBar progressBar;
 
@@ -168,6 +173,7 @@ public class NotificationsEditActivity extends AppCompatActivity {
                 .child(notKey).setValue(notification).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                Utils.updateNotificationsForAllUsers(notKey);
                 Snackbar.make(imageView, getString(R.string.not_added), Snackbar.LENGTH_SHORT).show();
             }
         });
@@ -180,6 +186,7 @@ public class NotificationsEditActivity extends AppCompatActivity {
                 .child(notification.getKey()).setValue(notification).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                Utils.updateNotificationsForAllUsers(notKey);
                 Snackbar.make(imageView, getString(R.string.mk_updated), Snackbar.LENGTH_SHORT).show();
             }
         });

@@ -15,21 +15,27 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
+import com.ruslanlyalko.kidsapp.data.models.Notif;
 import com.ruslanlyalko.kidsapp.data.models.Notification;
 import com.ruslanlyalko.kidsapp.presentation.ui.notifications.adapter.NotificationsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class NotificationsActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private NotificationsAdapter adapter;
-    private List<Notification> notificationList;
+    @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.recycler_view) RecyclerView mNotificationsList;
 
-    private FloatingActionButton fab;
+    private NotificationsAdapter mNotificationsAdapter;
+    private List<Notification> notificationList;
+    private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
@@ -37,13 +43,13 @@ public class NotificationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
         setContentView(R.layout.activity_notification);
-        initRef();
+        ButterKnife.bind(this);
         notificationList = new ArrayList<>();
-        adapter = new NotificationsAdapter(this, notificationList);
+        mNotificationsAdapter = new NotificationsAdapter(this, notificationList);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+        mNotificationsList.setLayoutManager(mLayoutManager);
+        mNotificationsList.setItemAnimator(new DefaultItemAnimator());
+        mNotificationsList.setAdapter(mNotificationsAdapter);
         loadNotifications();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,11 +57,7 @@ public class NotificationsActivity extends AppCompatActivity {
                 addNotification();
             }
         });
-    }
-
-    private void addNotification() {
-        Intent intent = new Intent(NotificationsActivity.this, NotificationsEditActivity.class);
-        startActivity(intent);
+        loadBadge();
     }
 
     private void loadNotifications() {
@@ -67,8 +69,8 @@ public class NotificationsActivity extends AppCompatActivity {
                         Notification notification = dataSnapshot.getValue(Notification.class);
                         if (notification != null) {
                             notificationList.add(0, notification);
-                            adapter.notifyItemInserted(0);
-                            recyclerView.smoothScrollToPosition(0);
+                            mNotificationsAdapter.notifyItemInserted(0);
+                            mNotificationsList.smoothScrollToPosition(0);
                         }
                     }
 
@@ -94,6 +96,31 @@ public class NotificationsActivity extends AppCompatActivity {
                 });
     }
 
+    private void addNotification() {
+        Intent intent = new Intent(NotificationsActivity.this, NotificationsEditActivity.class);
+        startActivity(intent);
+    }
+
+    private void loadBadge() {
+        mDatabase.getReference(DefaultConfigurations.DB_USERS_NOTIFICATIONS)
+                .child(mAuth.getCurrentUser().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        List<Notif> notifs = new ArrayList<>();
+                        for (DataSnapshot notifSS : dataSnapshot.getChildren()) {
+                            Notif notif = notifSS.getValue(Notif.class);
+                            notifs.add(notif);
+                        }
+                        mNotificationsAdapter.updateNotifs(notifs);
+                    }
+
+                    @Override
+                    public void onCancelled(final DatabaseError databaseError) {
+                    }
+                });
+    }
+
     private void updateNot(Notification notification) {
         int ind = 0;
         for (Notification m : notificationList) {
@@ -104,8 +131,8 @@ public class NotificationsActivity extends AppCompatActivity {
         }
         if (ind < notificationList.size()) {
             notificationList.set(ind, notification);
-            adapter.notifyItemChanged(ind);
-            recyclerView.smoothScrollToPosition(ind);
+            mNotificationsAdapter.notifyItemChanged(ind);
+            mNotificationsList.smoothScrollToPosition(ind);
         }
     }
 
@@ -119,13 +146,8 @@ public class NotificationsActivity extends AppCompatActivity {
         }
         if (ind < notificationList.size()) {
             notificationList.remove(ind);
-            adapter.notifyItemRemoved(ind);
+            mNotificationsAdapter.notifyItemRemoved(ind);
         }
-    }
-
-    private void initRef() {
-        fab = findViewById(R.id.fab);
-        recyclerView = findViewById(R.id.recycler_view);
     }
 
     @Override

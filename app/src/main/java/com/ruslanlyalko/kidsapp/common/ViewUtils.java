@@ -1,5 +1,7 @@
 package com.ruslanlyalko.kidsapp.common;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -58,5 +60,14 @@ public class ViewUtils {
         // 1dp/ms
         a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
+    }
+
+    public static Bitmap viewToDrawable(View v) {
+        v.measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        Bitmap b = Bitmap.createBitmap(v.getMeasuredWidth(), v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
+        v.draw(c);
+        return b;
     }
 }
