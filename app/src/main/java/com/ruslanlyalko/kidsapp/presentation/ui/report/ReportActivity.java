@@ -1,5 +1,6 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.report;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -68,8 +69,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class ReportActivity extends AppCompatActivity {
+import pub.devrel.easypermissions.EasyPermissions;
 
+public class ReportActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+
+    private static final int REQUEST_IMAGE_PERMISSION = 1;
     TextView textRoom60;
     TextView textRoom30;
     TextView textRoom20;
@@ -196,17 +200,35 @@ public class ReportActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+        switch (requestCode) {
+            case REQUEST_IMAGE_PERMISSION:
+                startCamera();
+                break;
+        }
+    }
+
     void startCamera() {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = timeStamp + ".jpg";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
-        File file = new File(pictureImagePath);
-        Uri outputFileUri = Uri.fromFile(file);
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        startActivityForResult(cameraIntent, Constants.REQUEST_CODE_CAMERA);
+        String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+            String imageFileName = timeStamp + ".jpg";
+            File storageDir = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES);
+            pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+            File file = new File(pictureImagePath);
+            Uri outputFileUri = Uri.fromFile(file);
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+            startActivityForResult(cameraIntent, Constants.REQUEST_CODE_CAMERA);
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.image_permissions), REQUEST_IMAGE_PERMISSION, perms);
+        }
+    }
+
+    @Override
+    public void onPermissionsDenied(final int requestCode, final List<String> perms) {
     }
 
     @Override
