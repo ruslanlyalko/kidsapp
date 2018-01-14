@@ -210,7 +210,8 @@ public class ProfileActivity extends AppCompatActivity {
         if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
             mAvaImageView.setVisibility(View.VISIBLE);
             mBackImageView.setVisibility(View.VISIBLE);
-            Glide.with(this).load(mUser.getAvatar()).into(mAvaImageView);
+            if (!isDestroyed())
+                Glide.with(this).load(mUser.getAvatar()).into(mAvaImageView);
         } else {
             mAvaImageView.setVisibility(View.GONE);
             mBackImageView.setVisibility(View.GONE);

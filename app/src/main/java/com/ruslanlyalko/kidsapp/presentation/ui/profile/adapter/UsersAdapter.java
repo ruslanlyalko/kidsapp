@@ -25,8 +25,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView textUserName, textPositionTitle;
-        public LinearLayout linearUser;
+        TextView textUserName, textPositionTitle;
+        LinearLayout linearUser;
 
         public MyViewHolder(View view) {
             super(view);

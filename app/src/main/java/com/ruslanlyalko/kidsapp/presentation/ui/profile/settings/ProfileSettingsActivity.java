@@ -47,11 +47,39 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     Button buttonChangePassword;
 
     private Calendar mBirthDay = Calendar.getInstance();
+    private Calendar mFirstDate = Calendar.getInstance();
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private String mNumber = "";
     private String mUid;
+    private TextWatcher mWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (mNumber.length() < s.length()) {
+                switch (s.length()) {
+                    case 5:
+                        s.insert(4, " ");
+                        break;
+                    case 10:
+                        s.insert(9, " ");
+                        break;
+                    case 15:
+                        s.insert(14, " ");
+                        break;
+                }
+            }
+            mNumber = s.toString();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +124,41 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                         mBirthDay.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+        final DatePickerDialog.OnDateSetListener firstDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                mFirstDate.set(Calendar.YEAR, year);
+                mFirstDate.set(Calendar.MONTH, monthOfYear);
+                mFirstDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.US);
+                inputFirstDate.setText(sdf.format(mFirstDate.getTime()));
+            }
+        };
+        // Pop up the Date Picker after user clicked on editText
+        inputFirstDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(ProfileSettingsActivity.this, firstDateSetListener,
+                        mFirstDate.get(Calendar.YEAR), mFirstDate.get(Calendar.MONTH),
+                        mFirstDate.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
         inputCard.addTextChangedListener(mWatcher);
         initCurrentUserData();
+    }
+
+    private void initRef() {
+        panelPassword = findViewById(R.id.panel_password);
+        buttonChangePassword = findViewById(R.id.button_change_password);
+        panelFirstDate = findViewById(R.id.panel_first_date);
+        textName = findViewById(R.id.text_name);
+        inputFirstDate = findViewById(R.id.text_first_date);
+        inputPhone = findViewById(R.id.text_phone);
+        inputEmail = findViewById(R.id.text_email);
+        inputBDay = findViewById(R.id.text_bday);
+        inputCard = findViewById(R.id.text_card);
+        inputPassword1 = findViewById(R.id.text_password1);
+        inputPassword2 = findViewById(R.id.text_password2);
     }
 
     private void changePassword() {
@@ -129,93 +190,13 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         });
     }
 
-    private TextWatcher mWatcher = new TextWatcher() {
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if (mNumber.length() < s.length()) {
-                switch (s.length()) {
-                    case 5:
-                        s.insert(4, " ");
-                        break;
-                    case 10:
-                        s.insert(9, " ");
-                        break;
-                    case 15:
-                        s.insert(14, " ");
-                        break;
-                }
-            }
-            mNumber = s.toString();
-        }
-    };
-
-    private void initRef() {
-        panelPassword = findViewById(R.id.panel_password);
-        buttonChangePassword = findViewById(R.id.button_change_password);
-        panelFirstDate = findViewById(R.id.panel_first_date);
-        textName = findViewById(R.id.text_name);
-        inputFirstDate = findViewById(R.id.text_first_date);
-        inputPhone = findViewById(R.id.text_phone);
-        inputEmail = findViewById(R.id.text_email);
-        inputBDay = findViewById(R.id.text_bday);
-        inputCard = findViewById(R.id.text_card);
-        inputPassword1 = findViewById(R.id.text_password1);
-        inputPassword2 = findViewById(R.id.text_password2);
-    }
-
-    private void saveChanges() {
-        final String phone = inputPhone.getText().toString().trim();
-        final String email = inputEmail.getText().toString().trim();
-        final String birthday = inputBDay.getText().toString().trim();
-        final String card = inputCard.getText().toString().trim();
-        final String tPhone = inputPhone.getTag().toString().trim();
-        final String tEmail = inputEmail.getTag().toString().trim();
-        final String tBirthday = inputBDay.getTag().toString().trim();
-        final String tCard = inputCard.getTag().toString().trim();
-        Map<String, Object> childUpdates = new HashMap<>();
-        boolean needUpdate = false;
-        if (!phone.equals(tPhone)) {
-            childUpdates.put("userPhone", phone);
-            needUpdate = true;
-        }
-        if (!birthday.equals(tBirthday)) {
-            childUpdates.put("userBDay", birthday);
-            needUpdate = true;
-        }
-        if (!card.equals(tCard)) {
-            childUpdates.put("userCard", card);
-            needUpdate = true;
-        }
-        if (!email.equals(tEmail)) {
-            childUpdates.put("userEmail", email);
-            mAuth.getCurrentUser().updateEmail(email);
-            needUpdate = true;
-        }
-        if (needUpdate)
-            mDatabase.getReference(DefaultConfigurations.DB_USERS).child(mUid).updateChildren(childUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    Toast.makeText(ProfileSettingsActivity.this, R.string.toast_data_updated, Toast.LENGTH_SHORT).show();
-                }
-            });
-        else
-            Toast.makeText(ProfileSettingsActivity.this, R.string.toast_nothing_to_change, Toast.LENGTH_SHORT).show();
-    }
-
     private void initCurrentUserData() {
         DatabaseReference ref = mDatabase.getReference(DefaultConfigurations.DB_USERS).child(mUid);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
+                if (user == null) return;
                 textName.setText(user.getUserName());
                 inputPhone.setText(user.getUserPhone());
                 inputPhone.setTag(user.getUserPhone());
@@ -226,7 +207,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 inputCard.setText(user.getUserCard());
                 inputCard.setTag(user.getUserCard());
                 inputFirstDate.setText(user.getUserFirstDate());
-                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                inputFirstDate.setTag(user.getUserFirstDate());
+                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.US);
                 Date dt = new Date();
                 try {
                     dt = sdf.parse(user.getUserBDay());
@@ -234,6 +216,12 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 mBirthDay.setTime(dt);
+                try {
+                    dt = sdf.parse(user.getUserFirstDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                mFirstDate.setTime(dt);
             }
 
             @Override
@@ -268,5 +256,50 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.nothing, R.anim.fadeout);
+    }
+
+    private void saveChanges() {
+        final String phone = inputPhone.getText().toString().trim();
+        final String email = inputEmail.getText().toString().trim();
+        final String birthday = inputBDay.getText().toString().trim();
+        final String card = inputCard.getText().toString().trim();
+        final String firstDate = inputFirstDate.getText().toString().trim();
+        final String tPhone = inputPhone.getTag().toString().trim();
+        final String tEmail = inputEmail.getTag().toString().trim();
+        final String tBirthday = inputBDay.getTag().toString().trim();
+        final String tCard = inputCard.getTag().toString().trim();
+        final String tFirstDate = inputFirstDate.getTag().toString().trim();
+        Map<String, Object> childUpdates = new HashMap<>();
+        boolean needUpdate = false;
+        if (!phone.equals(tPhone)) {
+            childUpdates.put("userPhone", phone);
+            needUpdate = true;
+        }
+        if (!birthday.equals(tBirthday)) {
+            childUpdates.put("userBDay", birthday);
+            needUpdate = true;
+        }
+        if (!card.equals(tCard)) {
+            childUpdates.put("userCard", card);
+            needUpdate = true;
+        }
+        if (!email.equals(tEmail)) {
+            childUpdates.put("userEmail", email);
+            mAuth.getCurrentUser().updateEmail(email);
+            needUpdate = true;
+        }
+        if (!firstDate.equals(tFirstDate)) {
+            childUpdates.put("userFirstDate", firstDate);
+            needUpdate = true;
+        }
+        if (needUpdate)
+            mDatabase.getReference(DefaultConfigurations.DB_USERS).child(mUid).updateChildren(childUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Toast.makeText(ProfileSettingsActivity.this, R.string.toast_data_updated, Toast.LENGTH_SHORT).show();
+                }
+            });
+        else
+            Toast.makeText(ProfileSettingsActivity.this, R.string.toast_nothing_to_change, Toast.LENGTH_SHORT).show();
     }
 }
