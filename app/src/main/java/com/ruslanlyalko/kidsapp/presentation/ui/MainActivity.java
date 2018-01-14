@@ -43,7 +43,6 @@ import com.ruslanlyalko.kidsapp.presentation.ui.profile.ProfileActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.report.ReportActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout;
 
-import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -183,6 +182,26 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void loadBadge() {
+        mDatabase.getReference(DefaultConfigurations.DB_USERS_NOTIFICATIONS)
+                .child(mAuth.getCurrentUser().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        mNotifications.clear();
+                        for (DataSnapshot notifSS : dataSnapshot.getChildren()) {
+                            Notif notif = notifSS.getValue(Notif.class);
+                            mNotifications.add(notif);
+                        }
+                        redrawCountOfNotifications(mNotifications.size());
+                    }
+
+                    @Override
+                    public void onCancelled(final DatabaseError databaseError) {
+                    }
+                });
+    }
+
     private void updateLink() {
         mLinkActive = mRemoteConfig.getBoolean("link_show");
         String linkText = mRemoteConfig.getString("link_text");
@@ -204,26 +223,6 @@ public class MainActivity extends AppCompatActivity {
             mLinkDetailsText.setText("");
         }
         mLinkFb = mRemoteConfig.getString("link_fb");
-    }
-
-    private void loadBadge() {
-        mDatabase.getReference(DefaultConfigurations.DB_USERS_NOTIFICATIONS)
-                .child(mAuth.getCurrentUser().getUid())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(final DataSnapshot dataSnapshot) {
-                        mNotifications.clear();
-                        for (DataSnapshot notifSS : dataSnapshot.getChildren()) {
-                            Notif notif = notifSS.getValue(Notif.class);
-                            mNotifications.add(notif);
-                        }
-                        redrawCountOfNotifications(mNotifications.size());
-                    }
-
-                    @Override
-                    public void onCancelled(final DatabaseError databaseError) {
-                    }
-                });
     }
 
     public void redrawCountOfNotifications(int count) {
@@ -262,8 +261,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.button_profile)
     void onProfileClicked() {
-        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-        startActivity(intent);
+        startActivity(ProfileActivity.getLaunchIntent(this));
     }
 
     @OnClick(R.id.button_events)

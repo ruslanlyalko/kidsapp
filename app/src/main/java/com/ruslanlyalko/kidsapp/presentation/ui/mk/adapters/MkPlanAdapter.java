@@ -1,5 +1,6 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.mk.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -27,30 +28,6 @@ public class MkPlanAdapter extends RecyclerView.Adapter<MkPlanAdapter.MyViewHold
     private Context mContext;
     private List<Report> reportList;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView textMkTitleUserName, textDate, textTotal, textT2Total, textT1Total, textT1, textT2;
-        public SwipeLayout swipeLayout;
-        public ProgressBar progressBar;
-        public ImageButton buttonMK, buttonUser, buttonDelete;
-
-        public MyViewHolder(View view) {
-            super(view);
-            textT1 = view.findViewById(R.id.text_t1);
-            textT2 = view.findViewById(R.id.text_t2);
-            textMkTitleUserName = view.findViewById(R.id.text_user_name);
-            textDate = view.findViewById(R.id.text_date);
-            textTotal = view.findViewById(R.id.text_total);
-            textT2Total = view.findViewById(R.id.text_bday_total);
-            textT1Total = view.findViewById(R.id.text_room_total);
-            swipeLayout = view.findViewById(R.id.swipe_layout);
-            progressBar = view.findViewById(R.id.progress_bar);
-            buttonMK = view.findViewById(R.id.button_user);
-            buttonUser = view.findViewById(R.id.button_edit);
-            buttonDelete = view.findViewById(R.id.button_comment);
-        }
-    }
 
     public MkPlanAdapter(Context mContext, List<Report> reportList) {
         this.mContext = mContext;
@@ -97,9 +74,7 @@ public class MkPlanAdapter extends RecyclerView.Adapter<MkPlanAdapter.MyViewHold
         holder.buttonUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, ProfileActivity.class);
-                intent.putExtra(Keys.Extras.EXTRA_UID, report.userId);
-                mContext.startActivity(intent);
+                mContext.startActivity(ProfileActivity.getLaunchIntent((Activity) mContext, report.userId));
             }
         });
         // Calendar
@@ -108,6 +83,11 @@ public class MkPlanAdapter extends RecyclerView.Adapter<MkPlanAdapter.MyViewHold
             public void onClick(View v) {
             }
         });
+    }
+
+    @Override
+    public int getItemCount() {
+        return reportList.size();
     }
 
     private void removeReport(Report report, int position) {
@@ -119,9 +99,9 @@ public class MkPlanAdapter extends RecyclerView.Adapter<MkPlanAdapter.MyViewHold
                 .child(report.userId).removeValue();
     }
 
-    private String getDayFromStr(String date) {
-        int first = date.indexOf('-');
-        return date.substring(0, first);
+    private String getYearFromStr(String date) {
+        int last = date.lastIndexOf('-');
+        return date.substring(last + 1);
     }
 
     private String getMonthFromStr(String date) {
@@ -130,13 +110,32 @@ public class MkPlanAdapter extends RecyclerView.Adapter<MkPlanAdapter.MyViewHold
         return date.substring(first + 1, last);
     }
 
-    private String getYearFromStr(String date) {
-        int last = date.lastIndexOf('-');
-        return date.substring(last + 1);
+    private String getDayFromStr(String date) {
+        int first = date.indexOf('-');
+        return date.substring(0, first);
     }
 
-    @Override
-    public int getItemCount() {
-        return reportList.size();
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView textMkTitleUserName, textDate, textTotal, textT2Total, textT1Total, textT1, textT2;
+        public SwipeLayout swipeLayout;
+        public ProgressBar progressBar;
+        public ImageButton buttonMK, buttonUser, buttonDelete;
+
+        public MyViewHolder(View view) {
+            super(view);
+            textT1 = view.findViewById(R.id.text_t1);
+            textT2 = view.findViewById(R.id.text_t2);
+            textMkTitleUserName = view.findViewById(R.id.text_user_name);
+            textDate = view.findViewById(R.id.text_date);
+            textTotal = view.findViewById(R.id.text_total);
+            textT2Total = view.findViewById(R.id.text_bday_total);
+            textT1Total = view.findViewById(R.id.text_room_total);
+            swipeLayout = view.findViewById(R.id.swipe_layout);
+            progressBar = view.findViewById(R.id.progress_bar);
+            buttonMK = view.findViewById(R.id.button_user);
+            buttonUser = view.findViewById(R.id.button_edit);
+            buttonDelete = view.findViewById(R.id.button_comment);
+        }
     }
 }

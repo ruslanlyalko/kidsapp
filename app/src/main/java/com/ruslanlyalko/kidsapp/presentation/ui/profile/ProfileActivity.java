@@ -1,5 +1,6 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.profile;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -41,15 +42,13 @@ import com.ruslanlyalko.kidsapp.presentation.ui.profile.adapter.UsersAdapter;
 import com.ruslanlyalko.kidsapp.presentation.ui.profile.dashboard.DashboardActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.profile.salary.SalaryActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.profile.settings.ProfileSettingsActivity;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.ruslanlyalko.kidsapp.presentation.widget.OnItemClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements OnItemClickListener {
 
     @BindView(R.id.text_email) TextView mEmailText;
     @BindView(R.id.text_phone) TextView mPhoneText;
@@ -67,15 +66,18 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.image_view_ava) ImageView mAvaImageView;
     @BindView(R.id.image_view_back) ImageView mBackImageView;
-
     @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
+
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private String mUID;
     private User mUser;
-    private List<User> userList = new ArrayList<>();
-    private UsersAdapter adapter;
+    private UsersAdapter mUsersAdapter;
     private boolean needLoadFriends;
+
+    public static Intent getLaunchIntent(final Activity launchIntent) {
+        return new Intent(launchIntent, ProfileActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,18 +109,17 @@ public class ProfileActivity extends AppCompatActivity {
     private void initRecycle() {
         if (needLoadFriends) {
             mCardView.setVisibility(View.VISIBLE);
-            adapter = new UsersAdapter(this, userList);
+            mUsersAdapter = new UsersAdapter(this);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            mRecyclerView.setAdapter(adapter);
+            mRecyclerView.setAdapter(mUsersAdapter);
         } else {
             mCardView.setVisibility(View.GONE);
         }
     }
 
     private void loadUsers() {
-        userList.clear();
         if (needLoadFriends)
-            adapter.notifyDataSetChanged();
+            mUsersAdapter.notifyDataSetChanged();
         mDatabase.getReference(DefaultConfigurations.DB_USERS)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
@@ -129,8 +130,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 mUser = user;
                                 updateUI(user);
                             } else if (needLoadFriends) {
-                                userList.add(0, user);
-                                adapter.notifyDataSetChanged();
+                                mUsersAdapter.add(user);
                             }
                         }
                     }
@@ -248,11 +248,11 @@ public class ProfileActivity extends AppCompatActivity {
         }
         switch (id) {
             case R.id.action_add_user: {
-                startActivity(new Intent(ProfileActivity.this, SignupActivity.class));
+                startActivity(new Intent(this, SignupActivity.class));
                 return true;
             }
             case R.id.action_settings: {
-                Intent intent = new Intent(ProfileActivity.this, ProfileSettingsActivity.class);
+                Intent intent = new Intent(this, ProfileSettingsActivity.class);
                 intent.putExtra(Keys.Extras.EXTRA_UID, mUID);
                 startActivity(intent);
                 return true;
@@ -292,5 +292,16 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void onItemClicked(final int position) {
+        startActivity(ProfileActivity.getLaunchIntent(this, mUsersAdapter.getItemAtPostion(position).getUserId()));
+    }
+
+    public static Intent getLaunchIntent(final Activity launchIntent, final String userId) {
+        Intent intent = new Intent(launchIntent, ProfileActivity.class);
+        intent.putExtra(Keys.Extras.EXTRA_UID, userId);
+        return intent;
     }
 }

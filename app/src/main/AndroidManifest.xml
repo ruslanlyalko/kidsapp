@@ -8,6 +8,11 @@
     <!-- Include following permission if you want to cache images on SD card -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".presentation.KidsApplication"
         android:allowBackup="true"
@@ -149,7 +154,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Close"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name=".presentation.ui.calc.CalcActivity"
             android:label="@string/title_activity_calc"
@@ -160,6 +164,7 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="52ba750a54b6b9f14ef3239631d128c3b628ee05" />
+
     </application>
 
 </manifest>
