@@ -44,8 +44,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:maxLines="1"
                 android:hint="@string/hint_email"
-                android:inputType="textEmailAddress|textAutoComplete" />
+                android:inputType="textEmailAddress" />
 
         </LinearLayout>
 
