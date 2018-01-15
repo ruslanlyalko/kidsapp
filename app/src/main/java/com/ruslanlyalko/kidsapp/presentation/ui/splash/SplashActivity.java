@@ -3,7 +3,7 @@ package com.ruslanlyalko.kidsapp.presentation.ui.splash;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.ruslanlyalko.kidsapp.presentation.ui.MainActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.MainActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.login.LoginActivity;
 
 /**

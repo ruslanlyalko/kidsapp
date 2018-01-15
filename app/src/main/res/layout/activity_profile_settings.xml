@@ -3,12 +3,12 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.ruslanlyalko.kidsapp.presentation.ui.profile.settings.ProfileSettingsActivity">
+            tools:context=".presentation.ui.main.profile.settings.ProfileSettingsActivity">
 
     <LinearLayout
         android:id="@+id/body"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <!-- Name-->
@@ -16,13 +16,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:focusable="true"
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_name" />
+                android:src="@drawable/ic_user_name"
+                tools:ignore="ContentDescription" />
+
+            <requestFocus />
 
             <TextView
                 android:id="@+id/text_name"
@@ -55,7 +60,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_phone" />
+                android:src="@drawable/ic_user_phone"
+                tools:ignore="ContentDescription" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -83,7 +89,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_email" />
+                android:src="@drawable/ic_user_email"
+                tools:ignore="ContentDescription" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -113,7 +120,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_birthday" />
+                android:src="@drawable/ic_user_birthday"
+                tools:ignore="ContentDescription" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -142,7 +150,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_card" />
+                android:src="@drawable/ic_user_card"
+                tools:ignore="ContentDescription" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -173,7 +182,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_birthday" />
+                android:src="@drawable/ic_user_birthday"
+                tools:ignore="ContentDescription" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -186,7 +196,8 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:focusable="false"
-                    android:hint="@string/hint_first_date" />
+                    android:hint="@string/hint_first_date"
+                    android:inputType="date" />
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
@@ -212,7 +223,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_user_password" />
+                android:src="@drawable/ic_user_password"
+                tools:ignore="ContentDescription" />
 
             <LinearLayout
                 android:layout_width="match_parent"

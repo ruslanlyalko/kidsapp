@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -16,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -23,45 +23,30 @@ import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.User;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class SignupActivity extends AppCompatActivity {
 
-    private EditText inputEmail, inputPassword, inputName, inputPhone;
-    private Button btnSignUp, btnResetPassword;
-    private ProgressBar progressBar;
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mDatabaseRefCurrentUser;
+    @BindView(R.id.text_email) EditText inputEmail;
+    @BindView(R.id.text_password) EditText inputPassword;
+    @BindView(R.id.text_name) EditText inputName;
+    @BindView(R.id.text_phone) EditText inputPhone;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
+
+    private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        //Get Firebase mFirebaseAuth instance
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        initializeReferences();
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signUp();
-            }
-        });
-        btnResetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetPassword();
-            }
-        });
+        ButterKnife.bind(this);
     }
 
-    private void resetPassword() {
-        startActivity(new Intent(SignupActivity.this, ResetPasswordActivity.class));
-    }
-
-    /*
-    *
-     */
-    private void signUp() {
+    @OnClick(R.id.sign_up_button)
+    void onSignUpClicked() {
         final String name = inputName.getText().toString().trim();
         final String phone = inputPhone.getText().toString().trim();
         final String email = inputEmail.getText().toString().trim();
@@ -90,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
         }
         progressBar.setVisibility(View.VISIBLE);
         //create user
-        mFirebaseAuth.createUserWithEmailAndPassword(email, password)
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -102,12 +87,12 @@ public class SignupActivity extends AppCompatActivity {
                             UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(name)
                                     .build();
-                            mFirebaseAuth.getCurrentUser().updateProfile(profileUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            mUser.updateProfile(profileUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    String uId = mFirebaseAuth.getCurrentUser().getUid();
-                                    createUserData(name, phone, email, uId);
-                                    Toast.makeText(SignupActivity.this, getResources().getString(R.string.toast_user_created) + " " + email, Toast.LENGTH_LONG).show();
+                                    createUserData(name, phone, email, mUser.getUid());
+                                    Toast.makeText(SignupActivity.this, getResources().getString(R.string.toast_user_created)
+                                            + " " + email, Toast.LENGTH_LONG).show();
                                     onBackPressed();
                                 }
                             });
@@ -120,25 +105,25 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void createUserData(String name, String phone, String email, String uId) {
-        mDatabaseRefCurrentUser = mFirebaseDatabase.getReference(DefaultConfigurations.DB_USERS).child(uId);
+        DatabaseReference databaseRefCurrentUser = mDatabase.getReference(DefaultConfigurations.DB_USERS).child(uId);
         User user = new User(uId, name, phone, email, "01.06.1991", "", false);
-        mDatabaseRefCurrentUser.setValue(user);
+        databaseRefCurrentUser.setValue(user);
     }
 
-    private void initializeReferences() {
-        btnSignUp = findViewById(R.id.sign_up_button);
-        inputName = findViewById(R.id.text_name);
-        inputPhone = findViewById(R.id.text_phone);
-        inputEmail = findViewById(R.id.text_email);
-        inputPassword = findViewById(R.id.text_password);
-        progressBar = findViewById(R.id.progress_bar);
-        btnResetPassword = findViewById(R.id.button_reset_password);
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         progressBar.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.button_reset_password)
+    void onResetClicked() {
+        startActivity(new Intent(SignupActivity.this, ResetPasswordActivity.class));
     }
 
     @Override
@@ -149,10 +134,5 @@ public class SignupActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 }

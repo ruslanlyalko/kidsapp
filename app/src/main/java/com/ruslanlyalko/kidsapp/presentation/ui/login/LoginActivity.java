@@ -17,7 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.ruslanlyalko.kidsapp.R;
-import com.ruslanlyalko.kidsapp.presentation.ui.MainActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

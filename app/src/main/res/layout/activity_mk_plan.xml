@@ -6,7 +6,7 @@
               android:layout_height="match_parent"
               android:background="@color/colorBackground"
               android:orientation="vertical"
-              tools:context="com.ruslanlyalko.kidsapp.presentation.ui.mk.MkPlanActivity">
+              tools:context=".presentation.ui.main.mk.MkPlanActivity">
 
     <!-- invisible calendar-->
     <com.github.sundeepk.compactcalendarview.CompactCalendarView

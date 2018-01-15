@@ -6,7 +6,7 @@
               android:layout_height="match_parent"
               android:background="@color/colorBackground"
               android:orientation="vertical"
-              tools:context="com.ruslanlyalko.kidsapp.presentation.ui.profile.dashboard.DashboardActivity">
+              tools:context=".presentation.ui.main.profile.dashboard.DashboardActivity">
 
     <com.github.sundeepk.compactcalendarview.CompactCalendarView
         android:id="@+id/calendar_view"

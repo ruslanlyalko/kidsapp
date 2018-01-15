@@ -80,8 +80,8 @@
             android:layout_height="wrap_content"
             android:background="@color/colorBackground"
             android:orientation="vertical"
-            tools:context="com.ruslanlyalko.kidsapp.presentation.ui.expenses.ExpensesActivity"
-            tools:showIn="@layout/activity_costs">
+            tools:context=".presentation.ui.main.expenses.ExpensesActivity"
+            tools:showIn="@layout/activity_expenses">
 
             <!-- tile  DETAILS -->
             <android.support.v7.widget.CardView
