@@ -1,5 +1,6 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.calendar;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -62,6 +63,10 @@ public class CalendarActivity extends AppCompatActivity implements OnReportClick
 
     //private String mDay, mMonth, mYear;
     private SimpleDateFormat mSdf = new SimpleDateFormat("d-M-yyyy", Locale.US);
+
+    public static Intent getLaunchIntent(final Activity launchIntent) {
+        return new Intent(launchIntent, CalendarActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

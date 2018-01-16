@@ -34,11 +34,10 @@ import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Notification;
 import com.ruslanlyalko.kidsapp.data.models.User;
 import com.ruslanlyalko.kidsapp.presentation.ui.about.AboutActivity;
-import com.ruslanlyalko.kidsapp.presentation.ui.calc.CalcActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.calendar.CalendarActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.expenses.ExpensesActivity;
-import com.ruslanlyalko.kidsapp.presentation.ui.main.mk.MkTabActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.MessagesActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.mk.MkTabActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.ProfileActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.report.ReportActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout;
@@ -266,32 +265,27 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.button_events)
     void onEventsClicked() {
-        Intent intent = new Intent(MainActivity.this, MessagesActivity.class);
-        startActivity(intent);
+        startActivity(MessagesActivity.getLaunchIntent(this));
     }
 
     @OnClick(R.id.button_report)
     void onReportClicked() {
-        Intent intent = new Intent(MainActivity.this, ReportActivity.class);
-        startActivity(intent);
+        startActivity(ReportActivity.getLaunchIntent(this));
     }
 
     @OnClick(R.id.button_calendar)
     void onCalendarClicked() {
-        Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
-        startActivity(intent);
+        startActivity(CalendarActivity.getLaunchIntent(this));
     }
 
     @OnClick(R.id.button_mk)
     void onMkClicked() {
-        Intent intent = new Intent(MainActivity.this, MkTabActivity.class);
-        startActivity(intent);
+        startActivity(MkTabActivity.getLaunchIntent(this));
     }
 
     @OnClick(R.id.button_expenses)
     void onExpensesClicked() {
-        Intent intent = new Intent(MainActivity.this, ExpensesActivity.class);
-        startActivity(intent);
+        startActivity(ExpensesActivity.getLaunchIntent(this));
     }
 
     @OnClick(R.id.button_about)
@@ -312,11 +306,6 @@ public class MainActivity extends AppCompatActivity {
         sendIntent.putExtra(Intent.EXTRA_TEXT, mLink);
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
-    }
-
-    @OnClick(R.id.button_calc)
-    void onCalcClicked() {
-        startActivity(CalcActivity.getLaunchIntent(this));
     }
 
     @Override

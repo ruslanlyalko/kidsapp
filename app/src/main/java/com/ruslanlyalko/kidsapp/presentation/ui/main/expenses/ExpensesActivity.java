@@ -1,6 +1,7 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.expenses;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -96,6 +97,10 @@ public class ExpensesActivity extends AppCompatActivity implements OnExpenseClic
     private String mTitle1, mTitle2, mPrice;
     private String mPictureImagePath = "";
     private FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+    public static Intent getLaunchIntent(final Activity launchIntent) {
+        return new Intent(launchIntent, ExpensesActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

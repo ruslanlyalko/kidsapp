@@ -1,6 +1,7 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.report;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -142,6 +143,10 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     private boolean mIsFuture;
     private String pictureImagePath = "";
 
+
+    public static Intent getLaunchIntent(final Activity launchIntent) {
+        return new Intent(launchIntent, ReportActivity.class);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

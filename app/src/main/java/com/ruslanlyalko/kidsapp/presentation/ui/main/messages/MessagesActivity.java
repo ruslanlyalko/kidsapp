@@ -1,5 +1,6 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.messages;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -40,6 +41,10 @@ public class MessagesActivity extends AppCompatActivity {
     private List<Message> mMessageList = new ArrayList<>();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+
+    public static Intent getLaunchIntent(final Activity launchIntent) {
+        return new Intent(launchIntent, MessagesActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
