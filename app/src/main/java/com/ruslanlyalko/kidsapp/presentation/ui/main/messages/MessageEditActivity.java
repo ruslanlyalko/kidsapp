@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MessageEditActivity extends AppCompatActivity {
 
@@ -58,6 +59,7 @@ public class MessageEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fadein, R.anim.nothing);
         setContentView(R.layout.activity_notification_edit);
+        ButterKnife.bind(this);
         parseExtras();
         isNew = notKey == null;
         initTextWatchers();
