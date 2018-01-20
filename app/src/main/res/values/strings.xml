@@ -177,7 +177,7 @@
     <string name="not_added">Статтю створено успішно</string>
     <string name="dialog_mk_edit_text">В тексті є зміни, зберегти їх?</string>
     <string name="dialog_choose_mk">Виберіть МК</string>
-    <string name="text_add_photo">Добавити Фото</string>
+    <string name="text_add_photo">Сфотографувати Звіт</string>
     <string name="action_delete_mk">Видалити</string>
     <string name="photo_uploading">"Фото загружається. Зачекайте хвильку.."</string>
     <string name="hint_first_date">Перший робочий день</string>
@@ -252,5 +252,6 @@
     <string name="maps_marker_title">Розташування</string>
     <string name="text_check_list_description">*Якщо з певним пунктом виникли труднощі,
         будь ласка, вкажіть обставини в коментарях нижче.</string>
+    <string name="report_toast_no_image">Відсутнє фото звіту. Сфотографуйте звіт перед збереженням!</string>
 
 </resources>

@@ -2,7 +2,6 @@ package com.ruslanlyalko.kidsapp.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -37,6 +36,15 @@ public class DateUtils {
         }
         //todo write logic here
         return false;
+    }
+
+    public static boolean future(Date date) {
+        Date today = new Date();
+        today.setHours(23);
+        today.setMinutes(59);
+        today.setSeconds(59);
+        date.setHours(1);
+        return date.getTime() > today.getTime();
     }
 
     public static boolean future(String dateStr) {
@@ -111,6 +119,5 @@ public class DateUtils {
 
     public static String toString(final Date date, final String format) {
         return new SimpleDateFormat(format, Locale.getDefault()).format(date);
-
     }
 }

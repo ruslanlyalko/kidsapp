@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,8 +27,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -39,10 +36,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -178,31 +171,19 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         initSeeks();
         loadReportFromDB();
         loadMK();
-        buttonChooseMk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseMkDialog();
-            }
-        });
-        panelPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String uri = mReport.imageUri;
-                if (uri != null && !uri.isEmpty()) {
-                    startActivity(PhotoPreviewActivity.getLaunchIntent(
-                            ReportActivity.this, uri, mReport.getUserName(), DefaultConfigurations.STORAGE_REPORT));
-                } else {
-                    // start camera to take photo
-                    startCamera();
-                }
-            }
-        });
-        panelPhoto.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+        buttonChooseMk.setOnClickListener(v -> chooseMkDialog());
+        panelPhoto.setOnClickListener(v -> {
+            String uri = mReport.imageUri;
+            if (uri != null && !uri.isEmpty()) {
+                startActivity(PhotoPreviewActivity.getLaunchIntent(
+                        ReportActivity.this, uri, mReport.getUserName(), DefaultConfigurations.STORAGE_REPORT));
+            } else {
                 startCamera();
-                return false;
             }
+        });
+        panelPhoto.setOnLongClickListener(v -> {
+            startCamera();
+            return false;
         });
         mLocationHandler = new LocationHandler(this);
         mLocationHandler.getLocation(new LocationHandler.OnLocationRequest() {
@@ -292,19 +273,13 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
                         .getReference(DefaultConfigurations.STORAGE_REPORT)
                         .child(filename)
                         .putBytes(bytes, metadata);
-                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        //    addCost(mTitle1, mTitle2, mPrice, filename);
-                        mReport.imageUri = filename;//taskSnapshot.getDownloadUrl().toString();//filename;
-                        hideProgressBarUpload();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        hideProgressBarUpload();
-                    }
+                uploadTask.addOnSuccessListener(taskSnapshot -> {
+                    //    addCost(mTitle1, mTitle2, mPrice, filename);
+                    mReport.imageUri = filename;//taskSnapshot.getDownloadUrl().toString();//filename;
+                    hideProgressBarUpload();
+                }).addOnFailureListener(exception -> {
+                    // Handle unsuccessful uploads
+                    hideProgressBarUpload();
                 });
             }
         }
@@ -332,18 +307,13 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
             AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
             builder.setTitle(R.string.dialog_report_save_before_close_title)
                     .setMessage(R.string.dialog_report_save_before_close_text)
-                    .setPositiveButton(R.string.action_save, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            saveReportToDB();
+                    .setPositiveButton(R.string.action_save, (dialog, which) -> {
+                        if (saveReportToDB())
                             onBackPressed();
-                        }
                     })
-                    .setNegativeButton(R.string.action_no, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // do nothing
-                            isChanged = false;
-                            onBackPressed();
-                        }
+                    .setNegativeButton(R.string.action_no, (dialog, which) -> {
+                        isChanged = false;
+                        onBackPressed();
                     })
                     .show();
         } else {
@@ -360,7 +330,8 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     @Override
     protected void onResume() {
         super.onResume();
-        mLocationHandler.onResume();
+        if (mReport != null && !mReport.getCheckedListDone())
+            mLocationHandler.onResume();
     }
 
     @Override
@@ -407,45 +378,31 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.dialog_choose_mk)
                 .setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_1, mkNames),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (which == mkList.size()) {
-                                    mReport.mkRef = "";
-                                    mReport.mkName = "";
-                                } else {
-                                    mReport.mkRef = mkList.get(which).getKey();
-                                    mReport.mkName = mkList.get(which).getTitle1();
-                                }
-                                isChanged = true;
-                                updateMkName();
+                        (dialog, which) -> {
+                            if (which == mkList.size()) {
+                                mReport.mkRef = "";
+                                mReport.mkName = "";
+                            } else {
+                                mReport.mkRef = mkList.get(which).getKey();
+                                mReport.mkName = mkList.get(which).getTitle1();
                             }
+                            isChanged = true;
+                            updateMkName();
                         });
         builder.create();
         builder.show();
     }
 
-    /**
-     * Initialize DatePicker
-     */
     private void initDatePicker() {
-        final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                setDate(year, monthOfYear, dayOfMonth);
+        panelDate.setOnClickListener(v -> {
+            DatePickerDialog dpd = new DatePickerDialog(ReportActivity.this, (view, year, monthOfYear, dayOfMonth) ->
+                    setDate(year, monthOfYear, dayOfMonth),
+                    mDate.get(Calendar.YEAR), mDate.get(Calendar.MONTH),
+                    mDate.get(Calendar.DAY_OF_MONTH));
+            if (!FirebaseUtils.isAdmin()) {
+                dpd.getDatePicker().setMinDate(new Date().getTime());
             }
-        };
-        // Pop up the Date Picker after user clicked on editText
-        panelDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog dpd = new DatePickerDialog(ReportActivity.this, dateSetListener,
-                        mDate.get(Calendar.YEAR), mDate.get(Calendar.MONTH),
-                        mDate.get(Calendar.DAY_OF_MONTH));
-                if (!FirebaseUtils.isAdmin()) {
-                    dpd.getDatePicker().setMinDate(new Date().getTime());
-                }
-                dpd.show();
-            }
+            dpd.show();
         });
     }
 
@@ -618,13 +575,10 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-        View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    EditText ed = (EditText) v;
-                    ed.setSelection(ed.getText().length());
-                }
+        View.OnFocusChangeListener focusChangeListener = (v, hasFocus) -> {
+            if (hasFocus) {
+                EditText ed = (EditText) v;
+                ed.setSelection(ed.getText().length());
             }
         };
         seekMkT2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -921,12 +875,9 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
                     s.delete(0, 1);
             }
         });
-        switchMyMk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mReport.mkMy = isChecked;
-                isChanged = true;
-            }
+        switchMyMk.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            mReport.mkMy = isChecked;
+            isChanged = true;
         });
         editComment.addTextChangedListener(new TextWatcher() {
             @Override
@@ -980,32 +931,23 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         swipeLayout3.addDrag(SwipeLayout.DragEdge.Left, R.id.swipe_menu3);
         swipeLayout3.setLeftSwipeEnabled(true);
         swipeLayout3.setBottomSwipeEnabled(false);
-        panelRoomExpand.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mIsFuture) return;
-                swipeLayout.setVisibility((swipeLayout.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
-                swipeLayout2.setVisibility(View.GONE);
-                swipeLayout3.setVisibility(View.GONE);
-            }
+        panelRoomExpand.setOnClickListener(v -> {
+            if (mIsFuture) return;
+            swipeLayout.setVisibility((swipeLayout.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
+            swipeLayout2.setVisibility(View.GONE);
+            swipeLayout3.setVisibility(View.GONE);
         });
-        panelRoomExpand2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mIsFuture) return;
-                swipeLayout2.setVisibility((swipeLayout2.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
-                swipeLayout.setVisibility(View.GONE);
-                swipeLayout3.setVisibility(View.GONE);
-            }
+        panelRoomExpand2.setOnClickListener(v -> {
+            if (mIsFuture) return;
+            swipeLayout2.setVisibility((swipeLayout2.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
+            swipeLayout.setVisibility(View.GONE);
+            swipeLayout3.setVisibility(View.GONE);
         });
-        panelRoomExpand3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mIsFuture) return;
-                swipeLayout3.setVisibility((swipeLayout3.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
-                swipeLayout2.setVisibility(View.GONE);
-                swipeLayout.setVisibility(View.GONE);
-            }
+        panelRoomExpand3.setOnClickListener(v -> {
+            if (mIsFuture) return;
+            swipeLayout3.setVisibility((swipeLayout3.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
+            swipeLayout2.setVisibility(View.GONE);
+            swipeLayout.setVisibility(View.GONE);
         });
     }
 
@@ -1048,18 +990,12 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportActivity.this);
         builder.setTitle(R.string.dialog_delete_title)
                 .setMessage(R.string.dialog_delete_message)
-                .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // delete from DB
-                        deleteReportFromDB();
-                        loadReportFromDB();
-                    }
+                .setPositiveButton("Видалити", (dialog, which) -> {
+                    // delete from DB
+                    deleteReportFromDB();
+                    loadReportFromDB();
                 })
-                .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
+                .setNegativeButton("Повернутись", null)
                 .show();
     }
 
@@ -1069,12 +1005,8 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         mDatabase.getReference(DefaultConfigurations.DB_REPORTS)
                 .child(mDateYear).child(mDateMonth).child(mDateDay)
                 .child(mUId)
-                .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Snackbar.make(textRoom60, getString(R.string.toast_report_deleted), Snackbar.LENGTH_SHORT).show();
-            }
-        });
+                .removeValue().addOnCompleteListener(task ->
+                Snackbar.make(textRoom60, getString(R.string.toast_report_deleted), Snackbar.LENGTH_SHORT).show());
     }
 
     private void clearReport(boolean clearMK) {
@@ -1092,26 +1024,23 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     /**
      * Save current report to DB
      */
-    private void saveReportToDB() {
+    private boolean saveReportToDB() {
+        if (mReport.getTotal() > 0 && (mReport.getImageUri() == null || mReport.getImageUri().isEmpty())) {
+            Toast.makeText(this, getString(R.string.report_toast_no_image), Toast.LENGTH_SHORT).show();
+            return false;
+        }
         isChanged = false;
         mDatabase.getReference(DefaultConfigurations.DB_REPORTS)
                 .child(mDateYear).child(mDateMonth).child(mDateDay)
                 .child(mUId)
-                .setValue(mReport).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Snackbar.make(textRoom60, getString(R.string.toast_report_saved), Snackbar.LENGTH_SHORT)
-                        .setAction(getString(R.string.action_go_to_calendar), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                // show calendar activity
-                                Intent intent = new Intent(ReportActivity.this, CalendarActivity.class);
-                                startActivity(intent);
-                            }
-                        })
-                        .show();
-            }
-        });
+                .setValue(mReport).addOnCompleteListener(task -> Snackbar.make(textRoom60, getString(R.string.toast_report_saved), Snackbar.LENGTH_SHORT)
+                .setAction(getString(R.string.action_go_to_calendar), v -> {
+                    // show calendar activity
+                    Intent intent = new Intent(ReportActivity.this, CalendarActivity.class);
+                    startActivity(intent);
+                })
+                .show());
+        return true;
     }
 
     /**
@@ -1260,6 +1189,8 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
             swipeLayout2.setVisibility(View.GONE);
             swipeLayout3.setVisibility(View.GONE);
             clearReport(false);
+        } else {
+            loadReportFromDB();
         }
     }
 
@@ -1346,7 +1277,7 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
 
     private void updateChecklist() {
         if (mReport == null) return;
-        toggleCheckList(!mReport.getCheckedListDone() && !FirebaseUtils.isAdmin() && !DateUtils.future(mReport.getDate()));
+        toggleCheckList(!mReport.getCheckedListDone() && !FirebaseUtils.isAdmin() && !DateUtils.future(mDate.getTime()));
         if (mReport.getCheckedListTime() != null)
             mTextCheckListTime.setText(DateUtils.toString(mReport.getCheckedListTime(), "HH:mm"));
         else
@@ -1363,10 +1294,12 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
             mCheckboxCheckList3.setChecked(false);
             mCheckboxCheckList4.setChecked(false);
             mCheckboxCheckList5.setChecked(false);
+            mLocationHandler.onResume();
         } else {
             mPanelCheckListExpand.setVisibility(View.GONE);
             if (mPanelReportValues.getVisibility() != View.VISIBLE)
                 ViewUtils.expand(mPanelReportValues);
+            mLocationHandler.onPause();
         }
     }
 
