@@ -19,7 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/card_margin"
-        android:layout_marginTop="@dimen/card_margin"
         android:elevation="3dp"
         card_view:cardCornerRadius="@dimen/card_radius">
 
@@ -124,7 +123,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:gravity="center_vertical"
+                            android:gravity="center_vertical|start"
                             android:text="@string/text_add_photo"
                             android:textAlignment="textStart"
                             android:textSize="18sp" />
@@ -810,7 +809,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/card_margin"
                 android:layout_marginTop="@dimen/card_margin"
                 android:elevation="3dp"
                 card_view:cardCornerRadius="@dimen/card_radius">

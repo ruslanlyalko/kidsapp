@@ -392,8 +392,9 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
                 DatePickerDialog dpd = new DatePickerDialog(ReportActivity.this, dateSetListener,
                         mDate.get(Calendar.YEAR), mDate.get(Calendar.MONTH),
                         mDate.get(Calendar.DAY_OF_MONTH));
-                if (!FirebaseUtils.isAdmin())
-                    dpd.getDatePicker().setMinDate(mDate.getTime().getTime());
+                if (!FirebaseUtils.isAdmin()) {
+                    dpd.getDatePicker().setMinDate(new Date().getTime());
+                }
                 dpd.show();
             }
         });
@@ -1185,14 +1186,14 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     private void setDate(Calendar calendar) {
         mDate = calendar;
         mDateStr = mSdf.format(mDate.getTime());
-        fillDateStr(mDateStr);
+        fillDateStr();
         mIsFuture = DateUtils.future(mDateStr);
     }
 
     private void setDate(String dateStr) {
         mDateStr = dateStr;
         mDate = getDateFromStr(mDateStr);
-        fillDateStr(mDateStr);
+        fillDateStr();
         mIsFuture = DateUtils.future(mDateStr);
     }
 
@@ -1201,7 +1202,7 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         mDate.set(Calendar.MONTH, monthOfYear);
         mDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         mDateStr = mSdf.format(mDate.getTime());
-        fillDateStr(mDateStr);
+        fillDateStr();
         mIsFuture = DateUtils.future(mDateStr);
         if (mIsFuture) {
             swipeLayout.setVisibility(View.GONE);
@@ -1211,13 +1212,13 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         }
     }
 
-    private void fillDateStr(String dateStr) {
-        int first = dateStr.indexOf('-');
-        int last = dateStr.lastIndexOf('-');
-        mDateDay = dateStr.substring(0, first);
-        mDateMonth = dateStr.substring(first + 1, last);
-        mDateYear = dateStr.substring(last + 1);
-        textDate.setText(mDateStr);
+    private void fillDateStr() {
+        int first = mDateStr.indexOf('-');
+        int last = mDateStr.lastIndexOf('-');
+        mDateDay = mDateStr.substring(0, first);
+        mDateMonth = mDateStr.substring(first + 1, last);
+        mDateYear = mDateStr.substring(last + 1);
+        textDate.setText(DateUtils.toString(mDate.getTime(), "d-M-yyyy EEEE").toUpperCase());
         if (mReport != null)
             mReport.date = mDateStr;
     }

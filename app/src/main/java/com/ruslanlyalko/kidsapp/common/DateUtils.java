@@ -2,6 +2,7 @@ package com.ruslanlyalko.kidsapp.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -106,5 +107,10 @@ public class DateUtils {
         // Get msec from each, and subtract.
         long diff = d1.getTime() - d2.getTime();
         return (int) TimeUnit.MILLISECONDS.toMinutes(diff);
+    }
+
+    public static String toString(final Date date, final String format) {
+        return new SimpleDateFormat(format, Locale.getDefault()).format(date);
+
     }
 }
