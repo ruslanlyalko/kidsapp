@@ -1,6 +1,7 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.report;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -40,6 +41,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -70,67 +72,67 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class ReportActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
     private static final int REQUEST_IMAGE_PERMISSION = 1;
-    TextView textRoom60;
-    TextView textRoom30;
-    TextView textRoom20;
-    TextView textRoom10;
-    TextView textRoomTotal;
-    TextView textBday50;
-    TextView textBday10;
-    TextView textBday30;
-    TextView textBdayTotal;
-    TextView textBdayMk;
-    TextView textMk1;
-    TextView textMk2;
-    TextView textMkT1;
-    TextView textMkT2;
-    TextView textMkTotal;
+    @BindView(R.id.text_date) TextView textDate;
+    @BindView(R.id.panel_date) LinearLayout panelDate;
+    @BindView(R.id.progress_bar_upload) ProgressBar progressBarUpload;
+    @BindView(R.id.edit_photo) TextView textPhoto;
+    @BindView(R.id.panel_photo) LinearLayout panelPhoto;
+    @BindView(R.id.text_room_total) TextView textRoomTotal;
+    @BindView(R.id.panel_room_expand) LinearLayout panelRoomExpand;
+    @BindView(R.id.input_room_60) EditText inputRoom60;
+    @BindView(R.id.input_room_30) EditText inputRoom30;
+    @BindView(R.id.input_room_20) EditText inputRoom20;
+    @BindView(R.id.input_room_10) EditText inputRoom10;
+    @BindView(R.id.swipe_menu) LinearLayout swipeMenu;
+    @BindView(R.id.text_room_60) TextView textRoom60;
+    @BindView(R.id.seek_room_60) SeekBar seekRoom60;
+    @BindView(R.id.text_room_30) TextView textRoom30;
+    @BindView(R.id.seek_room_30) SeekBar seekRoom30;
+    @BindView(R.id.text_room_20) TextView textRoom20;
+    @BindView(R.id.seek_room_20) SeekBar seekRoom20;
+    @BindView(R.id.text_room_10) TextView textRoom10;
+    @BindView(R.id.seek_room_10) SeekBar seekRoom10;
+    @BindView(R.id.swipe_layout) SwipeLayout swipeLayout;
+    @BindView(R.id.text_bday_total) TextView textBdayTotal;
+    @BindView(R.id.panel_room_expand2) LinearLayout panelRoomExpand2;
+    @BindView(R.id.input_bday_50) EditText inputBday50;
+    @BindView(R.id.input_bday_10) EditText inputBday10;
+    @BindView(R.id.input_bday_30) EditText inputBday30;
+    @BindView(R.id.text_bday_50) TextView textBday50;
+    @BindView(R.id.seek_bday_50) SeekBar seekBday50;
+    @BindView(R.id.text_bday_10) TextView textBday10;
+    @BindView(R.id.seek_bday_10) SeekBar seekBday10;
+    @BindView(R.id.text_bday_30) TextView textBday30;
+    @BindView(R.id.seek_bday_30) SeekBar seekBday30;
+    @BindView(R.id.text_bday_mk_done) TextView textBdayMk;
+    @BindView(R.id.seek_bday_mk_done) SeekBar seekBdayMk;
+    @BindView(R.id.swipe_layout2) SwipeLayout swipeLayout2;
+    @BindView(R.id.text_mk_name) TextView textMkName;
+    @BindView(R.id.button_choose_mk) Button buttonChooseMk;
+    @BindView(R.id.text_mk_total) TextView textMkTotal;
+    @BindView(R.id.switch_my_mk) Switch switchMyMk;
+    @BindView(R.id.panel_room_expand3) LinearLayout panelRoomExpand3;
+    @BindView(R.id.input_mk_1) EditText inputMk1;
+    @BindView(R.id.input_mk_2) EditText inputMk2;
+    @BindView(R.id.text_mk_t1) TextView textMkT1;
+    @BindView(R.id.seek_mk_t1) SeekBar seekMkT1;
+    @BindView(R.id.text_mk_t2) TextView textMkT2;
+    @BindView(R.id.seek_mk_t2) SeekBar seekMkT2;
+    @BindView(R.id.text_mk_1) TextView textMk1;
+    @BindView(R.id.seek_mk_1) SeekBar seekMk1;
+    @BindView(R.id.text_mk_2) TextView textMk2;
+    @BindView(R.id.seek_mk_2) SeekBar seekMk2;
+    @BindView(R.id.swipe_layout3) SwipeLayout swipeLayout3;
+    @BindView(R.id.edit_comment) EditText editComment;
 
-    TextView textDate;
-    TextView textMkName;
-    LinearLayout panelDate;
-    LinearLayout panelRoomExpand;
-    LinearLayout panelRoomExpand2;
-    LinearLayout panelRoomExpand3;
-    LinearLayout panelPhoto;
-
-    SeekBar seekRoom60;
-    SeekBar seekRoom30;
-    SeekBar seekRoom20;
-    SeekBar seekRoom10;
-    SeekBar seekBday50;
-    SeekBar seekBday10;
-    SeekBar seekBday30;
-    SeekBar seekBdayMk;
-    SeekBar seekMkT1;
-    SeekBar seekMkT2;
-    SeekBar seekMk1;
-    SeekBar seekMk2;
-
-    EditText inputRoom60;
-    EditText inputRoom30;
-    EditText inputRoom20;
-    EditText inputRoom10;
-    EditText inputBday50;
-    EditText inputBday10;
-    EditText inputBday30;
-    EditText inputMk1;
-    EditText inputMk2;
-    SwipeLayout swipeLayout;
-    SwipeLayout swipeLayout2;
-    SwipeLayout swipeLayout3;
-
-    EditText editComment;
-    TextView textPhoto;
-    Button buttonChooseMk;
-    Switch switchMyMk;
-
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private String mUId, mUserName;
     private Calendar mDate;
@@ -139,19 +141,18 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     private SimpleDateFormat mSdf = new SimpleDateFormat("d-M-yyyy", Locale.US);
     private boolean isChanged;
     private List<Mk> mkList = new ArrayList<>();
-    private ProgressBar progressBarUpload;
     private boolean mIsFuture;
     private String pictureImagePath = "";
-
 
     public static Intent getLaunchIntent(final Activity launchIntent) {
         return new Intent(launchIntent, ReportActivity.class);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-        initRef();
+        ButterKnife.bind(this);
         parseExtras();
         initDatePicker();
         initSwipesAndExpandPanels();
@@ -189,14 +190,14 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     private void parseExtras() {
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) {
-            if (mAuth.getCurrentUser() != null)
-                mUId = mAuth.getCurrentUser().getUid();
-            if (mAuth.getCurrentUser() != null)
-                mUserName = mAuth.getCurrentUser().getDisplayName();
+            if (mUser != null)
+                mUId = mUser.getUid();
+            if (mUser != null)
+                mUserName = mUser.getDisplayName();
             setDate(Calendar.getInstance());
         } else {
-            mUId = bundle.getString(Keys.Extras.EXTRA_UID, mAuth.getCurrentUser().getUid());
-            mUserName = bundle.getString(Keys.Extras.EXTRA_USER_NAME, mAuth.getCurrentUser().getDisplayName());
+            mUId = bundle.getString(Keys.Extras.EXTRA_UID, mUser.getUid());
+            mUserName = bundle.getString(Keys.Extras.EXTRA_USER_NAME, mUser.getDisplayName());
             String date = bundle.getString(Keys.Extras.EXTRA_DATE);
             if (date != null)
                 setDate(date);
@@ -224,7 +225,7 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
             pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
             File file = new File(pictureImagePath);
             Uri outputFileUri = Uri.fromFile(file);
-            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
             startActivityForResult(cameraIntent, Constants.REQUEST_CODE_CAMERA);
         } else {
@@ -274,7 +275,6 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
                         hideProgressBarUpload();
                     }
                 });
-            } else { //resultCode = CANCEL
             }
         }
         //other request code
@@ -397,66 +397,6 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
                 dpd.show();
             }
         });
-    }
-
-    /**
-     * Initialize references for all Views
-     */
-    private void initRef() {
-        progressBarUpload = findViewById(R.id.progress_bar_upload);
-        panelPhoto = findViewById(R.id.panel_photo);
-        panelRoomExpand = findViewById(R.id.panel_room_expand);
-        panelRoomExpand2 = findViewById(R.id.panel_room_expand2);
-        panelRoomExpand3 = findViewById(R.id.panel_room_expand3);
-        textDate = findViewById(R.id.text_date);
-        editComment = findViewById(R.id.edit_comment);
-        textPhoto = findViewById(R.id.edit_photo);
-        panelDate = findViewById(R.id.panel_date);
-        // Room
-        swipeLayout = findViewById(R.id.swipe_layout);
-        textRoomTotal = findViewById(R.id.text_room_total);
-        textRoom60 = findViewById(R.id.text_room_60);
-        textRoom30 = findViewById(R.id.text_room_30);
-        textRoom20 = findViewById(R.id.text_room_20);
-        textRoom10 = findViewById(R.id.text_room_10);
-        seekRoom60 = (SeekBar) findViewById(R.id.seek_room_60);
-        seekRoom30 = (SeekBar) findViewById(R.id.seek_room_30);
-        seekRoom20 = (SeekBar) findViewById(R.id.seek_room_20);
-        seekRoom10 = (SeekBar) findViewById(R.id.seek_room_10);
-        inputRoom60 = findViewById(R.id.input_room_60);
-        inputRoom30 = findViewById(R.id.input_room_30);
-        inputRoom20 = findViewById(R.id.input_room_20);
-        inputRoom10 = findViewById(R.id.input_room_10);
-        // BirthDay
-        swipeLayout2 = findViewById(R.id.swipe_layout2);
-        textBdayTotal = findViewById(R.id.text_bday_total);
-        textBday50 = findViewById(R.id.text_bday_50);
-        textBday10 = findViewById(R.id.text_bday_10);
-        textBday30 = findViewById(R.id.text_bday_30);
-        textBdayMk = findViewById(R.id.text_bday_mk_done);
-        seekBday50 = (SeekBar) findViewById(R.id.seek_bday_50);
-        seekBday10 = (SeekBar) findViewById(R.id.seek_bday_10);
-        seekBday30 = (SeekBar) findViewById(R.id.seek_bday_30);
-        seekBdayMk = (SeekBar) findViewById(R.id.seek_bday_mk_done);
-        inputBday50 = findViewById(R.id.input_bday_50);
-        inputBday10 = findViewById(R.id.input_bday_10);
-        inputBday30 = findViewById(R.id.input_bday_30);
-        // MK
-        swipeLayout3 = findViewById(R.id.swipe_layout3);
-        textMkName = findViewById(R.id.text_mk_name);
-        seekMk1 = (SeekBar) findViewById(R.id.seek_mk_1);
-        seekMk2 = (SeekBar) findViewById(R.id.seek_mk_2);
-        seekMkT1 = (SeekBar) findViewById(R.id.seek_mk_t1);
-        seekMkT2 = (SeekBar) findViewById(R.id.seek_mk_t2);
-        textMkTotal = findViewById(R.id.text_mk_total);
-        textMk1 = findViewById(R.id.text_mk_1);
-        textMk2 = findViewById(R.id.text_mk_2);
-        textMkT1 = findViewById(R.id.text_mk_t1);
-        textMkT2 = findViewById(R.id.text_mk_t2);
-        inputMk1 = findViewById(R.id.input_mk_1);
-        inputMk2 = findViewById(R.id.input_mk_2);
-        switchMyMk = (Switch) findViewById(R.id.switch_my_mk);
-        buttonChooseMk = findViewById(R.id.button_choose_mk);
     }
 
     /**
@@ -972,6 +912,7 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         View view = ReportActivity.this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            assert imm != null;
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
@@ -1145,6 +1086,7 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
      * Update Report with new values
      * Update Title of Activity
      */
+    @SuppressLint("SetTextI18n")
     void updateRoomTotal() {
         textRoom60.setText("60 грн х " + mReport.r60 + " = " + (mReport.r60 * 60) + " ГРН");
         textRoom30.setText("30 грн х " + mReport.r30 + " = " + (mReport.r30 * 30) + " ГРН");
@@ -1169,6 +1111,7 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
      * Update Report with new values
      * Update Title of Activity
      */
+    @SuppressLint("SetTextI18n")
     void updateBdayTotal() {
         textBday50.setText("Кімната: 50 грн х " + mReport.b50 + " = " + (mReport.b50 * 50) + " ГРН");
         textBday10.setText("Кімната: 10 грн х " + mReport.b10 + " = " + (mReport.b10 * 10) + " ГРН");
@@ -1192,6 +1135,7 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
      * Update Report with new values
      * Update Title of Activity
      */
+    @SuppressLint("SetTextI18n")
     void updateMkTotal() {
         int tar1 = 30 + mReport.mkt1 * 10;
         int tar2 = 30 + mReport.mkt2 * 10;
@@ -1238,11 +1182,6 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         updateTitle();
     }
 
-    /**
-     * Set new values of current date
-     *
-     * @param calendar
-     */
     private void setDate(Calendar calendar) {
         mDate = calendar;
         mDateStr = mSdf.format(mDate.getTime());
