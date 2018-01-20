@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -54,6 +55,7 @@ import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Constants;
 import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.common.Keys;
+import com.ruslanlyalko.kidsapp.common.ViewUtils;
 import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Mk;
@@ -74,6 +76,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class ReportActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
@@ -131,6 +134,14 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     @BindView(R.id.seek_mk_2) SeekBar seekMk2;
     @BindView(R.id.swipe_layout3) SwipeLayout swipeLayout3;
     @BindView(R.id.edit_comment) EditText editComment;
+    @BindView(R.id.text_check_list_time) TextView mTextCheckListTime;
+    @BindView(R.id.panel_check_list) LinearLayout mPanelCheckList;
+    @BindView(R.id.panel_check_list_expand) LinearLayout mPanelCheckListExpand;
+    @BindView(R.id.button_check_list_done) Button mButtonCheckListDone;
+    @BindView(R.id.checkbox_check_list_1) CheckBox mCheckboxCheckList1;
+    @BindView(R.id.checkbox_check_list_2) CheckBox mCheckboxCheckList2;
+    @BindView(R.id.checkbox_check_list_3) CheckBox mCheckboxCheckList3;
+    @BindView(R.id.checkbox_check_list_4) CheckBox mCheckboxCheckList4;
 
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -143,6 +154,8 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     private List<Mk> mkList = new ArrayList<>();
     private boolean mIsFuture;
     private String pictureImagePath = "";
+    private float mLatitude = 0;
+    private float mLongitude = 0;
 
     public static Intent getLaunchIntent(final Activity launchIntent) {
         return new Intent(launchIntent, ReportActivity.class);
@@ -977,6 +990,7 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
                         updateMkName();
                         updateComments();
                         updatePhoto();
+                        updateChecklist();
                         isChanged = false;
                     }
 
@@ -1034,6 +1048,7 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         updatePhoto();
         updateComments();
         updateTitle();
+        updateChecklist();
         if (clearMK)
             Snackbar.make(textRoom60, getString(R.string.toast_report_cleared), Snackbar.LENGTH_SHORT).show();
     }
@@ -1266,5 +1281,46 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.button_check_list_done)
+    public void onCheckListDoneClicked() {
+        if (mCheckboxCheckList1.isChecked()
+                && mCheckboxCheckList2.isChecked()
+                && mCheckboxCheckList3.isChecked()
+                && mCheckboxCheckList4.isChecked()) {
+            if (mReport != null) {
+                mReport.setCheckedListDone(true);
+                mReport.setCheckedListTime(new Date());
+                mReport.setCheckedListLatitude(mLatitude);
+                mReport.setCheckedListLatitude(mLongitude);
+                isChanged = true;
+                updateChecklist();
+            }
+        } else {
+            Toast.makeText(this, getString(R.string.toast_check_list_not_all_checked), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateChecklist() {
+        if (mReport == null) return;
+        toggleCheckList(!mReport.getCheckedListDone() && !FirebaseUtils.isAdmin() && !DateUtils.future(mReport.getDate()));
+        if (mReport.getCheckedListTime() != null)
+            mTextCheckListTime.setText(DateUtils.toString(mReport.getCheckedListTime(), "HH:mm"));
+        else
+            mTextCheckListTime.setText("");
+    }
+
+    void toggleCheckList(boolean show) {
+        if (show) {
+            if (mPanelCheckListExpand.getVisibility() != View.VISIBLE)
+                ViewUtils.expand(mPanelCheckListExpand);
+            mCheckboxCheckList1.setChecked(false);
+            mCheckboxCheckList2.setChecked(false);
+            mCheckboxCheckList3.setChecked(false);
+            mCheckboxCheckList4.setChecked(false);
+        } else {
+            mPanelCheckListExpand.setVisibility(View.GONE);
+        }
     }
 }

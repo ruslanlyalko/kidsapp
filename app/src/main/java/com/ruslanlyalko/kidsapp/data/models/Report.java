@@ -1,5 +1,7 @@
 package com.ruslanlyalko.kidsapp.data.models;
 
+import java.util.Date;
+
 public class Report {
 
     public String userId;
@@ -32,6 +34,11 @@ public class Report {
 
     public String comment;
 
+    private boolean checkedListDone;
+    private Date checkedListTime;
+    private float checkedListLatitude;
+    private float checkedListLongitude;
+
     public Report() {
     }
 
@@ -42,6 +49,38 @@ public class Report {
         this.mkRef = "";
         this.mkName = "";
         this.imageUri = "";
+    }
+
+    public float getCheckedListLatitude() {
+        return checkedListLatitude;
+    }
+
+    public void setCheckedListLatitude(final float checkedListLatitude) {
+        this.checkedListLatitude = checkedListLatitude;
+    }
+
+    public float getCheckedListLongitude() {
+        return checkedListLongitude;
+    }
+
+    public void setCheckedListLongitude(final float checkedListLongitude) {
+        this.checkedListLongitude = checkedListLongitude;
+    }
+
+    public boolean getCheckedListDone() {
+        return checkedListDone;
+    }
+
+    public void setCheckedListDone(final boolean checkedListDone) {
+        this.checkedListDone = checkedListDone;
+    }
+
+    public Date getCheckedListTime() {
+        return checkedListTime;
+    }
+
+    public void setCheckedListTime(final Date checkedListTime) {
+        this.checkedListTime = checkedListTime;
     }
 
     public String getImageUri() {
@@ -160,5 +199,9 @@ public class Report {
             mkName = "";
             mkRef = "";
         }
+        checkedListLatitude = 0;
+        checkedListLongitude = 0;
+        checkedListDone = false;
+        checkedListTime = null;
     }
 }

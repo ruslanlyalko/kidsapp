@@ -320,7 +320,7 @@ public class SalaryActivity extends AppCompatActivity {
         mTextPercent.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(percent)));
         mTextMk.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(mkBirthday + mkArt)));
         mTotalSwitcher.setText(String.format(getString(R.string.HRN), DateUtils.getIntWithSpace(total)));
-        String text1 = "В цьоу місяці було " + mReports.size() + " робочих днів \n";
+        String text1 = "В цьому місяці було " + mReports.size() + " робочих днів \n";
         text1 += "Загальна виручка " + percentTotal + " грн \n\n";
         text1 += "Проведено " + mkBirthdayCount + " МК на Днях Народженнях \n";
         text1 += "На яких було присутньо " + mkBirthdayChildren + " дітей \n";

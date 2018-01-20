@@ -251,5 +251,12 @@
         completions."
     </string>
     <string name="image_permissions">Будь ласка, добавте дозвіл на використання камери</string>
+    <string name="text_check_list">ЧЕК-ЛИСТ</string>
+    <string name="text_check_list_1"><![CDATA[Освітлення & Кондиціонер]]></string>
+    <string name="text_check_list_2"><![CDATA[Іграшки & Батут]]></string>
+    <string name="text_check_list_3">Прибирання</string>
+    <string name="text_check_list_4"><![CDATA[Стіна & Підвіконник]]></string>
+    <string name="button_check_list_done">Готово</string>
+    <string name="toast_check_list_not_all_checked">Не всі пункти вибрано!</string>
 
 </resources>
