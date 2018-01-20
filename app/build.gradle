@@ -22,8 +22,8 @@ android {
         applicationId "com.ruslanlyalko.kidsapp"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 16
-        versionName "3.6"
+        versionCode 17
+        versionName "3.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -56,6 +56,10 @@ android {
             keyPassword 'android'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -70,6 +74,9 @@ dependencies {
     compile 'com.android.support:customtabs:27.0.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
+    compile 'com.google.android.gms:play-services-auth:11.8.0'
+    compile 'com.google.android.gms:play-services-maps:11.8.0'
+    compile 'com.google.android.gms:play-services-location:11.8.0'
     compile 'com.google.firebase:firebase-auth:11.8.0'
     compile 'com.google.firebase:firebase-database:11.8.0'
     compile 'com.google.firebase:firebase-storage:11.8.0'
