@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,6 +38,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -55,12 +57,14 @@ import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Constants;
 import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.common.Keys;
+import com.ruslanlyalko.kidsapp.common.LocationHandler;
 import com.ruslanlyalko.kidsapp.common.ViewUtils;
 import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Mk;
 import com.ruslanlyalko.kidsapp.data.models.Report;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.calendar.CalendarActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.maps.MapsActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.PhotoPreviewActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout;
 
@@ -154,8 +158,8 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     private List<Mk> mkList = new ArrayList<>();
     private boolean mIsFuture;
     private String pictureImagePath = "";
-    private float mLatitude = 0;
-    private float mLongitude = 0;
+    private LocationHandler mLocationHandler;
+    private LatLng mLocation;
 
     public static Intent getLaunchIntent(final Activity launchIntent) {
         return new Intent(launchIntent, ReportActivity.class);
@@ -196,6 +200,17 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
             public boolean onLongClick(View v) {
                 startCamera();
                 return false;
+            }
+        });
+        mLocationHandler = new LocationHandler(this);
+        mLocationHandler.getLocation(new LocationHandler.OnLocationRequest() {
+            @Override
+            public void onFindLocation(final Location location) {
+                mLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            }
+
+            @Override
+            public void onError(final Exception e) {
             }
         });
     }
@@ -253,6 +268,7 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        mLocationHandler.handleActivityResult(requestCode, resultCode, data);
         // handle request from camera
         if (requestCode == Constants.REQUEST_CODE_CAMERA) {
             if (resultCode == RESULT_OK) {
@@ -331,6 +347,24 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        mLocationHandler.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mLocationHandler.onResume();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mLocationHandler.handleRequestPermissionResult(requestCode, permissions, grantResults);
     }
 
     private void loadMK() {
@@ -1292,8 +1326,13 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
             if (mReport != null) {
                 mReport.setCheckedListDone(true);
                 mReport.setCheckedListTime(new Date());
-                mReport.setCheckedListLatitude(mLatitude);
-                mReport.setCheckedListLatitude(mLongitude);
+                if (mLocation != null) {
+                    mReport.setCheckedListLatitude(mLocation.latitude);
+                    mReport.setCheckedListLongitude(mLocation.longitude);
+                } else {
+                    mReport.setCheckedListLatitude(-1);
+                    mReport.setCheckedListLongitude(-1);
+                }
                 isChanged = true;
                 updateChecklist();
             }
@@ -1321,6 +1360,16 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
             mCheckboxCheckList4.setChecked(false);
         } else {
             mPanelCheckListExpand.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.panel_check_list)
+    public void onPanelChckListClicked() {
+        if (mReport == null) return;
+        if (FirebaseUtils.isAdmin()) {
+            if (mReport.getCheckedListLongitude() != 0 && mReport.getCheckedListLongitude() != 0) {
+                startActivity(MapsActivity.getLaunchIntent(this, new LatLng(mReport.getCheckedListLatitude(), mReport.getCheckedListLongitude())));
+            }
         }
     }
 }

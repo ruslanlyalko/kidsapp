@@ -258,5 +258,7 @@
     <string name="text_check_list_4"><![CDATA[Стіна & Підвіконник]]></string>
     <string name="button_check_list_done">Готово</string>
     <string name="toast_check_list_not_all_checked">Не всі пункти вибрано!</string>
+    <string name="title_activity_maps">Карта</string>
+    <string name="maps_marker_title">Розташування</string>
 
 </resources>

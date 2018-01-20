@@ -19,5 +19,6 @@ public interface Keys {
         String EXTRA_NOT_ID = "extra_not_id";
         String EXTRA_ABOUT = "extra_about";
         String EXTRA_USER = "EXTRA_USER";
+        String EXTRA_LOCATION = "EXTRA_LOCATION";
     }
 }

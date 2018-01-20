@@ -36,8 +36,8 @@ public class Report {
 
     private boolean checkedListDone;
     private Date checkedListTime;
-    private float checkedListLatitude;
-    private float checkedListLongitude;
+    private double checkedListLatitude;
+    private double checkedListLongitude;
 
     public Report() {
     }
@@ -51,19 +51,19 @@ public class Report {
         this.imageUri = "";
     }
 
-    public float getCheckedListLatitude() {
+    public double getCheckedListLatitude() {
         return checkedListLatitude;
     }
 
-    public void setCheckedListLatitude(final float checkedListLatitude) {
+    public void setCheckedListLatitude(final double checkedListLatitude) {
         this.checkedListLatitude = checkedListLatitude;
     }
 
-    public float getCheckedListLongitude() {
+    public double getCheckedListLongitude() {
         return checkedListLongitude;
     }
 
-    public void setCheckedListLongitude(final float checkedListLongitude) {
+    public void setCheckedListLongitude(final double checkedListLongitude) {
         this.checkedListLongitude = checkedListLongitude;
     }
 
