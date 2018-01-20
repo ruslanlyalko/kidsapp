@@ -146,6 +146,8 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     @BindView(R.id.checkbox_check_list_2) CheckBox mCheckboxCheckList2;
     @BindView(R.id.checkbox_check_list_3) CheckBox mCheckboxCheckList3;
     @BindView(R.id.checkbox_check_list_4) CheckBox mCheckboxCheckList4;
+    @BindView(R.id.checkbox_check_list_5) CheckBox mCheckboxCheckList5;
+    @BindView(R.id.panel_report_values) LinearLayout mPanelReportValues;
 
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -1322,7 +1324,8 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         if (mCheckboxCheckList1.isChecked()
                 && mCheckboxCheckList2.isChecked()
                 && mCheckboxCheckList3.isChecked()
-                && mCheckboxCheckList4.isChecked()) {
+                && mCheckboxCheckList4.isChecked()
+                && mCheckboxCheckList5.isChecked()) {
             if (mReport != null) {
                 mReport.setCheckedListDone(true);
                 mReport.setCheckedListTime(new Date());
@@ -1354,17 +1357,21 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         if (show) {
             if (mPanelCheckListExpand.getVisibility() != View.VISIBLE)
                 ViewUtils.expand(mPanelCheckListExpand);
+            mPanelReportValues.setVisibility(View.GONE);
             mCheckboxCheckList1.setChecked(false);
             mCheckboxCheckList2.setChecked(false);
             mCheckboxCheckList3.setChecked(false);
             mCheckboxCheckList4.setChecked(false);
+            mCheckboxCheckList5.setChecked(false);
         } else {
             mPanelCheckListExpand.setVisibility(View.GONE);
+            if (mPanelReportValues.getVisibility() != View.VISIBLE)
+                ViewUtils.expand(mPanelReportValues);
         }
     }
 
     @OnClick(R.id.panel_check_list)
-    public void onPanelChckListClicked() {
+    public void onPanelCheckListClicked() {
         if (mReport == null) return;
         if (FirebaseUtils.isAdmin()) {
             if (mReport.getCheckedListLongitude() != 0 && mReport.getCheckedListLongitude() != 0) {
