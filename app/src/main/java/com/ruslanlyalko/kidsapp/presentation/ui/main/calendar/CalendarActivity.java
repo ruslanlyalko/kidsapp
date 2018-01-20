@@ -153,7 +153,7 @@ public class CalendarActivity extends AppCompatActivity implements OnReportClick
                                 for (DataSnapshot datMonth : datYear.getChildren()) {
                                     for (DataSnapshot datDay : datMonth.getChildren()) {
                                         Report report = datDay.getValue(Report.class);
-                                        if (report != null && (FirebaseUtils.isAdmin() || report.getUserId().equals(mUserId))) {
+                                        if (report != null && (FirebaseUtils.isAdmin() || report.getUserId().equals(mUserId) || DateUtils.future(report.getDate()))) {
                                             int color = getUserColor(report.getUserId());
                                             long date = getDateLongFromStr(report.getDate());
                                             String uId = report.getUserId();
