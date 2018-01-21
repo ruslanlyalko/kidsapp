@@ -36,7 +36,7 @@ public class AlarmReceiverActivity extends AppCompatActivity {
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = null;
         if (pm != null) {
-            wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK
+            wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK
                     | PowerManager.ON_AFTER_RELEASE, "wakeup");
             wl.acquire(10 * 60 * 1000L /*10 minutes*/);
             new Handler().postDelayed(wl::release, 10 * 60 * 1000);

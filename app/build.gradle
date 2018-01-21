@@ -22,8 +22,8 @@ android {
         applicationId "com.ruslanlyalko.kidsapp"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 21
-        versionName "4.1"
+        versionCode 22
+        versionName "4.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -81,6 +81,7 @@ dependencies {
     compile 'com.google.firebase:firebase-database:11.8.0'
     compile 'com.google.firebase:firebase-storage:11.8.0'
     compile 'com.google.firebase:firebase-config:11.8.0'
+    compile 'com.google.firebase:firebase-messaging:11.8.0'
     compile 'com.firebaseui:firebase-ui-storage:0.6.0'
     compile 'com.github.sundeepk:compact-calendar-view:2.0.2.1'
 

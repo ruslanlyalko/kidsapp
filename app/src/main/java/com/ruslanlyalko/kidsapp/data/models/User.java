@@ -24,6 +24,7 @@ public class User implements Serializable {
     private boolean mkSpecCalc = false;
     private String mkSpecCalcDate = "1-8-2017";
     private String avatar;
+    private String token;
 
     public User(String userId, String userName, String userPhone, String userEmail, String userBDay, String userCard, boolean userIsAdmin) {
         this.userId = userId;
@@ -37,6 +38,14 @@ public class User implements Serializable {
 
     public User() {
         // Default constructor required
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(final String token) {
+        this.token = token;
     }
 
     public String getAvatar() {

@@ -22,10 +22,12 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.ruslanlyalko.kidsapp.R;
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         initCurrentUser();
         initSwipes();
         loadBadge();
+        sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken());
     }
 
     private void initRemoteConfig() {
@@ -199,6 +202,16 @@ public class MainActivity extends AppCompatActivity {
                     public void onCancelled(final DatabaseError databaseError) {
                     }
                 });
+    }
+
+    private void sendRegistrationToServer(final String refreshedToken) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseDatabase.getInstance().getReference(DefaultConfigurations.DB_USERS)
+                    .child(user.getUid())
+                    .child("token")
+                    .setValue(refreshedToken);
+        }
     }
 
     private void updateLink() {

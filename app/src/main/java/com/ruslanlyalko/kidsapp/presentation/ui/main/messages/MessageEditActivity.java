@@ -145,7 +145,7 @@ public class MessageEditActivity extends AppCompatActivity {
                 .child(notKey).setValue(mMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                FirebaseUtils.updateNotificationsForAllUsers(notKey);
+                FirebaseUtils.updateNotificationsForAllUsers(notKey, mMessage.getTitle1(), "Створено нове повідомлення");
                 Snackbar.make(imageView, getString(R.string.not_added), Snackbar.LENGTH_SHORT).show();
             }
         });
@@ -158,7 +158,7 @@ public class MessageEditActivity extends AppCompatActivity {
                 .child(mMessage.getKey()).setValue(mMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                FirebaseUtils.updateNotificationsForAllUsers(notKey);
+                FirebaseUtils.updateNotificationsForAllUsers(notKey, mMessage.getTitle1(), "Повідомленя відредаговане");
                 Snackbar.make(imageView, getString(R.string.mk_updated), Snackbar.LENGTH_SHORT).show();
             }
         });
