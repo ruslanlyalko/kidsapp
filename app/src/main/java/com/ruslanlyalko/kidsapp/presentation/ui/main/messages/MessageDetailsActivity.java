@@ -37,8 +37,6 @@ import butterknife.OnClick;
 
 public class MessageDetailsActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.toolbar_layout) CollapsingToolbarLayout toolbarLayout;
     @BindView(R.id.text_description) TextView textDescription;
     @BindView(R.id.fab) FloatingActionButton fab;
 
@@ -52,16 +50,9 @@ public class MessageDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_details);
         ButterKnife.bind(this);
-        initToolbar();
         parseExtras();
         FirebaseUtils.markNotificationsAsRead(notKey);
         loadNotFromDB();
-    }
-
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void parseExtras() {
@@ -90,12 +81,12 @@ public class MessageDetailsActivity extends AppCompatActivity {
     private void updateUI() {
         if (mMessage != null) {
             invalidateOptionsMenu();
-            toolbarLayout.setTitle(mMessage.getTitle1());
+            getSupportActionBar().setTitle(mMessage.getTitle1());
             textDescription.setText(mMessage.getDescription());
             fab.setVisibility((mMessage.getLink() != null && !mMessage.getLink().isEmpty())
                     ? View.VISIBLE : View.GONE);
         } else {
-            toolbar.setTitle(R.string.title_activity_notification_item);
+            getSupportActionBar().setTitle(R.string.title_activity_notification_item);
         }
     }
 

@@ -401,13 +401,12 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/text_salary_expand"
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/list_users_salary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginStart="64dp"
+                        android:layout_marginStart="0dp"
                         android:visibility="gone" />
                 </LinearLayout>
 

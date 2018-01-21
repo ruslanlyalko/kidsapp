@@ -35,7 +35,7 @@ import butterknife.OnClick;
 public class MessagesActivity extends AppCompatActivity {
 
     @BindView(R.id.fab) FloatingActionButton fab;
-    @BindView(R.id.recycler_view) RecyclerView mNotificationsList;
+    @BindView(R.id.recycler_view) RecyclerView mMessagesList;
 
     private MessagesAdapter mMessagesAdapter;
     private List<Message> mMessageList = new ArrayList<>();
@@ -53,7 +53,7 @@ public class MessagesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notification);
         ButterKnife.bind(this);
         initRecycler();
-        loadNotifications();
+        loadMessages();
         fab.setVisibility(FirebaseUtils.isAdmin() ? View.VISIBLE : View.GONE);
         loadBadge();
     }
@@ -61,12 +61,12 @@ public class MessagesActivity extends AppCompatActivity {
     private void initRecycler() {
         mMessagesAdapter = new MessagesAdapter(this, mMessageList);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
-        mNotificationsList.setLayoutManager(mLayoutManager);
-        mNotificationsList.setItemAnimator(new DefaultItemAnimator());
-        mNotificationsList.setAdapter(mMessagesAdapter);
+        mMessagesList.setLayoutManager(mLayoutManager);
+        mMessagesList.setItemAnimator(new DefaultItemAnimator());
+        mMessagesList.setAdapter(mMessagesAdapter);
     }
 
-    private void loadNotifications() {
+    private void loadMessages() {
         mMessageList.clear();
         FirebaseDatabase.getInstance().getReference(DefaultConfigurations.DB_MESSAGES)
                 .addChildEventListener(new ChildEventListener() {
@@ -76,7 +76,7 @@ public class MessagesActivity extends AppCompatActivity {
                         if (message != null) {
                             mMessageList.add(0, message);
                             mMessagesAdapter.notifyItemInserted(0);
-                            mNotificationsList.smoothScrollToPosition(0);
+                            mMessagesList.smoothScrollToPosition(0);
                         }
                     }
 
@@ -133,7 +133,7 @@ public class MessagesActivity extends AppCompatActivity {
         if (ind < mMessageList.size()) {
             mMessageList.set(ind, message);
             mMessagesAdapter.notifyItemChanged(ind);
-            mNotificationsList.smoothScrollToPosition(ind);
+            mMessagesList.smoothScrollToPosition(ind);
         }
     }
 

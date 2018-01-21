@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +37,9 @@ import com.ruslanlyalko.kidsapp.data.models.Expense;
 import com.ruslanlyalko.kidsapp.data.models.Report;
 import com.ruslanlyalko.kidsapp.data.models.Result;
 import com.ruslanlyalko.kidsapp.data.models.User;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.dashboard.adapter.UsersSalaryAdapter;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.salary.SalaryActivity;
+import com.ruslanlyalko.kidsapp.presentation.widget.OnItemClickListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,7 +52,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity implements OnItemClickListener {
 
     @BindView(R.id.calendar_view) CompactCalendarView mCompactCalendarView;
     @BindView(R.id.text_total) TextView textTotal;
@@ -67,21 +72,19 @@ public class DashboardActivity extends AppCompatActivity {
     @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.progress_bar_cost) ProgressBar progressBarCost;
     @BindView(R.id.progress_bar_salary) ProgressBar progressBarSalary;
-    @BindView(R.id.text_salary_expand) TextView mTextExpand;
+    @BindView(R.id.list_users_salary) RecyclerView mListUsersSalary;
     @BindView(R.id.image_expand) ImageView mImageView;
     @BindView(R.id.bar_chart) BarChart mBarChart;
-
+    private UsersSalaryAdapter mUsersSalaryAdapter = new UsersSalaryAdapter(this);
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private List<Report> reportList = new ArrayList<>();
     private List<Expense> mExpenseList = new ArrayList<>();
     private List<User> userList = new ArrayList<>();
     private String yearStr;
-
     private String monthStr;
     private int incomeTotal;
     private int costTotal;
     private int salaryTotal;
-
     private String mComment;
     private List<Result> mResults;
 
@@ -96,6 +99,7 @@ public class DashboardActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initCalendar();
         initBarChart();
+        initRecycler();
         textMonth.setText(Constants.MONTH_FULL[Calendar.getInstance().get(Calendar.MONTH)]);
         yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date());
         monthStr = new SimpleDateFormat("M", Locale.US).format(new Date());
@@ -104,6 +108,11 @@ public class DashboardActivity extends AppCompatActivity {
         loadUsers();
         loadComment(yearStr, monthStr);
         loadResults();
+    }
+
+    private void initRecycler() {
+        mListUsersSalary.setLayoutManager(new LinearLayoutManager(this));
+        mListUsersSalary.setAdapter(mUsersSalaryAdapter);
     }
 
     private void loadResults() {
@@ -183,11 +192,11 @@ public class DashboardActivity extends AppCompatActivity {
 
     @OnClick(R.id.panel_action)
     void onExpandClicked() {
-        if (mTextExpand.getVisibility() == View.VISIBLE) {
+        if (mListUsersSalary.getVisibility() == View.VISIBLE) {
             mImageView.setImageResource(R.drawable.ic_action_expand_more);
-            ViewUtils.collapse(mTextExpand);
+            ViewUtils.collapse(mListUsersSalary);
         } else {
-            ViewUtils.expand(mTextExpand);
+            ViewUtils.expand(mListUsersSalary);
             mImageView.setImageResource(R.drawable.ic_action_expand_less);
         }
     }
@@ -353,9 +362,9 @@ public class DashboardActivity extends AppCompatActivity {
         int common = 0;
         int mk = 0;
         for (Expense expense : mExpenseList) {
-            if (expense.getTitle2().equals(getString(R.string.text_cost_common)))
+            if (expense.getTitle2().equalsIgnoreCase(getString(R.string.text_cost_common)))
                 common += expense.getPrice();
-            if (expense.getTitle2().equals(getString(R.string.text_cost_mk)))
+            if (expense.getTitle2().equalsIgnoreCase(getString(R.string.text_cost_mk)))
                 mk += expense.getPrice();
         }
         costTotal = common + mk;
@@ -441,13 +450,15 @@ public class DashboardActivity extends AppCompatActivity {
             mkBirthday += uMkBirth;
             percent += uPercent;
             int uTotal = (uMkArt + uMkBirth + uStavka + uPercent);
-            if (uTotal > 0)
+            if (uTotal > 0) {
                 usersSalary += uTotal + " - " + user.getUserName() + "\n";
+                mUsersSalaryAdapter.add(user, uTotal);
+            }
             // birthdays list
             if (!user.getUserIsAdmin())
                 birthdays += user.getUserBDay() + " - " + user.getUserName() + "\n";
         }
-        mTextExpand.setText(usersSalary);
+        //mTextExpand.setText(usersSalary);
         textBirthdays.setText(birthdays);
         salaryTotal = stavka + percent + mkBirthday + mkArt;
         textSalaryStavka.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(stavka)));
@@ -496,5 +507,13 @@ public class DashboardActivity extends AppCompatActivity {
         mBarChart.getData().notifyDataChanged();
         mBarChart.notifyDataSetChanged();
         mBarChart.invalidate();
+    }
+
+    @Override
+    public void onItemClicked(final int position) {
+        User user = mUsersSalaryAdapter.getItemAtPostion(position);
+        startActivity(SalaryActivity.getLaunchIntent(this,
+                user.getUserId(),
+                user));
     }
 }

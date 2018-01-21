@@ -335,9 +335,9 @@ public class ExpensesActivity extends AppCompatActivity implements OnExpenseClic
         int common = 0;
         int mk = 0;
         for (Expense expense : mExpenseList) {
-            if (expense.getTitle2().equals(getString(R.string.text_cost_common)))
+            if (expense.getTitle2().equalsIgnoreCase(getString(R.string.text_cost_common)))
                 common += expense.getPrice();
-            if (expense.getTitle2().equals(getString(R.string.text_cost_mk)))
+            if (expense.getTitle2().equalsIgnoreCase(getString(R.string.text_cost_mk)))
                 mk += expense.getPrice();
         }
         int total = common + mk;

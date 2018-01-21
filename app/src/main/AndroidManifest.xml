@@ -136,7 +136,7 @@
             android:name=".presentation.ui.main.messages.MessageDetailsActivity"
             android:label="@string/title_activity_notification_item"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".presentation.ui.main.messages.MessagesActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".presentation.ui.main.messages.MessageEditActivity"

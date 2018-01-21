@@ -112,8 +112,8 @@
     <string name="hint_price">Ціна</string>
     <string name="hint_title2">Тип</string>
     <string name="hint_title1">Назва</string>
-    <string name="text_cost_common">загальні</string>
-    <string name="text_cost_mk">на мк</string>
+    <string name="text_cost_common">Загальні</string>
+    <string name="text_cost_mk">На мк</string>
     <string name="text_cost_list">Список витрат</string>
     <string name="action_delete_all">  ВИДАЛИТИ ВСЕ  </string>
     <string name="dialog_cost_delete_title">Видалити витрату</string>
