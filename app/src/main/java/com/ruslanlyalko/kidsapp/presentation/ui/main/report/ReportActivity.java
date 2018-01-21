@@ -3,7 +3,9 @@ package com.ruslanlyalko.kidsapp.presentation.ui.main.report;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -56,6 +58,7 @@ import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Mk;
 import com.ruslanlyalko.kidsapp.data.models.Report;
+import com.ruslanlyalko.kidsapp.presentation.ui.alarm.AlarmReceiverActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.calendar.CalendarActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.maps.MapsActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.PhotoPreviewActivity;
@@ -992,6 +995,7 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
                 .setMessage(R.string.dialog_delete_message)
                 .setPositiveButton("Видалити", (dialog, which) -> {
                     // delete from DB
+                    cancelAlarm();
                     deleteReportFromDB();
                     loadReportFromDB();
                 })
@@ -1040,7 +1044,56 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
                     startActivity(intent);
                 })
                 .show());
+        setupAlarm();
         return true;
+    }
+
+    private void cancelAlarm() {
+        if (mReport == null) return;
+        if (!mReport.getUserId().equals(mUser.getUid())) return;
+        if (!DateUtils.future(mReport.getDate())) return;
+        //Create a new PendingIntent and add it to the AlarmManager
+        Intent intent = new Intent(this, AlarmReceiverActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                getAlarmRequestCode(mReport.getDate()), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager am = (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
+        if (am != null) am.cancel(pendingIntent);
+    }
+
+    private int getAlarmRequestCode(final String date) {
+        try {
+            return Integer.parseInt(date.replace("-", ""));
+        } catch (Exception e) {
+            return 12345;
+        }
+    }
+
+    private Calendar getAlarmTime(final Calendar time) {
+//        time.setTime(new Date());
+//        time.add(Calendar.MINUTE, 1);
+        int hour = 10;
+        if (time.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) hour = 11;
+        if (time.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) hour = 12;
+        time.set(Calendar.HOUR_OF_DAY, hour);
+        time.set(Calendar.MINUTE, 5);
+        return time;
+    }
+
+    private void setupAlarm() {
+        if (mReport == null) return;
+        if (!mReport.getUserId().equals(mUser.getUid())) return;
+        if (!DateUtils.future(mReport.getDate())) return;
+        Calendar alarmTime = getAlarmTime(mDate);
+        //Create a new PendingIntent and add it to the AlarmManager
+        Intent intent = new Intent(this, AlarmReceiverActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                getAlarmRequestCode(mReport.getDate()), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager am = (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
+        if (am != null)
+            am.set(AlarmManager.RTC_WAKEUP, alarmTime.getTimeInMillis(), pendingIntent);
+        String toastText = "Нагадування встановлено: \n" +
+                DateUtils.toString(alarmTime.getTime(), "EEEE d-M-yyyy HH:mm").toUpperCase();
+        Toast.makeText(this, toastText, Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -1139,8 +1192,14 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
      */
     void updateTitle() {
         mReport.total = (mReport.totalRoom + mReport.totalBday + mReport.totalMk);
-        setTitle(getResources().getString(R.string.title_activity_report) + " (" + DateUtils.getIntWithSpace(mReport.total) + " ГРН)");
+        setTitle(mReport.getUserId().equals(mUser.getUid())
+                ? getString(R.string.title_activity_report) : getAbbreviation(mReport.getUserName())
+                + " (" + DateUtils.getIntWithSpace(mReport.total) + " ГРН)");
         isChanged = true;
+    }
+
+    private String getAbbreviation(final String userName) {
+        return userName.charAt(0) + "." + userName.charAt(userName.lastIndexOf(" ") + 1) + ".";
     }
 
     /**

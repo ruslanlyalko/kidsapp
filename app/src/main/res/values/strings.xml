@@ -253,5 +253,7 @@
     <string name="text_check_list_description">*Якщо з певним пунктом виникли труднощі,
         будь ласка, вкажіть обставини в коментарях нижче.</string>
     <string name="report_toast_no_image">Відсутнє фото звіту. Сфотографуйте звіт перед збереженням!</string>
+    <string name="title_activity_alarm">KIDS APP    Чек-Лист</string>
+    <string name="stop_alarm">Пройти Чек-Лист</string>
 
 </resources>
