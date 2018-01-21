@@ -46,8 +46,7 @@
                 android:clipToPadding="true"
                 android:focusableInTouchMode="false"
                 android:nestedScrollingEnabled="false"
-                android:paddingBottom="64dp"
-                android:scrollbars="vertical" />
+                android:paddingBottom="64dp" />
         </LinearLayout>
 
     </ScrollView>
@@ -79,13 +78,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/transparent"
-                android:hint="@string/hint_comment"
+                android:hint="@string/hint_comment_add"
                 android:inputType="textCapSentences|textMultiLine" />
 
             <!-- Send Button -->
             <RelativeLayout
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
                 android:background="@color/colorAccent"
                 android:focusable="true">
 

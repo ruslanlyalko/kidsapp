@@ -257,5 +257,6 @@
     <string name="stop_alarm">Пройти Чек-Лист</string>
     <string name="text_comments_list">Коментарі</string>
     <string name="button_send">Відправити</string>
+    <string name="hint_comment_add">Введіть повідомлення…</string>
 
 </resources>

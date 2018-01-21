@@ -80,6 +80,17 @@
             android:inputType="textUri"
             android:padding="@dimen/text_margin" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorDividersDark" />
+
+        <CheckBox
+            android:id="@+id/checkbox_comments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/text_comments_list" />
     </LinearLayout>
 
 </ScrollView>

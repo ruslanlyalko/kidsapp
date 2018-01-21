@@ -277,6 +277,7 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
                 .setMessage(R.string.dialog_logout_message)
                 .setPositiveButton("Вийти", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        FirebaseUtils.clearPushToken();
                         mAuth.signOut();
                         Intent intent = new Intent(ProfileActivity.this,
                                 LoginActivity.class);
@@ -286,11 +287,7 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
                         finish();
                     }
                 })
-                .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
+                .setNegativeButton("Повернутись", null)
                 .show();
     }
 

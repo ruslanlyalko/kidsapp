@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -48,8 +49,9 @@ public class MessageEditActivity extends AppCompatActivity {
     @BindView(R.id.edit_link) EditText textLink;
     @BindView(R.id.edit_description) EditText textDescription;
     @BindView(R.id.image_view) ImageView imageView;
-    boolean isNew = false;
-    boolean needToSave = false;
+    @BindView(R.id.checkbox_comments) CheckBox mCheckBoxComments;
+    private boolean isNew = false;
+    private boolean needToSave = false;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private Message mMessage = new Message();
@@ -122,6 +124,7 @@ public class MessageEditActivity extends AppCompatActivity {
                 textTitle2.setText(mMessage.getTitle2());
                 textLink.setText(mMessage.getLink());
                 textDescription.setText(mMessage.getDescription());
+                mCheckBoxComments.setChecked(mMessage.getCommentsEnabled());
             }
         }
         needToSave = false;
@@ -132,6 +135,7 @@ public class MessageEditActivity extends AppCompatActivity {
         mMessage.setTitle2(textTitle2.getText().toString());
         mMessage.setLink(textLink.getText().toString());
         mMessage.setDescription(textDescription.getText().toString());
+        mMessage.setCommentsEnabled(mCheckBoxComments.isChecked());
     }
 
     private void addNotification() {
@@ -143,12 +147,9 @@ public class MessageEditActivity extends AppCompatActivity {
         mMessage.setUserId(mUser.getUid());
         mMessage.setUserName(mUser.getDisplayName());
         database.getReference(DefaultConfigurations.DB_MESSAGES)
-                .child(notKey).setValue(mMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                FirebaseUtils.updateNotificationsForAllUsers(notKey, mMessage.getTitle1(), "Створено нове повідомлення", MessageType.MESSAGE);
-                Snackbar.make(imageView, getString(R.string.not_added), Snackbar.LENGTH_SHORT).show();
-            }
+                .child(notKey).setValue(mMessage).addOnCompleteListener(task -> {
+            FirebaseUtils.updateNotificationsForAllUsers(notKey, mMessage.getTitle1(), "Створено нове повідомлення", MessageType.MESSAGE);
+            Snackbar.make(imageView, getString(R.string.not_added), Snackbar.LENGTH_SHORT).show();
         });
         needToSave = false;
     }

@@ -34,7 +34,7 @@ public class FirebaseUtils {
                     public void onDataChange(final DataSnapshot dataSnapshot) {
                         for (DataSnapshot userSS : dataSnapshot.getChildren()) {
                             User user = userSS.getValue(User.class);
-                            if (user != null) {//todo:&& !user.getUserId().equals(FirebaseAuth.getInstance().getUid())) {
+                            if (user != null && !user.getUserId().equals(FirebaseAuth.getInstance().getUid())) {
                                 sendUserNotification(user.getUserId(), notification1);
                                 sendPushNotification(new PushNotification(title1,
                                         title2,
@@ -66,6 +66,14 @@ public class FirebaseUtils {
                     .getReference(DefaultConfigurations.DB_PUSH_NOTIFICATIONS)
                     .push()
                     .setValue(notification);
+    }
+
+    public static void clearPushToken() {
+        FirebaseDatabase.getInstance()
+                .getReference(DefaultConfigurations.DB_USERS)
+                .child(FirebaseAuth.getInstance().getUid())
+                .child("token")
+                .setValue("");
     }
 
     public static void clearNotificationsForAllUsers(final String notKey) {
