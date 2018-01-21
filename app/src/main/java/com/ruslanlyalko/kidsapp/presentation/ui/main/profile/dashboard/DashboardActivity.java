@@ -402,6 +402,8 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
         int mkArtCount = 0;
         int mkArtChildren = 0;
         String usersSalary = "";
+        mUsersSalaryAdapter.clearAll();
+
         for (User user : userList) {
             int uPercentTotal = 0;
             int uStavka = 0;
