@@ -11,6 +11,7 @@ public class Message {
 
     private String userId;
     private String userName;
+    private boolean commentsEnabled;
 
     public Message() {
     }
@@ -24,6 +25,14 @@ public class Message {
         this.date = date;
         this.userId = userId;
         this.userName = userName;
+    }
+
+    public boolean getCommentsEnabled() {
+        return commentsEnabled;
+    }
+
+    public void setCommentsEnabled(final boolean commentsEnabled) {
+        this.commentsEnabled = commentsEnabled;
     }
 
     public String getKey() {

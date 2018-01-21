@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
+import com.ruslanlyalko.kidsapp.data.models.MessageType;
 import com.ruslanlyalko.kidsapp.data.models.Notification;
 import com.ruslanlyalko.kidsapp.data.models.PushNotification;
 import com.ruslanlyalko.kidsapp.data.models.User;
@@ -23,9 +24,9 @@ public class FirebaseUtils {
         FirebaseUtils.mIsAdmin = mIsAdmin;
     }
 
-    public static void updateNotificationsForAllUsers(final String notKey, final String title1, final String title2) {
+    public static void updateNotificationsForAllUsers(final String messageKey, final String title1, final String title2, MessageType messageType) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        final Notification notification1 = new Notification(notKey);
+        final Notification notification1 = new Notification(messageKey);
         FirebaseDatabase.getInstance()
                 .getReference(DefaultConfigurations.DB_USERS)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -34,19 +35,13 @@ public class FirebaseUtils {
                         for (DataSnapshot userSS : dataSnapshot.getChildren()) {
                             User user = userSS.getValue(User.class);
                             if (user != null) {//todo:&& !user.getUserId().equals(FirebaseAuth.getInstance().getUid())) {
-                                FirebaseDatabase.getInstance()
-                                        .getReference(DefaultConfigurations.DB_USERS_NOTIFICATIONS)
-                                        .child(user.getUserId())
-                                        .child(notification1.getKey())
-                                        .setValue(notification1);
-                                if (user.getToken() != null && !user.getToken().isEmpty())
-                                    FirebaseDatabase.getInstance()
-                                            .getReference(DefaultConfigurations.DB_PUSH_NOTIFICATIONS)
-                                            .push()
-                                            .setValue(new PushNotification(title1,
-                                                    title2,
-                                                    user.getToken(), notKey,
-                                                    currentUser.getUid(), currentUser.getDisplayName()));
+                                sendUserNotification(user.getUserId(), notification1);
+                                sendPushNotification(new PushNotification(title1,
+                                        title2,
+                                        user.getToken(), messageKey,
+                                        currentUser.getUid(),
+                                        currentUser.getDisplayName(),
+                                        messageType));
                             }
                         }
                     }
@@ -55,6 +50,22 @@ public class FirebaseUtils {
                     public void onCancelled(final DatabaseError databaseError) {
                     }
                 });
+    }
+
+    private static void sendUserNotification(String userId, Notification notification1) {
+        FirebaseDatabase.getInstance()
+                .getReference(DefaultConfigurations.DB_USERS_NOTIFICATIONS)
+                .child(userId)
+                .child(notification1.getKey())
+                .setValue(notification1);
+    }
+
+    private static void sendPushNotification(PushNotification notification) {
+        if (notification.getToken() != null && !notification.getToken().isEmpty())
+            FirebaseDatabase.getInstance()
+                    .getReference(DefaultConfigurations.DB_PUSH_NOTIFICATIONS)
+                    .push()
+                    .setValue(notification);
     }
 
     public static void clearNotificationsForAllUsers(final String notKey) {

@@ -11,7 +11,8 @@ public interface DefaultConfigurations {
     String DB_USERS = "USERS";
     String DB_USERS_NOTIFICATIONS = "USERS_NOTIFICATIONS";
     String DB_PUSH_NOTIFICATIONS = "PUSH_NOTIFICATIONS";
-    String DB_MESSAGES = "NOTIFICATIONS";
+    String DB_MESSAGES = "MESSAGES";
+    String DB_MESSAGES_COMMENTS = "MESSAGES_COMMENTS";
     String DB_MK = "MK";
     String DB_EXPENSES = "COSTS";
     String DB_COMMENTS = "COMMENTS";

@@ -13,7 +13,7 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.ruslanlyalko.kidsapp.R;
-import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.MessageDetailsActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.MessageDetailsActivity;
 
 import java.util.Map;
 
@@ -45,7 +45,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         builder.setContentText(payload.get("message"));
         builder.setTicker(payload.get("message"));
         builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_comment_primary));
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         builder.setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND);
         builder.setAutoCancel(true);
         builder.setVibrate(new long[]{0,
@@ -53,13 +53,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 200, 300,
                 100, 100,
                 100, 100,
-                100, 100,
-                200, 100,
-                200, 100,
-                200, 100,
-                200, 200,
-                100, 100,
-                100, 100});
+                100, 100
+//                200, 100,
+//                200, 100,
+//                200, 100,
+//                200, 200,
+//                100, 100,
+//                100, 100
+        });
         Intent resultIntent = MessageDetailsActivity.getLaunchIntent(this, payload.get("messageKey"));
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addNextIntent(resultIntent);

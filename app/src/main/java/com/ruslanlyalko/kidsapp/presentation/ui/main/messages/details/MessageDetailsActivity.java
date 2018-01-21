@@ -1,8 +1,6 @@
-package com.ruslanlyalko.kidsapp.presentation.ui.main.messages;
+package com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,11 +9,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,23 +30,35 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Constants;
+import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.common.Keys;
 import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Message;
+import com.ruslanlyalko.kidsapp.data.models.MessageComment;
+import com.ruslanlyalko.kidsapp.data.models.MessageType;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.MessageEditActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter.CommentsAdapter;
+import com.ruslanlyalko.kidsapp.presentation.widget.OnItemClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MessageDetailsActivity extends AppCompatActivity {
+public class MessageDetailsActivity extends AppCompatActivity implements OnItemClickListener {
 
     @BindView(R.id.text_description) TextView textDescription;
     @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.list_comments) RecyclerView mListComments;
+    @BindView(R.id.card_comments_send) CardView mCardCommentsSend;
+    @BindView(R.id.edit_comment) EditText mEditComment;
+    @BindView(R.id.button_send) ImageButton mButtonSend;
+    @BindView(R.id.scroll_view) ScrollView mScrollView;
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-    private String notKey;
+    private CommentsAdapter mCommentsAdapter = new CommentsAdapter(this);
+    private String mMessageKey;
     private Message mMessage;
 
     public static Intent getLaunchIntent(final Context launchIntent, final String messageId) {
@@ -57,36 +73,71 @@ public class MessageDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notification_details);
         ButterKnife.bind(this);
         parseExtras();
-        FirebaseUtils.markNotificationsAsRead(notKey);
-        loadNotFromDB();
+        setupRecycler();
+        FirebaseUtils.markNotificationsAsRead(mMessageKey);
+        loadDetailsFromDB();
+        loadCommentsFromDB();
     }
 
     private void parseExtras() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            notKey = bundle.getString(Keys.Extras.EXTRA_NOT_ID);
+            mMessageKey = bundle.getString(Keys.Extras.EXTRA_NOT_ID);
         }
     }
 
-    private void loadNotFromDB() {
-        if (notKey == null || notKey.isEmpty()) return;
-        DatabaseReference ref = database.getReference(DefaultConfigurations.DB_MESSAGES).child(notKey);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mMessage = dataSnapshot.getValue(Message.class);
-                updateUI();
-            }
+    private void setupRecycler() {
+        mListComments.setLayoutManager(new LinearLayoutManager(this));
+        mListComments.setAdapter(mCommentsAdapter);
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+    private void loadDetailsFromDB() {
+        if (mMessageKey == null || mMessageKey.isEmpty()) return;
+        database.getReference(DefaultConfigurations.DB_MESSAGES)
+                .child(mMessageKey)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        mMessage = dataSnapshot.getValue(Message.class);
+                        updateUI();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+    }
+
+    private void loadCommentsFromDB() {
+        if (mMessageKey == null || mMessageKey.isEmpty()) return;
+        database.getReference(DefaultConfigurations.DB_MESSAGES_COMMENTS)
+                .child(mMessageKey)
+                .orderByChild("date/time")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        boolean scroll = mCommentsAdapter.getItemCount() > 0;
+                        mCommentsAdapter.clearAll();
+                        for (DataSnapshot commentSS : dataSnapshot.getChildren()) {
+                            MessageComment messageComment = commentSS.getValue(MessageComment.class);
+                            if (messageComment != null) {
+                                mCommentsAdapter.add(messageComment);
+                            }
+                        }
+                        if (scroll)
+                            mScrollView.fullScroll(View.FOCUS_DOWN);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
     }
 
     private void updateUI() {
         if (mMessage != null) {
             invalidateOptionsMenu();
+            mCardCommentsSend.setVisibility(mMessage.getCommentsEnabled() ? View.VISIBLE : View.GONE);
             getSupportActionBar().setTitle(mMessage.getTitle1());
             textDescription.setText(mMessage.getDescription());
             fab.setVisibility((mMessage.getLink() != null && !mMessage.getLink().isEmpty())
@@ -108,15 +159,14 @@ public class MessageDetailsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQUEST_CODE_EDIT) {
-            loadNotFromDB();
+            loadDetailsFromDB();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_item, menu);
+        getMenuInflater().inflate(R.menu.menu_item, menu);
         return true;
     }
 
@@ -157,7 +207,7 @@ public class MessageDetailsActivity extends AppCompatActivity {
 
     private void editMk() {
         Intent intent = new Intent(MessageDetailsActivity.this, MessageEditActivity.class);
-        intent.putExtra(Keys.Extras.EXTRA_ITEM_ID, notKey);
+        intent.putExtra(Keys.Extras.EXTRA_ITEM_ID, mMessageKey);
         startActivityForResult(intent, Constants.REQUEST_CODE_EDIT);
     }
 
@@ -165,18 +215,33 @@ public class MessageDetailsActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(MessageDetailsActivity.this);
         AlertDialog dialog = builder.setTitle(R.string.dialog_delete_notification_title)
                 .setMessage(R.string.dialog_delete_notification_message)
-                .setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        database.getReference(DefaultConfigurations.DB_MESSAGES).child(mMessage.getKey()).removeValue();
-                        FirebaseUtils.clearNotificationsForAllUsers(mMessage.getKey());
-                        onBackPressed();
-                    }
+                .setPositiveButton("Видалити", (dialog1, which) -> {
+                    database.getReference(DefaultConfigurations.DB_MESSAGES)
+                            .child(mMessage.getKey())
+                            .removeValue();
+                    FirebaseUtils.clearNotificationsForAllUsers(mMessage.getKey());
+                    onBackPressed();
                 })
-                .setNegativeButton("Повернутись", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                }).create();
+                .setNegativeButton("Повернутись", null).create();
         dialog.show();
+    }
+
+    @Override
+    public void onItemClicked(final int position) {
+        Toast.makeText(this, DateUtils.toString(mCommentsAdapter.getItemAtPostion(position).getDate(),
+                "HH:mm   d.MM EEEE ").toUpperCase(), Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.button_send)
+    public void onSendButtonClicked() {
+        String comment = mEditComment.getText().toString().trim();
+        mEditComment.setText("");
+        if (comment.isEmpty()) return;
+        if (mMessageKey.isEmpty()) return;
+        DatabaseReference ref = database.getReference(DefaultConfigurations.DB_MESSAGES_COMMENTS)
+                .child(mMessageKey)
+                .push();
+        ref.setValue(new MessageComment(ref.getKey(), comment, mUser));
+        FirebaseUtils.updateNotificationsForAllUsers(mMessageKey, mMessage.getTitle1(), "Добавлено новий коментар", MessageType.COMMENTS);
     }
 }

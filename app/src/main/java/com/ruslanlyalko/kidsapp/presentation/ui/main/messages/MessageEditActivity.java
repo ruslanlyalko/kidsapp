@@ -31,6 +31,7 @@ import com.ruslanlyalko.kidsapp.common.Keys;
 import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Message;
+import com.ruslanlyalko.kidsapp.data.models.MessageType;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -145,7 +146,7 @@ public class MessageEditActivity extends AppCompatActivity {
                 .child(notKey).setValue(mMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                FirebaseUtils.updateNotificationsForAllUsers(notKey, mMessage.getTitle1(), "Створено нове повідомлення");
+                FirebaseUtils.updateNotificationsForAllUsers(notKey, mMessage.getTitle1(), "Створено нове повідомлення", MessageType.MESSAGE);
                 Snackbar.make(imageView, getString(R.string.not_added), Snackbar.LENGTH_SHORT).show();
             }
         });
@@ -158,7 +159,7 @@ public class MessageEditActivity extends AppCompatActivity {
                 .child(mMessage.getKey()).setValue(mMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                FirebaseUtils.updateNotificationsForAllUsers(notKey, mMessage.getTitle1(), "Повідомленя відредаговане");
+                FirebaseUtils.updateNotificationsForAllUsers(notKey, mMessage.getTitle1(), "Повідомленя відредаговане", MessageType.MESSAGE);
                 Snackbar.make(imageView, getString(R.string.mk_updated), Snackbar.LENGTH_SHORT).show();
             }
         });

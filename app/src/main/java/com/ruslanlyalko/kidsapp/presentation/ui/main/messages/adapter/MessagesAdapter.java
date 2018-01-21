@@ -1,7 +1,6 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.messages.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ruslanlyalko.kidsapp.R;
-import com.ruslanlyalko.kidsapp.common.Keys;
 import com.ruslanlyalko.kidsapp.data.models.Message;
 import com.ruslanlyalko.kidsapp.data.models.Notification;
-import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.MessageDetailsActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.MessageDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,23 +50,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
         holder.bindData(message);
     }
 
-    /*
-        private void removeNotification(Notification notification, int position, MyViewHolder holder) {
-            //Close panel
-            editNotification(notification, holder, false);
-
-            mMessageList.remove(position);
-            mDatabase.getReference(Constants.DB_MESSAGES)
-                    .child(notification.getKey()).removeValue();
-            notifyItemRemoved(position);
-        }
-
-
-        private void updateMk(Notification updatedNotification) {
-            mDatabase.getReference(Constants.DB_MESSAGES)
-                    .child(updatedNotification.getKey()).setValue(updatedNotification);
-        }
-    */
     @Override
     public int getItemCount() {
         return mMessageList.size();
@@ -93,14 +74,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
                     ? R.drawable.ic_comment_primary : R.drawable.ic_comment));
             title1.setText(message.getTitle1());
             title2.setText(message.getTitle2());
-            date.setText(message.getDate());
-            panelItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, MessageDetailsActivity.class);
-                    intent.putExtra(Keys.Extras.EXTRA_NOT_ID, message.getKey());
-                    mContext.startActivity(intent);
-                }
+            date.setText(message.getDate().substring(0, message.getDate().length() - 5));
+            panelItem.setOnClickListener(v -> {
+                mContext.startActivity(MessageDetailsActivity.getLaunchIntent(mContext, message.getKey()));
             });
         }
     }

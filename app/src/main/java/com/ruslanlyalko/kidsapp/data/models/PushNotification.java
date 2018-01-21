@@ -17,12 +17,13 @@ public class PushNotification {
     private String messageKey;
     private String senderId;
     private String senderName;
+    private String type;
     private String date;
 
     public PushNotification() {
     }
 
-    public PushNotification(final String title, final String message, final String token, final String messageKey, final String senderId, final String senderName) {
+    public PushNotification(final String title, final String message, final String token, final String messageKey, final String senderId, final String senderName, MessageType messageType) {
         this.title = title;
         this.message = message;
         this.token = token;
@@ -30,6 +31,15 @@ public class PushNotification {
         this.senderId = senderId;
         this.senderName = senderName;
         this.date = DateUtils.toString(new Date(), "d-M-yyyy HH:mm:ss");
+        this.type = messageType.name().toUpperCase();
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(final String type) {
+        this.type = type;
     }
 
     public String getMessageKey() {

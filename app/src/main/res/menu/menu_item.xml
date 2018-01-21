@@ -5,11 +5,13 @@
     <item
         android:id="@+id/action_edit"
         android:icon="@drawable/ic_settings"
-        android:title="@string/action_edit" />
+        android:title="@string/action_edit"
+        android:visible="false" />
 
     <item
         android:id="@+id/action_delete"
         android:icon="@drawable/ic_action_delete_red"
-        android:title="@string/action_delete_mk" />
+        android:title="@string/action_delete_mk"
+        android:visible="false" />
 
 </menu>
