@@ -258,5 +258,6 @@
     <string name="text_comments_list">Коментарі</string>
     <string name="button_send">Відправити</string>
     <string name="hint_comment_add">Введіть повідомлення…</string>
+    <string name="dialog_remove_title">Видалити повідомлення?</string>
 
 </resources>

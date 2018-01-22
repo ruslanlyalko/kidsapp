@@ -24,7 +24,7 @@ public class FirebaseUtils {
         FirebaseUtils.mIsAdmin = mIsAdmin;
     }
 
-    public static void updateNotificationsForAllUsers(final String messageKey, final String title1, final String title2, MessageType messageType) {
+    public static void updateNotificationsForAllUsers(final String messageKey, final String title1, final String pushMessage, MessageType messageType) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         final Notification notification1 = new Notification(messageKey);
         FirebaseDatabase.getInstance()
@@ -37,7 +37,7 @@ public class FirebaseUtils {
                             if (user != null && !user.getUserId().equals(FirebaseAuth.getInstance().getUid())) {
                                 sendUserNotification(user.getUserId(), notification1);
                                 sendPushNotification(new PushNotification(title1,
-                                        title2,
+                                        pushMessage,
                                         user.getToken(), messageKey,
                                         currentUser.getUid(),
                                         currentUser.getDisplayName(),

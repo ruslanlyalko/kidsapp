@@ -1,5 +1,7 @@
 package com.ruslanlyalko.kidsapp.data.models;
 
+import java.util.Date;
+
 public class Message {
 
     private String key;
@@ -8,6 +10,9 @@ public class Message {
     private String description;
     private String link;
     private String date;
+    private Date createdAt = new Date();
+    private Date updatedAt = new Date();
+    private String lastComment;
 
     private String userId;
     private String userName;
@@ -33,6 +38,30 @@ public class Message {
 
     public void setCommentsEnabled(final boolean commentsEnabled) {
         this.commentsEnabled = commentsEnabled;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(final Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(final Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getLastComment() {
+        return lastComment;
+    }
+
+    public void setLastComment(final String lastComment) {
+        this.lastComment = lastComment;
     }
 
     public String getKey() {

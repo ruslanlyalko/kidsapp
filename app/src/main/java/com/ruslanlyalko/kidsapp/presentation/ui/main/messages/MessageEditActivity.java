@@ -2,7 +2,6 @@ package com.ruslanlyalko.kidsapp.presentation.ui.main.messages;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +17,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -61,7 +58,7 @@ public class MessageEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fadein, R.anim.nothing);
-        setContentView(R.layout.activity_notification_edit);
+        setContentView(R.layout.activity_message_edit);
         ButterKnife.bind(this);
         parseExtras();
         isNew = notKey == null;
@@ -157,12 +154,10 @@ public class MessageEditActivity extends AppCompatActivity {
     private void updateNotification() {
         updateNotModel();
         database.getReference(DefaultConfigurations.DB_MESSAGES)
-                .child(mMessage.getKey()).setValue(mMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                FirebaseUtils.updateNotificationsForAllUsers(notKey, mMessage.getTitle1(), "Повідомленя відредаговане", MessageType.MESSAGE);
-                Snackbar.make(imageView, getString(R.string.mk_updated), Snackbar.LENGTH_SHORT).show();
-            }
+                .child(mMessage.getKey()).setValue(mMessage).addOnCompleteListener(task -> {
+            FirebaseUtils.updateNotificationsForAllUsers(notKey, mMessage.getTitle1(),
+                    "Повідомленя обмновлено", MessageType.MESSAGE);
+            Snackbar.make(imageView, getString(R.string.mk_updated), Snackbar.LENGTH_SHORT).show();
         });
         needToSave = false;
     }

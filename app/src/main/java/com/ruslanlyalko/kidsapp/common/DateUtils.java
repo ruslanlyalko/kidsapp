@@ -117,6 +117,20 @@ public class DateUtils {
         return (int) TimeUnit.MILLISECONDS.toMinutes(diff);
     }
 
+    public static String getUpdatedAt(final Date updatedAt) {
+        if (isTodayOrFuture(updatedAt))
+            return toString(updatedAt, "HH:mm");
+        return toString(updatedAt, "dd.MM.yyyy");
+    }
+
+    public static boolean isTodayOrFuture(Date date) {
+        Date today = new Date();
+        today.setHours(0);
+        today.setMinutes(0);
+        today.setSeconds(0);
+        return date.getTime() >= today.getTime();
+    }
+
     public static String toString(final Date date, final String format) {
         return new SimpleDateFormat(format, Locale.getDefault()).format(date);
     }

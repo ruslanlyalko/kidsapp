@@ -50,7 +50,7 @@ public class MessagesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
-        setContentView(R.layout.activity_notification);
+        setContentView(R.layout.activity_message);
         ButterKnife.bind(this);
         initRecycler();
         loadMessages();
@@ -113,7 +113,7 @@ public class MessagesActivity extends AppCompatActivity {
                             Notification notification = notifSS.getValue(Notification.class);
                             notifications.add(notification);
                         }
-                        mMessagesAdapter.updateNotifs(notifications);
+                        mMessagesAdapter.updateNotifications(notifications);
                     }
 
                     @Override

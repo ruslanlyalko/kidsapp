@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ruslanlyalko.kidsapp.R;
+import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.data.models.Message;
 import com.ruslanlyalko.kidsapp.data.models.Notification;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.MessageDetailsActivity;
@@ -31,7 +32,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
         this.mMessageList = messageList;
     }
 
-    public void updateNotifs(final List<Notification> notifications) {
+    public void updateNotifications(final List<Notification> notifications) {
         mNotifications.clear();
         mNotifications.addAll(notifications);
         notifyDataSetChanged();
@@ -40,7 +41,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_notification, parent, false);
+                .inflate(R.layout.card_message, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -60,7 +61,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
         @BindView(R.id.title1) TextView title1;
         @BindView(R.id.title2) TextView title2;
         @BindView(R.id.text_date) TextView date;
-        @BindView(R.id.panel_item) LinearLayout panelItem;
+        @BindView(R.id.layout_root) LinearLayout mLinearLayout;
         @BindView(R.id.image_view) ImageView mImageView;
 
         MyViewHolder(View view) {
@@ -73,11 +74,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
             mImageView.setImageDrawable(mImageView.getResources().getDrawable(isNew
                     ? R.drawable.ic_comment_primary : R.drawable.ic_comment));
             title1.setText(message.getTitle1());
-            title2.setText(message.getTitle2());
-            date.setText(message.getDate().substring(0, message.getDate().length() - 5));
-            panelItem.setOnClickListener(v -> {
-                mContext.startActivity(MessageDetailsActivity.getLaunchIntent(mContext, message.getKey()));
-            });
+            title2.setText(message.getLastComment() != null && !message.getLastComment().isEmpty()
+                    ? message.getLastComment() : message.getTitle2());
+            date.setText(DateUtils.getUpdatedAt(message.getUpdatedAt()));
+            mLinearLayout.setOnClickListener(v ->
+                    mContext.startActivity(MessageDetailsActivity.getLaunchIntent(mContext, message.getKey())));
         }
     }
 }
