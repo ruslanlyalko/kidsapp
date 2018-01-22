@@ -13,7 +13,6 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,7 +37,6 @@ public class MessagesActivity extends AppCompatActivity {
     @BindView(R.id.recycler_view) RecyclerView mMessagesList;
 
     private MessagesAdapter mMessagesAdapter;
-    private List<Message> mMessageList = new ArrayList<>();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -59,7 +57,7 @@ public class MessagesActivity extends AppCompatActivity {
     }
 
     private void initRecycler() {
-        mMessagesAdapter = new MessagesAdapter(this, mMessageList);
+        mMessagesAdapter = new MessagesAdapter(this);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         mMessagesList.setLayoutManager(mLayoutManager);
         mMessagesList.setItemAnimator(new DefaultItemAnimator());
@@ -67,37 +65,24 @@ public class MessagesActivity extends AppCompatActivity {
     }
 
     private void loadMessages() {
-        mMessageList.clear();
         FirebaseDatabase.getInstance().getReference(DefaultConfigurations.DB_MESSAGES)
-                .addChildEventListener(new ChildEventListener() {
+                .orderByChild("updatedAt/time")
+                .addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Message message = dataSnapshot.getValue(Message.class);
-                        if (message != null) {
-                            mMessageList.add(0, message);
-                            mMessagesAdapter.notifyItemInserted(0);
-                            mMessagesList.smoothScrollToPosition(0);
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        List<Message> list = new ArrayList<>();
+                        for (DataSnapshot messageSS : dataSnapshot.getChildren()) {
+                            Message message = messageSS.getValue(Message.class);
+                            if (message != null) {
+                                list.add(0, message);
+                            }
                         }
+                        mMessagesAdapter.clearAll();
+                        mMessagesAdapter.addAll(list);
                     }
 
                     @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                        Message message = dataSnapshot.getValue(Message.class);
-                        updateNot(message);
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        Message message = dataSnapshot.getValue(Message.class);
-                        removeNot(message.getKey());
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(final DatabaseError databaseError) {
                     }
                 });
     }
@@ -120,35 +105,6 @@ public class MessagesActivity extends AppCompatActivity {
                     public void onCancelled(final DatabaseError databaseError) {
                     }
                 });
-    }
-
-    private void updateNot(Message message) {
-        int ind = 0;
-        for (Message m : mMessageList) {
-            if (m.getKey().equals(message.getKey())) {
-                break;
-            }
-            ind++;
-        }
-        if (ind < mMessageList.size()) {
-            mMessageList.set(ind, message);
-            mMessagesAdapter.notifyItemChanged(ind);
-            mMessagesList.smoothScrollToPosition(ind);
-        }
-    }
-
-    private void removeNot(String key) {
-        int ind = 0;
-        for (Message m : mMessageList) {
-            if (m.getKey().equals(key)) {
-                break;
-            }
-            ind++;
-        }
-        if (ind < mMessageList.size()) {
-            mMessageList.remove(ind);
-            mMessagesAdapter.notifyItemRemoved(ind);
-        }
     }
 
     @OnClick(R.id.fab)

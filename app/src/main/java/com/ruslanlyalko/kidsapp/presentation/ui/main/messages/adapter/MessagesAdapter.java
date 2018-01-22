@@ -24,18 +24,44 @@ import butterknife.ButterKnife;
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<Message> mMessageList;
+    private List<Message> mDataSource = new ArrayList<>();
     private List<Notification> mNotifications = new ArrayList<>();
 
-    public MessagesAdapter(Context mContext, List<Message> messageList) {
+    public MessagesAdapter(Context mContext) {
         this.mContext = mContext;
-        this.mMessageList = messageList;
     }
 
     public void updateNotifications(final List<Notification> notifications) {
         mNotifications.clear();
         mNotifications.addAll(notifications);
         notifyDataSetChanged();
+    }
+
+    public void clearAll() {
+        mDataSource.clear();
+        notifyDataSetChanged();
+    }
+
+    public void add(final Message messageComment) {
+        if (mDataSource.contains(messageComment)) return;
+        mDataSource.add(messageComment);
+        notifyItemInserted(mDataSource.size());
+    }
+
+    public void addAll(final List<Message> messageComments) {
+        mDataSource.addAll(messageComments);
+        notifyDataSetChanged();
+    }
+
+    public void update(final Message messageComment) {
+        for (int i = 0; i < mDataSource.size(); i++) {
+            Message current = mDataSource.get(i);
+            if (messageComment.getKey().equals(current.getKey())) {
+                mDataSource.set(i, messageComment);
+                notifyItemChanged(i);
+                return;
+            }
+        }
     }
 
     @Override
@@ -47,13 +73,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        final Message message = mMessageList.get(position);
+        final Message message = mDataSource.get(position);
         holder.bindData(message);
     }
 
     @Override
     public int getItemCount() {
-        return mMessageList.size();
+        return mDataSource.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

@@ -39,7 +39,10 @@ import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter.Co
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter.OnCommentClickListener;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -223,7 +226,6 @@ public class MessageDetailsActivity extends AppCompatActivity implements OnComme
                     scrolledDistance = 0;
                 } else if (scrolledDistance < -HIDE_THRESHOLD && !controlsVisible) {
                     mFab.show();
-                    mFab.setAlpha(0.5f);
                     controlsVisible = true;
                     scrolledDistance = 0;
                 }
@@ -336,11 +338,24 @@ public class MessageDetailsActivity extends AppCompatActivity implements OnComme
         mEditComment.setText("");
         if (comment.isEmpty()) return;
         if (mMessageKey.isEmpty()) return;
+        sendComment(comment);
+    }
+
+    private void sendComment(String comment) {
+        String pushMessage = mUser.getDisplayName() + ": " + comment;
         DatabaseReference ref = database.getReference(DefaultConfigurations.DB_MESSAGES_COMMENTS)
                 .child(mMessageKey)
                 .push();
         ref.setValue(new MessageComment(ref.getKey(), comment, mUser));
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("lastComment", pushMessage);
+        childUpdates.put("updatedAt", new Date());
+        database.getReference(DefaultConfigurations.DB_MESSAGES)
+                .child(mMessageKey)
+                .updateChildren(childUpdates);
         FirebaseUtils.updateNotificationsForAllUsers(mMessageKey,
-                mMessage.getTitle1(), mUser.getDisplayName() + ": " + comment, MessageType.COMMENTS);
+                mMessage.getTitle1(),
+                pushMessage,
+                MessageType.COMMENTS);
     }
 }
