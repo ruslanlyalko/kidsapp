@@ -1,7 +1,10 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +30,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Constants;
 import com.ruslanlyalko.kidsapp.common.DateUtils;
@@ -37,7 +44,10 @@ import com.ruslanlyalko.kidsapp.data.models.MessageType;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.MessageEditActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter.CommentsAdapter;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter.OnCommentClickListener;
+import com.ruslanlyalko.kidsapp.presentation.widget.PhotoPreviewActivity;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,8 +57,11 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class MessageDetailsActivity extends AppCompatActivity implements OnCommentClickListener {
+public class MessageDetailsActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, OnCommentClickListener {
 
     @BindView(R.id.text_description) TextView textDescription;
     @BindView(R.id.list_comments) RecyclerView mListComments;
@@ -56,6 +69,8 @@ public class MessageDetailsActivity extends AppCompatActivity implements OnComme
     @BindView(R.id.edit_comment) EditText mEditComment;
     @BindView(R.id.button_send) FloatingActionButton mButtonSend;
     @BindView(R.id.fab) FloatingActionButton mFab;
+    @BindView(R.id.button_attachments) ImageView mButtonAttachments;
+    @BindView(R.id.progress_bar) ProgressBar mProgressBar;
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -172,7 +187,9 @@ public class MessageDetailsActivity extends AppCompatActivity implements OnComme
                 MessageComment messageComment = dataSnapshot.getValue(MessageComment.class);
                 if (messageComment != null) {
                     mCommentsAdapter.add(messageComment);
-                    FirebaseUtils.markNotificationsAsRead(mMessageKey);
+                    if (!isDestroyed()) {
+                        FirebaseUtils.markNotificationsAsRead(mMessageKey);
+                    }
                     if (mMessage.getCommentsEnabled())
                         mListComments.postDelayed(() -> mListComments.smoothScrollToPosition(mCommentsAdapter.getItemCount()), 500);
                 }
@@ -197,41 +214,6 @@ public class MessageDetailsActivity extends AppCompatActivity implements OnComme
 
             @Override
             public void onCancelled(final DatabaseError databaseError) {
-            }
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_CODE_EDIT) {
-            loadDetailsFromDB();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mListComments.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            private static final int HIDE_THRESHOLD = 20;
-            private int scrolledDistance = 0;
-            private boolean controlsVisible = true;
-
-            @Override
-            public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (scrolledDistance > HIDE_THRESHOLD && controlsVisible) {
-                    mFab.hide();
-                    controlsVisible = false;
-                    scrolledDistance = 0;
-                } else if (scrolledDistance < -HIDE_THRESHOLD && !controlsVisible) {
-                    mFab.show();
-                    controlsVisible = true;
-                    scrolledDistance = 0;
-                }
-                if ((controlsVisible && dy > 0) || (!controlsVisible && dy < 0)) {
-                    scrolledDistance += dy;
-                }
             }
         });
     }
@@ -301,13 +283,17 @@ public class MessageDetailsActivity extends AppCompatActivity implements OnComme
 
     @Override
     public void onItemClicked(final int position) {
-        Toast.makeText(this, DateUtils.toString(mCommentsAdapter.getItemAtPostion(position).getDate(),
-                "EEEE dd.MM.yyyy").toUpperCase(), Toast.LENGTH_SHORT).show();
+        MessageComment item = mCommentsAdapter.getItemAtPosition(position);
+        if (item.getFile() != null && !item.getFile().isEmpty()) {
+            startActivity(PhotoPreviewActivity.getLaunchIntent(this, item.getFile(), item.getUserName()));
+        } else
+            Toast.makeText(this, DateUtils.toString(mCommentsAdapter.getItemAtPosition(position).getDate(),
+                    "EEEE dd.MM.yyyy").toUpperCase(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onItemLongClicked(final int position) {
-        MessageComment item = mCommentsAdapter.getItemAtPostion(position);
+        MessageComment item = mCommentsAdapter.getItemAtPosition(position);
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setTitle(R.string.dialog_remove_title)
                 .setMessage(item.getMessage())
@@ -357,5 +343,120 @@ public class MessageDetailsActivity extends AppCompatActivity implements OnComme
                 mMessage.getTitle1(),
                 pushMessage,
                 MessageType.COMMENTS);
+    }
+
+    @OnClick(R.id.button_attachments)
+    public void onAttachmentsViewClicked() {
+        String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            chooseFileToUpload();
+        }
+    }
+
+    void chooseFileToUpload() {
+        EasyImage.openChooserWithGallery(this, getString(R.string.choose_images), 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_CODE_EDIT) {
+            loadDetailsFromDB();
+        }
+        EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
+            @Override
+            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                //Some error handling
+            }
+
+            @Override
+            public void onImagePicked(final File imageFile, final EasyImage.ImageSource source, final int type) {
+                onPhotosReturned(imageFile);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mListComments.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private static final int HIDE_THRESHOLD = 20;
+            private int scrolledDistance = 0;
+            private boolean controlsVisible = true;
+
+            @Override
+            public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (scrolledDistance > HIDE_THRESHOLD && controlsVisible) {
+                    mFab.hide();
+                    controlsVisible = false;
+                    scrolledDistance = 0;
+                } else if (scrolledDistance < -HIDE_THRESHOLD && !controlsVisible) {
+                    mFab.show();
+                    controlsVisible = true;
+                    scrolledDistance = 0;
+                }
+                if ((controlsVisible && dy > 0) || (!controlsVisible && dy < 0)) {
+                    scrolledDistance += dy;
+                }
+            }
+        });
+    }
+
+    private void onPhotosReturned(final File imageFile) {
+        try {
+            showProgress(true);
+            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.toString());//= imageView.getDrawingCache();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, baos);
+            byte[] bytes = baos.toByteArray();
+            // Meta data for imageView
+            // name of file in Storage
+            final String filename = DateUtils.getCurrentTimeStamp() + "_" + ".jpg";
+            UploadTask uploadTask = FirebaseStorage.getInstance()
+                    .getReference(DefaultConfigurations.STORAGE_MESSAGES_COMMENTS)
+                    .child(filename)
+                    .putBytes(bytes);
+            uploadTask.addOnSuccessListener(taskSnapshot -> {
+                showProgress(false);
+                if (taskSnapshot.getDownloadUrl() == null) return;
+                sendCommentFile(taskSnapshot.getDownloadUrl().toString());
+            }).addOnFailureListener(exception -> showProgress(false));
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            showProgress(false);
+        }
+    }
+
+    private void showProgress(final boolean show) {
+        mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        mButtonAttachments.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    private void sendCommentFile(String file) {
+        String pushMessage = mUser.getDisplayName() + ": відправив фото";
+        DatabaseReference ref = database.getReference(DefaultConfigurations.DB_MESSAGES_COMMENTS)
+                .child(mMessageKey)
+                .push();
+        ref.setValue(new MessageComment(ref.getKey(), "фото", file, mUser));
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("lastComment", pushMessage);
+        childUpdates.put("updatedAt", new Date());
+        database.getReference(DefaultConfigurations.DB_MESSAGES)
+                .child(mMessageKey)
+                .updateChildren(childUpdates);
+        FirebaseUtils.updateNotificationsForAllUsers(mMessageKey,
+                mMessage.getTitle1(),
+                pushMessage,
+                MessageType.COMMENTS);
+    }
+
+    @Override
+    public void onPermissionsGranted(final int requestCode, final List<String> perms) {
+        chooseFileToUpload();
+    }
+
+    @Override
+    public void onPermissionsDenied(final int requestCode, final List<String> perms) {
     }
 }

@@ -39,7 +39,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
         holder.bindData(user);
     }
 
-    public User getItemAtPostion(final int position) {
+    public User getItemAtPosition(final int position) {
         return mDataSource.get(position);
     }
 

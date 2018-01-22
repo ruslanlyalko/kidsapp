@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -151,7 +150,8 @@ public class MkEditActivity extends AppCompatActivity {
                 if (mMk.getImageUri() != null && !mMk.getImageUri().isEmpty()) {
                     StorageReference ref = storage.getReference(DefaultConfigurations.STORAGE_MK).child(mMk.getImageUri());
                     imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    Glide.with(this).using(new FirebaseImageLoader()).load(ref).into(imageView);
+                    ref.getDownloadUrl().addOnSuccessListener(uri ->
+                            Glide.with(MkEditActivity.this).load(uri).into(imageView));
                 }
             }
         }
@@ -176,12 +176,7 @@ public class MkEditActivity extends AppCompatActivity {
             mMk.setImageUri(imageName);
             // upload to storage
             StorageReference ref = storage.getReference(DefaultConfigurations.STORAGE_MK).child(imageName);
-            ref.putFile(selectedImage).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    progressBar.setVisibility(View.GONE);
-                }
-            });
+            ref.putFile(selectedImage).addOnCompleteListener(task -> progressBar.setVisibility(View.GONE));
         }
     }
 

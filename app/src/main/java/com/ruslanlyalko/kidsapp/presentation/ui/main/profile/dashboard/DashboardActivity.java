@@ -513,7 +513,7 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
 
     @Override
     public void onItemClicked(final int position) {
-        User user = mUsersSalaryAdapter.getItemAtPostion(position);
+        User user = mUsersSalaryAdapter.getItemAtPosition(position);
         startActivity(SalaryActivity.getLaunchIntent(this,
                 user.getUserId(),
                 user));

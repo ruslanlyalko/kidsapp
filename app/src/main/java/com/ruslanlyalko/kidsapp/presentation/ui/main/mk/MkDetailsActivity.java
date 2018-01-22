@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -103,7 +102,8 @@ public class MkDetailsActivity extends AppCompatActivity {
                     ? View.VISIBLE : View.GONE);
             if (mk.getImageUri() != null && !mk.getImageUri().isEmpty()) {
                 StorageReference ref = storage.getReference(DefaultConfigurations.STORAGE_MK).child(mk.getImageUri());
-                Glide.with(this).using(new FirebaseImageLoader()).load(ref).into(imageView);
+                ref.getDownloadUrl().addOnSuccessListener(uri ->
+                        Glide.with(MkDetailsActivity.this).load(uri).into(imageView));
             }
         } else {
             // notification == null

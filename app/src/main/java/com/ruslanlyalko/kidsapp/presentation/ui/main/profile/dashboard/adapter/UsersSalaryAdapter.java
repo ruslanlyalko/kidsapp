@@ -45,7 +45,7 @@ public class UsersSalaryAdapter extends RecyclerView.Adapter<UsersSalaryAdapter.
         return mDataSource.size();
     }
 
-    public User getItemAtPostion(final int position) {
+    public User getItemAtPosition(final int position) {
         return mDataSource.get(position);
     }
 

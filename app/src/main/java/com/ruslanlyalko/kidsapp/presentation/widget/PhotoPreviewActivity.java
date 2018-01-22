@@ -1,17 +1,19 @@
 package com.ruslanlyalko.kidsapp.presentation.widget;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -68,16 +70,16 @@ public class PhotoPreviewActivity extends AppCompatActivity {
         if (uri == null || uri.isEmpty()) return;
         setTitle("Загрузка....");
         if (uri.contains("http")) {
-            Glide.with(PhotoPreviewActivity.this).load(uri).listener(new RequestListener<String, GlideDrawable>() {
+            Glide.with(PhotoPreviewActivity.this).load(uri).listener(new RequestListener<Drawable>() {
                 @Override
-                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                public boolean onLoadFailed(@Nullable final GlideException e, final Object model, final Target<Drawable> target, final boolean isFirstResource) {
                     setTitle("Помилка при загрузці");
                     mProgressBar.setVisibility(View.GONE);
                     return false;
                 }
 
                 @Override
-                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                public boolean onResourceReady(final Drawable resource, final Object model, final Target<Drawable> target, final DataSource dataSource, final boolean isFirstResource) {
                     setTitle("Автор: " + mUserName);
                     mProgressBar.setVisibility(View.GONE);
                     return false;
@@ -86,21 +88,22 @@ public class PhotoPreviewActivity extends AppCompatActivity {
         } else {
             StorageReference ref = FirebaseStorage.getInstance().getReference(mFolder).child(uri);
             //load mPhotoView using Glide
-            Glide.with(PhotoPreviewActivity.this).using(new FirebaseImageLoader()).load(ref).listener(new RequestListener<StorageReference, GlideDrawable>() {
+            ref.getDownloadUrl().addOnSuccessListener(uri1 -> Glide.with(
+                    PhotoPreviewActivity.this).load(uri1).listener(new RequestListener<Drawable>() {
                 @Override
-                public boolean onException(Exception e, StorageReference model, com.bumptech.glide.request.target.Target<GlideDrawable> target, boolean isFirstResource) {
+                public boolean onLoadFailed(@Nullable final GlideException e, final Object model, final Target<Drawable> target, final boolean isFirstResource) {
                     setTitle("Помилка при загрузці");
                     mProgressBar.setVisibility(View.GONE);
                     return false;
                 }
 
                 @Override
-                public boolean onResourceReady(GlideDrawable resource, StorageReference model, com.bumptech.glide.request.target.Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                public boolean onResourceReady(final Drawable resource, final Object model, final Target<Drawable> target, final DataSource dataSource, final boolean isFirstResource) {
                     setTitle("Автор: " + mUserName);
                     mProgressBar.setVisibility(View.GONE);
                     return false;
                 }
-            }).into(mPhotoView);
+            }).into(mPhotoView));
         }
     }
 

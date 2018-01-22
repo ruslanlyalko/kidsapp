@@ -27,49 +27,37 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingEnd="0dp"
-            android:paddingStart="8dp">
+            android:layout_gravity="end"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <RelativeLayout
+                android:layout_width="250dp"
+                android:layout_height="250dp"
                 android:gravity="end"
                 android:minWidth="50dp"
-                android:orientation="vertical"
-                android:padding="8dp">
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/text_user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="12sp"
-                    android:visibility="gone"
-                    tools:text="User Name" />
-
-                <TextView
-                    android:id="@+id/text_comment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxWidth="250dp"
-                    android:textAlignment="textEnd"
-                    android:textSize="14sp"
-                    tools:text="Some textSome " />
+                <ImageView
+                    android:id="@+id/image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/text_comment_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="4dp"
                     android:gravity="end"
                     android:textColor="@color/colorComment"
                     android:textSize="12sp"
                     tools:text="10:00" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <ImageView
                 android:layout_width="24dp"

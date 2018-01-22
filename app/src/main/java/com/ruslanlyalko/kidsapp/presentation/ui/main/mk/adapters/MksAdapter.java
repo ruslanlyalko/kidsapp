@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.ruslanlyalko.kidsapp.R;
@@ -84,51 +83,40 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
             //load image if already defined
             if (mk.getImageUri() != null && !mk.getImageUri().isEmpty()) {
                 StorageReference ref = storage.getReference(DefaultConfigurations.STORAGE_MK).child(mk.getImageUri());
-                Glide.with(mContext).using(new FirebaseImageLoader()).load(ref).into(imageView);
+                ref.getDownloadUrl().addOnSuccessListener(uri ->
+                        Glide.with(mContext).load(uri).into(imageView));
             }
             // button share
-            buttonShare.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, mk.getTitle1());
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, mk.getTitle1() + "\n" + mk.getTitle2() + "\n\n" + mk.getDescription());
-                    sendIntent.setType("text/plain");
-                    mContext.startActivity(sendIntent);
-                }
+            buttonShare.setOnClickListener(v -> {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, mk.getTitle1());
+                sendIntent.putExtra(Intent.EXTRA_TEXT, mk.getTitle1() + "\n" + mk.getTitle2() + "\n\n" + mk.getDescription());
+                sendIntent.setType("text/plain");
+                mContext.startActivity(sendIntent);
             });
-            buttonLink.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mk.getLink() != null && !mk.getLink().isEmpty()) {
-                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                        CustomTabsIntent customTabsIntent = builder.build();
-                        builder.setToolbarColor(ResourcesCompat.getColor(mContext.getResources(), R.color.colorPrimary, null));
-                        customTabsIntent.launchUrl(mContext, Uri.parse(mk.getLink()));
-                    }
+            buttonLink.setOnClickListener(v -> {
+                if (mk.getLink() != null && !mk.getLink().isEmpty()) {
+                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                    CustomTabsIntent customTabsIntent = builder.build();
+                    builder.setToolbarColor(ResourcesCompat.getColor(mContext.getResources(), R.color.colorPrimary, null));
+                    customTabsIntent.launchUrl(mContext, Uri.parse(mk.getLink()));
                 }
             });
             // expand to show description
-            buttonExpand.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (expandPanel.getVisibility() == View.VISIBLE) {
-                        buttonExpand.setImageResource(R.drawable.ic_action_expand_more);
-                        expandPanel.setVisibility(View.GONE);
-                    } else {
-                        buttonExpand.setImageResource(R.drawable.ic_action_expand_less);
-                        expandPanel.setVisibility(View.VISIBLE);
-                    }
+            buttonExpand.setOnClickListener(v -> {
+                if (expandPanel.getVisibility() == View.VISIBLE) {
+                    buttonExpand.setImageResource(R.drawable.ic_action_expand_more);
+                    expandPanel.setVisibility(View.GONE);
+                } else {
+                    buttonExpand.setImageResource(R.drawable.ic_action_expand_less);
+                    expandPanel.setVisibility(View.VISIBLE);
                 }
             });
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, MkDetailsActivity.class);
-                    intent.putExtra(Keys.Extras.EXTRA_ITEM_ID, mk.getKey());
-                    mContext.startActivity(intent);
-                }
+            cardView.setOnClickListener(v -> {
+                Intent intent = new Intent(mContext, MkDetailsActivity.class);
+                intent.putExtra(Keys.Extras.EXTRA_ITEM_ID, mk.getKey());
+                mContext.startActivity(intent);
             });
         }
     }

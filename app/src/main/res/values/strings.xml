@@ -259,5 +259,6 @@
     <string name="button_send">Відправити</string>
     <string name="hint_comment_add">Введіть повідомлення…</string>
     <string name="dialog_remove_title">Видалити повідомлення?</string>
+    <string name="choose_images">Виберіть картинку</string>
 
 </resources>

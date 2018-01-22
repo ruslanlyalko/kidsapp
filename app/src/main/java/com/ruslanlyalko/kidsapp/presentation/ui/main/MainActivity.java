@@ -117,25 +117,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initCurrentUser() {
-        if (mAuth.getCurrentUser() != null) {
-            mDatabase.getReference(DefaultConfigurations.DB_USERS)
-                    .child(mAuth.getCurrentUser().getUid())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(final DataSnapshot dataSnapshot) {
-                            User user = dataSnapshot.getValue(User.class);
-                            if (user != null) {
-                                FirebaseUtils.setIsAdmin(user.getUserIsAdmin());
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(final DatabaseError databaseError) {
-                        }
-                    });
-        } else {
+        if (mAuth.getCurrentUser() == null) {
             finish();
+            return;
         }
+        mDatabase.getReference(DefaultConfigurations.DB_USERS)
+                .child(mAuth.getCurrentUser().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        if (user != null) {
+                            FirebaseUtils.setIsAdmin(user.getUserIsAdmin());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(final DatabaseError databaseError) {
+                    }
+                });
         mDatabase.getReference(DefaultConfigurations.DB_ABOUT)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -185,6 +185,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadBadge() {
+        if (mAuth.getCurrentUser() == null) {
+            finish();
+            return;
+        }
         mDatabase.getReference(DefaultConfigurations.DB_USERS_NOTIFICATIONS)
                 .child(mAuth.getCurrentUser().getUid())
                 .addValueEventListener(new ValueEventListener() {

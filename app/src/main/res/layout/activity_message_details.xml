@@ -65,6 +65,28 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp">
+
+                    <ImageView
+                        android:id="@+id/button_attachments"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:focusable="true"
+                        android:src="@drawable/ic_add_photo"
+                        android:visibility="visible"
+                        tools:ignore="ContentDescription" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
                 <EditText
                     android:id="@+id/edit_comment"
                     android:layout_width="0dp"
@@ -81,10 +103,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="4dp"
-                    android:contentDescription="@string/button_send"
                     android:focusable="true"
                     android:src="@drawable/ic_send"
-                    android:textColor="@color/colorWhite"
                     app:fabSize="mini" />
             </LinearLayout>
 
@@ -96,13 +116,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="70dp"
         android:layout_marginEnd="4dp"
         android:backgroundTint="@color/colorGray"
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_arrow_down"
-        android:visibility="visible"
+        android:visibility="gone"
         app:borderWidth="0dp"
         app:elevation="3dp"
         app:fabSize="mini" />

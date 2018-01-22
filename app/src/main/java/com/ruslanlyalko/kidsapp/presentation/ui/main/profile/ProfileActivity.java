@@ -161,7 +161,7 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
     }
 
     private void updateUI(User user) {
-        if (user == null) return;
+        if (user == null || mAuth.getCurrentUser() == null) return;
         final boolean myPage = mUser.getUserId().equals(mAuth.getCurrentUser().getUid());
         // if current user is admin or open his friends
         fab.setVisibility(FirebaseUtils.isAdmin() || myPage ? View.VISIBLE : View.GONE);
@@ -293,7 +293,7 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
 
     @Override
     public void onItemClicked(final int position) {
-        startActivity(ProfileActivity.getLaunchIntent(this, mUsersAdapter.getItemAtPostion(position).getUserId()));
+        startActivity(ProfileActivity.getLaunchIntent(this, mUsersAdapter.getItemAtPosition(position).getUserId()));
     }
 
     public static Intent getLaunchIntent(final Activity launchIntent, final String userId) {
