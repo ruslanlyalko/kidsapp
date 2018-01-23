@@ -94,11 +94,11 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
         FirebaseUtils.markNotificationsAsRead(mMessageKey);
         loadDetailsFromDB();
         loadCommentsFromDB();
-//        mListComments.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-//            if (bottom < oldBottom) {
-//                mListComments.postDelayed(() -> mListComments.smoothScrollToPosition(mCommentsAdapter.getItemCount()), 500);
-//            }
-//        });
+        mListComments.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            if (bottom < oldBottom) {
+                mListComments.postDelayed(() -> mListComments.smoothScrollToPosition(mCommentsAdapter.getItemCount()), 500);
+            }
+        });
         mCommentsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -116,8 +116,8 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
 
     private void setupRecycler() {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mLayoutManager.setReverseLayout(false);
-        mLayoutManager.setStackFromEnd(true);
+        mLayoutManager.setStackFromEnd(true);//true
+        mLayoutManager.setReverseLayout(false);//false
         mListComments.setLayoutManager(mLayoutManager);
         mListComments.setAdapter(mCommentsAdapter);
     }
@@ -159,6 +159,7 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
                         new Handler().postDelayed(() -> {
                             if (mMessage.getCommentsEnabled()) {
                                 loadMoreCommentsFromDB();
+                                mListComments.smoothScrollToPosition(list.size());
                             }
                         }, 300);
                     }
