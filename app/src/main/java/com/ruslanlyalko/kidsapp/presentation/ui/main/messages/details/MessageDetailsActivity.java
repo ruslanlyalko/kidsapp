@@ -94,11 +94,11 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
         FirebaseUtils.markNotificationsAsRead(mMessageKey);
         loadDetailsFromDB();
         loadCommentsFromDB();
-        mListComments.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            if (bottom < oldBottom) {
-                mListComments.postDelayed(() -> mListComments.smoothScrollToPosition(mCommentsAdapter.getItemCount()), 500);
-            }
-        });
+//        mListComments.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+//            if (bottom < oldBottom) {
+//                mListComments.postDelayed(() -> mListComments.smoothScrollToPosition(mCommentsAdapter.getItemCount()), 500);
+//            }
+//        });
         mCommentsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -115,7 +115,10 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
     }
 
     private void setupRecycler() {
-        mListComments.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setReverseLayout(false);
+        mLayoutManager.setStackFromEnd(true);
+        mListComments.setLayoutManager(mLayoutManager);
         mListComments.setAdapter(mCommentsAdapter);
     }
 
@@ -154,9 +157,9 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
                         mCommentsAdapter.clearAll();
                         mCommentsAdapter.addAll(list);
                         new Handler().postDelayed(() -> {
-                            if (mMessage.getCommentsEnabled())
-                                mListComments.scrollToPosition(mCommentsAdapter.getItemCount());
-                            loadMoreCommentsFromDB();
+                            if (mMessage.getCommentsEnabled()) {
+                                loadMoreCommentsFromDB();
+                            }
                         }, 300);
                     }
 
@@ -172,7 +175,6 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
             mCardCommentsSend.setVisibility(mMessage.getCommentsEnabled() ? View.VISIBLE : View.GONE);
             getSupportActionBar().setTitle(mMessage.getTitle1());
             textDescription.setText(mMessage.getDescription());
-            //fab.setVisibility((mMessage.getLink() != null && !mMessage.getLink().isEmpty()) ? View.VISIBLE : View.GONE);
         } else {
             getSupportActionBar().setTitle(R.string.title_activity_notification_item);
         }
@@ -190,8 +192,6 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
                     if (!isDestroyed()) {
                         FirebaseUtils.markNotificationsAsRead(mMessageKey);
                     }
-                    if (mMessage.getCommentsEnabled())
-                        mListComments.postDelayed(() -> mListComments.smoothScrollToPosition(mCommentsAdapter.getItemCount()), 500);
                 }
             }
 
@@ -406,22 +406,19 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
     private void onPhotosReturned(final File imageFile) {
         try {
             showProgress(true);
-            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.toString());//= imageView.getDrawingCache();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, baos);
-            byte[] bytes = baos.toByteArray();
-            // Meta data for imageView
-            // name of file in Storage
-            final String filename = DateUtils.getCurrentTimeStamp() + "_" + ".jpg";
-            UploadTask uploadTask = FirebaseStorage.getInstance()
-                    .getReference(DefaultConfigurations.STORAGE_MESSAGES_COMMENTS)
-                    .child(filename)
-                    .putBytes(bytes);
-            uploadTask.addOnSuccessListener(taskSnapshot -> {
-                showProgress(false);
-                if (taskSnapshot.getDownloadUrl() == null) return;
-                sendCommentFile(taskSnapshot.getDownloadUrl().toString());
-            }).addOnFailureListener(exception -> showProgress(false));
+            final String filenameOriginal = DateUtils.getCurrentTimeStamp() + "_original" + ".jpg";
+            final String filenameThumbnail = DateUtils.getCurrentTimeStamp() + "_thumbnail" + ".jpg";
+            uploadFile(imageFile, filenameOriginal, 95).addOnSuccessListener(taskSnapshot ->
+                    uploadFile(imageFile, filenameThumbnail, 30)
+                            .addOnSuccessListener(taskSnapshot1 -> {
+                                showProgress(false);
+                                if (taskSnapshot.getDownloadUrl() == null) return;
+                                if (taskSnapshot1.getDownloadUrl() == null) return;
+                                String origin = taskSnapshot.getDownloadUrl().toString();
+                                String thumbnail = taskSnapshot1.getDownloadUrl().toString();
+                                sendCommentFile(origin, thumbnail);
+                            }).addOnFailureListener(exception -> showProgress(false)))
+                    .addOnFailureListener(exception -> showProgress(false));
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             showProgress(false);
@@ -433,12 +430,25 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
         mButtonAttachments.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
-    private void sendCommentFile(String file) {
+    private UploadTask uploadFile(File file, String fileName, int quality) {
+        Bitmap bitmapOriginal = BitmapFactory.decodeFile(file.toString());//= imageView.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmapOriginal.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+        byte[] bytes = baos.toByteArray();
+        // Meta data for imageView
+        // name of file in Storage
+        return FirebaseStorage.getInstance()
+                .getReference(DefaultConfigurations.STORAGE_MESSAGES_COMMENTS)
+                .child(fileName)
+                .putBytes(bytes);
+    }
+
+    private void sendCommentFile(String file, String thumbnail) {
         String pushMessage = mUser.getDisplayName() + ": відправив фото";
         DatabaseReference ref = database.getReference(DefaultConfigurations.DB_MESSAGES_COMMENTS)
                 .child(mMessageKey)
                 .push();
-        ref.setValue(new MessageComment(ref.getKey(), "фото", file, mUser));
+        ref.setValue(new MessageComment(ref.getKey(), "фото", file, thumbnail, mUser));
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("lastComment", pushMessage);
         childUpdates.put("updatedAt", new Date());

@@ -16,6 +16,7 @@ public class MessageComment {
     private String userId;
     private String userName;
     private String file;
+    private String thumbnail;
     private Date date;
     private boolean removed;
 
@@ -30,13 +31,22 @@ public class MessageComment {
         this.date = new Date();
     }
 
-    public MessageComment(final String key, final String message, final String file, FirebaseUser user) {
+    public MessageComment(final String key, final String message, final String file, final String thumbnail, FirebaseUser user) {
         this.key = key;
         this.file = file;
+        this.thumbnail = thumbnail;
         this.message = message;
         this.userId = user.getUid();
         this.userName = user.getDisplayName();
         this.date = new Date();
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(final String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public boolean getRemoved() {

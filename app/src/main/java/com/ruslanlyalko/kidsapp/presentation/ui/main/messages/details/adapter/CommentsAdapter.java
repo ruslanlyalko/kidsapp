@@ -153,10 +153,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                         messageComment.getRemoved() ? R.color.colorComment : R.color.colorBlack));
             }
             mTextCommentTime.setText(DateUtils.toString(messageComment.getDate(), "HH:mm"));
-            if (messageComment.getFile() != null && !messageComment.getFile().isEmpty() && mImageView != null) {
+            if (messageComment.getThumbnail() != null && !messageComment.getThumbnail().isEmpty() && mImageView != null) {
                 try {
                     Glide.with(mTextCommentTime.getContext())
-                            .load(messageComment.getFile())
+                            .load(messageComment.getThumbnail())
                             .apply(new RequestOptions().transform(new RoundedCorners(50)))
 //                            .apply(bitmapTransform(new RoundedCornersTransformation(20, 2,
 //                                    RoundedCornersTransformation.CornerType.ALL)))

@@ -11,10 +11,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -49,7 +46,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.UploadTask;
 import com.ruslanlyalko.kidsapp.R;
-import com.ruslanlyalko.kidsapp.common.Constants;
 import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.common.Keys;
 import com.ruslanlyalko.kidsapp.common.LocationHandler;
@@ -77,6 +73,8 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class ReportActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
@@ -224,26 +222,8 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     public void onPermissionsGranted(int requestCode, List<String> list) {
         switch (requestCode) {
             case REQUEST_IMAGE_PERMISSION:
-                startCamera();
+                EasyImage.openChooserWithGallery(this, getString(R.string.choose_images), 0);
                 break;
-        }
-    }
-
-    void startCamera() {
-        String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-            String imageFileName = timeStamp + ".jpg";
-            File storageDir = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES);
-            pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
-            File file = new File(pictureImagePath);
-            Uri outputFileUri = Uri.fromFile(file);
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-            startActivityForResult(cameraIntent, Constants.REQUEST_CODE_CAMERA);
-        } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.image_permissions), REQUEST_IMAGE_PERMISSION, perms);
         }
     }
 
@@ -251,47 +231,64 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     public void onPermissionsDenied(final int requestCode, final List<String> perms) {
     }
 
+    void startCamera() {
+        String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            EasyImage.openChooserWithGallery(this, getString(R.string.choose_images), 0);
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.image_permissions), REQUEST_IMAGE_PERMISSION, perms);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mLocationHandler.handleActivityResult(requestCode, resultCode, data);
-        // handle request from camera
-        if (requestCode == Constants.REQUEST_CODE_CAMERA) {
-            if (resultCode == RESULT_OK) {
-                showProgressBarUpload();
-                isChanged = true;
-                Bitmap bitmap = BitmapFactory.decodeFile(pictureImagePath);//= imageView.getDrawingCache();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
-                byte[] bytes = baos.toByteArray();
-                // Meta data for imageView
-                StorageMetadata metadata = new StorageMetadata.Builder()
-                        .setContentType("imageView/jpg")
-                        .setCustomMetadata("Date", mReport.getDate())
-                        .setCustomMetadata("UserName", mReport.getUserName())
-                        .build();
-                // name of file in Storage
-                final String filename = DateUtils.getCurrentTimeStamp() + "_" + mReport.getUserId() + ".jpg";
-                UploadTask uploadTask = FirebaseStorage.getInstance()
-                        .getReference(DefaultConfigurations.STORAGE_REPORT)
-                        .child(filename)
-                        .putBytes(bytes, metadata);
-                uploadTask.addOnSuccessListener(taskSnapshot -> {
-                    //    addCost(mTitle1, mTitle2, mPrice, filename);
-                    mReport.imageUri = filename;//taskSnapshot.getDownloadUrl().toString();//filename;
-                    hideProgressBarUpload();
-                }).addOnFailureListener(exception -> {
-                    // Handle unsuccessful uploads
-                    hideProgressBarUpload();
-                });
+        EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
+            @Override
+            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                //Some error handling
             }
-        }
-        //other request code
+
+            @Override
+            public void onImagePicked(final File imageFile, final EasyImage.ImageSource source, final int type) {
+                onPhotosReturned(imageFile);
+            }
+        });
+    }
+
+    private void onPhotosReturned(final File imageFile) {
+        showProgressBarUpload();
+        isChanged = true;
+        String imageFileName = DateUtils.getCurrentTimeStamp() + "_original" + ".jpg";
+        uploadFile(imageFile, imageFileName, 95).addOnSuccessListener(taskSnapshot -> {
+            if (taskSnapshot.getDownloadUrl() != null)
+                mReport.imageUri = taskSnapshot.getDownloadUrl().toString();
+            hideProgressBarUpload();
+        }).addOnFailureListener(exception -> hideProgressBarUpload());
     }
 
     void showProgressBarUpload() {
         progressBarUpload.setVisibility(View.VISIBLE);
         textPhoto.setText("Загрузка...");
+    }
+
+    private UploadTask uploadFile(File file, String fileName, int quality) {
+        Bitmap bitmapOriginal = BitmapFactory.decodeFile(file.toString());//= imageView.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmapOriginal.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+        byte[] bytes = baos.toByteArray();
+        // Meta data for imageView
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setContentType("imageView/jpg")
+                .setCustomMetadata("Date", mReport.getDate())
+                .setCustomMetadata("UserName", mReport.getUserName())
+                .build();
+        // name of file in Storage
+        return FirebaseStorage.getInstance()
+                .getReference(DefaultConfigurations.STORAGE_REPORT)
+                .child(fileName)
+                .putBytes(bytes, metadata);
     }
 
     void hideProgressBarUpload() {

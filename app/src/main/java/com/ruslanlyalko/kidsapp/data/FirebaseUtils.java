@@ -41,6 +41,7 @@ public class FirebaseUtils {
                                         user.getToken(), messageKey,
                                         currentUser.getUid(),
                                         currentUser.getDisplayName(),
+                                        user.getUserName(),
                                         messageType));
                             }
                         }
