@@ -169,7 +169,7 @@
     <string name="action_save">Зберегти</string>
     <string name="title_activity_edit">Редагування</string>
     <string name="title_activity_add">Добавлення</string>
-    <string name="hint_description">Детальний опис</string>
+    <string name="hint_description">Детальний опис (не обовязково)</string>
     <string name="mk_k">Кулінарний майстер клас</string>
     <string name="mk_art">Творчий майстер клас</string>
     <string name="mk_updated">Дані обновлено успішно</string>
@@ -255,10 +255,11 @@
     <string name="report_toast_no_image">Відсутнє фото звіту. Сфотографуйте звіт перед збереженням!</string>
     <string name="title_activity_alarm">KIDS APP    Чек-Лист</string>
     <string name="stop_alarm">Пройти Чек-Лист</string>
-    <string name="text_comments_list">Коментарі</string>
+    <string name="text_comments_list">Дозволити коментувати</string>
     <string name="button_send">Відправити</string>
     <string name="hint_comment_add">Введіть повідомлення…</string>
     <string name="dialog_remove_title">Видалити повідомлення?</string>
     <string name="choose_images">Виберіть картинку</string>
+    <string name="empty_string" />
 
 </resources>

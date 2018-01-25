@@ -153,12 +153,19 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     private boolean isChanged;
     private List<Mk> mkList = new ArrayList<>();
     private boolean mIsFuture;
-    private String pictureImagePath = "";
     private LocationHandler mLocationHandler;
     private LatLng mLocation;
 
     public static Intent getLaunchIntent(final Activity launchIntent) {
         return new Intent(launchIntent, ReportActivity.class);
+    }
+
+    public static Intent getLaunchIntent(final Context context, String reportDate, String userName, String userId) {
+        Intent intent = new Intent(context, ReportActivity.class);
+        intent.putExtra(Keys.Extras.EXTRA_DATE, reportDate);
+        intent.putExtra(Keys.Extras.EXTRA_USER_NAME, userName);
+        intent.putExtra(Keys.Extras.EXTRA_UID, userId);
+        return intent;
     }
 
     @Override

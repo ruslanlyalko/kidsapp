@@ -40,7 +40,6 @@ import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Message;
 import com.ruslanlyalko.kidsapp.data.models.MessageComment;
-import com.ruslanlyalko.kidsapp.data.models.MessageType;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.MessageEditActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter.CommentsAdapter;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter.OnCommentClickListener;
@@ -49,10 +48,7 @@ import com.ruslanlyalko.kidsapp.presentation.widget.PhotoPreviewActivity;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -174,10 +170,16 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
         if (mMessage != null) {
             invalidateOptionsMenu();
             mCardCommentsSend.setVisibility(mMessage.getCommentsEnabled() ? View.VISIBLE : View.GONE);
-            getSupportActionBar().setTitle(mMessage.getTitle1());
-            textDescription.setText(mMessage.getDescription());
+            if (getSupportActionBar() != null) getSupportActionBar().setTitle(mMessage.getTitle1());
+            if (mMessage.getDescription() != null & !mMessage.getDescription().isEmpty()) {
+                textDescription.setVisibility(View.VISIBLE);
+                textDescription.setText(mMessage.getDescription());
+            } else {
+                textDescription.setVisibility(View.GONE);
+            }
         } else {
-            getSupportActionBar().setTitle(R.string.title_activity_notification_item);
+            if (getSupportActionBar() != null)
+                getSupportActionBar().setTitle(R.string.title_activity_notification_item);
         }
     }
 
@@ -285,7 +287,7 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
     @Override
     public void onItemClicked(final int position) {
         MessageComment item = mCommentsAdapter.getItemAtPosition(position);
-        if (item.getFile() != null && !item.getFile().isEmpty()) {
+        if (item.getFile() != null && !item.getFile().isEmpty() && !item.getRemoved()) {
             startActivity(PhotoPreviewActivity.getLaunchIntent(this, item.getFile(), item.getUserName()));
         } else
             Toast.makeText(this, DateUtils.toString(mCommentsAdapter.getItemAtPosition(position).getDate(),
@@ -329,21 +331,10 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
     }
 
     private void sendComment(String comment) {
-        String pushMessage = mUser.getDisplayName() + ": " + comment;
         DatabaseReference ref = database.getReference(DefaultConfigurations.DB_MESSAGES_COMMENTS)
                 .child(mMessageKey)
                 .push();
         ref.setValue(new MessageComment(ref.getKey(), comment, mUser));
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("lastComment", pushMessage);
-        childUpdates.put("updatedAt", new Date());
-        database.getReference(DefaultConfigurations.DB_MESSAGES)
-                .child(mMessageKey)
-                .updateChildren(childUpdates);
-        FirebaseUtils.updateNotificationsForAllUsers(mMessageKey,
-                mMessage.getTitle1(),
-                pushMessage,
-                MessageType.COMMENTS);
     }
 
     @OnClick(R.id.button_attachments)
@@ -445,21 +436,10 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
     }
 
     private void sendCommentFile(String file, String thumbnail) {
-        String pushMessage = mUser.getDisplayName() + ": відправив фото";
         DatabaseReference ref = database.getReference(DefaultConfigurations.DB_MESSAGES_COMMENTS)
                 .child(mMessageKey)
                 .push();
         ref.setValue(new MessageComment(ref.getKey(), "фото", file, thumbnail, mUser));
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("lastComment", pushMessage);
-        childUpdates.put("updatedAt", new Date());
-        database.getReference(DefaultConfigurations.DB_MESSAGES)
-                .child(mMessageKey)
-                .updateChildren(childUpdates);
-        FirebaseUtils.updateNotificationsForAllUsers(mMessageKey,
-                mMessage.getTitle1(),
-                pushMessage,
-                MessageType.COMMENTS);
     }
 
     @Override

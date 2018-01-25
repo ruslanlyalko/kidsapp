@@ -136,7 +136,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".presentation.ui.main.messages.details.MessageDetailsActivity"
-            android:label="@string/title_activity_notification_item"
+            android:label="@string/empty_string"
             android:parentActivityName=".presentation.ui.main.messages.MessagesActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
@@ -182,14 +182,14 @@
         <service
             android:name=".presentation.service.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <service
             android:name=".presentation.service.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
@@ -202,7 +202,6 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
-
 
     </application>
 

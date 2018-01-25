@@ -14,6 +14,8 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.MessageDetailsActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.report.ReportActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.splash.SplashActivity;
 
 import java.util.Map;
 
@@ -61,7 +63,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //                100, 100,
 //                100, 100
         });
-        Intent resultIntent = MessageDetailsActivity.getLaunchIntent(this, payload.get("messageKey"));
+        Intent resultIntent;
+        switch (payload.get("type")) {
+            case "REPORT":
+                resultIntent = ReportActivity.getLaunchIntent(this,
+                        payload.get("reportDate"),
+                        payload.get("reportUserName"),
+                        payload.get("reportUserId"));
+                break;
+            default:
+            case "COMMENT":
+                resultIntent = MessageDetailsActivity.getLaunchIntent(this, payload.get("messageKey"));
+                break;
+        }
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);

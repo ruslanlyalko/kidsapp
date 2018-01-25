@@ -26,10 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Keys;
-import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Message;
-import com.ruslanlyalko.kidsapp.data.models.MessageType;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -145,7 +143,6 @@ public class MessageEditActivity extends AppCompatActivity {
         mMessage.setUserName(mUser.getDisplayName());
         database.getReference(DefaultConfigurations.DB_MESSAGES)
                 .child(notKey).setValue(mMessage).addOnCompleteListener(task -> {
-            FirebaseUtils.updateNotificationsForAllUsers(notKey, mMessage.getTitle1(), "Створено нове повідомлення", MessageType.MESSAGE);
             Snackbar.make(imageView, getString(R.string.not_added), Snackbar.LENGTH_SHORT).show();
         });
         needToSave = false;
@@ -155,8 +152,6 @@ public class MessageEditActivity extends AppCompatActivity {
         updateNotModel();
         database.getReference(DefaultConfigurations.DB_MESSAGES)
                 .child(mMessage.getKey()).setValue(mMessage).addOnCompleteListener(task -> {
-            FirebaseUtils.updateNotificationsForAllUsers(notKey, mMessage.getTitle1(),
-                    "Повідомленя обмновлено", MessageType.MESSAGE);
             Snackbar.make(imageView, getString(R.string.mk_updated), Snackbar.LENGTH_SHORT).show();
         });
         needToSave = false;

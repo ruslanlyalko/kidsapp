@@ -78,17 +78,20 @@
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/hint_link"
             android:inputType="textUri"
-            android:padding="@dimen/text_margin" />
+            android:padding="@dimen/text_margin"
+            android:visibility="gone" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorDividersDark" />
+            android:background="@color/colorDividersDark"
+            android:visibility="gone" />
 
         <CheckBox
             android:id="@+id/checkbox_comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:padding="16dp"
             android:text="@string/text_comments_list" />
     </LinearLayout>

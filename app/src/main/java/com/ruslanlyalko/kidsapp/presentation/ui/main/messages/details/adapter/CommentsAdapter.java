@@ -74,7 +74,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
     @Override
     public int getItemViewType(final int position) {
         MessageComment item = mDataSource.get(position);
-        if ((item.getFile() != null && !item.getFile().isEmpty())) {
+        if (item.getFile() != null && !item.getFile().isEmpty() && !item.getRemoved()) {
             return item.getUserId().equals(FirebaseAuth.getInstance().getUid())
                     ? VIEW_TYPE_PHOTO_MY
                     : VIEW_TYPE_PHOTO_ANOTHER;
