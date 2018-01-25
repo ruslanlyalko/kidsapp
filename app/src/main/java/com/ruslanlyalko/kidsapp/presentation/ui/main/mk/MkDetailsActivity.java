@@ -26,8 +26,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Constants;
 import com.ruslanlyalko.kidsapp.common.Keys;
@@ -49,7 +47,6 @@ public class MkDetailsActivity extends AppCompatActivity {
     @BindView(R.id.fab) FloatingActionButton fab;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private Mk mk;
     private String mkKey;
@@ -101,9 +98,7 @@ public class MkDetailsActivity extends AppCompatActivity {
             fab.setVisibility((mk.getLink() != null && !mk.getLink().isEmpty())
                     ? View.VISIBLE : View.GONE);
             if (mk.getImageUri() != null && !mk.getImageUri().isEmpty()) {
-                StorageReference ref = storage.getReference(DefaultConfigurations.STORAGE_MK).child(mk.getImageUri());
-                ref.getDownloadUrl().addOnSuccessListener(uri ->
-                        Glide.with(MkDetailsActivity.this).load(uri).into(imageView));
+                Glide.with(MkDetailsActivity.this).load(mk.getImageUri()).into(imageView);
             }
         } else {
             // notification == null

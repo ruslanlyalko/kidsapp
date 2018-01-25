@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@+id/text_date"
                 android:textColor="@color/album_title"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 tools:text="Text" />
 
             <TextView
@@ -58,7 +58,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="top"
-                android:padding="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 tools:text=" 16.05" />
         </RelativeLayout>
 

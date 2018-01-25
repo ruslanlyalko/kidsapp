@@ -1,8 +1,11 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.mk;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,22 +35,32 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Constants;
+import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.common.Keys;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Mk;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class MkEditActivity extends AppCompatActivity {
+public class MkEditActivity extends AppCompatActivity  implements EasyPermissions.PermissionCallbacks  {
+
+    private static final int REQUEST_IMAGE_PERMISSION = 1;
 
     @BindView(R.id.edit_title1) EditText textTitle1;
     @BindView(R.id.text_title2) TextView textTitle2;
@@ -57,7 +70,6 @@ public class MkEditActivity extends AppCompatActivity {
     @BindView(R.id.progress_bar) ProgressBar progressBar;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    FirebaseStorage storage = FirebaseStorage.getInstance();
     boolean mIsNew = false;
     boolean mNeedToSave = false;
     private Mk mMk = new Mk();
@@ -96,8 +108,7 @@ public class MkEditActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, Constants.REQUEST_CODE_GALLERY);
+                startCamera();
             }
         });
         TextWatcher watcher = new TextWatcher() {
@@ -148,10 +159,7 @@ public class MkEditActivity extends AppCompatActivity {
                 textLink.setText(mMk.getLink());
                 textDescription.setText(mMk.getDescription());
                 if (mMk.getImageUri() != null && !mMk.getImageUri().isEmpty()) {
-                    StorageReference ref = storage.getReference(DefaultConfigurations.STORAGE_MK).child(mMk.getImageUri());
-                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    ref.getDownloadUrl().addOnSuccessListener(uri ->
-                            Glide.with(MkEditActivity.this).load(uri).into(imageView));
+                    Glide.with(MkEditActivity.this).load(mMk.getImageUri()).into(imageView);
                 }
             }
         }
@@ -161,25 +169,73 @@ public class MkEditActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK) {
-            if (data == null)
-                return;
-            mNeedToSave = true;
-            progressBar.setVisibility(View.VISIBLE);
-            //upload to imageView view
-            Uri selectedImage = data.getData();
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageURI(selectedImage);
-            final String imageName = (mMkKey != null ? mMkKey : "newMK")
-                    + new SimpleDateFormat("_ddMMyyyy_HHmmss", Locale.US).format(new Date()) + ".jpg";
-            // save in database
-            mMk.setImageUri(imageName);
-            // upload to storage
-            StorageReference ref = storage.getReference(DefaultConfigurations.STORAGE_MK).child(imageName);
-            ref.putFile(selectedImage).addOnCompleteListener(task -> progressBar.setVisibility(View.GONE));
+        EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
+            @Override
+            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                //Some error handling
+            }
+
+            @Override
+            public void onImagePicked(final File imageFile, final EasyImage.ImageSource source, final int type) {
+                onPhotosReturned(imageFile);
+            }
+        });
+    }
+
+    private void onPhotosReturned(final File imageFile) {
+        progressBar.setVisibility(View.VISIBLE);
+        mNeedToSave= true;
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        Glide.with(this).load(imageFile).into(imageView);
+
+        String imageFileName = DateUtils.getCurrentTimeStamp() + "_original" + ".jpg";
+        uploadFile(imageFile, imageFileName, 95).addOnSuccessListener(taskSnapshot -> {
+            if (taskSnapshot.getDownloadUrl() != null)
+                mMk.setImageUri( taskSnapshot.getDownloadUrl().toString());
+            progressBar.setVisibility(View.GONE);
+        }).addOnFailureListener(exception -> progressBar.setVisibility(View.GONE));
+    }
+
+    private UploadTask uploadFile(File file, String fileName, int quality) {
+        Bitmap bitmapOriginal = BitmapFactory.decodeFile(file.toString());//= imageView.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmapOriginal.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+        byte[] bytes = baos.toByteArray();
+        // Meta data for imageView
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setContentType("imageView/jpg")
+                .setCustomMetadata("Title1", mMk.getTitle1())
+                .setCustomMetadata("UserName", mMk.getUserName())
+                .build();
+        // name of file in Storage
+        return FirebaseStorage.getInstance()
+                .getReference(DefaultConfigurations.STORAGE_MK)
+                .child(fileName)
+                .putBytes(bytes, metadata);
+    }
+
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+        switch (requestCode) {
+            case REQUEST_IMAGE_PERMISSION:
+                EasyImage.openChooserWithGallery(this, getString(R.string.choose_images), 0);
+                break;
         }
     }
 
+    @Override
+    public void onPermissionsDenied(final int requestCode, final List<String> perms) {
+    }
+
+    void startCamera() {
+        String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            EasyImage.openChooserWithGallery(this, getString(R.string.choose_images), 0);
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.image_permissions), REQUEST_IMAGE_PERMISSION, perms);
+        }
+    }
     @Override
     public void onBackPressed() {
         if (progressBar.getVisibility() == View.VISIBLE) {
@@ -189,16 +245,11 @@ public class MkEditActivity extends AppCompatActivity {
         if (mNeedToSave) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MkEditActivity.this);
             builder.setTitle(R.string.dialog_discart_changes)
-                    .setPositiveButton(R.string.action_discard, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            mNeedToSave = false;
-                            onBackPressed();
-                        }
+                    .setPositiveButton(R.string.action_discard, (dialog, which) -> {
+                        mNeedToSave = false;
+                        onBackPressed();
                     })
-                    .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show();
         } else {
             super.onBackPressed();

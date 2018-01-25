@@ -120,7 +120,7 @@ public class DateUtils {
     public static String getUpdatedAt(final Date updatedAt) {
         if (isTodayOrFuture(updatedAt))
             return toString(updatedAt, "HH:mm");
-        return toString(updatedAt, "dd.MM.yyyy");
+        return toString(updatedAt, "dd.MM.yy");
     }
 
     public static boolean isTodayOrFuture(Date date) {

@@ -18,10 +18,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Keys;
-import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Mk;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.mk.MkDetailsActivity;
 
@@ -82,9 +80,7 @@ public class MksAdapter extends RecyclerView.Adapter<MksAdapter.MyViewHolder> {
             textDescription.setText(mk.getDescription());
             //load image if already defined
             if (mk.getImageUri() != null && !mk.getImageUri().isEmpty()) {
-                StorageReference ref = storage.getReference(DefaultConfigurations.STORAGE_MK).child(mk.getImageUri());
-                ref.getDownloadUrl().addOnSuccessListener(uri ->
-                        Glide.with(mContext).load(uri).into(imageView));
+                Glide.with(mContext).load(mk.getImageUri()).into(imageView);
             }
             // button share
             buttonShare.setOnClickListener(v -> {
