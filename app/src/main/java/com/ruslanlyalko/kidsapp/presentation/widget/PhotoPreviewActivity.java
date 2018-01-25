@@ -66,6 +66,8 @@ public class PhotoPreviewActivity extends AppCompatActivity {
         }
     }
 
+
+
     private void loadWithGlide(String uri) {
         if (uri == null || uri.isEmpty()) return;
         setTitle("Загрузка....");

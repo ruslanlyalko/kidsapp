@@ -98,6 +98,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".presentation.widget.PhotoPreviewActivity"
+            android:parentActivityName=".presentation.ui.main.MainActivity"
             android:theme="@style/AppTheme.BlackClose" />
         <activity
             android:name=".presentation.ui.main.mk.MkDetailsActivity"
