@@ -261,5 +261,8 @@
     <string name="dialog_remove_title">Видалити повідомлення?</string>
     <string name="choose_images">Виберіть картинку</string>
     <string name="empty_string" />
+    <string name="online">Online</string>
+    <string name="last_online">Востанє в мережі %s</string>
+    <string name="last_online_long_time_ago">Востаннє в мережі давно</string>
 
 </resources>

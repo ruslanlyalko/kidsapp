@@ -45,6 +45,7 @@ import com.ruslanlyalko.kidsapp.presentation.ui.main.report.ReportActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -215,6 +216,20 @@ public class MainActivity extends AppCompatActivity {
                     .child(user.getUid())
                     .child("token")
                     .setValue(refreshedToken);
+            mDatabase.getReference(DefaultConfigurations.DB_USERS)
+                    .child(user.getUid())
+                    .child("lastOnline")
+                    .onDisconnect()
+                    .setValue(new Date());
+            mDatabase.getReference(DefaultConfigurations.DB_USERS)
+                    .child(user.getUid())
+                    .child("isOnline")
+                    .setValue(Boolean.TRUE);
+            mDatabase.getReference(DefaultConfigurations.DB_USERS)
+                    .child(user.getUid())
+                    .child("isOnline")
+                    .onDisconnect()
+                    .removeValue();
         }
     }
 

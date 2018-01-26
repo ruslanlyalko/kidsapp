@@ -2,6 +2,7 @@ package com.ruslanlyalko.kidsapp.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -133,5 +134,13 @@ public class DateUtils {
 
     public static String toString(final Date date, final String format) {
         return new SimpleDateFormat(format, Locale.getDefault()).format(date);
+    }
+
+    public static boolean isLessThen10minsAgo(final Date lastOnline) {
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.MINUTE, -10);
+        Calendar lastOnlineCalendar = Calendar.getInstance();
+        lastOnlineCalendar.setTime(lastOnline);
+        return now.getTime().getTime() < lastOnlineCalendar.getTime().getTime();
     }
 }

@@ -23,6 +23,7 @@
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginEnd="16dp"
             app:expandedTitleMarginStart="32dp"
+            app:expandedTitleMarginBottom="56dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
@@ -49,12 +50,38 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:paddingBottom="8dp"
+                android:paddingBottom="28dp"
                 android:paddingEnd="64dp"
-                android:paddingStart="32dp"
+                android:paddingStart="34dp"
                 android:textColor="@color/colorWhite70"
                 app:layout_collapseMode="pin"
                 tools:text="SubTitle" />
+
+            <TextView
+                android:id="@+id/text_last_online"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:paddingBottom="8dp"
+                android:paddingEnd="64dp"
+                android:paddingStart="34dp"
+                android:textColor="@color/colorWhite70"
+                app:layout_collapseMode="pin"
+                tools:text="SubTitle" />
+
+            <TextView
+                android:id="@+id/text_available"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:paddingBottom="0dp"
+                android:paddingEnd="70dp"
+                android:paddingStart="18dp"
+                android:text="."
+                android:textColor="@color/colorAccent"
+                android:textSize="50sp"
+                android:visibility="visible"
+                app:layout_collapseMode="pin" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

@@ -31,7 +31,9 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ruslanlyalko.kidsapp.R;
+import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.common.Keys;
 import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
@@ -43,6 +45,8 @@ import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.dashboard.Dashboard
 import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.salary.SalaryActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.settings.ProfileSettingsActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.OnItemClickListener;
+
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,6 +71,8 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
     @BindView(R.id.image_view_ava) ImageView mAvaImageView;
     @BindView(R.id.image_view_back) ImageView mBackImageView;
     @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.text_available) TextView mTextAvailable;
+    @BindView(R.id.text_last_online) TextView mTextLastOnline;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -74,6 +80,8 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
     private User mUser;
     private UsersAdapter mUsersAdapter;
     private boolean needLoadFriends;
+    private Date mLastOnline = new Date();
+    private Boolean mConnected;
 
     public static Intent getLaunchIntent(final Activity launchIntent) {
         return new Intent(launchIntent, ProfileActivity.class);
@@ -89,6 +97,7 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
         initToolbar();
         initRecycle();
         loadUsers();
+        checkConnection();
     }
 
     private void parseExtras() {
@@ -160,6 +169,54 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
                 });
     }
 
+    private void checkConnection() {
+        if (needLoadFriends) {
+            mDatabase.getReference(".info/connected")
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            mConnected = snapshot.getValue(Boolean.class);
+                            updateLastOnline();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            System.err.println("Listener was cancelled");
+                        }
+                    });
+        } else {
+            mDatabase.getReference(DefaultConfigurations.DB_USERS)
+                    .child(mUID)
+                    .child("isOnline")
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(final DataSnapshot dataSnapshot) {
+                            mConnected = dataSnapshot.getValue(Boolean.class);
+                            updateLastOnline();
+                        }
+
+                        @Override
+                        public void onCancelled(final DatabaseError databaseError) {
+                        }
+                    });
+            mDatabase.getReference(DefaultConfigurations.DB_USERS)
+                    .child(mUID)
+                    .child("lastOnline")
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            mLastOnline = snapshot.getValue(Date.class);
+                            updateLastOnline();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            System.err.println("Listener was cancelled");
+                        }
+                    });
+        }
+    }
+
     private void updateUI(User user) {
         if (user == null || mAuth.getCurrentUser() == null) return;
         final boolean myPage = mUser.getUserId().equals(mAuth.getCurrentUser().getUid());
@@ -215,6 +272,19 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
         } else {
             mAvaImageView.setVisibility(View.GONE);
             mBackImageView.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateLastOnline() {
+        if (mConnected != null && mConnected) {
+            mTextAvailable.setVisibility(View.VISIBLE);
+            mTextLastOnline.setText(R.string.online);
+        } else {
+            mTextAvailable.setVisibility(View.INVISIBLE);
+            if (mLastOnline != null)
+                mTextLastOnline.setText(getString(R.string.last_online, DateUtils.getUpdatedAt(mLastOnline)));
+            else
+                mTextLastOnline.setText(getString(R.string.last_online_long_time_ago));
         }
     }
 

@@ -1,12 +1,15 @@
 package com.ruslanlyalko.kidsapp.data;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.User;
+
+import java.util.Date;
 
 public class FirebaseUtils {
 
@@ -21,11 +24,24 @@ public class FirebaseUtils {
     }
 
     public static void clearPushToken() {
-        FirebaseDatabase.getInstance()
-                .getReference(DefaultConfigurations.DB_USERS)
-                .child(FirebaseAuth.getInstance().getUid())
-                .child("token")
-                .setValue("");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseDatabase.getInstance()
+                    .getReference(DefaultConfigurations.DB_USERS)
+                    .child(user.getUid())
+                    .child("isOnline")
+                    .removeValue();
+            FirebaseDatabase.getInstance()
+                    .getReference(DefaultConfigurations.DB_USERS)
+                    .child(user.getUid())
+                    .child("lastOnline")
+                    .setValue(new Date());
+            FirebaseDatabase.getInstance()
+                    .getReference(DefaultConfigurations.DB_USERS)
+                    .child(user.getUid())
+                    .child("token")
+                    .removeValue();
+        }
     }
 
     public static void clearNotificationsForAllUsers(final String notKey) {
