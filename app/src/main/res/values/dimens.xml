@@ -24,9 +24,10 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="comment_margin">8dp</dimen>
     <dimen name="card_comment_radius">12dp</dimen>
-    <dimen name="card_comment_user_radius">8dp</dimen>
+    <dimen name="card_comment_user_radius">12dp</dimen>
     <dimen name="card_comment_user_size">48dp</dimen>
-    <dimen name="card_comment_user_margin">8dp</dimen>
-    <dimen name="card_comment_margin">8dp</dimen>
+    <dimen name="card_comment_margin">4dp</dimen>
+    <dimen name="card_comment_margin_x2">8dp</dimen>
+    <dimen name="card_comment_margin_top_bottom">8dp</dimen>
 
 </resources>
