@@ -7,6 +7,7 @@
     <color name="colorBackground">#f1f5f8</color>
     <color name="colorComment">#cad4cb</color>
 
+    <color name="colorCommentBackground">#dce0e1</color>
     <color name="colorGray">#e1dcdc</color>
     <color name="colorBgGray">#f4f4f4</color>
     <color name="colorGradient">#fafafa</color>

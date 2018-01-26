@@ -1,16 +1,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/layout_root"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="?android:attr/selectableItemBackground"
-              android:clickable="true"
-              android:focusable="true"
+              android:background="@color/colorWhite"
               android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/layout_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center_vertical"
         android:paddingBottom="8dp"
         android:paddingTop="8dp">
@@ -19,8 +20,8 @@
             android:id="@+id/image_view"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:padding="16dp"
             android:src="@drawable/ic_comment"
             tools:ignore="ContentDescription" />
@@ -40,7 +41,7 @@
                 android:layout_toStartOf="@+id/text_date"
                 android:textColor="@color/album_title"
                 android:textSize="20sp"
-                tools:text="Text" />
+                tools:text="Some Name Of" />
 
             <TextView
                 android:id="@+id/title2"
@@ -58,16 +59,16 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="top"
-                android:paddingStart="8dp"
                 android:paddingEnd="8dp"
-                tools:text=" 16.05" />
+                android:paddingStart="8dp"
+                tools:text="16.05" />
         </RelativeLayout>
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_marginStart="72dp"
-        android:background="@drawable/divider_with_left_padding" />
+        android:background="@color/colorDividersDark" />
 </LinearLayout>

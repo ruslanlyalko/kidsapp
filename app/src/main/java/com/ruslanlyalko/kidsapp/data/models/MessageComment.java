@@ -19,6 +19,7 @@ public class MessageComment {
     private String thumbnail;
     private Date date;
     private boolean removed;
+    private String userAvatar;
 
     public MessageComment() {
     }
@@ -41,37 +42,17 @@ public class MessageComment {
         this.date = new Date();
     }
 
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(final String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
-    public boolean getRemoved() {
-        return removed;
-    }
-
-    public void setRemoved(final boolean removed) {
-        this.removed = removed;
-    }
-
-    public String getFile() {
-        return file;
-    }
-
-    public void setFile(final String file) {
-        this.file = file;
-    }
-
     @Override
     public int hashCode() {
         int result = getKey() != null ? getKey().hashCode() : 0;
         result = 31 * result + (getMessage() != null ? getMessage().hashCode() : 0);
         result = 31 * result + (getUserId() != null ? getUserId().hashCode() : 0);
         result = 31 * result + (getUserName() != null ? getUserName().hashCode() : 0);
+        result = 31 * result + (getFile() != null ? getFile().hashCode() : 0);
+        result = 31 * result + (getThumbnail() != null ? getThumbnail().hashCode() : 0);
         result = 31 * result + (getDate() != null ? getDate().hashCode() : 0);
+        result = 31 * result + (getRemoved() ? 1 : 0);
+        result = 31 * result + (getUserAvatar() != null ? getUserAvatar().hashCode() : 0);
         return result;
     }
 
@@ -80,6 +61,7 @@ public class MessageComment {
         if (this == o) return true;
         if (!(o instanceof MessageComment)) return false;
         MessageComment that = (MessageComment) o;
+        if (getRemoved() != that.getRemoved()) return false;
         if (getKey() != null ? !getKey().equals(that.getKey()) : that.getKey() != null)
             return false;
         if (getMessage() != null ? !getMessage().equals(that.getMessage()) : that.getMessage() != null)
@@ -88,7 +70,13 @@ public class MessageComment {
             return false;
         if (getUserName() != null ? !getUserName().equals(that.getUserName()) : that.getUserName() != null)
             return false;
-        return getDate() != null ? getDate().equals(that.getDate()) : that.getDate() == null;
+        if (getFile() != null ? !getFile().equals(that.getFile()) : that.getFile() != null)
+            return false;
+        if (getThumbnail() != null ? !getThumbnail().equals(that.getThumbnail()) : that.getThumbnail() != null)
+            return false;
+        if (getDate() != null ? !getDate().equals(that.getDate()) : that.getDate() != null)
+            return false;
+        return getUserAvatar() != null ? getUserAvatar().equals(that.getUserAvatar()) : that.getUserAvatar() == null;
     }
 
     public String getKey() {
@@ -119,8 +107,16 @@ public class MessageComment {
         return userName;
     }
 
-    public void setUserName(final String userName) {
-        this.userName = userName;
+    public String getFile() {
+        return file;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(final String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public Date getDate() {
@@ -129,5 +125,29 @@ public class MessageComment {
 
     public void setDate(final Date date) {
         this.date = date;
+    }
+
+    public boolean getRemoved() {
+        return removed;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(final String userAvatar) {
+        this.userAvatar = userAvatar;
+    }
+
+    public void setRemoved(final boolean removed) {
+        this.removed = removed;
+    }
+
+    public void setFile(final String file) {
+        this.file = file;
+    }
+
+    public void setUserName(final String userName) {
+        this.userName = userName;
     }
 }

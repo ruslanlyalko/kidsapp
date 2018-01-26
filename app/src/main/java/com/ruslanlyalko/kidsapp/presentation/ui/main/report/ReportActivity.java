@@ -1196,8 +1196,8 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
      */
     void updateTitle() {
         mReport.total = (mReport.totalRoom + mReport.totalBday + mReport.totalMk);
-        setTitle(mReport.getUserId().equals(mUser.getUid())
-                ? getString(R.string.title_activity_report) : getAbbreviation(mReport.getUserName())
+        setTitle((mReport.getUserId().equals(mUser.getUid())
+                ? getString(R.string.title_activity_report) : getAbbreviation(mReport.getUserName()))
                 + " (" + DateUtils.getIntWithSpace(mReport.total) + " ГРН)");
         isChanged = true;
     }

@@ -43,6 +43,7 @@ import com.ruslanlyalko.kidsapp.data.models.MessageComment;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.MessageEditActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter.CommentsAdapter;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter.OnCommentClickListener;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.ProfileActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.PhotoPreviewActivity;
 
 import java.io.ByteArrayOutputStream;
@@ -292,6 +293,12 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
         } else
             Toast.makeText(this, DateUtils.toString(mCommentsAdapter.getItemAtPosition(position).getDate(),
                     "EEEE dd.MM.yyyy").toUpperCase(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onUserClicked(final int position) {
+        MessageComment item = mCommentsAdapter.getItemAtPosition(position);
+        startActivity(ProfileActivity.getLaunchIntent(this, item.getUserId()));
     }
 
     @Override

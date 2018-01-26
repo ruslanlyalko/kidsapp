@@ -2,6 +2,7 @@ package com.ruslanlyalko.kidsapp.presentation.ui.main.calendar.adapter;
 
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHolder> {
 
@@ -51,6 +53,7 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         private final Resources mResources;
+        @BindView(R.id.card_root) CardView mCardRoot;
         @BindView(R.id.text_user_name) TextView textUserName;
         @BindView(R.id.text_total) TextView textTotal;
         @BindView(R.id.text_bday_total) TextView textBdayTotal;
@@ -105,6 +108,13 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
         void onEditClicked() {
             if (mOnReportClickListener != null)
                 mOnReportClickListener.onEditClicked(mReports.get(getAdapterPosition()));
+        }
+
+        @OnLongClick(R.id.card_root)
+        boolean onCardLongClicked() {
+            if (mOnReportClickListener != null)
+                mOnReportClickListener.onEditClicked(mReports.get(getAdapterPosition()));
+            return true;
         }
     }
 }

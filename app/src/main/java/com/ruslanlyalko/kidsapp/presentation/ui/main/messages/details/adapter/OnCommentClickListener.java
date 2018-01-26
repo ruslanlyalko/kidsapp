@@ -8,5 +8,6 @@ package com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter;
 public interface OnCommentClickListener {
 
     void onItemClicked(final int position);
+    void onUserClicked(final int position);
     void onItemLongClicked(final int position);
 }
