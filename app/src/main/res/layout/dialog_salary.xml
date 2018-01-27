@@ -14,7 +14,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_action_vyruchka" />
+            android:src="@drawable/ic_action_income" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_action_vyruchka" />
+            android:src="@drawable/ic_action_income" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -70,7 +70,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_action_vyruchka" />
+            android:src="@drawable/ic_action_income" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -97,7 +97,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_action_vyruchka" />
+            android:src="@drawable/ic_action_income" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

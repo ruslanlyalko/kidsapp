@@ -126,7 +126,8 @@
     <string name="text_room">Кімната</string>
     <string name="text_all">Всього</string>
     <string name="text_birthdays">Дні Народження</string>
-    <string name="text_charts">Графік (чистий прибуток)</string>
+    <string name="text_charts_income">Виручка / 80% / Прибуток</string>
+    <string name="text_charts">Чистий прибуток</string>
     <string name="dialog_delete_notification_title">Видалити статтю</string>
     <string name="dialog_delete_notification_message">Після видаленння відновити статтю буде неможливо</string>
     <string name="dialog_about_title">Про програму</string>
@@ -138,9 +139,9 @@
     <string name="text_mk">МК</string>
     <string name="text_stavka">Ставка</string>
     <string name="text_percent">Відсотки</string>
-    <string name="text_oborot">Оборот</string>
+    <string name="text_income_">Оборот</string>
     <string name="text_cost_total1">Витрати</string>
-    <string name="text_salary">Зарплата</string>
+    <string name="text_salary">Заробітна плата</string>
     <string name="text_salary_detail_title">Деталі</string>
     <string name="text_salary_condition_title">Умови</string>
 
@@ -264,5 +265,6 @@
     <string name="online">Online</string>
     <string name="last_online">Востанє в мережі %s</string>
     <string name="last_online_long_time_ago">Востаннє в мережі давно</string>
+    <string name="calendar_add_report">ДОБАВИТИ ЗВІТ</string>
 
 </resources>

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                              xmlns:app="http://schemas.android.com/apk/res-auto"
-                                              xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                                              xmlns:tools="http://schemas.android.com/tools"
-                                              android:id="@+id/swipere_fresh"
-                                              android:layout_width="match_parent"
-                                              android:layout_height="match_parent"
-                                              tools:context=".presentation.ui.main.calendar.CalendarActivity">
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipere_fresh"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".presentation.ui.main.calendar.CalendarActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -95,21 +96,22 @@
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp">
 
-                <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                                             android:id="@+id/calendar_view"
-                                                                             android:layout_width="fill_parent"
-                                                                             android:layout_height="220dp"
-                                                                             android:paddingLeft="10dp"
-                                                                             android:paddingRight="10dp"
-                                                                             app:compactCalendarBackgroundColor="@color/colorWhite70"
-                                                                             app:compactCalendarCurrentDayBackgroundColor="@color/colorBlack12"
-                                                                             app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorGray"
-                                                                             app:compactCalendarCurrentSelectedDayTextColor="@color/colorAccent"
-                                                                             app:compactCalendarMultiEventIndicatorColor="@color/colorAccent"
-                                                                             app:compactCalendarOtherMonthDaysTextColor="@color/colorBlack12"
-                                                                             app:compactCalendarTargetHeight="220dp"
-                                                                             app:compactCalendarTextColor="@color/colorBlack50"
-                                                                             app:compactCalendarTextSize="14sp" />
+                <com.github.sundeepk.compactcalendarview.CompactCalendarView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/calendar_view"
+                    android:layout_width="fill_parent"
+                    android:layout_height="220dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    app:compactCalendarBackgroundColor="@color/colorWhite70"
+                    app:compactCalendarCurrentDayBackgroundColor="@color/colorBlack12"
+                    app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorGray"
+                    app:compactCalendarCurrentSelectedDayTextColor="@color/colorAccent"
+                    app:compactCalendarMultiEventIndicatorColor="@color/colorAccent"
+                    app:compactCalendarOtherMonthDaysTextColor="@color/colorBlack12"
+                    app:compactCalendarTargetHeight="220dp"
+                    app:compactCalendarTextColor="@color/colorBlack50"
+                    app:compactCalendarTextSize="14sp" />
 
             </LinearLayout>
 
@@ -118,10 +120,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@drawable/divider_with_left_padding"
-            android:dividerPadding="8dp"
-            android:orientation="vertical"
-            android:showDividers="middle">
+            android:orientation="vertical">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
@@ -129,6 +128,18 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:scrollbars="vertical" />
+
+            <TextView
+                android:id="@+id/button_add_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp"
+                android:text="@string/calendar_add_report"
+                android:textColor="@color/colorAccent" />
 
         </LinearLayout>
     </LinearLayout>

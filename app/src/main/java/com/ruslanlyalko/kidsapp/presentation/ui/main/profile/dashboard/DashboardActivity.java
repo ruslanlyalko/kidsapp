@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -37,6 +38,7 @@ import com.ruslanlyalko.kidsapp.data.models.Expense;
 import com.ruslanlyalko.kidsapp.data.models.Report;
 import com.ruslanlyalko.kidsapp.data.models.Result;
 import com.ruslanlyalko.kidsapp.data.models.User;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.expenses.ExpensesActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.dashboard.adapter.UsersSalaryAdapter;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.salary.SalaryActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.OnItemClickListener;
@@ -75,6 +77,8 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
     @BindView(R.id.list_users_salary) RecyclerView mListUsersSalary;
     @BindView(R.id.image_expand) ImageView mImageView;
     @BindView(R.id.bar_chart) BarChart mBarChart;
+    @BindView(R.id.bar_chart_income) BarChart mBarChartIncome;
+    @BindView(R.id.card_expenses) CardView mCardExpenses;
     private UsersSalaryAdapter mUsersSalaryAdapter = new UsersSalaryAdapter(this);
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private List<Report> reportList = new ArrayList<>();
@@ -99,6 +103,7 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
         ButterKnife.bind(this);
         initCalendar();
         initBarChart();
+        initBarChartIncome();
         initRecycler();
         textMonth.setText(Constants.MONTH_FULL[Calendar.getInstance().get(Calendar.MONTH)]);
         yearStr = new SimpleDateFormat("yyyy", Locale.US).format(new Date());
@@ -129,6 +134,7 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
                                 }
                             }
                             updateBarChart(results);
+                            updateBarChartIncome(results);
                         }
                     }
 
@@ -155,6 +161,33 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
         mBarChart.setDrawBarShadow(false);
         mBarChart.getAxisLeft().setAxisMinimum(0);
         XAxis xAxis = mBarChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return mResults.get((int) value).getMonth();
+            }
+        });
+    }
+
+    private void initBarChartIncome() {
+        mBarChartIncome.setDrawGridBackground(false);
+        mBarChartIncome.getLegend().setEnabled(false);
+        mBarChartIncome.getDescription().setEnabled(false);
+        mBarChartIncome.getXAxis().setEnabled(true);
+        mBarChartIncome.getAxisRight().setEnabled(false);
+        mBarChartIncome.getAxisLeft().setAxisLineColor(Color.TRANSPARENT);
+        mBarChartIncome.getAxisLeft().enableGridDashedLine(1, 1, 10);
+        mBarChartIncome.setMaxVisibleValueCount(150);
+        mBarChartIncome.setDrawValueAboveBar(true);
+        mBarChartIncome.setDoubleTapToZoomEnabled(false);
+        mBarChartIncome.setPinchZoom(false);
+        mBarChartIncome.setScaleEnabled(false);
+        mBarChartIncome.setTouchEnabled(false);
+        mBarChartIncome.setDrawBarShadow(false);
+        mBarChartIncome.getAxisLeft().setAxisMinimum(0);
+        XAxis xAxis = mBarChartIncome.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setValueFormatter(new IAxisValueFormatter() {
@@ -403,7 +436,6 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
         int mkArtChildren = 0;
         String usersSalary = "";
         mUsersSalaryAdapter.clearAll();
-
         for (User user : userList) {
             int uPercentTotal = 0;
             int uStavka = 0;
@@ -511,11 +543,89 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
         mBarChart.invalidate();
     }
 
+    private void updateBarChartIncome(List<Result> resultList) {
+        mResults = resultList;
+        int[] colors = new int[resultList.size()];
+        int[] colors80 = new int[resultList.size()];
+        int[] colorsProfit = new int[resultList.size()];
+        ArrayList<BarEntry> values = new ArrayList<>();
+        ArrayList<BarEntry> values80 = new ArrayList<>();
+        ArrayList<BarEntry> valuesProfit = new ArrayList<>();
+        for (int i = 0; i < resultList.size(); i++) {
+            Result current = resultList.get(i);
+            float val = current.getIncome();
+            float val80 = current.getIncome80();
+            float valProfit = current.getProfit();
+            colors[i] = ContextCompat.getColor(this, R.color.colorProfit);
+            colors80[i] = ContextCompat.getColor(this, R.color.colorAccent);
+            colorsProfit[i] = ContextCompat.getColor(this, R.color.colorPrimary);
+            values.add(new BarEntry(i, val, val));
+            values80.add(new BarEntry(i, val80, val80));
+            valuesProfit.add(new BarEntry(i, valProfit, valProfit));
+        }
+        BarDataSet set1;
+        BarDataSet set180;
+        BarDataSet set1Profit;
+        if (mBarChartIncome.getData() != null &&
+                mBarChartIncome.getData().getDataSetCount() == 1) {
+            set1 = (BarDataSet) mBarChartIncome.getData().getDataSetByIndex(0);
+            set1.setValues(values);
+        } else if (mBarChartIncome.getData() != null &&
+                mBarChartIncome.getData().getDataSetCount() == 2) {
+            set1 = (BarDataSet) mBarChartIncome.getData().getDataSetByIndex(0);
+            set1.setValues(values);
+            set180 = (BarDataSet) mBarChartIncome.getData().getDataSetByIndex(1);
+            set180.setValues(values80);
+        } else if (mBarChartIncome.getData() != null &&
+                mBarChartIncome.getData().getDataSetCount() == 3) {
+            set1 = (BarDataSet) mBarChartIncome.getData().getDataSetByIndex(0);
+            set1.setValues(values);
+            set180 = (BarDataSet) mBarChartIncome.getData().getDataSetByIndex(1);
+            set180.setValues(values80);
+            set1Profit = (BarDataSet) mBarChartIncome.getData().getDataSetByIndex(2);
+            set1Profit.setValues(valuesProfit);
+        } else {
+            set1 = new BarDataSet(values, "");
+            set1.setColors(colors);
+            set1.setDrawIcons(true);
+            set1.setDrawValues(true);
+            set180 = new BarDataSet(values, "");
+            set180.setColors(colors80);
+            set180.setDrawIcons(true);
+            set180.setDrawValues(true);
+            set1Profit = new BarDataSet(values, "");
+            set1Profit.setColors(colorsProfit);
+            set1Profit.setDrawIcons(true);
+            set1Profit.setDrawValues(true);
+            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+            dataSets.add(set1);
+            dataSets.add(set180);
+            dataSets.add(set1Profit);
+            BarData data = new BarData(dataSets);
+            data.setBarWidth(0.90f);
+            data.setDrawValues(true);
+            // data.setValueFormatter(new LabelValueFormatter());
+            data.setValueTextColor(Color.BLACK);
+            set1.setValueTextSize(10f);
+            set180.setValueTextSize(9f);
+            set1Profit.setValueTextSize(9f);
+            mBarChartIncome.setData(data);
+        }
+        mBarChartIncome.getData().notifyDataChanged();
+        mBarChartIncome.notifyDataSetChanged();
+        mBarChartIncome.invalidate();
+    }
+
     @Override
     public void onItemClicked(final int position) {
         User user = mUsersSalaryAdapter.getItemAtPosition(position);
         startActivity(SalaryActivity.getLaunchIntent(this,
                 user.getUserId(),
                 user));
+    }
+
+    @OnClick(R.id.card_expenses)
+    public void onExpensesClicked() {
+        startActivity(ExpensesActivity.getLaunchIntent(this));
     }
 }

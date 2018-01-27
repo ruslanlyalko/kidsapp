@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -63,6 +64,7 @@ public class CalendarActivity extends AppCompatActivity implements OnReportClick
 
     //private String mDay, mMonth, mYear;
     private SimpleDateFormat mSdf = new SimpleDateFormat("d-M-yyyy", Locale.US);
+    private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
 
     public static Intent getLaunchIntent(final Activity launchIntent) {
         return new Intent(launchIntent, CalendarActivity.class);
@@ -116,12 +118,9 @@ public class CalendarActivity extends AppCompatActivity implements OnReportClick
                 mTextMonth.setText(str);
             }
         });
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                showReportsOnCalendar();
-                reloadReportsForDate();
-            }
+        mSwipeRefresh.setOnRefreshListener(() -> {
+            showReportsOnCalendar();
+            reloadReportsForDate();
         });
     }
 
@@ -141,7 +140,6 @@ public class CalendarActivity extends AppCompatActivity implements OnReportClick
 
     private void showReportsOnCalendar() {
         mSwipeRefresh.setRefreshing(true);
-        String yearStr = DateFormat.format("yyyy", Calendar.getInstance()).toString();
         mDatabase.getReference(DefaultConfigurations.DB_REPORTS)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -232,11 +230,6 @@ public class CalendarActivity extends AppCompatActivity implements OnReportClick
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
@@ -275,5 +268,11 @@ public class CalendarActivity extends AppCompatActivity implements OnReportClick
         } else {
             Toast.makeText(this, R.string.toast_edit_impossible, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @OnClick(R.id.button_add_report)
+    void onAddReportClicked() {
+        startActivity(ReportActivity.getLaunchIntent(this, DateUtils.toString(mCurrentDate, "d-M-yyyy"),
+                mUser.getDisplayName(), mUser.getUid()));
     }
 }
