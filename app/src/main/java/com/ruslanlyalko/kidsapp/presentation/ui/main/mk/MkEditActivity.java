@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,15 +15,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -47,6 +45,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -59,8 +58,9 @@ public class MkEditActivity extends AppCompatActivity implements EasyPermissions
     @BindView(R.id.text_title2) TextView textTitle2;
     @BindView(R.id.edit_description) EditText textDescription;
     @BindView(R.id.edit_link) EditText textLink;
-    @BindView(R.id.image_view) ImageView imageView;
-    @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindView(R.id.image_view) PhotoView mImageView;
+    @BindView(R.id.progress_bar) ProgressBar mProgressBar;
+    @BindView(R.id.button_upload) Button mButtonUpload;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     boolean mIsNew = false;
@@ -98,12 +98,6 @@ public class MkEditActivity extends AppCompatActivity implements EasyPermissions
     }
 
     private void initRef() {
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startCamera();
-            }
-        });
         TextWatcher watcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -152,14 +146,15 @@ public class MkEditActivity extends AppCompatActivity implements EasyPermissions
                 textLink.setText(mMk.getLink());
                 textDescription.setText(mMk.getDescription());
                 if (mMk.getImageUri() != null && !mMk.getImageUri().isEmpty()) {
-                    Glide.with(MkEditActivity.this).load(mMk.getImageUri()).into(imageView);
+                    Glide.with(MkEditActivity.this).load(mMk.getImageUri()).into(mImageView);
                 }
             }
         }
         mNeedToSave = false;
     }
 
-    void startCamera() {
+    @OnClick(R.id.button_upload)
+    void onUploadCLicked() {
         String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
             EasyImage.openChooserWithGallery(this, getString(R.string.choose_images), 0);
@@ -185,16 +180,20 @@ public class MkEditActivity extends AppCompatActivity implements EasyPermissions
     }
 
     private void onPhotosReturned(final File imageFile) {
-        progressBar.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mButtonUpload.setVisibility(View.GONE);
         mNeedToSave = true;
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        Glide.with(this).load(imageFile).into(imageView);
+        Glide.with(this).load(imageFile).into(mImageView);
         String imageFileName = DateUtils.getCurrentTimeStamp() + "_original" + ".jpg";
         uploadFile(imageFile, imageFileName, 95).addOnSuccessListener(taskSnapshot -> {
             if (taskSnapshot.getDownloadUrl() != null)
                 mMk.setImageUri(taskSnapshot.getDownloadUrl().toString());
-            progressBar.setVisibility(View.GONE);
-        }).addOnFailureListener(exception -> progressBar.setVisibility(View.GONE));
+            mProgressBar.setVisibility(View.GONE);
+            mButtonUpload.setVisibility(View.VISIBLE);
+        }).addOnFailureListener(exception -> {
+            mProgressBar.setVisibility(View.GONE);
+            mButtonUpload.setVisibility(View.VISIBLE);
+        });
     }
 
     private UploadTask uploadFile(File file, String fileName, int quality) {
@@ -217,7 +216,7 @@ public class MkEditActivity extends AppCompatActivity implements EasyPermissions
 
     @Override
     public void onBackPressed() {
-        if (progressBar.getVisibility() == View.VISIBLE) {
+        if (mProgressBar.getVisibility() == View.VISIBLE) {
             Toast.makeText(this, R.string.photo_uploading, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -264,24 +263,17 @@ public class MkEditActivity extends AppCompatActivity implements EasyPermissions
         mMk.setUserId(mUser.getUid());
         mMk.setUserName(mUser.getDisplayName());
         database.getReference(DefaultConfigurations.DB_MK)
-                .child(mMkKey).setValue(mMk).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Snackbar.make(imageView, getString(R.string.mk_added), Snackbar.LENGTH_SHORT).show();
-            }
-        });
+                .child(mMkKey).setValue(mMk).addOnCompleteListener(task ->
+                Snackbar.make(mImageView, getString(R.string.mk_added), Snackbar.LENGTH_SHORT).show());
         mNeedToSave = false;
     }
 
     private void updateMk() {
         updateMkModel();
         database.getReference(DefaultConfigurations.DB_MK)
-                .child(mMk.getKey()).setValue(mMk).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(MkEditActivity.this, getString(R.string.mk_updated), Toast.LENGTH_SHORT).show();
-                onBackPressed();
-            }
+                .child(mMk.getKey()).setValue(mMk).addOnCompleteListener(task -> {
+            Toast.makeText(MkEditActivity.this, getString(R.string.mk_updated), Toast.LENGTH_SHORT).show();
+            onBackPressed();
         });
         mNeedToSave = false;
     }

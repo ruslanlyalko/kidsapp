@@ -229,9 +229,9 @@
     <string name="income">"%1$s/%2$s ГРН"</string>
     <string name="text_show_details">Показати детальніше</string>
     <string name="text_salary_switch">Використовувати спеціальні умови</string>
-    <string name="dialog_discart_changes">Скинути всі зміни</string>
+    <string name="dialog_discart_changes">Вийти без збереження?</string>
 
-    <string name="action_discard">СКИНУТИ</string>
+    <string name="action_discard">ВИЙТИ</string>
     <string name="action_cancel">СКАСУВАТИ</string>
     <string name="action_save_changes">ЗБЕРЕГТИ ЗМІНИ</string>
     <string name="action_no">НІ</string>

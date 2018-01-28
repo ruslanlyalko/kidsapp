@@ -52,10 +52,10 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
     private static final int REQUEST_IMAGE_PERMISSION = 1;
     @BindView(R.id.image_expense) PhotoView mImageExpense;
     @BindView(R.id.progress_bar) ProgressBar mProgressBar;
+    @BindView(R.id.button_upload) Button mButtonUpload;
     @BindView(R.id.edit_title1) EditText mEditTitle1;
     @BindView(R.id.text_title2) TextView mTextTitle2;
     @BindView(R.id.edit_price) EditText mEditPrice;
-    @BindView(R.id.button_upload) Button mButtonUpload;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private Expense mExpense = new Expense();
@@ -283,11 +283,7 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
     }
 
     @OnClick(R.id.button_upload)
-    public void onViewClicked() {
-        startCamera();
-    }
-
-    void startCamera() {
+    public void onUploadClicked() {
         String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
             EasyImage.openChooserWithGallery(this, getString(R.string.choose_images), 0);
