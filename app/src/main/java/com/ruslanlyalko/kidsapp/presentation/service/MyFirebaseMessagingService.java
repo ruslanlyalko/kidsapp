@@ -13,7 +13,9 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.ruslanlyalko.kidsapp.R;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.expenses.ExpensesActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.MessageDetailsActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.mk.MkTabActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.report.ReportActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.splash.SplashActivity;
 
@@ -71,10 +73,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         payload.get("reportUserName"),
                         payload.get("reportUserId"));
                 break;
-            default:
             case "COMMENT":
                 resultIntent = MessageDetailsActivity.getLaunchIntent(this, payload.get("messageKey"));
                 break;
+            case "EXPENSE":
+                resultIntent = ExpensesActivity.getLaunchIntent(this);
+                break;
+            case "MK":
+                resultIntent = MkTabActivity.getLaunchIntent(this);
+                break;
+            default:
+                resultIntent = SplashActivity.getLaunchIntent(this);
         }
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addNextIntent(resultIntent);

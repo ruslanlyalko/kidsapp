@@ -1,6 +1,7 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.mk;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -63,7 +64,7 @@ public class MkTabActivity extends AppCompatActivity {
     private Animation fade;
     private Animation fade_back;
 
-    public static Intent getLaunchIntent(final Activity launchIntent) {
+    public static Intent getLaunchIntent(final Context launchIntent) {
         return new Intent(launchIntent, MkTabActivity.class);
     }
 

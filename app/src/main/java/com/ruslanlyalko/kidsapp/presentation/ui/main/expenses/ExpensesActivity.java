@@ -1,6 +1,7 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.expenses;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -73,7 +74,7 @@ public class ExpensesActivity extends BaseActivity implements OnExpenseClickList
     private ExpensesAdapter mExpensesAdapter = new ExpensesAdapter(this);
     private Boolean mIsFabOpen = false;
 
-    public static Intent getLaunchIntent(final Activity launchIntent) {
+    public static Intent getLaunchIntent(final Context launchIntent) {
         return new Intent(launchIntent, ExpensesActivity.class);
     }
 

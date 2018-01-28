@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -211,25 +212,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendRegistrationToServer(final String refreshedToken) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String version = (pInfo != null ? pInfo.versionName : "");
         if (user != null) {
-            FirebaseDatabase.getInstance().getReference(DefaultConfigurations.DB_USERS)
-                    .child(user.getUid())
-                    .child("token")
-                    .setValue(refreshedToken);
-            mDatabase.getReference(DefaultConfigurations.DB_USERS)
-                    .child(user.getUid())
-                    .child("lastOnline")
-                    .onDisconnect()
-                    .setValue(new Date());
-            mDatabase.getReference(DefaultConfigurations.DB_USERS)
-                    .child(user.getUid())
-                    .child("isOnline")
-                    .setValue(Boolean.TRUE);
-            mDatabase.getReference(DefaultConfigurations.DB_USERS)
-                    .child(user.getUid())
-                    .child("isOnline")
-                    .onDisconnect()
-                    .removeValue();
+            DatabaseReference ref = mDatabase.getReference(DefaultConfigurations.DB_USERS)
+                    .child(user.getUid());
+            ref.child("token").setValue(refreshedToken);
+            ref.child("appVersion").setValue(version);
+            ref.child("lastOnline").onDisconnect().setValue(new Date());
+            ref.child("isOnline").setValue(Boolean.TRUE);
+            ref.child("isOnline").onDisconnect().removeValue();
         }
     }
 
