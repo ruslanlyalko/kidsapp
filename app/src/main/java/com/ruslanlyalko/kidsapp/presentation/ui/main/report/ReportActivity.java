@@ -287,7 +287,7 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         byte[] bytes = baos.toByteArray();
         // Meta data for imageView
         StorageMetadata metadata = new StorageMetadata.Builder()
-                .setContentType("imageView/jpg")
+                .setContentType("image/jpg")
                 .setCustomMetadata("Date", mReport.getDate())
                 .setCustomMetadata("UserName", mReport.getUserName())
                 .build();

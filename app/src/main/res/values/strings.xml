@@ -266,5 +266,7 @@
     <string name="last_online">Востанє в мережі %s</string>
     <string name="last_online_long_time_ago">Востаннє в мережі давно</string>
     <string name="calendar_add_report">ДОБАВИТИ ЗВІТ</string>
+    <string name="expense_added">Витрату добавлено</string>
+    <string name="expense_upload">Загрузити фото</string>
 
 </resources>

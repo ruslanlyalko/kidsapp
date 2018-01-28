@@ -2,11 +2,9 @@ package com.ruslanlyalko.kidsapp.presentation.ui.main.mk;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -36,10 +34,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
-import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.ruslanlyalko.kidsapp.R;
-import com.ruslanlyalko.kidsapp.common.Constants;
 import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.common.Keys;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
@@ -47,10 +43,7 @@ import com.ruslanlyalko.kidsapp.data.models.Mk;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +51,7 @@ import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MkEditActivity extends AppCompatActivity  implements EasyPermissions.PermissionCallbacks  {
+public class MkEditActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
     private static final int REQUEST_IMAGE_PERMISSION = 1;
 
@@ -166,6 +159,15 @@ public class MkEditActivity extends AppCompatActivity  implements EasyPermission
         mNeedToSave = false;
     }
 
+    void startCamera() {
+        String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            EasyImage.openChooserWithGallery(this, getString(R.string.choose_images), 0);
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.image_permissions), REQUEST_IMAGE_PERMISSION, perms);
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -184,14 +186,13 @@ public class MkEditActivity extends AppCompatActivity  implements EasyPermission
 
     private void onPhotosReturned(final File imageFile) {
         progressBar.setVisibility(View.VISIBLE);
-        mNeedToSave= true;
+        mNeedToSave = true;
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Glide.with(this).load(imageFile).into(imageView);
-
         String imageFileName = DateUtils.getCurrentTimeStamp() + "_original" + ".jpg";
         uploadFile(imageFile, imageFileName, 95).addOnSuccessListener(taskSnapshot -> {
             if (taskSnapshot.getDownloadUrl() != null)
-                mMk.setImageUri( taskSnapshot.getDownloadUrl().toString());
+                mMk.setImageUri(taskSnapshot.getDownloadUrl().toString());
             progressBar.setVisibility(View.GONE);
         }).addOnFailureListener(exception -> progressBar.setVisibility(View.GONE));
     }
@@ -203,7 +204,7 @@ public class MkEditActivity extends AppCompatActivity  implements EasyPermission
         byte[] bytes = baos.toByteArray();
         // Meta data for imageView
         StorageMetadata metadata = new StorageMetadata.Builder()
-                .setContentType("imageView/jpg")
+                .setContentType("image/jpg")
                 .setCustomMetadata("Title1", mMk.getTitle1())
                 .setCustomMetadata("UserName", mMk.getUserName())
                 .build();
@@ -214,28 +215,6 @@ public class MkEditActivity extends AppCompatActivity  implements EasyPermission
                 .putBytes(bytes, metadata);
     }
 
-
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> list) {
-        switch (requestCode) {
-            case REQUEST_IMAGE_PERMISSION:
-                EasyImage.openChooserWithGallery(this, getString(R.string.choose_images), 0);
-                break;
-        }
-    }
-
-    @Override
-    public void onPermissionsDenied(final int requestCode, final List<String> perms) {
-    }
-
-    void startCamera() {
-        String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            EasyImage.openChooserWithGallery(this, getString(R.string.choose_images), 0);
-        } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.image_permissions), REQUEST_IMAGE_PERMISSION, perms);
-        }
-    }
     @Override
     public void onBackPressed() {
         if (progressBar.getVisibility() == View.VISIBLE) {
@@ -255,6 +234,19 @@ public class MkEditActivity extends AppCompatActivity  implements EasyPermission
             super.onBackPressed();
             overridePendingTransition(R.anim.nothing, R.anim.fadeout);
         }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+        switch (requestCode) {
+            case REQUEST_IMAGE_PERMISSION:
+                EasyImage.openChooserWithGallery(this, getString(R.string.choose_images), 0);
+                break;
+        }
+    }
+
+    @Override
+    public void onPermissionsDenied(final int requestCode, final List<String> perms) {
     }
 
     private void updateMkModel() {

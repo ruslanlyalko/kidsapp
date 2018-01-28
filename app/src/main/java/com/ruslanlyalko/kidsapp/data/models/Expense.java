@@ -1,6 +1,8 @@
 package com.ruslanlyalko.kidsapp.data.models;
 
-public class Expense {
+import java.io.Serializable;
+
+public class Expense implements Serializable {
 
     public String key;
     public String title1;
@@ -14,6 +16,15 @@ public class Expense {
 
     public Expense() {
     }
+
+    public Expense(final String title2, final String date, final String time, final String userId, final String userName) {
+        this.title2 = title2;
+        this.date = date;
+        this.time = time;
+        this.userId = userId;
+        this.userName = userName;
+    }
+
 
     public Expense(String title1, String title2, String date, String uri, String userId, String userName, int price) {
         this.title1 = title1;

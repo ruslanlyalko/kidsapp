@@ -11,5 +11,7 @@ public interface OnExpenseClickListener {
 
     void onRemoveClicked(Expense expense);
 
+    void onEditClicked(Expense expense);
+
     void onPhotoPreviewClicked(Expense expense);
 }

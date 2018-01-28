@@ -20,21 +20,22 @@ import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.models.Expense;
 import com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyViewHolder> {
 
     private OnExpenseClickListener mOnExpenseClickListener;
-    private List<Expense> mExpenseList;
+    private List<Expense> mExpenseList = new ArrayList<>();
     private FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-    public ExpensesAdapter(OnExpenseClickListener onExpenseClickListener, List<Expense> reportList) {
+    public ExpensesAdapter(OnExpenseClickListener onExpenseClickListener) {
         this.mOnExpenseClickListener = onExpenseClickListener;
-        this.mExpenseList = reportList;
     }
 
     @Override
@@ -53,6 +54,22 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
     @Override
     public int getItemCount() {
         return mExpenseList.size();
+    }
+
+    public List<Expense> getData() {
+        return mExpenseList;
+    }
+
+    public void setData(final List<Expense> expenseList) {
+        mExpenseList.clear();
+        mExpenseList.addAll(expenseList);
+        notifyDataSetChanged();
+    }
+
+    public void clearData() {
+        int count = mExpenseList.size();
+        mExpenseList.clear();
+        notifyItemRangeRemoved(0, count);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -124,6 +141,15 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
                 mOnExpenseClickListener.onRemoveClicked(mExpenseList.get(getAdapterPosition()));
                 mSwipeLayout.close();
             }
+        }
+
+        @OnLongClick(R.id.linear_user)
+        boolean onEditClicked() {
+            if (mOnExpenseClickListener != null) {
+                mOnExpenseClickListener.onEditClicked(mExpenseList.get(getAdapterPosition()));
+                return true;
+            }
+            return false;
         }
     }
 }

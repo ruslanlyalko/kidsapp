@@ -143,4 +143,12 @@ public class DateUtils {
         lastOnlineCalendar.setTime(lastOnline);
         return now.getTime().getTime() < lastOnlineCalendar.getTime().getTime();
     }
+
+    public static String getCurrentYear() {
+        return new SimpleDateFormat("yyyy", Locale.US).format(new Date());
+    }
+
+    public static String getCurrentMonth() {
+        return new SimpleDateFormat("M", Locale.US).format(new Date());
+    }
 }

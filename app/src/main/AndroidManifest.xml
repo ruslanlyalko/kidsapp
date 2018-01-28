@@ -163,7 +163,12 @@
             android:name=".presentation.ui.alarm.AlarmReceiverActivity"
             android:label="@string/title_activity_alarm"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".presentation.ui.main.expenses.edit.ExpenseEditActivity"
+            android:parentActivityName=".presentation.ui.main.expenses.ExpensesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Close"
+            android:windowSoftInputMode="stateHidden" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="52ba750a54b6b9f14ef3239631d128c3b628ee05" />
