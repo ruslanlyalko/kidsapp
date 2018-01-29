@@ -23,4 +23,6 @@ public interface DefaultConfigurations {
     String STORAGE_MK = "MK";
     String STORAGE_REPORT = "REPORT";
     String STORAGE_MESSAGES_COMMENTS = "MESSAGES_COMMENTS";
+    String DB_CONTACTS = "CONTACTS";
+    String DB_BIRTHDAYS = "BIRTHDAYS";
 }

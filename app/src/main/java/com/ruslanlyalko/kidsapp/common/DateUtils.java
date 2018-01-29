@@ -1,5 +1,7 @@
 package com.ruslanlyalko.kidsapp.common;
 
+import android.text.Editable;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -150,5 +152,15 @@ public class DateUtils {
 
     public static String getCurrentMonth() {
         return new SimpleDateFormat("M", Locale.US).format(new Date());
+    }
+
+    public static Date parse(final String text, final String pattern) {
+        Date date = new Date();
+        try {
+            date = new SimpleDateFormat(pattern, Locale.US).parse(text);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 }

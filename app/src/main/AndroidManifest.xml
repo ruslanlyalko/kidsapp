@@ -111,7 +111,8 @@
             android:parentActivityName=".presentation.ui.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Close"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            />
         <activity
             android:name=".presentation.ui.main.mk.MkPlanActivity"
             android:label="@string/title_activity_mk_plan"
@@ -124,7 +125,8 @@
             android:parentActivityName=".presentation.ui.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Close"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            />
         <activity
             android:name=".presentation.ui.main.mk.MkTabActivity"
             android:label="@string/title_activity_mk_tab"
@@ -146,13 +148,15 @@
             android:parentActivityName=".presentation.ui.main.messages.details.MessageDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Close"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            />
         <activity
             android:name=".presentation.ui.main.profile.salary.edit.SalaryEditActivity"
             android:parentActivityName=".presentation.ui.main.profile.salary.SalaryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Close"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            />
         <activity
             android:name=".presentation.ui.main.maps.MapsActivity"
             android:label="@string/title_activity_maps"
@@ -168,7 +172,37 @@
             android:parentActivityName=".presentation.ui.main.expenses.ExpensesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Close"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            />
+        <activity
+            android:name=".presentation.ui.main.clients.ClientsTabActivity"
+            android:label="@string/title_activity_clients_tab"
+            android:parentActivityName=".presentation.ui.main.calendar.CalendarActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".presentation.ui.main.clients.contacts.edit.ContactEditActivity"
+            android:parentActivityName=".presentation.ui.main.clients.contacts.edit.ContactEditActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Close"
+            android:windowSoftInputMode="stateHidden"
+            />
+
+        <activity
+            android:name=".presentation.ui.main.clients.birthdays.edit.BirthdaysEditActivity"
+            android:parentActivityName=".presentation.ui.main.clients.contacts.edit.ContactEditActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Close"
+            android:windowSoftInputMode="stateHidden"
+            />
+
+        <activity
+            android:name=".presentation.ui.main.clients.contacts.details.ContactDetailsActivity"
+            android:parentActivityName=".presentation.ui.main.clients.ClientsTabActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="52ba750a54b6b9f14ef3239631d128c3b628ee05" />
@@ -185,26 +219,27 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <service
-            android:name=".presentation.service.MyFirebaseMessagingService">
+        <service android:name=".presentation.service.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <service
-            android:name=".presentation.service.MyFirebaseInstanceIDService">
+        <service android:name=".presentation.service.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-             See README(https://goo.gl/l4GJaQ) for more. -->
+        <!--
+             Set custom default icon. This is used when no icon is set for incoming notification messages.
+             See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_stat_default" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />

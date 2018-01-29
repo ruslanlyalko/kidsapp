@@ -23,6 +23,7 @@
     <!-- HINTS-->
     <string name="hint_first_name">ПІБ</string>
     <string name="hint_phone">Телефон</string>
+    <string name="hint_phone2">Телефон 2</string>
     <string name="hint_email">Електронна скринька</string>
     <string name="hint_date_birth">Дата народження</string>
     <string name="hint_card">Номер картки</string>
@@ -268,5 +269,23 @@
     <string name="calendar_add_report">ДОБАВИТИ ЗВІТ</string>
     <string name="expense_added">Витрату добавлено</string>
     <string name="expense_upload">Загрузити фото</string>
+    <string name="button_clients">НАШІ КЛІЄНТИ</string>
+    <string name="title_activity_clients_tab">Наші Клієнти</string>
+    <string name="tab_text_1">КОНТАКТИ</string>
+    <string name="tab_text_2">ДНІ НАРОДЖЕННЯ</string>
+    <string name="contacts_filter_by_name">Фільтр: І\'мя</string>
+    <string name="contacts_filter_by_phone">Фільтр: Телефон</string>
+    <string name="contacts_text_children">Діти</string>
+    <string name="client_added">Контакт створено</string>
+    <string name="hint_child1">Імя першої дитини</string>
+    <string name="hint_child2">Імя другої дитини</string>
+    <string name="hint_child3">Імя третьої дитини</string>
+    <string name="hint_client_description">Опис</string>
+    <string name="hint_person">Іия іменинника</string>
+    <string name="check_mk">Майстер - клас</string>
+    <string name="check_aqua">Аквагрим</string>
+    <string name="check_cinema">Кінотеатр</string>
+    <string name="hint_kids_count">Кількість дітей</string>
+    <string name="add_birthday">Добавити День Народження</string>
 
 </resources>

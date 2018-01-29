@@ -19,8 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,8 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
@@ -38,6 +34,7 @@ import com.ruslanlyalko.kidsapp.data.models.Notification;
 import com.ruslanlyalko.kidsapp.data.models.User;
 import com.ruslanlyalko.kidsapp.presentation.ui.about.AboutActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.calendar.CalendarActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.ClientsTabActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.expenses.ExpensesActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.MessagesActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.mk.MkTabActivity;
@@ -47,7 +44,6 @@ import com.ruslanlyalko.kidsapp.presentation.widget.SwipeLayout;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,27 +54,23 @@ import static com.ruslanlyalko.kidsapp.common.ViewUtils.viewToDrawable;
 
 public class MainActivity extends AppCompatActivity {
 
-    static final int MIN_DISTANCE = 150;
-
+    private static final int MIN_DISTANCE = 150;
+    private static final String mLink = "https://play.google.com/store/apps/details?id=com.ruslanlyalko.kidsapp";
+    private static final String mLinkFb = "https://www.facebook.com/groups/cheburashka.kids/";
     @BindView(R.id.text_app_name) TextView mAppNameText;
     @BindView(R.id.text_link) TextView mLinkText;
     @BindView(R.id.text_link_details) TextView mLinkDetailsText;
     @BindView(R.id.button_arrow) Button mArrowButton;
     @BindView(R.id.swipe_layout) SwipeLayout mSwipeLayout;
     @BindView(R.id.button_events) ImageView mEventsButton;
-
     boolean mDoubleBackToExitPressedOnce = false;
     boolean mSwipeOpened = false;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private FirebaseRemoteConfig mRemoteConfig = FirebaseRemoteConfig.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private boolean mLinkActive = false;
-    private String mLink = "https://play.google.com/store/apps/details?id=com.ruslanlyalko.kidsapp";
-    private String mLinkFb = "https://www.facebook.com/groups/cheburashka.kids/";
     private String mAboutText = "";
     private float x1;
     private float y1;
-    private boolean mIsLatestVersion;
     private List<Notification> mNotifications = new ArrayList<>();
 
     public static Intent getLaunchIntent(final AppCompatActivity launchActivity) {
@@ -90,32 +82,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        initRemoteConfig();
         initCurrentUser();
         initSwipes();
         loadBadge();
         sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken());
-    }
-
-    private void initRemoteConfig() {
-        mRemoteConfig.setConfigSettings(new FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(true)
-                .build());
-        HashMap<String, Object> defaults = new HashMap<>();
-        defaults.put("link_show", false);
-        defaults.put("latest_version", "1.7");
-        defaults.put("link", "https://play.google.com/store/apps/details?id=com.ruslanlyalko.kidsapp");
-        defaults.put("link_text", "Відвідайте нашу сторінку у ФБ!");
-        defaults.put("link_fb", "https://www.facebook.com/groups/cheburashka.kids/");
-        mRemoteConfig.setDefaults(defaults);
-        final Task<Void> fetch = mRemoteConfig.fetch(0);
-        fetch.addOnSuccessListener(this, new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                mRemoteConfig.activateFetched();
-                updateLink();
-            }
-        });
     }
 
     private void initCurrentUser() {
@@ -230,29 +200,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateLink() {
-        mLinkActive = mRemoteConfig.getBoolean("link_show");
-        String linkText = mRemoteConfig.getString("link_text");
-        mLink = mRemoteConfig.getString("link");
-        String latestVersion = mRemoteConfig.getString("latest_version");
-        PackageInfo pInfo = null;
-        try {
-            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        String currentVersion = pInfo != null ? pInfo.versionName : "";
-        mIsLatestVersion = currentVersion.equals(latestVersion);
-        if (mLinkActive && !mIsLatestVersion) {
-            mLinkText.setText(linkText);
-            mLinkDetailsText.setText("Докладніше >");
-        } else {
-            mLinkText.setText("");
-            mLinkDetailsText.setText("");
-        }
-        mLinkFb = mRemoteConfig.getString("link_fb");
-    }
-
     public void redrawCountOfNotifications(int count) {
         if (count == 0) {
             mEventsButton.setImageDrawable(getDrawable(R.drawable.ic_event1));
@@ -270,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick({R.id.text_link, R.id.text_link_details})
     void onTopLinkClicked() {
-        if (mLinkActive && !mIsLatestVersion) openBrowser(mLink);
+        if (mLinkActive) openBrowser(mLink);
     }
 
     private void openBrowser(String url) {
@@ -325,6 +272,11 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.button_fb)
     void onFbClicked() {
         openBrowser(mLinkFb);
+    }
+
+    @OnClick(R.id.button_clients)
+    void onClientsClicked() {
+        startActivity(ClientsTabActivity.getLaunchIntent(this));
     }
 
     @OnClick(R.id.button_link)
@@ -390,13 +342,7 @@ public class MainActivity extends AppCompatActivity {
         }
         mDoubleBackToExitPressedOnce = true;
         Toast.makeText(this, R.string.hint_double_press, Toast.LENGTH_SHORT).show();
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                mDoubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
+        new Handler().postDelayed(() -> mDoubleBackToExitPressedOnce = false, 2000);
     }
 
     @Override

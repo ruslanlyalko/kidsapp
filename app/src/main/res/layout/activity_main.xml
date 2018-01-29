@@ -107,7 +107,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="180dp"
             android:orientation="vertical">
 
             <View
@@ -116,20 +116,20 @@
                 android:background="@drawable/gradient" />
 
             <Button
-                android:id="@+id/button_calc"
+                android:id="@+id/button_clients"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="@string/button_calc"
-                android:visibility="gone" />
+                android:text="@string/button_clients"
+                android:visibility="visible" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@drawable/gradient"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <Button
                 android:id="@+id/button_about"
