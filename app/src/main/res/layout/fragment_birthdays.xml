@@ -1,5 +1,6 @@
 <android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,35 +12,49 @@
         <LinearLayout
             android:id="@+id/layout_filter"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginBottom="8dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/edit_filter_name"
+            <TextView
+                android:id="@+id/text_filter_date1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/transparent"
-                android:hint="@string/contacts_filter_by_name"
-                android:inputType="textCapWords"
+                android:gravity="center"
                 android:paddingEnd="8dp"
-                android:paddingStart="16dp" />
+                android:paddingStart="16dp"
+                android:textSize="18sp"
+                tools:text="12.12.2018" />
 
-            <EditText
-                android:id="@+id/edit_filter_phone"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:backgroundTint="@android:color/transparent"
+                android:gravity="center"
+                android:text="-"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/text_filter_date2"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/transparent"
-                android:hint="@string/contacts_filter_by_phone"
-                android:inputType="phone"
+                android:gravity="center"
                 android:paddingEnd="8dp"
-                android:paddingStart="16dp" />
+                android:paddingStart="16dp"
+                android:textSize="18sp"
+                tools:text="12.12.2018" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/list_contacts"
+            android:id="@+id/list_birthdays"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"

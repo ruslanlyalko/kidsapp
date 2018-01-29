@@ -1,7 +1,5 @@
 package com.ruslanlyalko.kidsapp.common;
 
-import android.text.Editable;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -152,6 +150,17 @@ public class DateUtils {
 
     public static String getCurrentMonth() {
         return new SimpleDateFormat("M", Locale.US).format(new Date());
+    }
+
+    public static boolean isBetween(final Date bdDate, final String from, final String to) {
+        Date fromDate = parse(from, "dd.MM.yyyy");
+        fromDate.setHours(0);
+        fromDate.setMinutes(0);
+        Date toDate = parse(to, "dd.MM.yyyy");
+        toDate.setHours(23);
+        toDate.setMinutes(59);
+        bdDate.setMinutes(5);
+        return bdDate.getTime() > fromDate.getTime() && bdDate.getTime() < toDate.getTime();
     }
 
     public static Date parse(final String text, final String pattern) {

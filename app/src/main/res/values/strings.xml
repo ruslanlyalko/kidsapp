@@ -281,11 +281,14 @@
     <string name="hint_child2">Імя другої дитини</string>
     <string name="hint_child3">Імя третьої дитини</string>
     <string name="hint_client_description">Опис</string>
-    <string name="hint_person">Іия іменинника</string>
-    <string name="check_mk">Майстер - клас</string>
+    <string name="hint_person">Ім\'я іменинника</string>
+    <string name="check_mk">МК</string>
     <string name="check_aqua">Аквагрим</string>
     <string name="check_cinema">Кінотеатр</string>
     <string name="hint_kids_count">Кількість дітей</string>
     <string name="add_birthday">Добавити День Народження</string>
+    <string name="text_kids">Кількість дітей:</string>
+    <string name="hint_date_celebrating">Дата Святкування ДН</string>
+    <string name="text_kids_count">Кількість дітей: %s</string>
 
 </resources>

@@ -34,8 +34,8 @@ import butterknife.OnClick;
 
 public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysClickListener {
 
-    @BindView(R.id.edit_phone1) TextView mEditPhone1;
-    @BindView(R.id.edit_phone2) TextView mEditPhone2;
+    @BindView(R.id.text_phone1) TextView mEditPhone1;
+    @BindView(R.id.text_phone2) TextView mEditPhone2;
     @BindView(R.id.edit_child_name1) TextView mEditChildName1;
     @BindView(R.id.edit_child_date1) TextView mEditChildDate1;
     @BindView(R.id.edit_child_name2) TextView mEditChildName2;
@@ -157,7 +157,7 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
         startActivity(BirthdaysEditActivity.getLaunchIntent(this, mContact.getKey()));
     }
 
-    @OnClick({R.id.edit_phone1, R.id.edit_phone2})
+    @OnClick({R.id.text_phone1, R.id.text_phone2})
     public void onViewClicked(View view) {
         Intent callIntent;
         switch (view.getId()) {

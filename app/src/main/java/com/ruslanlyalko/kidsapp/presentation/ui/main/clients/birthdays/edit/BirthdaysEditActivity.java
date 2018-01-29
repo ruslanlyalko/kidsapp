@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,10 +35,11 @@ public class BirthdaysEditActivity extends BaseActivity {
     @BindView(R.id.edit_child_name1) EditText mEditChildName1;
     @BindView(R.id.edit_child_date1) EditText mEditChildDate1;
     @BindView(R.id.edit_description) EditText mEditDescription;
-    @BindView(R.id.edit_kids_count) EditText mEditKidsCount;
+    @BindView(R.id.seek_kids_count) SeekBar mSeekKidsCount;
     @BindView(R.id.checkbox_birthday_mk) CheckBox mCheckboxBirthdayMk;
     @BindView(R.id.checkbox_birthday_aqua) CheckBox mCheckboxBirthdayAqua;
     @BindView(R.id.checkbox_birthday_cinema) CheckBox mCheckboxBirthdayCinema;
+    @BindView(R.id.text_kids_count) TextView mTextKidsCount;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private Birthday mBirthday = new Birthday();
@@ -97,11 +100,25 @@ public class BirthdaysEditActivity extends BaseActivity {
         mEditChildName1.addTextChangedListener(watcher);
         mEditChildDate1.addTextChangedListener(watcher);
         mEditDescription.addTextChangedListener(watcher);
-        mEditKidsCount.addTextChangedListener(watcher);
         CompoundButton.OnCheckedChangeListener checkedWatcher = (compoundButton, b) -> mNeedToSave = true;
         mCheckboxBirthdayAqua.setOnCheckedChangeListener(checkedWatcher);
         mCheckboxBirthdayMk.setOnCheckedChangeListener(checkedWatcher);
         mCheckboxBirthdayCinema.setOnCheckedChangeListener(checkedWatcher);
+        mSeekKidsCount.setMax(30);
+        mSeekKidsCount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(final SeekBar seekBar, final int i, final boolean b) {
+                mTextKidsCount.setText(getString(R.string.text_kids_count, String.valueOf(i)));
+            }
+
+            @Override
+            public void onStartTrackingTouch(final SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(final SeekBar seekBar) {
+            }
+        });
     }
 
     private void setupView() {
@@ -112,7 +129,7 @@ public class BirthdaysEditActivity extends BaseActivity {
             mEditDescription.setText(mBirthday.getDescription());
             mEditChildName1.setText(mBirthday.getChildName());
             mEditChildDate1.setText(DateUtils.toString(mBirthday.getBdDate(), "dd.MM.yyyy"));
-            mEditKidsCount.setText(String.valueOf(mBirthday.getKidsCount()));
+            mSeekKidsCount.setProgress(mBirthday.getKidsCount());
             mCheckboxBirthdayAqua.setChecked(mBirthday.getAqua());
             mCheckboxBirthdayMk.setChecked(mBirthday.getMk());
             mCheckboxBirthdayCinema.setChecked(mBirthday.getCinema());
@@ -139,7 +156,7 @@ public class BirthdaysEditActivity extends BaseActivity {
 
     private void updateModel() {
         mBirthday.setDescription(mEditDescription.getText().toString().trim());
-        mBirthday.setKidsCount(Integer.parseInt(mEditKidsCount.getText().toString().trim()));
+        mBirthday.setKidsCount(mSeekKidsCount.getProgress());
         mBirthday.setChildName(mEditChildName1.getText().toString().trim());
         mBirthday.setBdDate(DateUtils.parse(mEditChildDate1.getText().toString().trim(), "dd.MM.yyyy"));
         mBirthday.setAqua(mCheckboxBirthdayAqua.isChecked());

@@ -1,5 +1,6 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.google.firebase.database.DataSnapshot;
@@ -64,6 +67,8 @@ public class ContactsFragment extends Fragment implements OnContactClickListener
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
+        getActivity().getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setupRecycler();
         loadContacts();
     }
@@ -98,6 +103,19 @@ public class ContactsFragment extends Fragment implements OnContactClickListener
     @OnTextChanged({R.id.edit_filter_name, R.id.edit_filter_phone})
     void onFilterTextChanged() {
         mContactsAdapter.getFilter().filter(mEditFilterName.getText().toString().trim() + "/" + mEditFilterPhone.getText().toString().trim());
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        try {
+            final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null && getView() != null) {
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

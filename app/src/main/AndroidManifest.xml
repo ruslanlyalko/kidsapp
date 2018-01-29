@@ -179,7 +179,8 @@
             android:label="@string/title_activity_clients_tab"
             android:parentActivityName=".presentation.ui.main.calendar.CalendarActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".presentation.ui.main.clients.contacts.edit.ContactEditActivity"
             android:parentActivityName=".presentation.ui.main.clients.contacts.edit.ContactEditActivity"

@@ -139,22 +139,13 @@ public class BirthdaysAdapter extends RecyclerView.Adapter<BirthdaysAdapter.MyVi
         }
 
         private boolean isMatchFilter(final CharSequence charSequence, final Birthday birthday) {
-            if (charSequence.toString().isEmpty()) return true;
-            String[] filter = charSequence.toString().split("0", 2);
-            String name = filter[0];
-            String phone = "0";
+            if (charSequence.toString().equals("/")) return true;
+            String[] filter = charSequence.toString().split("/", 2);
+            String from = filter[0];
+            String to = "";
             if (filter.length > 1)
-                phone = "0" + filter[1];
-            boolean isNameGood = true;
-            boolean isPhoneGood = true;
-//            if (!name.isEmpty() && !birthday.getName().toLowerCase().contains(name.toLowerCase())) {
-//                isNameGood = false;
-//            }
-//            if (!phone.equals("0") && !(birthday.getPhone().toLowerCase().contains(phone.toLowerCase()) ||
-//                    (birthday.getPhone2() == null || birthday.getPhone2().toLowerCase().contains(phone.toLowerCase())))) {
-//                isPhoneGood = false;
-//            }
-            return isNameGood && isPhoneGood;
+                to = filter[1];
+            return DateUtils.isBetween(birthday.getBdDate(), from, to);
         }
 
         @Override

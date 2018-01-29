@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".presentation.ui.main.mk.MkEditActivity">
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.ui.main.mk.MkEditActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/text_margin">
+        android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/layout_phones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="16dp">
 
             <TextView
-                android:id="@+id/edit_phone1"
+                android:id="@+id/text_phone1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -26,11 +28,12 @@
                 android:focusable="true"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
-                android:textSize="16sp"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
                 tools:text="0958422333" />
 
             <TextView
-                android:id="@+id/edit_phone2"
+                android:id="@+id/text_phone2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -39,15 +42,17 @@
                 android:focusable="true"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
-                android:textSize="16sp"
-                tools:text="0958422333" />
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                tools:text="0508491707" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingStart="16dp">
 
             <TextView
                 android:id="@+id/edit_child_name1"
@@ -67,7 +72,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingStart="16dp">
 
             <TextView
                 android:id="@+id/edit_child_name2"
@@ -87,7 +93,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingStart="16dp">
 
             <TextView
                 android:id="@+id/edit_child_name3"
@@ -125,4 +132,4 @@
             android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>
