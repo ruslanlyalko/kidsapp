@@ -1,6 +1,5 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.adapter;
 
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,20 +85,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.text_name) TextView mTextName;
-        @BindView(R.id.text_phone1) TextView mTextPhone1;
-        @BindView(R.id.text_phone2) TextView mTextPhone2;
-        @BindView(R.id.layout_phones) LinearLayout mLayoutPhones;
-        @BindView(R.id.text_child_name1) TextView mTextChildName1;
-        @BindView(R.id.text_child_bd1) TextView mTextChildBd1;
-        @BindView(R.id.layout_child1) LinearLayout mLayoutChild1;
-        @BindView(R.id.text_child_name2) TextView mTextChildName2;
-        @BindView(R.id.text_child_bd2) TextView mTextChildBd2;
-        @BindView(R.id.layout_child2) LinearLayout mLayoutChild2;
-        @BindView(R.id.text_child_name3) TextView mTextChildName3;
-        @BindView(R.id.text_child_bd3) TextView mTextChildBd3;
-        @BindView(R.id.layout_child3) LinearLayout mLayoutChild3;
-        @BindView(R.id.card_root) CardView mCardRoot;
-        @BindView(R.id.text_description) TextView mTextDescription;
+        @BindView(R.id.text_phones) TextView mTextPhones;
+        @BindView(R.id.text_kids) TextView mTextKids;
+        @BindView(R.id.layout_root) LinearLayout mLayoutRoot;
 
         MyViewHolder(View view) {
             super(view);
@@ -108,56 +96,27 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
         void bindData(final Contact contact) {
             mTextName.setText(contact.getName());
-            mTextPhone1.setText(contact.getPhone());
-            mTextPhone2.setText(contact.getPhone2());
-            mTextPhone2.setVisibility(contact.getPhone2() != null & !contact.getPhone2().isEmpty() ? View.VISIBLE : View.GONE);
+            String phones = contact.getPhone();
+            if (contact.getPhone2() != null & !contact.getPhone2().isEmpty())
+                phones += ", " + contact.getPhone2();
+            mTextPhones.setText(phones);
+            String kids = "";
             if (contact.getChildName1() != null && !contact.getChildName1().isEmpty()) {
-                mTextChildName1.setText(contact.getChildName1());
-                mTextChildBd1.setText(DateUtils.toString(contact.getChildBd1(), "dd.MM.yyyy"));
-                mLayoutChild1.setVisibility(View.VISIBLE);
-            } else {
-                mLayoutChild1.setVisibility(View.GONE);
+                kids += contact.getChildName1() + DateUtils.toString(contact.getChildBd1(), " dd.MM ") + DateUtils.getChildYears(contact.getChildBd1());
             }
             if (contact.getChildName2() != null && !contact.getChildName2().isEmpty()) {
-                mTextChildName2.setText(contact.getChildName2());
-                mTextChildBd2.setText(DateUtils.toString(contact.getChildBd2(), "dd.MM.yyyy"));
-                mLayoutChild2.setVisibility(View.VISIBLE);
-            } else {
-                mLayoutChild2.setVisibility(View.GONE);
+                kids += contact.getChildName2() + DateUtils.toString(contact.getChildBd2(), " dd.MM ") + DateUtils.getChildYears(contact.getChildBd1());
             }
             if (contact.getChildName3() != null && !contact.getChildName3().isEmpty()) {
-                mTextChildName3.setText(contact.getChildName3());
-                mTextChildBd3.setText(DateUtils.toString(contact.getChildBd3(), "dd.MM.yyyy"));
-                mLayoutChild3.setVisibility(View.VISIBLE);
-            } else {
-                mLayoutChild3.setVisibility(View.GONE);
+                kids += contact.getChildName3() + DateUtils.toString(contact.getChildBd3(), " dd.MM") + DateUtils.getChildYears(contact.getChildBd1());
             }
-            mTextDescription.setText(contact.getDescription());
-            mTextDescription.setVisibility(contact.getDescription() != null & !contact.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
+            mTextKids.setText(kids);
         }
 
-        @OnClick(R.id.card_root)
+        @OnClick(R.id.layout_root)
         void onItemClicked() {
             if (mOnContactClickListener != null)
                 mOnContactClickListener.onItemClicked(getAdapterPosition());
-        }
-
-        @OnClick(R.id.button_edit)
-        void onEditClicked() {
-            if (mOnContactClickListener != null)
-                mOnContactClickListener.onEditClicked(getAdapterPosition());
-        }
-
-        @OnClick(R.id.text_phone1)
-        void onPhoneClicked() {
-            if (mOnContactClickListener != null)
-                mOnContactClickListener.onPhoneClicked(getAdapterPosition());
-        }
-
-        @OnClick(R.id.text_phone2)
-        void onPhone2Clicked() {
-            if (mOnContactClickListener != null)
-                mOnContactClickListener.onPhone2Clicked(getAdapterPosition());
         }
     }
 

@@ -1,176 +1,79 @@
-<android.support.v7.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_root"
+    android:id="@+id/layout_root"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/card_margin"
-    android:layout_marginTop="@dimen/card_margin"
+    android:layout_height="80dp"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_user_name"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/ic_person"
             tools:ignore="ContentDescription" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
-            android:orientation="vertical"
-            android:paddingBottom="16dp"
-            android:paddingEnd="8dp"
-            android:paddingStart="8dp"
-            android:paddingTop="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/text_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
-                    tools:text="NAME Surname" />
-
-                <ImageButton
-                    android:id="@+id/button_edit"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:contentDescription="@string/action_edit"
-                    android:src="@drawable/ic_card_edit_25" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_phones"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/text_phone1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="18sp"
-                    tools:text="0958422333" />
-
-                <TextView
-                    android:id="@+id/text_phone2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="18sp"
-                    tools:text="0508491707" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_child1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/text_child_name1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    tools:text="Name" />
-
-                <TextView
-                    android:id="@+id/text_child_bd1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    tools:text="12.05.2002 (16)" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_child2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/text_child_name2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    tools:text="Name" />
-
-                <TextView
-                    android:id="@+id/text_child_bd2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    tools:text="12.05.2002 (16)" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_child3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/text_child_name3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    tools:text="Name" />
-
-                <TextView
-                    android:id="@+id/text_child_bd3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    tools:text="12.05.2002 (16)" />
-
-            </LinearLayout>
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/text_description"
+                android:id="@+id/text_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:visibility="gone" />
-        </LinearLayout>
+                android:textAllCaps="true"
+                android:textColor="@color/colorDarkGray"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="NAME Surname" />
+
+            <TextView
+                android:id="@+id/text_kids"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_name"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="0dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/colorSteelGray"
+                android:textSize="14sp"
+                tools:text="Rome 12.05 (6y), Kate 16.07 (7y)" />
+
+            <TextView
+                android:id="@+id/text_phones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_kids"
+                android:ellipsize="end"
+                android:textColor="@color/colorSteelGray"
+                android:textSize="14sp"
+                tools:text="0958422333" />
+
+        </RelativeLayout>
+
     </LinearLayout>
-</android.support.v7.widget.CardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/colorDividersDark" />
+</LinearLayout>

@@ -1,8 +1,6 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,7 +25,6 @@ import com.ruslanlyalko.kidsapp.data.models.Contact;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.adapter.ContactsAdapter;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.adapter.OnContactClickListener;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.details.ContactDetailsActivity;
-import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.edit.ContactEditActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,25 +113,6 @@ public class ContactsFragment extends Fragment implements OnContactClickListener
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onPhoneClicked(final int position) {
-        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-        callIntent.setData(Uri.parse("tel:" + mContactsAdapter.getItem(position).getPhone()));
-        startActivity(callIntent);
-    }
-
-    @Override
-    public void onPhone2Clicked(final int position) {
-        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-        callIntent.setData(Uri.parse("tel:" + mContactsAdapter.getItem(position).getPhone2()));
-        startActivity(callIntent);
-    }
-
-    @Override
-    public void onEditClicked(final int position) {
-        startActivity(ContactEditActivity.getLaunchIntent(getContext(), mContactsAdapter.getItem(position)));
     }
 
     @Override

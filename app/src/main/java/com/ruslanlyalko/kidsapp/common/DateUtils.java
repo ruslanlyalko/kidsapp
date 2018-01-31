@@ -180,4 +180,19 @@ public class DateUtils {
         calendar.set(Calendar.DAY_OF_MONTH, day);
         return calendar.getTime();
     }
+
+    public static String getChildYears(final Date date) {
+        Date today = new Date();
+        long days = getDateDiff(date, today);
+        return "("+(int) (days / 365) + "р); ";
+    }
+
+    private static long getDateDiff(Date oldDate, Date newDate) {
+        try {
+            return TimeUnit.DAYS.convert(newDate.getTime() - oldDate.getTime(), TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }

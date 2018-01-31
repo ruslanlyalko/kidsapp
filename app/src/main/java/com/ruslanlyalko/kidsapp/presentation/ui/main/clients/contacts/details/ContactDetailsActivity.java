@@ -6,10 +6,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.common.Keys;
+import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Birthday;
 import com.ruslanlyalko.kidsapp.data.models.Contact;
@@ -26,6 +30,7 @@ import com.ruslanlyalko.kidsapp.presentation.base.BaseActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.birthdays.adapter.BirthdaysAdapter;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.birthdays.adapter.OnBirthdaysClickListener;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.birthdays.edit.BirthdaysEditActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.edit.ContactEditActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +115,34 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
         mEditDescription.setText(mContact.getDescription());
         mEditDescription.setVisibility(mContact.getDescription() != null & !mContact.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
         loadBirthdays();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.action_delete).setVisible(FirebaseUtils.isAdmin());
+        menu.findItem(R.id.action_edit).setVisible(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_edit:
+                startActivity(ContactEditActivity.getLaunchIntent(this, mContact));
+                break;
+            case R.id.action_delete:
+                Toast.makeText(this, "Not Implemented", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void loadDetails() {

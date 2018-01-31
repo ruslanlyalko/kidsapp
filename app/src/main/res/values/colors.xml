@@ -5,7 +5,8 @@
     <color name="colorAccent">#FF6E40</color>
 
     <color name="colorProfit">#dce0e1</color>
-    <color name="colorBackground">#f1f5f8</color>
+    <color name="colorBackground">#f5f6f7</color>
+    <color name="colorBackground2">#f1f5f8</color>
     <color name="colorComment">#cad4cb</color>
 
     <color name="colorCommentBackground">#dce0e1</color>
@@ -32,6 +33,8 @@
     <color name="colorIndigo500">#3F51B5</color>
     <color name="colorTeal500">#009688</color>
     <color name="colorDeepOrange500">#FF5722</color>
+    <color name="colorDarkGray">#323333</color>
+    <color name="colorSteelGray">#7d7f80</color>
 
     <integer-array name="colors">
         <item>@color/colorPrimary</item>
