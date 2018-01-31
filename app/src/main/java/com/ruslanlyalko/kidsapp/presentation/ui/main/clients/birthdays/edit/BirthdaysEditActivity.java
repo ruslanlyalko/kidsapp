@@ -28,6 +28,8 @@ import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Birthday;
 import com.ruslanlyalko.kidsapp.presentation.base.BaseActivity;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
