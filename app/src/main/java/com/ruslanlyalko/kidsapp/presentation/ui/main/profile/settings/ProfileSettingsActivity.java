@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -56,6 +57,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     @BindView(R.id.panel_first_date) LinearLayout panelFirstDate;
     @BindView(R.id.panel_password) LinearLayout panelPassword;
     @BindView(R.id.button_change_password) Button buttonChangePassword;
+    @BindView(R.id.checkbox_receive_notifications) CheckBox mCheckboxReceiveNotifications;
+    @BindView(R.id.panel_receive_notifications) LinearLayout mPanelReceiveNotifications;
 
     private Calendar mBirthDay = Calendar.getInstance();
     private Calendar mFirstDate = Calendar.getInstance();
@@ -86,6 +89,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             }
         });
         panelFirstDate.setVisibility(FirebaseUtils.isAdmin() && !isCurrentUser ? View.VISIBLE : View.GONE);
+        mPanelReceiveNotifications.setVisibility(FirebaseUtils.isAdmin() ? View.VISIBLE : View.GONE);
         inputCard.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -170,6 +174,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 inputCard.setTag(user.getUserCard());
                 inputFirstDate.setText(user.getUserFirstDate());
                 inputFirstDate.setTag(user.getUserFirstDate());
+                mCheckboxReceiveNotifications.setChecked(user.getReceiveNotifications());
+                mCheckboxReceiveNotifications.setTag(user.getReceiveNotifications());
                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.US);
                 Date dt = new Date();
                 try {
@@ -263,6 +269,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         final String tBirthday = inputBDay.getTag().toString().trim();
         final String tCard = inputCard.getTag().toString().trim();
         final String tFirstDate = inputFirstDate.getTag().toString().trim();
+        final boolean receiveNotifications = mCheckboxReceiveNotifications.isChecked();
+        final boolean tReceiveNotifications = (boolean) mCheckboxReceiveNotifications.getTag();
         Map<String, Object> childUpdates = new HashMap<>();
         boolean needUpdate = false;
         if (!phone.equals(tPhone)) {
@@ -284,6 +292,10 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         }
         if (!firstDate.equals(tFirstDate)) {
             childUpdates.put("userFirstDate", firstDate);
+            needUpdate = true;
+        }
+        if (receiveNotifications != tReceiveNotifications) {
+            childUpdates.put("receiveNotifications", receiveNotifications);
             needUpdate = true;
         }
         if (needUpdate)

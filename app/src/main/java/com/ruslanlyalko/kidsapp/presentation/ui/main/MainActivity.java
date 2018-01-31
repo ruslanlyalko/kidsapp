@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                         User user = dataSnapshot.getValue(User.class);
                         if (user != null) {
                             FirebaseUtils.setIsAdmin(user.getUserIsAdmin());
+                            FirebaseUtils.setUser(user);
                         }
                     }
 

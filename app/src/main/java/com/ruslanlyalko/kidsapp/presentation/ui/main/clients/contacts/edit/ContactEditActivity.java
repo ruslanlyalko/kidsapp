@@ -1,5 +1,6 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.edit;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,8 +25,11 @@ import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Contact;
 import com.ruslanlyalko.kidsapp.presentation.base.BaseActivity;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ContactEditActivity extends BaseActivity {
 
@@ -32,11 +37,11 @@ public class ContactEditActivity extends BaseActivity {
     @BindView(R.id.edit_phone1) EditText mEditPhone1;
     @BindView(R.id.edit_phone2) EditText mEditPhone2;
     @BindView(R.id.edit_child_name1) EditText mEditChildName1;
-    @BindView(R.id.edit_child_date1) EditText mEditChildDate1;
+    @BindView(R.id.edit_child_date1) TextView mEditChildDate1;
     @BindView(R.id.edit_child_name2) EditText mEditChildName2;
-    @BindView(R.id.edit_child_date2) EditText mEditChildDate2;
+    @BindView(R.id.edit_child_date2) TextView mEditChildDate2;
     @BindView(R.id.edit_child_name3) EditText mEditChildName3;
-    @BindView(R.id.edit_child_date3) EditText mEditChildDate3;
+    @BindView(R.id.edit_child_date3) TextView mEditChildDate3;
     @BindView(R.id.edit_description) EditText mEditDescription;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -198,5 +203,50 @@ public class ContactEditActivity extends BaseActivity {
                 updateClient();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.edit_child_date1)
+    public void onDate1Clicked() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mContact.getChildBd1());
+        new DatePickerDialog(ContactEditActivity.this, (datePicker, year, month, day)
+                -> {
+            mContact.setChildBd1(DateUtils.getDate(year, month, day));
+            mEditChildDate1.setText(DateUtils.toString(mContact.getChildBd1(), "dd.MM.yyyy"));
+        },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        ).show();
+    }
+
+    @OnClick(R.id.edit_child_date2)
+    public void onDate2Clicked() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mContact.getChildBd2());
+        new DatePickerDialog(ContactEditActivity.this, (datePicker, year, month, day)
+                -> {
+            mContact.setChildBd2(DateUtils.getDate(year, month, day));
+            mEditChildDate2.setText(DateUtils.toString(mContact.getChildBd2(), "dd.MM.yyyy"));
+        },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        ).show();
+    }
+
+    @OnClick(R.id.edit_child_date3)
+    public void onDate3Clicked() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mContact.getChildBd3());
+        new DatePickerDialog(ContactEditActivity.this, (datePicker, year, month, day)
+                -> {
+            mContact.setChildBd3(DateUtils.getDate(year, month, day));
+            mEditChildDate3.setText(DateUtils.toString(mContact.getChildBd3(), "dd.MM.yyyy"));
+        },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        ).show();
     }
 }

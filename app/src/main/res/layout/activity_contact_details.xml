@@ -49,10 +49,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_child1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="16dp">
+            android:paddingStart="8dp">
 
             <TextView
                 android:id="@+id/edit_child_name1"
@@ -70,10 +71,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_child2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="16dp">
+            android:paddingStart="8dp">
 
             <TextView
                 android:id="@+id/edit_child_name2"
@@ -91,10 +93,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_child3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="16dp">
+            android:paddingStart="8dp">
 
             <TextView
                 android:id="@+id/edit_child_name3"
@@ -115,14 +118,19 @@
             android:id="@+id/edit_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/transparent" />
+            android:backgroundTint="@android:color/transparent"
+            android:padding="16dp"
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/button_add_birthday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginStart="36dp"
             android:text="@string/add_birthday" />
 
         <android.support.v7.widget.RecyclerView

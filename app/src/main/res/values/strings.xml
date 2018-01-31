@@ -286,9 +286,10 @@
     <string name="check_aqua">Аквагрим</string>
     <string name="check_cinema">Кінотеатр</string>
     <string name="hint_kids_count">Кількість дітей</string>
-    <string name="add_birthday">Добавити День Народження</string>
+    <string name="add_birthday">Добавити Святкування Дня Народження в Чебурашці</string>
     <string name="text_kids">Кількість дітей:</string>
-    <string name="hint_date_celebrating">Дата Святкування ДН</string>
+    <string name="hint_date_celebrating">Дата Святкування ДН:</string>
     <string name="text_kids_count">Кількість дітей: %s</string>
+    <string name="hint_notif">Отримувати сповіщення</string>
 
 </resources>

@@ -20,6 +20,7 @@ import com.ruslanlyalko.kidsapp.presentation.ui.main.report.ReportActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.splash.SplashActivity;
 
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Ruslan Lyalko
@@ -91,7 +92,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         builder.setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
-            notificationManager.notify(0, builder.build());
+            notificationManager.notify(new Random().nextInt(250), builder.build());
         }
     }
 }

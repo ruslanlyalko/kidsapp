@@ -24,11 +24,12 @@ public class MessageComment {
     public MessageComment() {
     }
 
-    public MessageComment(final String key, final String message, FirebaseUser user) {
+    public MessageComment(final String key, final String message, User user) {
         this.key = key;
         this.message = message;
-        this.userId = user.getUid();
-        this.userName = user.getDisplayName();
+        this.userId = user.getUserId();
+        this.userName = user.getUserName();
+        this.userAvatar = user.getAvatar();
         this.date = new Date();
     }
 

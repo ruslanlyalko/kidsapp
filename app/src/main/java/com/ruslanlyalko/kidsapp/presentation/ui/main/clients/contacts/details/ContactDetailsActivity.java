@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -44,7 +46,11 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
     @BindView(R.id.edit_child_date3) TextView mEditChildDate3;
     @BindView(R.id.edit_description) TextView mEditDescription;
     @BindView(R.id.list_birthdays) RecyclerView mListBirthdays;
-    BirthdaysAdapter mBirthdaysAdapter = new BirthdaysAdapter(this);
+    @BindView(R.id.layout_child1) LinearLayout mLayoutChild1;
+    @BindView(R.id.layout_child2) LinearLayout mLayoutChild2;
+    @BindView(R.id.layout_child3) LinearLayout mLayoutChild3;
+    @BindView(R.id.button_add_birthday) Button mButtonAddBirthday;
+    private BirthdaysAdapter mBirthdaysAdapter = new BirthdaysAdapter(this);
     private Contact mContact;
     private String mContactKey = "";
 
@@ -95,13 +101,14 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
         mEditChildDate1.setText(DateUtils.toString(mContact.getChildBd1(), "dd.MM.yyyy"));
         mEditChildDate2.setText(DateUtils.toString(mContact.getChildBd2(), "dd.MM.yyyy"));
         mEditChildDate3.setText(DateUtils.toString(mContact.getChildBd3(), "dd.MM.yyyy"));
-        mEditChildDate1.setVisibility(mContact.getChildName1() != null && !mContact.getChildName1().isEmpty() ? View.VISIBLE : View.GONE);
-        mEditChildDate2.setVisibility(mContact.getChildName2() != null && !mContact.getChildName2().isEmpty() ? View.VISIBLE : View.GONE);
-        mEditChildDate3.setVisibility(mContact.getChildName3() != null && !mContact.getChildName3().isEmpty() ? View.VISIBLE : View.GONE);
+        mLayoutChild1.setVisibility(mContact.getChildName1() != null && !mContact.getChildName1().isEmpty() ? View.VISIBLE : View.GONE);
+        mLayoutChild2.setVisibility(mContact.getChildName2() != null && !mContact.getChildName2().isEmpty() ? View.VISIBLE : View.GONE);
+        mLayoutChild3.setVisibility(mContact.getChildName3() != null && !mContact.getChildName3().isEmpty() ? View.VISIBLE : View.GONE);
         mEditPhone1.setText(mContact.getPhone());
         mEditPhone2.setText(mContact.getPhone2());
         mEditPhone2.setVisibility(mContact.getPhone2() != null & !mContact.getPhone2().isEmpty() ? View.VISIBLE : View.GONE);
         mEditDescription.setText(mContact.getDescription());
+        mEditDescription.setVisibility(mContact.getDescription() != null & !mContact.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
         loadBirthdays();
     }
 
@@ -161,12 +168,12 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
     public void onViewClicked(View view) {
         Intent callIntent;
         switch (view.getId()) {
-            case R.id.edit_phone1:
+            case R.id.text_phone1:
                 callIntent = new Intent(Intent.ACTION_DIAL);
                 callIntent.setData(Uri.parse("tel:" + mContact.getPhone()));
                 startActivity(callIntent);
                 break;
-            case R.id.edit_phone2:
+            case R.id.text_phone2:
                 callIntent = new Intent(Intent.ACTION_DIAL);
                 callIntent.setData(Uri.parse("tel:" + mContact.getPhone()));
                 startActivity(callIntent);

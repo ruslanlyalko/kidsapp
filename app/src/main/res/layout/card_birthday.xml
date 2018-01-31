@@ -65,7 +65,7 @@
                     android:layout_height="40dp"
                     android:backgroundTint="@android:color/transparent"
                     android:contentDescription="@string/action_edit"
-                    android:src="@drawable/ic_action_edit" />
+                    android:src="@drawable/ic_card_edit_25" />
             </LinearLayout>
 
             <LinearLayout

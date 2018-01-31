@@ -14,6 +14,7 @@ import java.util.Date;
 public class FirebaseUtils {
 
     private static boolean mIsAdmin;
+    private static User mUser;
 
     public static boolean isAdmin() {
         return mIsAdmin;
@@ -73,5 +74,13 @@ public class FirebaseUtils {
                 .child(FirebaseAuth.getInstance().getUid())
                 .child(key)
                 .removeValue();
+    }
+
+    public static void setUser(final User user) {
+        mUser = user;
+    }
+
+    public static User getUser() {
+        return mUser;
     }
 }

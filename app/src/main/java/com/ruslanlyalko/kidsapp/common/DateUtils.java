@@ -172,4 +172,12 @@ public class DateUtils {
         }
         return date;
     }
+
+    public static Date getDate(final int year, final int month, final int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        return calendar.getTime();
+    }
 }

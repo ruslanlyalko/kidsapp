@@ -1,5 +1,6 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.clients.birthdays.edit;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,11 +30,12 @@ import com.ruslanlyalko.kidsapp.presentation.base.BaseActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class BirthdaysEditActivity extends BaseActivity {
 
     @BindView(R.id.edit_child_name1) EditText mEditChildName1;
-    @BindView(R.id.edit_child_date1) EditText mEditChildDate1;
+    @BindView(R.id.edit_child_date1) TextView mEditChildDate1;
     @BindView(R.id.edit_description) EditText mEditDescription;
     @BindView(R.id.seek_kids_count) SeekBar mSeekKidsCount;
     @BindView(R.id.checkbox_birthday_mk) CheckBox mCheckboxBirthdayMk;
@@ -99,12 +101,14 @@ public class BirthdaysEditActivity extends BaseActivity {
         };
         mEditChildName1.addTextChangedListener(watcher);
         mEditChildDate1.addTextChangedListener(watcher);
+        mEditChildDate1.setText(DateUtils.toString(mBirthday.getBdDate(), "dd.MM.yyyy"));
         mEditDescription.addTextChangedListener(watcher);
         CompoundButton.OnCheckedChangeListener checkedWatcher = (compoundButton, b) -> mNeedToSave = true;
         mCheckboxBirthdayAqua.setOnCheckedChangeListener(checkedWatcher);
         mCheckboxBirthdayMk.setOnCheckedChangeListener(checkedWatcher);
         mCheckboxBirthdayCinema.setOnCheckedChangeListener(checkedWatcher);
         mSeekKidsCount.setMax(30);
+        mTextKidsCount.setText(getString(R.string.text_kids_count, String.valueOf(0)));
         mSeekKidsCount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(final SeekBar seekBar, final int i, final boolean b) {
@@ -206,5 +210,20 @@ public class BirthdaysEditActivity extends BaseActivity {
                 updateClient();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.layout_date)
+    public void onDateClicked() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mBirthday.getBdDate());
+        new DatePickerDialog(BirthdaysEditActivity.this, (datePicker, year, month, day)
+                -> {
+            mBirthday.setBdDate(DateUtils.getDate(year, month, day));
+            mEditChildDate1.setText(DateUtils.toString(mBirthday.getBdDate(), "dd.MM.yyyy"));
+        },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        ).show();
     }
 }

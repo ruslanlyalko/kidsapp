@@ -341,7 +341,7 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
         DatabaseReference ref = database.getReference(DefaultConfigurations.DB_MESSAGES_COMMENTS)
                 .child(mMessageKey)
                 .push();
-        ref.setValue(new MessageComment(ref.getKey(), comment, mUser));
+        ref.setValue(new MessageComment(ref.getKey(), comment, FirebaseUtils.getUser()));
     }
 
     @OnClick(R.id.button_attachments)
