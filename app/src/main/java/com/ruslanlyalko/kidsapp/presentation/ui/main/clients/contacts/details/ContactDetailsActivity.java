@@ -1,16 +1,19 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.details;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,20 +44,16 @@ import butterknife.OnClick;
 
 public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysClickListener {
 
-    @BindView(R.id.text_phone1) TextView mEditPhone1;
-    @BindView(R.id.text_phone2) TextView mEditPhone2;
-    @BindView(R.id.edit_child_name1) TextView mEditChildName1;
-    @BindView(R.id.edit_child_date1) TextView mEditChildDate1;
-    @BindView(R.id.edit_child_name2) TextView mEditChildName2;
-    @BindView(R.id.edit_child_date2) TextView mEditChildDate2;
-    @BindView(R.id.edit_child_name3) TextView mEditChildName3;
-    @BindView(R.id.edit_child_date3) TextView mEditChildDate3;
-    @BindView(R.id.edit_description) TextView mEditDescription;
-    @BindView(R.id.list_birthdays) RecyclerView mListBirthdays;
-    @BindView(R.id.layout_child1) LinearLayout mLayoutChild1;
-    @BindView(R.id.layout_child2) LinearLayout mLayoutChild2;
-    @BindView(R.id.layout_child3) LinearLayout mLayoutChild3;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.image_avatar) ImageView mImageAvatar;
+    @BindView(R.id.text_kids) TextView mTextKids;
+    @BindView(R.id.text_phone1) TextView mTextPhone1;
+    @BindView(R.id.text_phone2) TextView mTextPhone2;
+    @BindView(R.id.card_phone2) CardView mCardPhone2;
+    @BindView(R.id.text_description) TextView mTextDescription;
     @BindView(R.id.button_add_birthday) Button mButtonAddBirthday;
+    @BindView(R.id.list_birthdays) RecyclerView mListBirthdays;
+    @BindView(R.id.text_user_name) TextView mTextUserName;
     private BirthdaysAdapter mBirthdaysAdapter = new BirthdaysAdapter(this);
     private Contact mContact;
     private String mContactKey = "";
@@ -76,9 +75,16 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_details);
         ButterKnife.bind(this);
+        setupToolbar();
         parseExtras();
         setupRecycler();
         setupView();
+    }
+
+    private void setupToolbar() {
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void parseExtras() {
@@ -94,26 +100,31 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
         mListBirthdays.setAdapter(mBirthdaysAdapter);
     }
 
+    @SuppressLint("SetTextI18n")
     private void setupView() {
         if (mContact == null) {
+            setTitle("");
             loadDetails();
             return;
         }
-        setTitle(mContact.getName());
-        mEditChildName1.setText(mContact.getChildName1());
-        mEditChildName2.setText(mContact.getChildName2());
-        mEditChildName3.setText(mContact.getChildName3());
-        mEditChildDate1.setText(DateUtils.toString(mContact.getChildBd1(), "dd.MM.yyyy"));
-        mEditChildDate2.setText(DateUtils.toString(mContact.getChildBd2(), "dd.MM.yyyy"));
-        mEditChildDate3.setText(DateUtils.toString(mContact.getChildBd3(), "dd.MM.yyyy"));
-        mLayoutChild1.setVisibility(mContact.getChildName1() != null && !mContact.getChildName1().isEmpty() ? View.VISIBLE : View.GONE);
-        mLayoutChild2.setVisibility(mContact.getChildName2() != null && !mContact.getChildName2().isEmpty() ? View.VISIBLE : View.GONE);
-        mLayoutChild3.setVisibility(mContact.getChildName3() != null && !mContact.getChildName3().isEmpty() ? View.VISIBLE : View.GONE);
-        mEditPhone1.setText(mContact.getPhone());
-        mEditPhone2.setText(mContact.getPhone2());
-        mEditPhone2.setVisibility(mContact.getPhone2() != null & !mContact.getPhone2().isEmpty() ? View.VISIBLE : View.GONE);
-        mEditDescription.setText(mContact.getDescription());
-        mEditDescription.setVisibility(mContact.getDescription() != null & !mContact.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
+        setTitle("");
+        mTextUserName.setText(mContact.getName());
+        String kids = "";
+        if (mContact.getChildName1() != null && !mContact.getChildName1().isEmpty()) {
+            kids += mContact.getChildName1() + DateUtils.toString(mContact.getChildBd1(), " dd.MM ") + DateUtils.getChildYears(mContact.getChildBd1());
+        }
+        if (mContact.getChildName2() != null && !mContact.getChildName2().isEmpty()) {
+            kids += mContact.getChildName2() + DateUtils.toString(mContact.getChildBd2(), " dd.MM ") + DateUtils.getChildYears(mContact.getChildBd2());
+        }
+        if (mContact.getChildName3() != null && !mContact.getChildName3().isEmpty()) {
+            kids += mContact.getChildName3() + DateUtils.toString(mContact.getChildBd3(), " dd.MM") + DateUtils.getChildYears(mContact.getChildBd3());
+        }
+        mTextKids.setText(kids);
+        mTextPhone1.setText(mContact.getPhone());
+        mTextPhone2.setText(mContact.getPhone2());
+        mCardPhone2.setVisibility(mContact.getPhone2() != null & !mContact.getPhone2().isEmpty() ? View.VISIBLE : View.GONE);
+        mTextDescription.setText(mContact.getDescription());
+        mTextDescription.setVisibility(mContact.getDescription() != null & !mContact.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
         loadBirthdays();
     }
 
@@ -197,18 +208,18 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
         startActivity(BirthdaysEditActivity.getLaunchIntent(this, mContact.getKey()));
     }
 
-    @OnClick({R.id.text_phone1, R.id.text_phone2})
+    @OnClick({R.id.card_phone1, R.id.card_phone2})
     public void onViewClicked(View view) {
         Intent callIntent;
         switch (view.getId()) {
-            case R.id.text_phone1:
+            case R.id.card_phone1:
                 callIntent = new Intent(Intent.ACTION_DIAL);
                 callIntent.setData(Uri.parse("tel:" + mContact.getPhone()));
                 startActivity(callIntent);
                 break;
-            case R.id.text_phone2:
+            case R.id.card_phone2:
                 callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("tel:" + mContact.getPhone()));
+                callIntent.setData(Uri.parse("tel:" + mContact.getPhone2()));
                 startActivity(callIntent);
                 break;
         }

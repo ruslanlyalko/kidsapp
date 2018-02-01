@@ -1,142 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.main.mk.MkEditActivity">
+    tools:context=".presentation.ui.main.clients.contacts.details.ContactDetailsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorBackground"
+        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorBackground" />
+
+        <!--AVATAR-->
+        <ImageView
+            android:id="@+id/image_avatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_person"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/text_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="Name Surname" />
+
+        <!--CHILDREN-->
+        <TextView
+            android:id="@+id/text_kids"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            tools:text="Child 12.0 (4); Child 12.0 (4); Child 12.0 (4);" />
+
+        <!--PHONES-->
         <LinearLayout
             android:id="@+id/layout_phones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp">
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/text_phone1"
-                android:layout_width="0dp"
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_phone1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="?android:attr/selectableItemBackground"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="0dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:textColor="@color/colorAccent"
-                android:textSize="18sp"
-                tools:text="0958422333" />
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="4dp">
 
-            <TextView
-                android:id="@+id/text_phone2"
-                android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/text_phone1"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:gravity="center"
+                    android:padding="6dp"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    tools:text="0958422333" />
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_phone2"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="?android:attr/selectableItemBackground"
+                android:layout_marginEnd="0dp"
+                android:layout_marginStart="16dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:textColor="@color/colorAccent"
-                android:textSize="18sp"
-                tools:text="0508491707" />
+                android:foreground="?android:attr/selectableItemBackground"
+                android:visibility="visible"
+                app:cardCornerRadius="4dp">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/text_phone2"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:gravity="center"
+                    android:padding="6dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    tools:text="0958422333" />
+            </android.support.v7.widget.CardView>
 
-        <LinearLayout
-            android:id="@+id/layout_child1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingStart="8dp">
-
-            <TextView
-                android:id="@+id/edit_child_name1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent" />
-
-            <TextView
-                android:id="@+id/edit_child_date1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_child2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingStart="8dp">
-
-            <TextView
-                android:id="@+id/edit_child_name2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent" />
-
-            <TextView
-                android:id="@+id/edit_child_date2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_child3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingStart="8dp">
-
-            <TextView
-                android:id="@+id/edit_child_name3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent" />
-
-            <TextView
-                android:id="@+id/edit_child_date3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/edit_description"
+            android:id="@+id/text_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/transparent"
+            android:backgroundTint="@color/colorWhite"
             android:padding="16dp"
-            android:visibility="invisible" />
+            tools:text="123156456465665423123 df123df d fd " />
 
         <Button
             android:id="@+id/button_add_birthday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="36dp"
             android:layout_marginStart="36dp"
+            android:layout_marginTop="16dp"
             android:text="@string/add_birthday" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list_birthdays"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusableInTouchMode="false"
             android:nestedScrollingEnabled="false" />
 
     </LinearLayout>

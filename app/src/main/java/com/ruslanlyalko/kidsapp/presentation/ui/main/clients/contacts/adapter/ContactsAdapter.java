@@ -105,10 +105,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 kids += contact.getChildName1() + DateUtils.toString(contact.getChildBd1(), " dd.MM ") + DateUtils.getChildYears(contact.getChildBd1());
             }
             if (contact.getChildName2() != null && !contact.getChildName2().isEmpty()) {
-                kids += contact.getChildName2() + DateUtils.toString(contact.getChildBd2(), " dd.MM ") + DateUtils.getChildYears(contact.getChildBd1());
+                kids += contact.getChildName2() + DateUtils.toString(contact.getChildBd2(), " dd.MM ") + DateUtils.getChildYears(contact.getChildBd2());
             }
             if (contact.getChildName3() != null && !contact.getChildName3().isEmpty()) {
-                kids += contact.getChildName3() + DateUtils.toString(contact.getChildBd3(), " dd.MM") + DateUtils.getChildYears(contact.getChildBd1());
+                kids += contact.getChildName3() + DateUtils.toString(contact.getChildBd3(), " dd.MM") + DateUtils.getChildYears(contact.getChildBd3());
             }
             mTextKids.setText(kids);
         }

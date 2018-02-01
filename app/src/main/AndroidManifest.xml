@@ -201,6 +201,7 @@
             android:name=".presentation.ui.main.clients.contacts.details.ContactDetailsActivity"
             android:parentActivityName=".presentation.ui.main.clients.ClientsTabActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden"
             />
 
