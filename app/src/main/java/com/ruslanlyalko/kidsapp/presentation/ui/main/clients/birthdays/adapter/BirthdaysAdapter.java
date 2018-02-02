@@ -100,7 +100,7 @@ public class BirthdaysAdapter extends RecyclerView.Adapter<BirthdaysAdapter.MyVi
         void bindData(final Birthday birthday) {
             mTextChildName1.setText(birthday.getChildName());
             mTextChildCount.setText(String.valueOf(birthday.getKidsCount()));
-            mTextChildBd1.setText(DateUtils.toString(birthday.getBdDate(), "dd.MM.yyyy"));
+            mTextChildBd1.setText(DateUtils.getHowLongTime(birthday.getBdDate(), "EEE dd.MM.yy"));
             mTextDescription.setText(birthday.getDescription());
             mTextDescription.setVisibility(birthday.getDescription() != null & !birthday.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
             mCheckboxBirthdayAqua.setChecked(birthday.getAqua());

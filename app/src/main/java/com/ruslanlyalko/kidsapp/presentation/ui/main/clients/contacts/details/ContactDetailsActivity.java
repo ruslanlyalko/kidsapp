@@ -1,6 +1,7 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.details;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.DateUtils;
@@ -51,7 +52,7 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
     @BindView(R.id.text_phone2) TextView mTextPhone2;
     @BindView(R.id.card_phone2) CardView mCardPhone2;
     @BindView(R.id.text_description) TextView mTextDescription;
-    @BindView(R.id.button_add_birthday) Button mButtonAddBirthday;
+    @BindView(R.id.button_add_birthday) CardView mButtonAddBirthday;
     @BindView(R.id.list_birthdays) RecyclerView mListBirthdays;
     @BindView(R.id.text_user_name) TextView mTextUserName;
     private BirthdaysAdapter mBirthdaysAdapter = new BirthdaysAdapter(this);
@@ -75,16 +76,11 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_details);
         ButterKnife.bind(this);
-        setupToolbar();
         parseExtras();
+        setupToolbar();
         setupRecycler();
         setupView();
-    }
-
-    private void setupToolbar() {
-        setSupportActionBar(mToolbar);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        loadDetails();
     }
 
     private void parseExtras() {
@@ -93,6 +89,14 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
             mContact = (Contact) bundle.getSerializable(Keys.Extras.EXTRA_ITEM_ID);
             mContactKey = bundle.getString(Keys.Extras.EXTRA_CONTACT_KEY);
         }
+        if (mContact != null)
+            mContactKey = mContact.getKey();
+    }
+
+    private void setupToolbar() {
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setupRecycler() {
@@ -104,20 +108,19 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
     private void setupView() {
         if (mContact == null) {
             setTitle("");
-            loadDetails();
             return;
         }
         setTitle("");
         mTextUserName.setText(mContact.getName());
         String kids = "";
         if (mContact.getChildName1() != null && !mContact.getChildName1().isEmpty()) {
-            kids += mContact.getChildName1() + DateUtils.toString(mContact.getChildBd1(), " dd.MM ") + DateUtils.getChildYears(mContact.getChildBd1());
+            kids += mContact.getChildName1() + DateUtils.toString(mContact.getChildBd1(), " dd.MM") + DateUtils.getAge(mContact.getChildBd1());
         }
         if (mContact.getChildName2() != null && !mContact.getChildName2().isEmpty()) {
-            kids += mContact.getChildName2() + DateUtils.toString(mContact.getChildBd2(), " dd.MM ") + DateUtils.getChildYears(mContact.getChildBd2());
+            kids += "; " + mContact.getChildName2() + DateUtils.toString(mContact.getChildBd2(), " dd.MM") + DateUtils.getAge(mContact.getChildBd2());
         }
         if (mContact.getChildName3() != null && !mContact.getChildName3().isEmpty()) {
-            kids += mContact.getChildName3() + DateUtils.toString(mContact.getChildBd3(), " dd.MM") + DateUtils.getChildYears(mContact.getChildBd3());
+            kids += "; " + mContact.getChildName3() + DateUtils.toString(mContact.getChildBd3(), " dd.MM") + DateUtils.getAge(mContact.getChildBd3());
         }
         mTextKids.setText(kids);
         mTextPhone1.setText(mContact.getPhone());
@@ -126,6 +129,46 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
         mTextDescription.setText(mContact.getDescription());
         mTextDescription.setVisibility(mContact.getDescription() != null & !mContact.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
         loadBirthdays();
+    }
+
+    private void loadDetails() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(DefaultConfigurations.DB_CONTACTS)
+                .child(mContactKey);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(final DataSnapshot dataSnapshot) {
+                mContact = dataSnapshot.getValue(Contact.class);
+                setupView();
+            }
+
+            @Override
+            public void onCancelled(final DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void loadBirthdays() {
+        Query ref = FirebaseDatabase.getInstance()
+                .getReference(DefaultConfigurations.DB_BIRTHDAYS)
+                .orderByChild("contactKey").equalTo(mContact.getKey());
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(final DataSnapshot dataSnapshot) {
+                List<Birthday> birthdays = new ArrayList<>();
+                for (DataSnapshot birthdaySS : dataSnapshot.getChildren()) {
+                    Birthday birthday = birthdaySS.getValue(Birthday.class);
+                    if (birthday != null) {
+                        birthdays.add(birthday);
+                    }
+                }
+                mBirthdaysAdapter.setData(birthdays);
+                //onFilterTextChanged();
+            }
+
+            @Override
+            public void onCancelled(final DatabaseError databaseError) {
+            }
+        });
     }
 
     @Override
@@ -150,48 +193,28 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
                 startActivity(ContactEditActivity.getLaunchIntent(this, mContact));
                 break;
             case R.id.action_delete:
-                Toast.makeText(this, "Not Implemented", Toast.LENGTH_SHORT).show();
+                removeCurrentContact();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadDetails() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(DefaultConfigurations.DB_CONTACTS)
-                .child(mContactKey);
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(final DataSnapshot dataSnapshot) {
-                mContact = dataSnapshot.getValue(Contact.class);
-                setupView();
-            }
-
-            @Override
-            public void onCancelled(final DatabaseError databaseError) {
-            }
-        });
-    }
-
-    private void loadBirthdays() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(DefaultConfigurations.DB_BIRTHDAYS);
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(final DataSnapshot dataSnapshot) {
-                List<Birthday> birthdays = new ArrayList<>();
-                for (DataSnapshot birthdaySS : dataSnapshot.getChildren()) {
-                    Birthday birthday = birthdaySS.getValue(Birthday.class);
-                    if (birthday != null && birthday.getContactKey().equals(mContact.getKey())) {
-                        birthdays.add(birthday);
-                    }
-                }
-                mBirthdaysAdapter.setData(birthdays);
-                //onFilterTextChanged();
-            }
-
-            @Override
-            public void onCancelled(final DatabaseError databaseError) {
-            }
-        });
+    private void removeCurrentContact() {
+        if (mBirthdaysAdapter.getItemCount() != 0) {
+            Toast.makeText(this, "Неможливо видалити контакт! Спочатку видаліть всі Дні Народження", Toast.LENGTH_LONG).show();
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.dialog_remove_contact_title)
+                .setMessage(R.string.dialog_remove_contact_message)
+                .setPositiveButton("Видалити", (dialog, which) -> {
+                    finish();
+                    FirebaseDatabase.getInstance()
+                            .getReference(DefaultConfigurations.DB_CONTACTS)
+                            .child(mContact.getKey()).removeValue();
+                })
+                .setNegativeButton("Повернутись", null)
+                .show();
     }
 
     @Override
@@ -205,7 +228,7 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
 
     @OnClick(R.id.button_add_birthday)
     public void onViewClicked() {
-        startActivity(BirthdaysEditActivity.getLaunchIntent(this, mContact.getKey()));
+        startActivity(BirthdaysEditActivity.getLaunchIntent(this, mContact.getKey(), mContact.getChildName1()));
     }
 
     @OnClick({R.id.card_phone1, R.id.card_phone2})

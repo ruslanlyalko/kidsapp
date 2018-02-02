@@ -1,11 +1,15 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.adapter;
 
+import android.app.Activity;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,12 +28,14 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         implements Filterable {
 
     private final OnContactClickListener mOnContactClickListener;
+    private final Activity mActivity;
     private List<Contact> mDataSource = new ArrayList<>();
     private List<Contact> mDataSourceFiltered = new ArrayList<>();
     private MyFilter mFilter;
 
-    public ContactsAdapter(final OnContactClickListener onContactClickListener) {
+    public ContactsAdapter(final OnContactClickListener onContactClickListener, final Activity activity) {
         mOnContactClickListener = onContactClickListener;
+        mActivity = activity;
     }
 
     public void clearAll() {
@@ -84,8 +90,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.image_avatar) ImageView mImageView;
         @BindView(R.id.text_name) TextView mTextName;
-        @BindView(R.id.text_phones) TextView mTextPhones;
+        @BindView(R.id.text_phone1) TextView mTextPhone1;
+        @BindView(R.id.text_phone2) TextView mTextPhone2;
         @BindView(R.id.text_kids) TextView mTextKids;
         @BindView(R.id.layout_root) LinearLayout mLayoutRoot;
 
@@ -96,27 +104,41 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
         void bindData(final Contact contact) {
             mTextName.setText(contact.getName());
-            String phones = contact.getPhone();
+            mTextPhone1.setText(contact.getPhone());
             if (contact.getPhone2() != null & !contact.getPhone2().isEmpty())
-                phones += ", " + contact.getPhone2();
-            mTextPhones.setText(phones);
+                mTextPhone2.setText(contact.getPhone2());
+            else
+                mTextPhone2.setText("");
             String kids = "";
             if (contact.getChildName1() != null && !contact.getChildName1().isEmpty()) {
-                kids += contact.getChildName1() + DateUtils.toString(contact.getChildBd1(), " dd.MM ") + DateUtils.getChildYears(contact.getChildBd1());
+                kids += contact.getChildName1() + DateUtils.toString(contact.getChildBd1(), " dd.MM") + DateUtils.getAge(contact.getChildBd1());
             }
             if (contact.getChildName2() != null && !contact.getChildName2().isEmpty()) {
-                kids += contact.getChildName2() + DateUtils.toString(contact.getChildBd2(), " dd.MM ") + DateUtils.getChildYears(contact.getChildBd2());
+                kids += "; " + contact.getChildName2() + DateUtils.toString(contact.getChildBd2(), " dd.MM") + DateUtils.getAge(contact.getChildBd2());
             }
             if (contact.getChildName3() != null && !contact.getChildName3().isEmpty()) {
-                kids += contact.getChildName3() + DateUtils.toString(contact.getChildBd3(), " dd.MM") + DateUtils.getChildYears(contact.getChildBd3());
+                kids += "; " + contact.getChildName3() + DateUtils.toString(contact.getChildBd3(), " dd.MM") + DateUtils.getAge(contact.getChildBd3());
             }
             mTextKids.setText(kids);
         }
 
         @OnClick(R.id.layout_root)
         void onItemClicked() {
-            if (mOnContactClickListener != null)
-                mOnContactClickListener.onItemClicked(getAdapterPosition());
+            if (mOnContactClickListener != null) {
+                final ActivityOptionsCompat options;
+                if (getItem(getAdapterPosition()).getPhone2() == null || getItem(getAdapterPosition()).getPhone2().isEmpty())
+                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity,
+                            Pair.create(mImageView, "avatar"),
+                            //Pair.create(mTextPhone1, "phone1"),
+                            Pair.create(mTextName, "user"));
+                else
+                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity,
+                            Pair.create(mImageView, "avatar"),
+//                            Pair.create(mTextPhone1, "phone1"),
+//                            Pair.create(mTextPhone2, "phone2"),
+                            Pair.create(mTextName, "user"));
+                mOnContactClickListener.onItemClicked(getAdapterPosition(), options);
+            }
         }
     }
 

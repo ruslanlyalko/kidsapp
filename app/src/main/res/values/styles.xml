@@ -51,9 +51,19 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="SelectableItemDarkTheme">>
+    <style name="SelectableItemDarkTheme">
         <item name="colorControlActivated">@color/colorPrimary</item>
         <item name="colorControlHighlight">@color/colorPrimary</item>
+
+    </style>
+
+    <style name="ActionButton">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:gravity">center</item>
+
     </style>
 
 </resources>

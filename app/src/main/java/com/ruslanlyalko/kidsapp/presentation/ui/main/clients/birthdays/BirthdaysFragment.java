@@ -79,7 +79,7 @@ public class BirthdaysFragment extends Fragment implements OnBirthdaysClickListe
     }
 
     private void setupFilter() {
-        mDateTo.add(Calendar.DAY_OF_MONTH, 7);
+        mDateTo.add(Calendar.DAY_OF_MONTH, 14);
         onFilterTextChanged();
     }
 

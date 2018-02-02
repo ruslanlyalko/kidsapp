@@ -99,10 +99,12 @@
 
             <TextView
                 android:id="@+id/edit_child_date1"
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:backgroundTint="@android:color/transparent"
-                android:hint="@string/hint_date_birth" />
+                android:hint="@string/hint_date_birth"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -136,10 +138,12 @@
 
             <TextView
                 android:id="@+id/edit_child_date2"
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:backgroundTint="@android:color/transparent"
-                android:hint="@string/hint_date_birth" />
+                android:hint="@string/hint_date_birth"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -173,10 +177,12 @@
 
             <TextView
                 android:id="@+id/edit_child_date3"
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:backgroundTint="@android:color/transparent"
-                android:hint="@string/hint_date_birth" />
+                android:hint="@string/hint_date_birth"
+                android:textSize="16sp" />
 
         </LinearLayout>
 

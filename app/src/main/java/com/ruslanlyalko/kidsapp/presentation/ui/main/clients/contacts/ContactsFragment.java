@@ -1,9 +1,11 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,12 +18,13 @@ import android.widget.EditText;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Contact;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.OnFilterListener;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.adapter.ContactsAdapter;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.adapter.OnContactClickListener;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.details.ContactDetailsActivity;
@@ -42,7 +45,8 @@ public class ContactsFragment extends Fragment implements OnContactClickListener
     @BindView(R.id.list_contacts) RecyclerView mListContacts;
     @BindView(R.id.edit_filter_name) EditText mEditFilterName;
     @BindView(R.id.edit_filter_phone) EditText mEditFilterPhone;
-    private ContactsAdapter mContactsAdapter = new ContactsAdapter(this);
+    private ContactsAdapter mContactsAdapter;
+    private OnFilterListener mOnFilterListener;
 
     public ContactsFragment() {
     }
@@ -52,6 +56,19 @@ public class ContactsFragment extends Fragment implements OnContactClickListener
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mOnFilterListener = (OnFilterListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
     }
 
     @Override
@@ -66,6 +83,7 @@ public class ContactsFragment extends Fragment implements OnContactClickListener
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        mContactsAdapter = new ContactsAdapter(this, getActivity());
         setupRecycler();
         loadContacts();
     }
@@ -76,7 +94,9 @@ public class ContactsFragment extends Fragment implements OnContactClickListener
     }
 
     private void loadContacts() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(DefaultConfigurations.DB_CONTACTS);
+        Query ref = FirebaseDatabase.getInstance()
+                .getReference(DefaultConfigurations.DB_CONTACTS)
+                .orderByChild("name");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
@@ -99,7 +119,11 @@ public class ContactsFragment extends Fragment implements OnContactClickListener
 
     @OnTextChanged({R.id.edit_filter_name, R.id.edit_filter_phone})
     void onFilterTextChanged() {
-        mContactsAdapter.getFilter().filter(mEditFilterName.getText().toString().trim() + "/" + mEditFilterPhone.getText().toString().trim());
+        String name = mEditFilterName.getText().toString().trim();
+        String phone = mEditFilterPhone.getText().toString().trim();
+        mContactsAdapter.getFilter().filter(name + "/" + phone);
+        if (mOnFilterListener != null)
+            mOnFilterListener.onFilterChanged(name, phone);
     }
 
     @Override
@@ -116,7 +140,7 @@ public class ContactsFragment extends Fragment implements OnContactClickListener
     }
 
     @Override
-    public void onItemClicked(final int position) {
-        startActivity(ContactDetailsActivity.getLaunchIntent(getContext(), mContactsAdapter.getItem(position)));
+    public void onItemClicked(final int position, ActivityOptionsCompat options) {
+        startActivity(ContactDetailsActivity.getLaunchIntent(getContext(), mContactsAdapter.getItem(position)), options.toBundle());
     }
 }

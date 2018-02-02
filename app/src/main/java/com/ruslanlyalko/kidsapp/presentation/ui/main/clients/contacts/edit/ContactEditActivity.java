@@ -1,6 +1,5 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.edit;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +23,7 @@ import com.ruslanlyalko.kidsapp.common.Keys;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Contact;
 import com.ruslanlyalko.kidsapp.presentation.base.BaseActivity;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.Calendar;
 
@@ -46,6 +46,7 @@ public class ContactEditActivity extends BaseActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private Contact mContact = new Contact();
+    private String mClientName;
     private String mClientPhone;
     private boolean mNeedToSave = false;
     private boolean mIsNew = false;
@@ -56,8 +57,9 @@ public class ContactEditActivity extends BaseActivity {
         return intent;
     }
 
-    public static Intent getLaunchIntent(final Context launchIntent, String phone) {
+    public static Intent getLaunchIntent(final Context launchIntent, String name, String phone) {
         Intent intent = new Intent(launchIntent, ContactEditActivity.class);
+        intent.putExtra(Keys.Extras.EXTRA_CLIENT_NAME, name);
         intent.putExtra(Keys.Extras.EXTRA_CLIENT_PHONE, phone);
         return intent;
     }
@@ -78,11 +80,13 @@ public class ContactEditActivity extends BaseActivity {
         if (bundle != null) {
             mContact = (Contact) bundle.getSerializable(Keys.Extras.EXTRA_ITEM_ID);
             mClientPhone = bundle.getString(Keys.Extras.EXTRA_CLIENT_PHONE);
+            mClientName = bundle.getString(Keys.Extras.EXTRA_CLIENT_NAME);
         }
         mIsNew = mContact == null;
         if (mIsNew) {
             mContact = new Contact();
             mEditPhone1.setText(mClientPhone);
+            mEditName.setText(mClientName);
         }
     }
 
@@ -115,6 +119,9 @@ public class ContactEditActivity extends BaseActivity {
     private void setupView() {
         if (mIsNew) {
             setTitle(R.string.title_activity_add);
+            mEditChildDate1.setText(DateUtils.toString(mContact.getChildBd1(), "dd.MM.yyyy"));
+            mEditChildDate2.setText(DateUtils.toString(mContact.getChildBd2(), "dd.MM.yyyy"));
+            mEditChildDate3.setText(DateUtils.toString(mContact.getChildBd3(), "dd.MM.yyyy"));
         } else {
             setTitle(R.string.title_activity_edit);
             mEditName.setText(mContact.getName());
@@ -153,9 +160,6 @@ public class ContactEditActivity extends BaseActivity {
         mContact.setChildName1(mEditChildName1.getText().toString().trim());
         mContact.setChildName2(mEditChildName2.getText().toString().trim());
         mContact.setChildName3(mEditChildName3.getText().toString().trim());
-        mContact.setChildBd1(DateUtils.parse(mEditChildDate1.getText().toString().trim(), "dd.MM.yyyy"));
-        mContact.setChildBd2(DateUtils.parse(mEditChildDate2.getText().toString().trim(), "dd.MM.yyyy"));
-        mContact.setChildBd3(DateUtils.parse(mEditChildDate3.getText().toString().trim(), "dd.MM.yyyy"));
         mContact.setPhone(mEditPhone1.getText().toString().trim());
         mContact.setPhone2(mEditPhone2.getText().toString().trim());
         mContact.setDescription(mEditDescription.getText().toString().trim());
@@ -209,44 +213,50 @@ public class ContactEditActivity extends BaseActivity {
     public void onDate1Clicked() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(mContact.getChildBd1());
-        new DatePickerDialog(ContactEditActivity.this, (datePicker, year, month, day)
-                -> {
-            mContact.setChildBd1(DateUtils.getDate(year, month, day));
-            mEditChildDate1.setText(DateUtils.toString(mContact.getChildBd1(), "dd.MM.yyyy"));
-        },
+        DatePickerDialog dialog = DatePickerDialog.newInstance((datePicker, year, month, day)
+                        -> {
+                    mContact.setChildBd1(DateUtils.getDate(year, month, day));
+                    mEditChildDate1.setText(DateUtils.toString(mContact.getChildBd1(), "dd.MM.yyyy"));
+                },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
-        ).show();
+        );
+        dialog.showYearPickerFirst(true);
+        dialog.show(getFragmentManager(), "child1");
     }
 
     @OnClick(R.id.edit_child_date2)
     public void onDate2Clicked() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(mContact.getChildBd2());
-        new DatePickerDialog(ContactEditActivity.this, (datePicker, year, month, day)
-                -> {
-            mContact.setChildBd2(DateUtils.getDate(year, month, day));
-            mEditChildDate2.setText(DateUtils.toString(mContact.getChildBd2(), "dd.MM.yyyy"));
-        },
+        DatePickerDialog dialog = DatePickerDialog.newInstance((datePicker, year, month, day)
+                        -> {
+                    mContact.setChildBd2(DateUtils.getDate(year, month, day));
+                    mEditChildDate2.setText(DateUtils.toString(mContact.getChildBd2(), "dd.MM.yyyy"));
+                },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
-        ).show();
+        );
+        dialog.showYearPickerFirst(true);
+        dialog.show(getFragmentManager(), "child2");
     }
 
     @OnClick(R.id.edit_child_date3)
     public void onDate3Clicked() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(mContact.getChildBd3());
-        new DatePickerDialog(ContactEditActivity.this, (datePicker, year, month, day)
-                -> {
-            mContact.setChildBd3(DateUtils.getDate(year, month, day));
-            mEditChildDate3.setText(DateUtils.toString(mContact.getChildBd3(), "dd.MM.yyyy"));
-        },
+        DatePickerDialog dialog = DatePickerDialog.newInstance((datePicker, year, month, day)
+                        -> {
+                    mContact.setChildBd3(DateUtils.getDate(year, month, day));
+                    mEditChildDate3.setText(DateUtils.toString(mContact.getChildBd3(), "dd.MM.yyyy"));
+                },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
-        ).show();
+        );
+        dialog.showYearPickerFirst(true);
+        dialog.show(getFragmentManager(), "child3");
     }
 }

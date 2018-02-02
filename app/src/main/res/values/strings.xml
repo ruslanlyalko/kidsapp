@@ -291,5 +291,7 @@
     <string name="hint_date_celebrating">Дата Святкування ДН:</string>
     <string name="text_kids_count">Кількість дітей: %s</string>
     <string name="hint_notif">Отримувати сповіщення</string>
+    <string name="dialog_remove_contact_title">Видалити контакт?</string>
+    <string name="dialog_remove_contact_message">Якщо ви видалите контакт всі дані будуть втрачені</string>
 
 </resources>

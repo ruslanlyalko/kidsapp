@@ -48,6 +48,7 @@ public class BirthdaysEditActivity extends BaseActivity {
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private Birthday mBirthday = new Birthday();
     private String mContactKey;
+    private String mChildName;
     private boolean mNeedToSave = false;
     private boolean mIsNew = false;
 
@@ -57,9 +58,10 @@ public class BirthdaysEditActivity extends BaseActivity {
         return intent;
     }
 
-    public static Intent getLaunchIntent(final Context launchIntent, String contackKey) {
+    public static Intent getLaunchIntent(final Context launchIntent, String contactKey, String childName) {
         Intent intent = new Intent(launchIntent, BirthdaysEditActivity.class);
-        intent.putExtra(Keys.Extras.EXTRA_CLIENT_PHONE, contackKey);
+        intent.putExtra(Keys.Extras.EXTRA_CLIENT_PHONE, contactKey);
+        intent.putExtra(Keys.Extras.EXTRA_CHILD_NAME, childName);
         return intent;
     }
 
@@ -79,10 +81,11 @@ public class BirthdaysEditActivity extends BaseActivity {
         if (bundle != null) {
             mBirthday = (Birthday) bundle.getSerializable(Keys.Extras.EXTRA_ITEM_ID);
             mContactKey = bundle.getString(Keys.Extras.EXTRA_CLIENT_PHONE);
+            mChildName = bundle.getString(Keys.Extras.EXTRA_CHILD_NAME);
         }
         mIsNew = mBirthday == null;
         if (mIsNew) {
-            mBirthday = new Birthday(mContactKey);
+            mBirthday = new Birthday(mContactKey, mChildName);
         }
     }
 
@@ -130,6 +133,7 @@ public class BirthdaysEditActivity extends BaseActivity {
     private void setupView() {
         if (mIsNew) {
             setTitle(R.string.title_activity_add);
+            mEditChildName1.setText(mBirthday.getChildName());
         } else {
             setTitle(R.string.title_activity_edit);
             mEditDescription.setText(mBirthday.getDescription());

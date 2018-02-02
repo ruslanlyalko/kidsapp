@@ -25,7 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ClientsTabActivity extends AppCompatActivity {
+public class ClientsTabActivity extends AppCompatActivity implements OnFilterListener {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.tabs) TabLayout mTabs;
@@ -34,6 +34,8 @@ public class ClientsTabActivity extends AppCompatActivity {
     @BindView(R.id.fab) FloatingActionButton mFab;
     @BindView(R.id.main_content) CoordinatorLayout mMainContent;
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private String mFilterName = "";
+    private String mFilterPhone = "";
 
     public static Intent getLaunchIntent(final Context context) {
         return new Intent(context, ClientsTabActivity.class);
@@ -73,7 +75,13 @@ public class ClientsTabActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab)
     public void onFabClicked() {
-        startActivity(ContactEditActivity.getLaunchIntent(this, ""));
+        startActivity(ContactEditActivity.getLaunchIntent(this, mFilterName, mFilterPhone));
+    }
+
+    @Override
+    public void onFilterChanged(final String name, final String phone) {
+        mFilterName = name;
+        mFilterPhone = phone;
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

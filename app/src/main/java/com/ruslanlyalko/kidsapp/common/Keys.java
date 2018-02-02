@@ -23,5 +23,7 @@ public interface Keys {
         String EXTRA_EXPENSE_TYPE = "EXTRA_EXPENSE_TYPE";
         String EXTRA_CLIENT_PHONE = "EXTRA_CLIENT_PHONE";
         String EXTRA_CONTACT_KEY = "EXTRA_CONTACT_KEY";
+        String EXTRA_CHILD_NAME = "EXTRA_CHILD_NAME";
+        String EXTRA_CLIENT_NAME = "EXTRA_CLIENT_NAME";
     }
 }

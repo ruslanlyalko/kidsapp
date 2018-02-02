@@ -136,14 +136,6 @@ public class DateUtils {
         return new SimpleDateFormat(format, Locale.getDefault()).format(date);
     }
 
-    public static boolean isLessThen10minsAgo(final Date lastOnline) {
-        Calendar now = Calendar.getInstance();
-        now.add(Calendar.MINUTE, -10);
-        Calendar lastOnlineCalendar = Calendar.getInstance();
-        lastOnlineCalendar.setTime(lastOnline);
-        return now.getTime().getTime() < lastOnlineCalendar.getTime().getTime();
-    }
-
     public static String getCurrentYear() {
         return new SimpleDateFormat("yyyy", Locale.US).format(new Date());
     }
@@ -181,12 +173,6 @@ public class DateUtils {
         return calendar.getTime();
     }
 
-    public static String getChildYears(final Date date) {
-        Date today = new Date();
-        long days = getDateDiff(date, today);
-        return "("+(int) (days / 365) + "р); ";
-    }
-
     private static long getDateDiff(Date oldDate, Date newDate) {
         try {
             return TimeUnit.DAYS.convert(newDate.getTime() - oldDate.getTime(), TimeUnit.MILLISECONDS);
@@ -194,5 +180,56 @@ public class DateUtils {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    public static String getAge(Date dateOfBirth) {
+        Calendar dob = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+        dob.setTime(dateOfBirth);
+        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+        Integer ageInt = Integer.valueOf(age);
+        return " (" + ageInt.toString() + "р)";
+    }
+
+    public static String getHowLongTime(final Date date, final String pattern) {
+        return isToday(date)
+                ? "Сьогодні"
+                : isTomorrow(date)
+                ? "Завтра"
+                : isYesterday(date)
+                ? "Вчора"
+                : toString(date, pattern);
+    }
+
+    private static boolean isToday(final Date date) {
+        Calendar today = Calendar.getInstance();
+        Calendar calDate = Calendar.getInstance();
+        calDate.setTime(date);
+        return today.get(Calendar.YEAR) == calDate.get(Calendar.YEAR)
+                && today.get(Calendar.MONTH) == calDate.get(Calendar.MONTH)
+                && today.get(Calendar.DAY_OF_MONTH) == calDate.get(Calendar.DAY_OF_MONTH);
+    }
+
+    private static boolean isTomorrow(final Date date) {
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+        Calendar calDate = Calendar.getInstance();
+        calDate.setTime(date);
+        return tomorrow.get(Calendar.YEAR) == calDate.get(Calendar.YEAR)
+                && tomorrow.get(Calendar.MONTH) == calDate.get(Calendar.MONTH)
+                && tomorrow.get(Calendar.DAY_OF_MONTH) == calDate.get(Calendar.DAY_OF_MONTH);
+    }
+
+    private static boolean isYesterday(final Date date) {
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DAY_OF_MONTH, -1);
+        Calendar calDate = Calendar.getInstance();
+        calDate.setTime(date);
+        return yesterday.get(Calendar.YEAR) == calDate.get(Calendar.YEAR)
+                && yesterday.get(Calendar.MONTH) == calDate.get(Calendar.MONTH)
+                && yesterday.get(Calendar.DAY_OF_MONTH) == calDate.get(Calendar.DAY_OF_MONTH);
     }
 }

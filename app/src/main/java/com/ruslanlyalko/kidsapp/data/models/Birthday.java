@@ -24,9 +24,11 @@ public class Birthday implements Serializable {
     public Birthday() {
     }
 
-    public Birthday(final String contactKey) {
+    public Birthday(final String contactKey, final String childName) {
         this.contactKey = contactKey;
+        this.childName = childName;
     }
+
 
     public String getKey() {
         return key;
