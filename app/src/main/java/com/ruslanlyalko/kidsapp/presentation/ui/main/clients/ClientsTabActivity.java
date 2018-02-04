@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ruslanlyalko.kidsapp.R;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.birth.BirthActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.birthdays.BirthdaysFragment;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.ContactsFragment;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.contacts.edit.ContactEditActivity;
@@ -60,14 +61,16 @@ public class ClientsTabActivity extends AppCompatActivity implements OnFilterLis
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // getMenuInflater().inflate(R.menu.menu_clients_tab, menu);
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_mk_tab, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_plan) {
+            startActivity(BirthActivity.getLaunchIntent(this));
             return true;
         }
         return super.onOptionsItemSelected(item);

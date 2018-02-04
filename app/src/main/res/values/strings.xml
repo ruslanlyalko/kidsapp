@@ -293,5 +293,6 @@
     <string name="hint_notif">Отримувати сповіщення</string>
     <string name="dialog_remove_contact_title">Видалити контакт?</string>
     <string name="dialog_remove_contact_message">Якщо ви видалите контакт всі дані будуть втрачені</string>
+    <string name="title_activity_birth">Дні Народження Діточок</string>
 
 </resources>

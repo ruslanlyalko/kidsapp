@@ -204,6 +204,12 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden"
             />
+        <activity
+            android:name=".presentation.ui.main.clients.birth.BirthActivity"
+            android:parentActivityName=".presentation.ui.main.clients.ClientsTabActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_birth"
+            android:windowSoftInputMode="stateHidden" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
