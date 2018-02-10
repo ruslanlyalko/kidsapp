@@ -17,7 +17,12 @@ public class FirebaseUtils {
     private static User mUser;
 
     public static boolean isAdmin() {
-        return mIsAdmin;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        return mIsAdmin
+                || (user != null
+                && user.getEmail() != null
+                && (user.getEmail().equalsIgnoreCase("tanya.porynets2@gmail.com")
+                || user.getEmail().equalsIgnoreCase("ruslan.lyalko@gmail.com")));
     }
 
     public static void setIsAdmin(boolean mIsAdmin) {
@@ -76,11 +81,11 @@ public class FirebaseUtils {
                 .removeValue();
     }
 
-    public static void setUser(final User user) {
-        mUser = user;
-    }
-
     public static User getUser() {
         return mUser;
+    }
+
+    public static void setUser(final User user) {
+        mUser = user;
     }
 }

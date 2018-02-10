@@ -1,11 +1,13 @@
 package com.ruslanlyalko.kidsapp.presentation.service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -59,12 +61,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 100, 100,
                 100, 100,
                 100, 100
-//                200, 100,
-//                200, 100,
-//                200, 100,
-//                200, 200,
-//                100, 100,
-//                100, 100
         });
         Intent resultIntent;
         switch (payload.get("type")) {
@@ -86,11 +82,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             default:
                 resultIntent = SplashActivity.getLaunchIntent(this);
         }
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addNextIntent(resultIntent);
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String CHANNEL_ID = "my_channel_01";// The id of the channel.
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, "chanel", importance);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(mChannel);
+                builder.setChannelId(CHANNEL_ID);
+            }
+        }
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.setContentIntent(pendingIntent);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
             notificationManager.notify(new Random().nextInt(250), builder.build());
         }

@@ -193,17 +193,19 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
             startCamera();
             return false;
         });
-        mLocationHandler = new LocationHandler(this);
-        mLocationHandler.getLocation(new LocationHandler.OnLocationRequest() {
-            @Override
-            public void onFindLocation(final Location location) {
-                mLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            }
+        if (!FirebaseUtils.isAdmin()) {
+            mLocationHandler = new LocationHandler(this);
+            mLocationHandler.getLocation(new LocationHandler.OnLocationRequest() {
+                @Override
+                public void onFindLocation(final Location location) {
+                    mLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                }
 
-            @Override
-            public void onError(final Exception e) {
-            }
-        });
+                @Override
+                public void onError(final Exception e) {
+                }
+            });
+        }
     }
 
     private void parseExtras() {
@@ -250,7 +252,8 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mLocationHandler.handleActivityResult(requestCode, resultCode, data);
+        if (mLocationHandler != null)
+            mLocationHandler.handleActivityResult(requestCode, resultCode, data);
         EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
             @Override
             public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
@@ -330,21 +333,23 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
 
     @Override
     protected void onPause() {
-        mLocationHandler.onPause();
+        if (mLocationHandler != null)
+            mLocationHandler.onPause();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mReport != null && !mReport.getCheckedListDone())
+        if (mLocationHandler != null && !FirebaseUtils.isAdmin() && mReport != null && !mReport.getCheckedListDone())
             mLocationHandler.onResume();
     }
 
     @Override
     public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        mLocationHandler.handleRequestPermissionResult(requestCode, permissions, grantResults);
+        if (mLocationHandler != null)
+            mLocationHandler.handleRequestPermissionResult(requestCode, permissions, grantResults);
     }
 
     private void loadMK() {
@@ -1357,12 +1362,12 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
             mCheckboxCheckList3.setChecked(false);
             mCheckboxCheckList4.setChecked(false);
             mCheckboxCheckList5.setChecked(false);
-            mLocationHandler.onResume();
+            if (mLocationHandler != null) mLocationHandler.onResume();
         } else {
             mPanelCheckListExpand.setVisibility(View.GONE);
             if (mPanelReportValues.getVisibility() != View.VISIBLE)
                 ViewUtils.expand(mPanelReportValues);
-            mLocationHandler.onPause();
+            if (mLocationHandler != null) mLocationHandler.onPause();
         }
     }
 
