@@ -54,7 +54,6 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
     @BindView(R.id.progress_bar) ProgressBar mProgressBar;
     @BindView(R.id.button_upload) Button mButtonUpload;
     @BindView(R.id.edit_title1) EditText mEditTitle1;
-    @BindView(R.id.text_title2) TextView mTextTitle2;
     @BindView(R.id.edit_price) EditText mEditPrice;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -124,14 +123,13 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
     private void setupView() {
         if (mIsNew) {
             setTitle(R.string.title_activity_add);
-            mTextTitle2.setText(mExpenseType);
         } else {
             setTitle(R.string.title_activity_edit);
             mEditTitle1.setText(mExpense.getTitle1());
-            mTextTitle2.setText(mExpense.getTitle2());
             mEditPrice.setText(String.valueOf(mExpense.getPrice()));
             if (mExpense.getUri() != null && !mExpense.getUri().isEmpty() && mExpense.getUri().startsWith("http")) {
                 try {
+                    mImageExpense.setVisibility(View.VISIBLE);
                     Glide.with(ExpenseEditActivity.this).load(mExpense.getUri()).into(mImageExpense);
                 } catch (Exception e) {
                     //
@@ -162,6 +160,7 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
         mButtonUpload.setVisibility(View.GONE);
         mNeedToSave = true;
         Glide.with(this).load(imageFile).into(mImageExpense);
+        mImageExpense.setVisibility(View.VISIBLE);
         String imageFileName = DateUtils.getCurrentTimeStamp() + "_original" + ".jpg";
         uploadFile(imageFile, imageFileName, 85).addOnSuccessListener(taskSnapshot -> {
             if (taskSnapshot.getDownloadUrl() != null)
@@ -230,7 +229,6 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
         if (mEditPrice.getText().toString().isEmpty())
             mEditPrice.setText("0");
         mExpense.setTitle1(mEditTitle1.getText().toString());
-        mExpense.setTitle2(mTextTitle2.getText().toString());
         mExpense.setPrice(Integer.parseInt(mEditPrice.getText().toString()));
     }
 
@@ -265,7 +263,6 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_edit, menu);
         return true;
     }

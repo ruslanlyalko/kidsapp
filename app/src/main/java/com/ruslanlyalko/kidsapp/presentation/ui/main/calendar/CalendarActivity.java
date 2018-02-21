@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +55,7 @@ public class CalendarActivity extends AppCompatActivity implements OnReportClick
     @BindView(R.id.button_prev) ImageButton mButtonPrev;
     @BindView(R.id.button_next) ImageButton mButtonNext;
     @BindView(R.id.text_month) TextView mTextMonth;
+    @BindView(R.id.button_add_report) TextView mTextAddReport;
 
     private ReportsAdapter mReportsAdapter;
     private List<Report> mReportList = new ArrayList<>();
@@ -201,6 +203,8 @@ public class CalendarActivity extends AppCompatActivity implements OnReportClick
 
     private void showReportsForDate(Date date) {
         mCurrentDate = date;
+        mTextAddReport.setVisibility((FirebaseUtils.isAdmin() || DateUtils.isTodayOrFuture(date))
+                ? View.VISIBLE : View.GONE);
         String mDay = DateFormat.format("d", date).toString();
         String mMonth = DateFormat.format("M", date).toString();
         String mYear = DateFormat.format("yyyy", date).toString();

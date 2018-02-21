@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -75,6 +76,7 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
     @BindView(R.id.progress_bar_cost) ProgressBar progressBarCost;
     @BindView(R.id.progress_bar_salary) ProgressBar progressBarSalary;
     @BindView(R.id.list_users_salary) RecyclerView mListUsersSalary;
+    @BindView(R.id.layout_collapsing) LinearLayout mLayoutCollapsing;
     @BindView(R.id.image_expand) ImageView mImageView;
     @BindView(R.id.bar_chart) BarChart mBarChart;
     @BindView(R.id.bar_chart_income) BarChart mBarChartIncome;
@@ -225,11 +227,11 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
 
     @OnClick(R.id.panel_action)
     void onExpandClicked() {
-        if (mListUsersSalary.getVisibility() == View.VISIBLE) {
+        if (mLayoutCollapsing.getVisibility() == View.VISIBLE) {
             mImageView.setImageResource(R.drawable.ic_action_expand_more);
-            ViewUtils.collapse(mListUsersSalary);
+            ViewUtils.collapse(mLayoutCollapsing);
         } else {
-            ViewUtils.expand(mListUsersSalary);
+            ViewUtils.expand(mLayoutCollapsing);
             mImageView.setImageResource(R.drawable.ic_action_expand_less);
         }
     }

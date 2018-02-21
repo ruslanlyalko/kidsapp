@@ -969,9 +969,10 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     private void loadReportFromDB() {
         mDatabase.getReference(DefaultConfigurations.DB_REPORTS)
                 .child(mDateYear).child(mDateMonth).child(mDateDay).child(mUId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (isDestroyed()) return;
                         mReport = dataSnapshot.getValue(Report.class);
                         if (mReport == null) {
                             mReport = new Report(mUId, mUserName, mDateStr);
