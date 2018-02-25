@@ -27,7 +27,7 @@ public class User implements Serializable {
     private String token;
     private boolean receiveNotifications;
 
-    public User(String userId, String userName, String userPhone, String userEmail, String userBDay, String userCard, boolean userIsAdmin) {
+    public User(String userId, String userName, String userPhone, String userEmail, String userBDay, String userFirstDate, String userCard, boolean userIsAdmin) {
         this.userId = userId;
         this.userName = userName;
         this.userPhone = userPhone;
@@ -35,6 +35,7 @@ public class User implements Serializable {
         this.userBDay = userBDay;
         this.userCard = userCard;
         this.userIsAdmin = userIsAdmin;
+        this.userFirstDate = userFirstDate;
     }
 
     public User() {

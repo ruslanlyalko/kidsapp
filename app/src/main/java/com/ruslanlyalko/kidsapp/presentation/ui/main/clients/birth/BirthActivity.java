@@ -2,7 +2,6 @@ package com.ruslanlyalko.kidsapp.presentation.ui.main.clients.birth;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +32,6 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class BirthActivity extends BaseActivity implements OnContactClickListener {
@@ -49,10 +47,12 @@ public class BirthActivity extends BaseActivity implements OnContactClickListene
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_birth);
-        ButterKnife.bind(this);
+    protected int getLayoutResource() {
+        return R.layout.activity_birth;
+    }
+
+    @Override
+    protected void setupView() {
         setupRecycler();
         loadContacts();
     }

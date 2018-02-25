@@ -15,7 +15,6 @@
             android:id="@+id/switch_salary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
             android:padding="16dp"
             android:text="@string/text_salary_switch" />
 

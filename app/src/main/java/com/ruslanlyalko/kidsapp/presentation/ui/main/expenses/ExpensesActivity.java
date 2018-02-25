@@ -1,10 +1,8 @@
 package com.ruslanlyalko.kidsapp.presentation.ui.main.expenses;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -46,7 +44,6 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ExpensesActivity extends BaseActivity implements OnExpenseClickListener {
@@ -79,10 +76,12 @@ public class ExpensesActivity extends BaseActivity implements OnExpenseClickList
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expenses);
-        ButterKnife.bind(this);
+    protected int getLayoutResource() {
+        return R.layout.activity_expenses;
+    }
+
+    @Override
+    protected void setupView() {
         initSwitcher();
         initRecycler();
         initFAB();
@@ -180,10 +179,24 @@ public class ExpensesActivity extends BaseActivity implements OnExpenseClickList
         mTotalSwitcher.setText(getString(R.string.HRN, DateUtils.getIntWithSpace(total)));
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mProgressBarUpload.getVisibility() == View.VISIBLE) {
+            Toast.makeText(this, R.string.photo_uploading, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        super.onBackPressed();
+    }
+
     @OnClick({R.id.fab, R.id.faded_background})
     void onFabClicked() {
         animateFAB();
     }
+    /*
+     int REQUEST_CODE_CAMERA =123;
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, REQUEST_CODE_CAMERA);
+     */
 
     public void animateFAB() {
         if (mIsFabOpen) {
@@ -210,11 +223,6 @@ public class ExpensesActivity extends BaseActivity implements OnExpenseClickList
             mIsFabOpen = true;
         }
     }
-    /*
-     int REQUEST_CODE_CAMERA =123;
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, REQUEST_CODE_CAMERA);
-     */
 
     @OnClick(R.id.fab1)
     void onFab1Clicked() {
@@ -276,15 +284,6 @@ public class ExpensesActivity extends BaseActivity implements OnExpenseClickList
     void onNextClicked() {
         setSwitcherAnim(false);
         mCalendarView.showNextMonth();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mProgressBarUpload.getVisibility() == View.VISIBLE) {
-            Toast.makeText(this, R.string.photo_uploading, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        super.onBackPressed();
     }
 
     @Override

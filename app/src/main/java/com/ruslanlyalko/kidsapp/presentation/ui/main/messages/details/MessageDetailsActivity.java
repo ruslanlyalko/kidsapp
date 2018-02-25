@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,6 +39,7 @@ import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Message;
 import com.ruslanlyalko.kidsapp.data.models.MessageComment;
+import com.ruslanlyalko.kidsapp.presentation.base.BaseActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.MessageEditActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter.CommentsAdapter;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter.OnCommentClickListener;
@@ -52,13 +52,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MessageDetailsActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, OnCommentClickListener {
+public class MessageDetailsActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks, OnCommentClickListener {
 
     @BindView(R.id.text_description) TextView textDescription;
     @BindView(R.id.list_comments) RecyclerView mListComments;
@@ -82,11 +81,20 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message_details);
-        ButterKnife.bind(this);
-        parseExtras();
+    protected int getLayoutResource() {
+        return R.layout.activity_message_details;
+    }
+
+    @Override
+    protected void parseExtras() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mMessageKey = bundle.getString(Keys.Extras.EXTRA_NOT_ID);
+        }
+    }
+
+    @Override
+    protected void setupView() {
         setupRecycler();
         FirebaseUtils.markNotificationsAsRead(mMessageKey);
         loadDetailsFromDB();
@@ -102,13 +110,6 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
                 mListComments.smoothScrollToPosition(mCommentsAdapter.getItemCount());
             }
         });
-    }
-
-    private void parseExtras() {
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            mMessageKey = bundle.getString(Keys.Extras.EXTRA_NOT_ID);
-        }
     }
 
     private void setupRecycler() {
@@ -151,8 +152,7 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
                                 list.add(messageComment);
                             }
                         }
-                        mCommentsAdapter.clearAll();
-                        mCommentsAdapter.addAll(list);
+                        mCommentsAdapter.setData(list);
                         new Handler().postDelayed(() -> {
                             if (mMessage.getCommentsEnabled()) {
                                 loadMoreCommentsFromDB();
@@ -223,25 +223,6 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_item, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(final Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (mMessage != null) {
-            menu.findItem(R.id.action_delete).setVisible(FirebaseUtils.isAdmin()
-                    || mMessage.getUserId().equals(mUser.getUid()));
-            menu.findItem(R.id.action_edit).setVisible(FirebaseUtils.isAdmin()
-                    || mMessage.getUserId().equals(mUser.getUid()));
-        }
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
@@ -286,9 +267,29 @@ public class MessageDetailsActivity extends AppCompatActivity implements EasyPer
     }
 
     @Override
-    public void onItemClicked(final int position) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (mMessage != null) {
+            menu.findItem(R.id.action_delete).setVisible(FirebaseUtils.isAdmin()
+                    || mMessage.getUserId().equals(mUser.getUid()));
+            menu.findItem(R.id.action_edit).setVisible(FirebaseUtils.isAdmin()
+                    || mMessage.getUserId().equals(mUser.getUid()));
+        }
+        return true;
+    }
+
+    @Override
+    public void onItemClicked(View view, final int position) {
         MessageComment item = mCommentsAdapter.getItemAtPosition(position);
         if (item.getFile() != null && !item.getFile().isEmpty() && !item.getRemoved()) {
+//            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, "image");
             startActivity(PhotoPreviewActivity.getLaunchIntent(this, item.getFile(), item.getUserName()));
         } else
             Toast.makeText(this, DateUtils.toString(mCommentsAdapter.getItemAtPosition(position).getDate(),

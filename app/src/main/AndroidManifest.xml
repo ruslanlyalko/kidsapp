@@ -206,9 +206,15 @@
             />
         <activity
             android:name=".presentation.ui.main.clients.birth.BirthActivity"
+            android:label="@string/title_activity_birth"
             android:parentActivityName=".presentation.ui.main.clients.ClientsTabActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_birth"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name=".presentation.widget.EnlargedImageActivity"
+            android:parentActivityName=".presentation.ui.main.clients.ClientsTabActivity"
+            android:theme="@style/Plaid.Translucent.About"
             android:windowSoftInputMode="stateHidden" />
 
         <meta-data

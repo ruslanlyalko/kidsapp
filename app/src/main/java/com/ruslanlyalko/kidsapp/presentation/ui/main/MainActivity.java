@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -32,6 +31,7 @@ import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Notification;
 import com.ruslanlyalko.kidsapp.data.models.User;
+import com.ruslanlyalko.kidsapp.presentation.base.BaseActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.about.AboutActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.calendar.CalendarActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.clients.ClientsTabActivity;
@@ -47,12 +47,11 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.ruslanlyalko.kidsapp.common.ViewUtils.viewToDrawable;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private static final int MIN_DISTANCE = 150;
     private static final String mLink = "https://play.google.com/store/apps/details?id=com.ruslanlyalko.kidsapp";
@@ -76,12 +75,14 @@ public class MainActivity extends AppCompatActivity {
     public static Intent getLaunchIntent(final AppCompatActivity launchActivity) {
         return new Intent(launchActivity, MainActivity.class);
     }
+    
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_main;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+    protected void setupView() {
         initCurrentUser();
         initSwipes();
         loadBadge();
@@ -207,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        android.view.View view = inflater.inflate(R.layout.drawable_event_badge, null);
+        View view = inflater.inflate(R.layout.drawable_event_badge, null);
         TextView badgeCount = view.findViewById(R.id.badge);
         badgeCount.setVisibility(View.VISIBLE);
         badgeCount.setText(String.valueOf(count));

@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysClickListener {
@@ -72,18 +71,12 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_details);
-        ButterKnife.bind(this);
-        parseExtras();
-        setupToolbar();
-        setupRecycler();
-        setupView();
-        loadDetails();
+    protected int getLayoutResource() {
+        return R.layout.activity_contact_details;
     }
 
-    private void parseExtras() {
+    @Override
+    protected void parseExtras() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             mContact = (Contact) bundle.getSerializable(Keys.Extras.EXTRA_ITEM_ID);
@@ -93,19 +86,11 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
             mContactKey = mContact.getKey();
     }
 
-    private void setupToolbar() {
-        setSupportActionBar(mToolbar);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void setupRecycler() {
-        mListBirthdays.setLayoutManager(new LinearLayoutManager(this));
-        mListBirthdays.setAdapter(mBirthdaysAdapter);
-    }
-
     @SuppressLint("SetTextI18n")
-    private void setupView() {
+    @Override
+    protected void setupView() {
+        setupRecycler();
+        loadDetails();
         if (mContact == null) {
             setTitle("");
             return;
@@ -129,6 +114,49 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
         mTextDescription.setText(mContact.getDescription());
         mTextDescription.setVisibility(mContact.getDescription() != null & !mContact.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
         loadBirthdays();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_edit:
+                startActivity(ContactEditActivity.getLaunchIntent(this, mContact));
+                break;
+            case R.id.action_delete:
+                removeCurrentContact();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void removeCurrentContact() {
+        if (mBirthdaysAdapter.getItemCount() != 0) {
+            Toast.makeText(this, "Неможливо видалити контакт! Спочатку видаліть всі Дні Народження", Toast.LENGTH_LONG).show();
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.dialog_remove_contact_title)
+                .setMessage(R.string.dialog_remove_contact_message)
+                .setPositiveButton("Видалити", (dialog, which) -> {
+                    finish();
+                    FirebaseDatabase.getInstance()
+                            .getReference(DefaultConfigurations.DB_CONTACTS)
+                            .child(mContact.getKey()).removeValue();
+                })
+                .setNegativeButton("Повернутись", null)
+                .show();
+    }
+
+    private void setupToolbar() {
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setupRecycler() {
+        mListBirthdays.setLayoutManager(new LinearLayoutManager(this));
+        mListBirthdays.setAdapter(mBirthdaysAdapter);
     }
 
     private void loadDetails() {
@@ -183,38 +211,6 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
         menu.findItem(R.id.action_delete).setVisible(FirebaseUtils.isAdmin());
         menu.findItem(R.id.action_edit).setVisible(true);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_edit:
-                startActivity(ContactEditActivity.getLaunchIntent(this, mContact));
-                break;
-            case R.id.action_delete:
-                removeCurrentContact();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void removeCurrentContact() {
-        if (mBirthdaysAdapter.getItemCount() != 0) {
-            Toast.makeText(this, "Неможливо видалити контакт! Спочатку видаліть всі Дні Народження", Toast.LENGTH_LONG).show();
-            return;
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.dialog_remove_contact_title)
-                .setMessage(R.string.dialog_remove_contact_message)
-                .setPositiveButton("Видалити", (dialog, which) -> {
-                    finish();
-                    FirebaseDatabase.getInstance()
-                            .getReference(DefaultConfigurations.DB_CONTACTS)
-                            .child(mContact.getKey()).removeValue();
-                })
-                .setNegativeButton("Повернутись", null)
-                .show();
     }
 
     @Override

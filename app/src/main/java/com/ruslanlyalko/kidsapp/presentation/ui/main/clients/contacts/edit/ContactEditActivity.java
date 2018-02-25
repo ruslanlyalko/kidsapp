@@ -28,7 +28,6 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import java.util.Calendar;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ContactEditActivity extends BaseActivity {
@@ -65,17 +64,12 @@ public class ContactEditActivity extends BaseActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        overridePendingTransition(R.anim.fadein, R.anim.nothing);
-        setContentView(R.layout.activity_contact_edit);
-        ButterKnife.bind(this);
-        parseExtras();
-        setupChangeWatcher();
-        setupView();
+    protected int getLayoutResource() {
+        return R.layout.activity_contact_edit;
     }
 
-    private void parseExtras() {
+    @Override
+    protected void parseExtras() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             mContact = (Contact) bundle.getSerializable(Keys.Extras.EXTRA_ITEM_ID);
@@ -88,6 +82,30 @@ public class ContactEditActivity extends BaseActivity {
             mEditPhone1.setText(mClientPhone);
             mEditName.setText(mClientName);
         }
+    }
+
+    @Override
+    protected void setupView() {
+        setupChangeWatcher();
+        if (mIsNew) {
+            setTitle(R.string.title_activity_add);
+            mEditChildDate1.setText(DateUtils.toString(mContact.getChildBd1(), "dd.MM.yyyy"));
+            mEditChildDate2.setText(DateUtils.toString(mContact.getChildBd2(), "dd.MM.yyyy"));
+            mEditChildDate3.setText(DateUtils.toString(mContact.getChildBd3(), "dd.MM.yyyy"));
+        } else {
+            setTitle(R.string.title_activity_edit);
+            mEditName.setText(mContact.getName());
+            mEditChildName1.setText(mContact.getChildName1());
+            mEditChildName2.setText(mContact.getChildName2());
+            mEditChildName3.setText(mContact.getChildName3());
+            mEditChildDate1.setText(DateUtils.toString(mContact.getChildBd1(), "dd.MM.yyyy"));
+            mEditChildDate2.setText(DateUtils.toString(mContact.getChildBd2(), "dd.MM.yyyy"));
+            mEditChildDate3.setText(DateUtils.toString(mContact.getChildBd3(), "dd.MM.yyyy"));
+            mEditPhone1.setText(mContact.getPhone());
+            mEditPhone2.setText(mContact.getPhone2());
+            mEditDescription.setText(mContact.getDescription());
+        }
+        mNeedToSave = false;
     }
 
     private void setupChangeWatcher() {
@@ -116,26 +134,16 @@ public class ContactEditActivity extends BaseActivity {
         mEditPhone2.addTextChangedListener(watcher);
     }
 
-    private void setupView() {
-        if (mIsNew) {
-            setTitle(R.string.title_activity_add);
-            mEditChildDate1.setText(DateUtils.toString(mContact.getChildBd1(), "dd.MM.yyyy"));
-            mEditChildDate2.setText(DateUtils.toString(mContact.getChildBd2(), "dd.MM.yyyy"));
-            mEditChildDate3.setText(DateUtils.toString(mContact.getChildBd3(), "dd.MM.yyyy"));
-        } else {
-            setTitle(R.string.title_activity_edit);
-            mEditName.setText(mContact.getName());
-            mEditChildName1.setText(mContact.getChildName1());
-            mEditChildName2.setText(mContact.getChildName2());
-            mEditChildName3.setText(mContact.getChildName3());
-            mEditChildDate1.setText(DateUtils.toString(mContact.getChildBd1(), "dd.MM.yyyy"));
-            mEditChildDate2.setText(DateUtils.toString(mContact.getChildBd2(), "dd.MM.yyyy"));
-            mEditChildDate3.setText(DateUtils.toString(mContact.getChildBd3(), "dd.MM.yyyy"));
-            mEditPhone1.setText(mContact.getPhone());
-            mEditPhone2.setText(mContact.getPhone2());
-            mEditDescription.setText(mContact.getDescription());
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_save) {
+            if (mIsNew)
+                addClient();
+            else
+                updateClient();
         }
-        mNeedToSave = false;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -195,18 +203,6 @@ public class ContactEditActivity extends BaseActivity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_edit, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_save) {
-            if (mIsNew)
-                addClient();
-            else
-                updateClient();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.edit_child_date1)

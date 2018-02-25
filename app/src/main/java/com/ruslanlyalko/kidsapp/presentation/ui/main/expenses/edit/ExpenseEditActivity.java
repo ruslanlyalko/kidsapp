@@ -2,6 +2,7 @@ package com.ruslanlyalko.kidsapp.presentation.ui.main.expenses.edit;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,11 +38,11 @@ import com.ruslanlyalko.kidsapp.presentation.base.BaseActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -55,6 +56,7 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
     @BindView(R.id.button_upload) Button mButtonUpload;
     @BindView(R.id.edit_title1) EditText mEditTitle1;
     @BindView(R.id.edit_price) EditText mEditPrice;
+    @BindView(R.id.text_date) TextView mTextDate;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private Expense mExpense = new Expense();
@@ -75,17 +77,12 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        overridePendingTransition(R.anim.fadein, R.anim.nothing);
-        setContentView(R.layout.activity_expense_edit);
-        ButterKnife.bind(this);
-        parseExtras();
-        setupChangeWatcher();
-        setupView();
+    protected int getLayoutResource() {
+        return R.layout.activity_expense_edit;
     }
 
-    private void parseExtras() {
+    @Override
+    protected void parseExtras() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             mExpense = (Expense) bundle.getSerializable(Keys.Extras.EXTRA_ITEM_ID);
@@ -93,12 +90,35 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
         }
         mIsNew = mExpense == null;
         if (mIsNew) {
+            mTextDate.setText(DateUtils.toString(new Date(), "d-M-yyyy"));
             mExpense = new Expense(mExpenseType,
                     DateUtils.toString(new Date(), "d-M-yyyy"),
                     DateUtils.toString(new Date(), "HH:mm"),
                     mUser.getUid(),
                     mUser.getDisplayName());
         }
+    }
+
+    @Override
+    public void setupView() {
+        setupChangeWatcher();
+        if (mIsNew) {
+            setTitle(R.string.title_activity_add);
+        } else {
+            setTitle(R.string.title_activity_edit);
+            mTextDate.setText(mExpense.getDate());
+            mEditTitle1.setText(mExpense.getTitle1());
+            mEditPrice.setText(String.valueOf(mExpense.getPrice()));
+            if (mExpense.getUri() != null && !mExpense.getUri().isEmpty() && mExpense.getUri().startsWith("http")) {
+                try {
+                    mImageExpense.setVisibility(View.VISIBLE);
+                    Glide.with(ExpenseEditActivity.this).load(mExpense.getUri()).into(mImageExpense);
+                } catch (Exception e) {
+                    //
+                }
+            }
+        }
+        mNeedToSave = false;
     }
 
     private void setupChangeWatcher() {
@@ -120,23 +140,41 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
         mEditPrice.addTextChangedListener(watcher);
     }
 
-    private void setupView() {
-        if (mIsNew) {
-            setTitle(R.string.title_activity_add);
-        } else {
-            setTitle(R.string.title_activity_edit);
-            mEditTitle1.setText(mExpense.getTitle1());
-            mEditPrice.setText(String.valueOf(mExpense.getPrice()));
-            if (mExpense.getUri() != null && !mExpense.getUri().isEmpty() && mExpense.getUri().startsWith("http")) {
-                try {
-                    mImageExpense.setVisibility(View.VISIBLE);
-                    Glide.with(ExpenseEditActivity.this).load(mExpense.getUri()).into(mImageExpense);
-                } catch (Exception e) {
-                    //
-                }
-            }
+    @Override
+    protected boolean isModalView() {
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_save) {
+            if (mIsNew)
+                addExpense();
+            else
+                updateExpense();
         }
-        mNeedToSave = false;
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mProgressBar.getVisibility() == View.VISIBLE) {
+            Toast.makeText(this, R.string.photo_uploading, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (mNeedToSave) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(ExpenseEditActivity.this);
+            builder.setTitle(R.string.dialog_discart_changes)
+                    .setPositiveButton(R.string.action_discard, (dialog, which) -> {
+                        mNeedToSave = false;
+                        onBackPressed();
+                    })
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -192,27 +230,6 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
     }
 
     @Override
-    public void onBackPressed() {
-        if (mProgressBar.getVisibility() == View.VISIBLE) {
-            Toast.makeText(this, R.string.photo_uploading, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (mNeedToSave) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(ExpenseEditActivity.this);
-            builder.setTitle(R.string.dialog_discart_changes)
-                    .setPositiveButton(R.string.action_discard, (dialog, which) -> {
-                        mNeedToSave = false;
-                        onBackPressed();
-                    })
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show();
-        } else {
-            super.onBackPressed();
-            overridePendingTransition(R.anim.nothing, R.anim.fadeout);
-        }
-    }
-
-    @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
         switch (requestCode) {
             case REQUEST_IMAGE_PERMISSION:
@@ -229,6 +246,7 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
         if (mEditPrice.getText().toString().isEmpty())
             mEditPrice.setText("0");
         mExpense.setTitle1(mEditTitle1.getText().toString());
+        mExpense.setDate(mTextDate.getText().toString());
         mExpense.setPrice(Integer.parseInt(mEditPrice.getText().toString()));
     }
 
@@ -267,18 +285,6 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_save) {
-            if (mIsNew)
-                addExpense();
-            else
-                updateExpense();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @OnClick(R.id.button_upload)
     public void onUploadClicked() {
         String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -287,5 +293,20 @@ public class ExpenseEditActivity extends BaseActivity implements EasyPermissions
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.image_permissions), REQUEST_IMAGE_PERMISSION, perms);
         }
+    }
+
+    @OnClick(R.id.text_date)
+    public void onDateClicked() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateUtils.parse(mExpense.getDate(), "d-M-yyyy"));
+        new DatePickerDialog(ExpenseEditActivity.this, (datePicker, year, month, day)
+                -> {
+            mExpense.setDate(DateUtils.toString(DateUtils.getDate(year, month, day), "d-M-yyyy"));
+            mTextDate.setText(mExpense.getDate());
+        },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        ).show();
     }
 }

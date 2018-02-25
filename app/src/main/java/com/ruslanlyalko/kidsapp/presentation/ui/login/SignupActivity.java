@@ -20,6 +20,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ruslanlyalko.kidsapp.R;
+import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.User;
 
@@ -84,6 +85,7 @@ public class SignupActivity extends AppCompatActivity {
                         // the mFirebaseAuth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (task.isSuccessful()) {
+                            FirebaseUtils.setIsAdmin(false);
                             UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(name)
                                     .build();
@@ -106,7 +108,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private void createUserData(String name, String phone, String email, String uId) {
         DatabaseReference databaseRefCurrentUser = mDatabase.getReference(DefaultConfigurations.DB_USERS).child(uId);
-        User user = new User(uId, name, phone, email, "01.06.1991", "", false);
+        User user = new User(uId, name, phone, email, "01.06.1991", "01.06.1991", "", false);
         databaseRefCurrentUser.setValue(user);
     }
 

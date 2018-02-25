@@ -31,7 +31,6 @@ import com.ruslanlyalko.kidsapp.presentation.base.BaseActivity;
 import java.util.Calendar;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class BirthdaysEditActivity extends BaseActivity {
@@ -66,17 +65,12 @@ public class BirthdaysEditActivity extends BaseActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        overridePendingTransition(R.anim.fadein, R.anim.nothing);
-        setContentView(R.layout.activity_birthday_edit);
-        ButterKnife.bind(this);
-        parseExtras();
-        setupChangeWatcher();
-        setupView();
+    protected int getLayoutResource() {
+        return R.layout.activity_birthday_edit;
     }
 
-    private void parseExtras() {
+    @Override
+    protected void parseExtras() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             mBirthday = (Birthday) bundle.getSerializable(Keys.Extras.EXTRA_ITEM_ID);
@@ -86,6 +80,59 @@ public class BirthdaysEditActivity extends BaseActivity {
         mIsNew = mBirthday == null;
         if (mIsNew) {
             mBirthday = new Birthday(mContactKey, mChildName);
+        }
+    }
+
+    @Override
+    protected void setupView() {
+        setupChangeWatcher();
+        if (mIsNew) {
+            setTitle(R.string.title_activity_add);
+            mEditChildName1.setText(mBirthday.getChildName());
+        } else {
+            setTitle(R.string.title_activity_edit);
+            mEditDescription.setText(mBirthday.getDescription());
+            mEditChildName1.setText(mBirthday.getChildName());
+            mEditChildDate1.setText(DateUtils.toString(mBirthday.getBdDate(), "dd.MM.yyyy"));
+            mSeekKidsCount.setProgress(mBirthday.getKidsCount());
+            mCheckboxBirthdayAqua.setChecked(mBirthday.getAqua());
+            mCheckboxBirthdayMk.setChecked(mBirthday.getMk());
+            mCheckboxBirthdayCinema.setChecked(mBirthday.getCinema());
+        }
+        mNeedToSave = false;
+    }
+
+    @Override
+    protected boolean isModalView() {
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_save) {
+            if (mIsNew)
+                addClient();
+            else
+                updateClient();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mNeedToSave) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(BirthdaysEditActivity.this);
+            builder.setTitle(R.string.dialog_discart_changes)
+                    .setPositiveButton(R.string.action_discard, (dialog, which) -> {
+                        mNeedToSave = false;
+                        onBackPressed();
+                    })
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .show();
+        } else {
+            super.onBackPressed();
+            overridePendingTransition(R.anim.nothing, R.anim.fadeout);
         }
     }
 
@@ -130,40 +177,6 @@ public class BirthdaysEditActivity extends BaseActivity {
         });
     }
 
-    private void setupView() {
-        if (mIsNew) {
-            setTitle(R.string.title_activity_add);
-            mEditChildName1.setText(mBirthday.getChildName());
-        } else {
-            setTitle(R.string.title_activity_edit);
-            mEditDescription.setText(mBirthday.getDescription());
-            mEditChildName1.setText(mBirthday.getChildName());
-            mEditChildDate1.setText(DateUtils.toString(mBirthday.getBdDate(), "dd.MM.yyyy"));
-            mSeekKidsCount.setProgress(mBirthday.getKidsCount());
-            mCheckboxBirthdayAqua.setChecked(mBirthday.getAqua());
-            mCheckboxBirthdayMk.setChecked(mBirthday.getMk());
-            mCheckboxBirthdayCinema.setChecked(mBirthday.getCinema());
-        }
-        mNeedToSave = false;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mNeedToSave) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(BirthdaysEditActivity.this);
-            builder.setTitle(R.string.dialog_discart_changes)
-                    .setPositiveButton(R.string.action_discard, (dialog, which) -> {
-                        mNeedToSave = false;
-                        onBackPressed();
-                    })
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show();
-        } else {
-            super.onBackPressed();
-            overridePendingTransition(R.anim.nothing, R.anim.fadeout);
-        }
-    }
-
     private void updateModel() {
         mBirthday.setDescription(mEditDescription.getText().toString().trim());
         mBirthday.setKidsCount(mSeekKidsCount.getProgress());
@@ -204,18 +217,6 @@ public class BirthdaysEditActivity extends BaseActivity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_edit, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_save) {
-            if (mIsNew)
-                addClient();
-            else
-                updateClient();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.layout_date)

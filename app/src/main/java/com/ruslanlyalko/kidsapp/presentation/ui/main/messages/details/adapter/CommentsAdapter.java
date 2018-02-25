@@ -108,6 +108,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
         notifyDataSetChanged();
     }
 
+    public void setData(final List<MessageComment> messageComments) {
+        mDataSource.clear();
+        mDataSource.addAll(messageComments);
+        notifyDataSetChanged();
+    }
+
     public void update(final MessageComment messageComment) {
         for (int i = 0; i < mDataSource.size(); i++) {
             MessageComment current = mDataSource.get(i);
@@ -177,7 +183,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
         @OnClick(R.id.linear_root)
         void onItemCLick() {
             if (mOnCommentClickListener != null)
-                mOnCommentClickListener.onItemClicked(getAdapterPosition());
+                mOnCommentClickListener.onItemClicked(mImageView, getAdapterPosition());
         }
 
         @OnClick(R.id.card_user)

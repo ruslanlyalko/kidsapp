@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -54,6 +53,7 @@ import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Mk;
 import com.ruslanlyalko.kidsapp.data.models.Report;
+import com.ruslanlyalko.kidsapp.presentation.base.BaseActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.alarm.AlarmReceiverActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.calendar.CalendarActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.maps.MapsActivity;
@@ -71,13 +71,12 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class ReportActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+public class ReportActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
 
     private static final int REQUEST_IMAGE_PERMISSION = 1;
     @BindView(R.id.text_date) TextView textDate;
@@ -169,11 +168,32 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_report);
-        ButterKnife.bind(this);
-        parseExtras();
+    protected int getLayoutResource() {
+        return R.layout.activity_report;
+    }
+
+    @Override
+    protected void parseExtras() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle == null) {
+            if (mUser != null)
+                mUId = mUser.getUid();
+            if (mUser != null)
+                mUserName = mUser.getDisplayName();
+            setDate(Calendar.getInstance());
+        } else {
+            mUId = bundle.getString(Keys.Extras.EXTRA_UID, mUser.getUid());
+            mUserName = bundle.getString(Keys.Extras.EXTRA_USER_NAME, mUser.getDisplayName());
+            String date = bundle.getString(Keys.Extras.EXTRA_DATE);
+            if (date != null)
+                setDate(date);
+            else
+                setDate(Calendar.getInstance());
+        }
+    }
+
+    @Override
+    protected void setupView() {
         initDatePicker();
         initSwipesAndExpandPanels();
         initSeeks();
@@ -183,6 +203,9 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         panelPhoto.setOnClickListener(v -> {
             String uri = mReport.imageUri;
             if (uri != null && !uri.isEmpty()) {
+//                if (uri.startsWith("http"))
+//                    startActivity(EnlargedImageActivity.getLaunchIntent(this, uri));
+//                else
                 startActivity(PhotoPreviewActivity.getLaunchIntent(
                         ReportActivity.this, uri, mReport.getUserName(), DefaultConfigurations.STORAGE_REPORT));
             } else {
@@ -208,23 +231,92 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         }
     }
 
-    private void parseExtras() {
-        Bundle bundle = getIntent().getExtras();
-        if (bundle == null) {
-            if (mUser != null)
-                mUId = mUser.getUid();
-            if (mUser != null)
-                mUserName = mUser.getDisplayName();
-            setDate(Calendar.getInstance());
-        } else {
-            mUId = bundle.getString(Keys.Extras.EXTRA_UID, mUser.getUid());
-            mUserName = bundle.getString(Keys.Extras.EXTRA_USER_NAME, mUser.getDisplayName());
-            String date = bundle.getString(Keys.Extras.EXTRA_DATE);
-            if (date != null)
-                setDate(date);
-            else
-                setDate(Calendar.getInstance());
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
+        switch (id) {
+            case R.id.action_add: {
+                saveReportToDB();
+                break;
+            }
+            case R.id.action_today: {
+                setDate(Calendar.getInstance());
+                break;
+            }
+            case R.id.action_clear_report: {
+                clearReport(true);
+                break;
+            }
+            case R.id.action_delete_report: {
+                deleteReport();
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (progressBarUpload.getVisibility() == View.VISIBLE) {
+            Toast.makeText(this, R.string.photo_uploading, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // Show Dialog if we have not saved data
+        if (isChanged) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
+            builder.setTitle(R.string.dialog_report_save_before_close_title)
+                    .setMessage(R.string.dialog_report_save_before_close_text)
+                    .setPositiveButton(R.string.action_save, (dialog, which) -> {
+                        if (saveReportToDB())
+                            onBackPressed();
+                    })
+                    .setNegativeButton(R.string.action_no, (dialog, which) -> {
+                        isChanged = false;
+                        onBackPressed();
+                    })
+                    .show();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void setDate(Calendar calendar) {
+        mDate = calendar;
+        mDateStr = mSdf.format(mDate.getTime());
+        fillDateStr();
+        mIsFuture = DateUtils.future(mDateStr);
+    }
+
+    private void setDate(String dateStr) {
+        mDateStr = dateStr;
+        mDate = getDateFromStr(mDateStr);
+        fillDateStr();
+        mIsFuture = DateUtils.future(mDateStr);
+    }
+
+    private void fillDateStr() {
+        int first = mDateStr.indexOf('-');
+        int last = mDateStr.lastIndexOf('-');
+        mDateDay = mDateStr.substring(0, first);
+        mDateMonth = mDateStr.substring(first + 1, last);
+        mDateYear = mDateStr.substring(last + 1);
+        textDate.setText(DateUtils.toString(mDate.getTime(), "d-M-yyyy EEEE").toUpperCase());
+        if (mReport != null)
+            mReport.date = mDateStr;
+    }
+
+    private Calendar getDateFromStr(String dateStr) {
+        Calendar date = Calendar.getInstance();
+        try {
+            date.setTime(mSdf.parse(dateStr));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 
     @Override
@@ -304,31 +396,6 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
     void hideProgressBarUpload() {
         progressBarUpload.setVisibility(View.GONE);
         textPhoto.setText("Фото загружено!");
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (progressBarUpload.getVisibility() == View.VISIBLE) {
-            Toast.makeText(this, R.string.photo_uploading, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        // Show Dialog if we have not saved data
-        if (isChanged) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
-            builder.setTitle(R.string.dialog_report_save_before_close_title)
-                    .setMessage(R.string.dialog_report_save_before_close_text)
-                    .setPositiveButton(R.string.action_save, (dialog, which) -> {
-                        if (saveReportToDB())
-                            onBackPressed();
-                    })
-                    .setNegativeButton(R.string.action_no, (dialog, which) -> {
-                        isChanged = false;
-                        onBackPressed();
-                    })
-                    .show();
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
@@ -1232,20 +1299,6 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         updateTitle();
     }
 
-    private void setDate(Calendar calendar) {
-        mDate = calendar;
-        mDateStr = mSdf.format(mDate.getTime());
-        fillDateStr();
-        mIsFuture = DateUtils.future(mDateStr);
-    }
-
-    private void setDate(String dateStr) {
-        mDateStr = dateStr;
-        mDate = getDateFromStr(mDateStr);
-        fillDateStr();
-        mIsFuture = DateUtils.future(mDateStr);
-    }
-
     private void setDate(int year, int monthOfYear, int dayOfMonth) {
         mDate.set(Calendar.YEAR, year);
         mDate.set(Calendar.MONTH, monthOfYear);
@@ -1263,60 +1316,11 @@ public class ReportActivity extends AppCompatActivity implements EasyPermissions
         }
     }
 
-    private void fillDateStr() {
-        int first = mDateStr.indexOf('-');
-        int last = mDateStr.lastIndexOf('-');
-        mDateDay = mDateStr.substring(0, first);
-        mDateMonth = mDateStr.substring(first + 1, last);
-        mDateYear = mDateStr.substring(last + 1);
-        textDate.setText(DateUtils.toString(mDate.getTime(), "d-M-yyyy EEEE").toUpperCase());
-        if (mReport != null)
-            mReport.date = mDateStr;
-    }
-
-    private Calendar getDateFromStr(String dateStr) {
-        Calendar date = Calendar.getInstance();
-        try {
-            date.setTime(mSdf.parse(dateStr));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_report, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        switch (id) {
-            case R.id.action_add: {
-                saveReportToDB();
-                break;
-            }
-            case R.id.action_today: {
-                setDate(Calendar.getInstance());
-                break;
-            }
-            case R.id.action_clear_report: {
-                clearReport(true);
-                break;
-            }
-            case R.id.action_delete_report: {
-                deleteReport();
-                break;
-            }
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.button_check_list_done)

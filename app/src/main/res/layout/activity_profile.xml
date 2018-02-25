@@ -54,7 +54,7 @@
                 android:paddingEnd="64dp"
                 android:paddingStart="34dp"
                 android:textColor="@color/colorWhite70"
-                app:layout_collapseMode="pin"
+                app:layout_collapseMode="parallax"
                 tools:text="SubTitle" />
 
             <TextView
@@ -66,7 +66,7 @@
                 android:paddingEnd="64dp"
                 android:paddingStart="34dp"
                 android:textColor="@color/colorWhite70"
-                app:layout_collapseMode="pin"
+                app:layout_collapseMode="parallax"
                 tools:text="SubTitle" />
 
             <TextView
@@ -81,7 +81,7 @@
                 android:textColor="@color/colorAccent"
                 android:textSize="50sp"
                 android:visibility="visible"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
