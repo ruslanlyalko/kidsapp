@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,12 +57,15 @@ public class MainActivity extends BaseActivity {
     private static final int MIN_DISTANCE = 150;
     private static final String mLink = "https://play.google.com/store/apps/details?id=com.ruslanlyalko.kidsapp";
     private static final String mLinkFb = "https://www.facebook.com/groups/cheburashka.kids/";
+
     @BindView(R.id.text_app_name) TextView mAppNameText;
     @BindView(R.id.text_link) TextView mLinkText;
     @BindView(R.id.text_link_details) TextView mLinkDetailsText;
     @BindView(R.id.button_arrow) Button mArrowButton;
     @BindView(R.id.swipe_layout) SwipeLayout mSwipeLayout;
     @BindView(R.id.button_events) ImageView mEventsButton;
+    @BindView(R.id.layout_clients) LinearLayout mLayoutClients;
+
     boolean mDoubleBackToExitPressedOnce = false;
     boolean mSwipeOpened = false;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -75,7 +79,7 @@ public class MainActivity extends BaseActivity {
     public static Intent getLaunchIntent(final AppCompatActivity launchActivity) {
         return new Intent(launchActivity, MainActivity.class);
     }
-    
+
     @Override
     protected int getLayoutResource() {
         return R.layout.activity_main;
@@ -103,6 +107,7 @@ public class MainActivity extends BaseActivity {
                         if (user != null) {
                             FirebaseUtils.setIsAdmin(user.getUserIsAdmin());
                             FirebaseUtils.setUser(user);
+                            mLayoutClients.setVisibility(user.getUserIsAdmin() || user.getShowClients() ? View.VISIBLE : View.GONE);
                         }
                     }
 
@@ -215,6 +220,21 @@ public class MainActivity extends BaseActivity {
         Bitmap bitmap = viewToDrawable(view);
         Drawable icon = new BitmapDrawable(getResources(), bitmap);
         mEventsButton.setImageDrawable(icon);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mSwipeOpened) {
+            mSwipeLayout.close();
+            return;
+        }
+        if (mDoubleBackToExitPressedOnce) {
+            finish();
+            return;
+        }
+        mDoubleBackToExitPressedOnce = true;
+        Toast.makeText(this, R.string.hint_double_press, Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(() -> mDoubleBackToExitPressedOnce = false, 2000);
     }
 
     @OnClick({R.id.text_link, R.id.text_link_details})
@@ -330,21 +350,6 @@ public class MainActivity extends BaseActivity {
                 break;
         }
         return super.onTouchEvent(event);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mSwipeOpened) {
-            mSwipeLayout.close();
-            return;
-        }
-        if (mDoubleBackToExitPressedOnce) {
-            finish();
-            return;
-        }
-        mDoubleBackToExitPressedOnce = true;
-        Toast.makeText(this, R.string.hint_double_press, Toast.LENGTH_SHORT).show();
-        new Handler().postDelayed(() -> mDoubleBackToExitPressedOnce = false, 2000);
     }
 
     @Override

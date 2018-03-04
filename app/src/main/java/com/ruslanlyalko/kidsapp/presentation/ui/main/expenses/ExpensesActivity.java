@@ -162,6 +162,7 @@ public class ExpensesActivity extends BaseActivity implements OnExpenseClickList
     }
 
     private void calcTotal() {
+        if (isDestroyed()) return;
         int common = 0;
         int mk = 0;
         List<Expense> expenseList = mExpensesAdapter.getData();

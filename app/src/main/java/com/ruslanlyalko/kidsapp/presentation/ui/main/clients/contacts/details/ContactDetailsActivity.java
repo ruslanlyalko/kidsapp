@@ -89,30 +89,11 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
     @SuppressLint("SetTextI18n")
     @Override
     protected void setupView() {
+        if (isDestroyed()) return;
+        setupToolbar();
         setupRecycler();
         loadDetails();
-        if (mContact == null) {
-            setTitle("");
-            return;
-        }
-        setTitle("");
-        mTextUserName.setText(mContact.getName());
-        String kids = "";
-        if (mContact.getChildName1() != null && !mContact.getChildName1().isEmpty()) {
-            kids += mContact.getChildName1() + DateUtils.toString(mContact.getChildBd1(), " dd.MM") + DateUtils.getAge(mContact.getChildBd1());
-        }
-        if (mContact.getChildName2() != null && !mContact.getChildName2().isEmpty()) {
-            kids += "; " + mContact.getChildName2() + DateUtils.toString(mContact.getChildBd2(), " dd.MM") + DateUtils.getAge(mContact.getChildBd2());
-        }
-        if (mContact.getChildName3() != null && !mContact.getChildName3().isEmpty()) {
-            kids += "; " + mContact.getChildName3() + DateUtils.toString(mContact.getChildBd3(), " dd.MM") + DateUtils.getAge(mContact.getChildBd3());
-        }
-        mTextKids.setText(kids);
-        mTextPhone1.setText(mContact.getPhone());
-        mTextPhone2.setText(mContact.getPhone2());
-        mCardPhone2.setVisibility(mContact.getPhone2() != null & !mContact.getPhone2().isEmpty() ? View.VISIBLE : View.GONE);
-        mTextDescription.setText(mContact.getDescription());
-        mTextDescription.setVisibility(mContact.getDescription() != null & !mContact.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
+        showContactDetails();
         loadBirthdays();
     }
 
@@ -166,13 +147,38 @@ public class ContactDetailsActivity extends BaseActivity implements OnBirthdaysC
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 mContact = dataSnapshot.getValue(Contact.class);
-                setupView();
+                showContactDetails();
             }
 
             @Override
             public void onCancelled(final DatabaseError databaseError) {
             }
         });
+    }
+
+    private void showContactDetails() {
+        if (mContact == null) {
+            setTitle("");
+            return;
+        }
+        setTitle("");
+        mTextUserName.setText(mContact.getName());
+        String kids = "";
+        if (mContact.getChildName1() != null && !mContact.getChildName1().isEmpty()) {
+            kids += mContact.getChildName1() + DateUtils.toString(mContact.getChildBd1(), " dd.MM") + DateUtils.getAge(mContact.getChildBd1());
+        }
+        if (mContact.getChildName2() != null && !mContact.getChildName2().isEmpty()) {
+            kids += "; " + mContact.getChildName2() + DateUtils.toString(mContact.getChildBd2(), " dd.MM") + DateUtils.getAge(mContact.getChildBd2());
+        }
+        if (mContact.getChildName3() != null && !mContact.getChildName3().isEmpty()) {
+            kids += "; " + mContact.getChildName3() + DateUtils.toString(mContact.getChildBd3(), " dd.MM") + DateUtils.getAge(mContact.getChildBd3());
+        }
+        mTextKids.setText(kids);
+        mTextPhone1.setText(mContact.getPhone());
+        mTextPhone2.setText(mContact.getPhone2());
+        mCardPhone2.setVisibility(mContact.getPhone2() != null & !mContact.getPhone2().isEmpty() ? View.VISIBLE : View.GONE);
+        mTextDescription.setText(mContact.getDescription());
+        mTextDescription.setVisibility(mContact.getDescription() != null & !mContact.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     private void loadBirthdays() {

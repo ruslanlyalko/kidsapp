@@ -179,6 +179,7 @@
             android:label="@string/title_activity_clients_tab"
             android:parentActivityName=".presentation.ui.main.calendar.CalendarActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
         <activity

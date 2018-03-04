@@ -11,10 +11,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,8 +57,10 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     @BindView(R.id.panel_first_date) LinearLayout panelFirstDate;
     @BindView(R.id.panel_password) LinearLayout panelPassword;
     @BindView(R.id.button_change_password) Button buttonChangePassword;
-    @BindView(R.id.checkbox_receive_notifications) CheckBox mCheckboxReceiveNotifications;
+    @BindView(R.id.switch_receive_notifications) Switch mSwitchReceiveNotifications;
+    @BindView(R.id.switch_show_clients) Switch mSwitchShowClients;
     @BindView(R.id.panel_receive_notifications) LinearLayout mPanelReceiveNotifications;
+    @BindView(R.id.panel_show_clients) LinearLayout mPanelShowCLients;
 
     private Calendar mBirthDay = Calendar.getInstance();
     private Calendar mFirstDate = Calendar.getInstance();
@@ -90,6 +92,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         });
         panelFirstDate.setVisibility(FirebaseUtils.isAdmin() && !isCurrentUser ? View.VISIBLE : View.GONE);
         mPanelReceiveNotifications.setVisibility(FirebaseUtils.isAdmin() ? View.VISIBLE : View.GONE);
+        mPanelShowCLients.setVisibility(FirebaseUtils.isAdmin() && !isCurrentUser ? View.VISIBLE : View.GONE);
         inputCard.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -174,8 +177,10 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 inputCard.setTag(user.getUserCard());
                 inputFirstDate.setText(user.getUserFirstDate());
                 inputFirstDate.setTag(user.getUserFirstDate());
-                mCheckboxReceiveNotifications.setChecked(user.getReceiveNotifications());
-                mCheckboxReceiveNotifications.setTag(user.getReceiveNotifications());
+                mSwitchReceiveNotifications.setChecked(user.getReceiveNotifications());
+                mSwitchReceiveNotifications.setTag(user.getReceiveNotifications());
+                mSwitchShowClients.setChecked(user.getShowClients());
+                mSwitchShowClients.setTag(user.getShowClients());
                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.US);
                 Date dt = new Date();
                 try {
@@ -269,8 +274,10 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         final String tBirthday = inputBDay.getTag().toString().trim();
         final String tCard = inputCard.getTag().toString().trim();
         final String tFirstDate = inputFirstDate.getTag().toString().trim();
-        final boolean receiveNotifications = mCheckboxReceiveNotifications.isChecked();
-        final boolean tReceiveNotifications = (boolean) mCheckboxReceiveNotifications.getTag();
+        final boolean receiveNotifications = mSwitchReceiveNotifications.isChecked();
+        final boolean tReceiveNotifications = (boolean) mSwitchReceiveNotifications.getTag();
+        final boolean showClients = mSwitchShowClients.isChecked();
+        final boolean tShowClients = (boolean) mSwitchShowClients.getTag();
         Map<String, Object> childUpdates = new HashMap<>();
         boolean needUpdate = false;
         if (!phone.equals(tPhone)) {
@@ -296,6 +303,10 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         }
         if (receiveNotifications != tReceiveNotifications) {
             childUpdates.put("receiveNotifications", receiveNotifications);
+            needUpdate = true;
+        }
+        if (showClients != tShowClients) {
+            childUpdates.put("showClients", showClients);
             needUpdate = true;
         }
         if (needUpdate)

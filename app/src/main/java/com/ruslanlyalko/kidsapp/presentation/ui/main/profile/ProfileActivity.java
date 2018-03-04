@@ -151,6 +151,8 @@ public class ProfileActivity extends AppCompatActivity implements OnItemClickLis
                             if (user.getUserId().equals(mUID)) {
                                 mUser = user;
                                 updateUI(user);
+                            } else if (needLoadFriends) {
+                                mUsersAdapter.update(user);
                             }
                         }
                     }

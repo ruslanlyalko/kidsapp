@@ -294,5 +294,6 @@
     <string name="dialog_remove_contact_title">Видалити контакт?</string>
     <string name="dialog_remove_contact_message">Якщо ви видалите контакт всі дані будуть втрачені</string>
     <string name="title_activity_birth">Дні Народження Діточок</string>
+    <string name="hint_show_clients">Доступ до списку клієнтів</string>
 
 </resources>

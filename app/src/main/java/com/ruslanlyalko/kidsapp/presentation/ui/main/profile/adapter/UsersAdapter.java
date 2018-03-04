@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ruslanlyalko.kidsapp.R;
@@ -39,24 +40,36 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
         holder.bindData(user);
     }
 
-    public User getItemAtPosition(final int position) {
-        return mDataSource.get(position);
-    }
-
     @Override
     public int getItemCount() {
         return mDataSource.size();
     }
 
+    public User getItemAtPosition(final int position) {
+        return mDataSource.get(position);
+    }
+
     public void add(final User user) {
         mDataSource.add(user);
-        notifyDataSetChanged();
+        notifyItemInserted(mDataSource.size() - 1);
+    }
+
+    public void update(final User user) {
+        for (int i = 0; i < mDataSource.size(); i++) {
+            if (user.getUserId().equalsIgnoreCase(mDataSource.get(i).getUserId())) {
+                mDataSource.set(i, user);
+                notifyItemChanged(i);
+                break;
+            }
+        }
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.text_user_name) TextView textUserName;
         @BindView(R.id.text_position_title) TextView textPositionTitle;
+        @BindView(R.id.image_user_logo) ImageView imageUserLogo;
+
         private User mUser;
         private OnItemClickListener mOnItemClickListener;
 
@@ -70,6 +83,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
             mUser = user;
             textUserName.setText(user.getUserName());
             textPositionTitle.setText(user.getUserPositionTitle());
+            imageUserLogo.setImageResource(user.getIsOnline() ? R.drawable.ic_user_primary : R.drawable.ic_user_name);
         }
 
         @OnClick(R.id.linear_user)

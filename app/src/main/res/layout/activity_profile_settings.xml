@@ -144,7 +144,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:visibility="gone">
 
             <ImageView
                 android:layout_width="24dp"
@@ -176,7 +177,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:visibility="gone">
 
             <ImageView
                 android:layout_width="24dp"
@@ -218,13 +220,39 @@
                 android:src="@drawable/ic_notifications"
                 tools:ignore="ContentDescription" />
 
-            <CheckBox
-                android:id="@+id/checkbox_receive_notifications"
+            <Switch
+                android:id="@+id/switch_receive_notifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:hint="@string/hint_notif" />
+
+        </LinearLayout>
+
+        <!-- Receive Notifications -->
+        <LinearLayout
+            android:id="@+id/panel_show_clients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_clients"
+                tools:ignore="ContentDescription" />
+
+            <Switch
+                android:id="@+id/switch_show_clients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:hint="@string/hint_show_clients" />
 
         </LinearLayout>
 

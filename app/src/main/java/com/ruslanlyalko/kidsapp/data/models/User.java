@@ -26,6 +26,8 @@ public class User implements Serializable {
     private String avatar;
     private String token;
     private boolean receiveNotifications;
+    private boolean showClients;
+    private boolean isOnline;
 
     public User(String userId, String userName, String userPhone, String userEmail, String userBDay, String userFirstDate, String userCard, boolean userIsAdmin) {
         this.userId = userId;
@@ -208,5 +210,21 @@ public class User implements Serializable {
 
     public void setUserTimeEnd(String userTimeEnd) {
         this.userTimeEnd = userTimeEnd;
+    }
+
+    public boolean getShowClients() {
+        return showClients;
+    }
+
+    public void setShowClients(final boolean showClients) {
+        this.showClients = showClients;
+    }
+
+    public boolean getIsOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(final boolean online) {
+        isOnline = online;
     }
 }

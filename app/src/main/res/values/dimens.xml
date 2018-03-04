@@ -29,5 +29,6 @@
     <dimen name="card_comment_margin">4dp</dimen>
     <dimen name="card_comment_margin_x2">8dp</dimen>
     <dimen name="card_comment_margin_top_bottom">8dp</dimen>
+    <dimen name="main_button_height">45dp</dimen>
 
 </resources>
