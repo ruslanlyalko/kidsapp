@@ -136,6 +136,10 @@ public class DateUtils {
         return new SimpleDateFormat(format, Locale.getDefault()).format(date);
     }
 
+    public static String toString(final Date date) {
+        return new SimpleDateFormat("d-M-yyyy", Locale.getDefault()).format(date);
+    }
+
     public static String getCurrentYear() {
         return new SimpleDateFormat("yyyy", Locale.US).format(new Date());
     }

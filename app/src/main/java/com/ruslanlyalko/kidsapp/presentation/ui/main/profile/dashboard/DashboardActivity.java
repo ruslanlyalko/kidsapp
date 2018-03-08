@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -35,12 +35,16 @@ import com.ruslanlyalko.kidsapp.common.Constants;
 import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.common.ViewUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
+import com.ruslanlyalko.kidsapp.data.models.Credit;
 import com.ruslanlyalko.kidsapp.data.models.Expense;
 import com.ruslanlyalko.kidsapp.data.models.Report;
 import com.ruslanlyalko.kidsapp.data.models.Result;
 import com.ruslanlyalko.kidsapp.data.models.User;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.expenses.ExpensesActivity;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.dashboard.adapter.CreditsAdapter;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.dashboard.adapter.OnCreditClickListener;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.dashboard.adapter.UsersSalaryAdapter;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.dashboard.credit.CreditEditActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.salary.SalaryActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.OnItemClickListener;
 
@@ -55,7 +59,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DashboardActivity extends AppCompatActivity implements OnItemClickListener {
+public class DashboardActivity extends AppCompatActivity implements OnItemClickListener, OnCreditClickListener {
 
     @BindView(R.id.calendar_view) CompactCalendarView mCompactCalendarView;
     @BindView(R.id.text_total) TextView textTotal;
@@ -76,23 +80,30 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
     @BindView(R.id.progress_bar_cost) ProgressBar progressBarCost;
     @BindView(R.id.progress_bar_salary) ProgressBar progressBarSalary;
     @BindView(R.id.list_users_salary) RecyclerView mListUsersSalary;
-    @BindView(R.id.layout_collapsing) LinearLayout mLayoutCollapsing;
+    @BindView(R.id.list_credits) RecyclerView mListCredits;
+    @BindView(R.id.layout_collapsing) NestedScrollView mLayoutCollapsing;
+    @BindView(R.id.nested_income) NestedScrollView mNestedIncome;
+    @BindView(R.id.text_credit_total) TextView mTextCreditTotal;
     @BindView(R.id.image_expand) ImageView mImageView;
+    @BindView(R.id.image_income_expand) ImageView mImageAction;
     @BindView(R.id.bar_chart) BarChart mBarChart;
     @BindView(R.id.bar_chart_income) BarChart mBarChartIncome;
     @BindView(R.id.card_expenses) CardView mCardExpenses;
     private UsersSalaryAdapter mUsersSalaryAdapter = new UsersSalaryAdapter(this);
+    private CreditsAdapter mCreditsAdapter = new CreditsAdapter(this);
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private List<Report> reportList = new ArrayList<>();
     private List<Expense> mExpenseList = new ArrayList<>();
+    private List<Credit> mCreditList = new ArrayList<>();
     private List<User> userList = new ArrayList<>();
+    private List<Result> mResults;
     private String yearStr;
     private String monthStr;
     private int incomeTotal;
     private int costTotal;
     private int salaryTotal;
     private String mComment;
-    private List<Result> mResults;
+    private int mCreditTotal;
 
     public static Intent getLaunchIntent(final AppCompatActivity launchActivity) {
         return new Intent(launchActivity, DashboardActivity.class);
@@ -114,12 +125,15 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
         loadCosts(yearStr, monthStr);
         loadUsers();
         loadComment(yearStr, monthStr);
+        loadCredits(yearStr, monthStr);
         loadResults();
     }
 
     private void initRecycler() {
         mListUsersSalary.setLayoutManager(new LinearLayoutManager(this));
         mListUsersSalary.setAdapter(mUsersSalaryAdapter);
+        mListCredits.setLayoutManager(new LinearLayoutManager(this));
+        mListCredits.setAdapter(mCreditsAdapter);
     }
 
     private void loadResults() {
@@ -221,8 +235,132 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
                 loadCosts(yearStr, monthStr);
                 loadUsers();
                 loadComment(yearStr, monthStr);
+                loadCredits(yearStr, monthStr);
             }
         });
+    }
+
+    @OnClick(R.id.layout_income_action)
+    void onIncomeActionClicked() {
+        if (mNestedIncome.getVisibility() == View.VISIBLE) {
+            mImageAction.setImageResource(R.drawable.ic_action_expand_more);
+            ViewUtils.collapse(mNestedIncome);
+        } else {
+            ViewUtils.expand(mNestedIncome);
+            mImageAction.setImageResource(R.drawable.ic_action_expand_less);
+        }
+    }
+
+    @OnClick(R.id.text_credit_total)
+    void onAddCreditClicked() {
+        startActivityForResult(CreditEditActivity.getLaunchIntent(this, yearStr, monthStr), 0);
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        loadCredits(yearStr, monthStr);
+    }
+
+    private void loadCredits(String yearStr, String monthStr) {
+        mDatabase.getReference(DefaultConfigurations.DB_CREDITS)
+                .child(yearStr)
+                .child(monthStr)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        mCreditList.clear();
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
+                            Credit credit = data.getValue(Credit.class);
+                            if (credit != null) {
+                                mCreditList.add(credit);
+                            }
+                        }
+                        mCreditsAdapter.setData(mCreditList);
+                        calcCreditTotal();
+                    }
+
+                    @Override
+                    public void onCancelled(final DatabaseError databaseError) {
+                    }
+                });
+    }
+
+    private void calcCreditTotal() {
+        mCreditTotal = 0;
+        for (int i = 0; i < mCreditList.size(); i++) {
+            Credit credit = mCreditList.get(i);
+            mCreditTotal += credit.getMoney();
+        }
+        mTextCreditTotal.setText(String.format(getString(R.string.text_credit), DateUtils.getIntWithSpace(mCreditTotal), DateUtils.getIntWithSpace((int) (incomeTotal * 0.8 - mCreditTotal))));
+    }
+
+    @Override
+    public void onBackPressed() {
+        // save comments before exit
+        saveCommentToDB(editComment.getText().toString());
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        calcIncome();
+        calcCostTotal();
+    }
+
+    private void calcIncome() {
+        int room = 0;
+        int bday = 0;
+        int mk = 0;
+        for (Report rep : reportList) {
+            room += rep.totalRoom;
+            bday += rep.totalBday;
+            mk += rep.totalMk;
+        }
+        incomeTotal = room + bday + mk;
+        textRoom.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(room)));
+        textBday.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(bday)));
+        textMk.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(mk)));
+        String income100Str = DateUtils.getIntWithSpace(incomeTotal);
+        String income80Str = DateUtils.getIntWithSpace(incomeTotal * 80 / 100);
+        textTotal.setText(String.format(getString(R.string.income), income100Str, income80Str));
+        progressBar.setMax(incomeTotal);
+        progressBar.setProgress(room);
+        progressBar.setSecondaryProgress(room + bday);
+        updateNetIncome();
+    }
+
+    private void calcCostTotal() {
+        int common = 0;
+        int mk = 0;
+        for (Expense expense : mExpenseList) {
+            if (expense.getTitle2().equalsIgnoreCase(getString(R.string.text_cost_common)))
+                common += expense.getPrice();
+            if (expense.getTitle2().equalsIgnoreCase(getString(R.string.text_cost_mk)))
+                mk += expense.getPrice();
+        }
+        costTotal = common + mk;
+        progressBarCost.setMax(costTotal);
+        progressBarCost.setProgress(common);
+        progressBarCost.setSecondaryProgress(common + mk);
+        textCostCommon.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(common)));
+        textCostMk.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(mk)));
+        textCostTotal.setText(String.format(getString(R.string.HRN), DateUtils.getIntWithSpace(costTotal)));
+        updateNetIncome();
+    }
+
+    private void updateNetIncome() {
+        int income80 = (int) (incomeTotal * 0.8);
+        int netIncome = income80 - costTotal - salaryTotal;
+        setTitle(String.format(getString(R.string.title_activity_dashboard), DateUtils.getIntWithSpace(netIncome)));
+        Result result = new Result(incomeTotal, income80, salaryTotal, costTotal, netIncome, yearStr, monthStr);
+        if (incomeTotal != 0 && salaryTotal != 0)
+            FirebaseDatabase.getInstance()
+                    .getReference(DefaultConfigurations.DB_RESULTS)
+                    .child(yearStr)
+                    .child(monthStr)
+                    .setValue(result);
     }
 
     @OnClick(R.id.panel_action)
@@ -355,74 +493,6 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        // save comments before exit
-        saveCommentToDB(editComment.getText().toString());
-        super.onBackPressed();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        calcIncome();
-        calcCostTotal();
-    }
-
-    private void calcIncome() {
-        int room = 0;
-        int bday = 0;
-        int mk = 0;
-        for (Report rep : reportList) {
-            room += rep.totalRoom;
-            bday += rep.totalBday;
-            mk += rep.totalMk;
-        }
-        incomeTotal = room + bday + mk;
-        textRoom.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(room)));
-        textBday.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(bday)));
-        textMk.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(mk)));
-        String income100Str = DateUtils.getIntWithSpace(incomeTotal);
-        String income80Str = DateUtils.getIntWithSpace(incomeTotal * 80 / 100);
-        textTotal.setText(String.format(getString(R.string.income), income100Str, income80Str));
-        progressBar.setMax(incomeTotal);
-        progressBar.setProgress(room);
-        progressBar.setSecondaryProgress(room + bday);
-        updateNetIncome();
-    }
-
-    private void calcCostTotal() {
-        int common = 0;
-        int mk = 0;
-        for (Expense expense : mExpenseList) {
-            if (expense.getTitle2().equalsIgnoreCase(getString(R.string.text_cost_common)))
-                common += expense.getPrice();
-            if (expense.getTitle2().equalsIgnoreCase(getString(R.string.text_cost_mk)))
-                mk += expense.getPrice();
-        }
-        costTotal = common + mk;
-        progressBarCost.setMax(costTotal);
-        progressBarCost.setProgress(common);
-        progressBarCost.setSecondaryProgress(common + mk);
-        textCostCommon.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(common)));
-        textCostMk.setText(String.format(getString(R.string.hrn), DateUtils.getIntWithSpace(mk)));
-        textCostTotal.setText(String.format(getString(R.string.HRN), DateUtils.getIntWithSpace(costTotal)));
-        updateNetIncome();
-    }
-
-    private void updateNetIncome() {
-        int income80 = (int) (incomeTotal * 0.8);
-        int netIncome = income80 - costTotal - salaryTotal;
-        setTitle(String.format(getString(R.string.title_activity_dashboard), DateUtils.getIntWithSpace(netIncome)));
-        Result result = new Result(incomeTotal, income80, salaryTotal, costTotal, netIncome, yearStr, monthStr);
-        if (incomeTotal != 0 && salaryTotal != 0)
-            FirebaseDatabase.getInstance()
-                    .getReference(DefaultConfigurations.DB_RESULTS)
-                    .child(yearStr)
-                    .child(monthStr)
-                    .setValue(result);
     }
 
     private void calcSalaryForUsers() {
@@ -629,5 +699,19 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
     @OnClick(R.id.card_expenses)
     public void onExpensesClicked() {
         startActivity(ExpensesActivity.getLaunchIntent(this));
+    }
+
+    @Override
+    public void onRemoveClicked(final Credit credit) {
+        mDatabase.getReference(DefaultConfigurations.DB_CREDITS)
+                .child(credit.getYear())
+                .child(credit.getMonth())
+                .child(credit.getKey()).removeValue();
+        loadCredits(yearStr, monthStr);
+    }
+
+    @Override
+    public void onEditClicked(final Credit credit) {
+        startActivityForResult(CreditEditActivity.getLaunchIntent(this, credit), 0);
     }
 }

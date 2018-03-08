@@ -295,5 +295,7 @@
     <string name="dialog_remove_contact_message">Якщо ви видалите контакт всі дані будуть втрачені</string>
     <string name="title_activity_birth">Дні Народження Діточок</string>
     <string name="hint_show_clients">Доступ до списку клієнтів</string>
+    <string name="text_credit">Аванс %1$s грн. Залишилось %2$s грн</string>
+    <string name="hint_money">Сума</string>
 
 </resources>

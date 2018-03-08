@@ -80,8 +80,8 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
         @BindView(R.id.text_title2) TextView mTextTitle2;
         @BindView(R.id.text_total) TextView mTextPrice;
         @BindView(R.id.text_date) TextView mTextDate;
-        @BindView(R.id.button_comment) ImageButton mButtonDelete;
         @BindView(R.id.linear_user) LinearLayout mUserLayout;
+        @BindView(R.id.button_comment) ImageButton mButtonDelete;
         @BindView(R.id.swipe_menu) LinearLayout mMenuLayout;
         @BindView(R.id.swipe_layout) SwipeLayout mSwipeLayout;
         @BindView(R.id.image_view) ImageView mLogoImage;
