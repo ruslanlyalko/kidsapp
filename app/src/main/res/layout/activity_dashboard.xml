@@ -291,7 +291,7 @@
                             <TextView
                                 android:id="@+id/text_credit_total"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="56dp"
                                 android:layout_marginStart="4dp"
                                 android:background="?android:attr/selectableItemBackground"
                                 android:clickable="true"
