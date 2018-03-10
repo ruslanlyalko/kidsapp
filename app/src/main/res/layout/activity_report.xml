@@ -374,14 +374,31 @@
                                     android:text="@string/text_all"
                                     android:textColor="@color/colorBlack" />
 
-                                <TextView
-                                    android:id="@+id/text_room_total"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="0 ГРН"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="32sp" />
+                                    android:orientation="horizontal">
 
+                                    <TextView
+                                        android:id="@+id/text_room_total"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/text_0_hrn"
+                                        android:textColor="@color/colorBlack"
+                                        android:textSize="32sp" />
+
+                                    <View
+                                        android:layout_width="0dp"
+                                        android:layout_height="1dp"
+                                        android:layout_weight="1" />
+
+                                    <Switch
+                                        android:id="@+id/switch_half_salary"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:checked="false"
+                                        android:text="@string/switch_half_salary" />
+                                </LinearLayout>
                             </LinearLayout>
 
                         </LinearLayout>
@@ -819,7 +836,7 @@
                                         android:id="@+id/text_mk_total"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="0 ГРН"
+                                        android:text="@string/text_0_hrn"
                                         android:textColor="@color/colorBlack"
                                         android:textSize="32sp" />
 
@@ -833,7 +850,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:checked="true"
-                                        android:text="Мій МК" />
+                                        android:text="@string/switch_my_mk" />
 
                                 </LinearLayout>
 

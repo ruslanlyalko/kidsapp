@@ -118,6 +118,7 @@ public class ReportActivity extends BaseActivity implements EasyPermissions.Perm
     @BindView(R.id.button_choose_mk) Button buttonChooseMk;
     @BindView(R.id.text_mk_total) TextView textMkTotal;
     @BindView(R.id.switch_my_mk) Switch switchMyMk;
+    @BindView(R.id.switch_half_salary) Switch switchHalfSalary;
     @BindView(R.id.panel_room_expand3) LinearLayout panelRoomExpand3;
     @BindView(R.id.input_mk_1) EditText inputMk1;
     @BindView(R.id.input_mk_2) EditText inputMk2;
@@ -958,6 +959,10 @@ public class ReportActivity extends BaseActivity implements EasyPermissions.Perm
             mReport.mkMy = isChecked;
             isChanged = true;
         });
+        switchHalfSalary.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            mReport.setHalfSalary(isChecked);
+            isChanged = true;
+        });
         editComment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -1296,6 +1301,7 @@ public class ReportActivity extends BaseActivity implements EasyPermissions.Perm
         seekMkT1.setProgress(mReport.mkt1);
         seekMkT2.setProgress(mReport.mkt2);
         switchMyMk.setChecked(mReport.mkMy);
+        switchHalfSalary.setChecked(mReport.getHalfSalary());
         updateTitle();
     }
 

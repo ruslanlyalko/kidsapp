@@ -104,6 +104,7 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
     private int salaryTotal;
     private String mComment;
     private int mCreditTotal;
+    private int mMaxMoney;
 
     public static Intent getLaunchIntent(final AppCompatActivity launchActivity) {
         return new Intent(launchActivity, DashboardActivity.class);
@@ -253,7 +254,7 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
 
     @OnClick(R.id.text_credit_total)
     void onAddCreditClicked() {
-        startActivityForResult(CreditEditActivity.getLaunchIntent(this, yearStr, monthStr), 0);
+        startActivityForResult(CreditEditActivity.getLaunchIntent(this, yearStr, monthStr, mMaxMoney), 0);
     }
 
     @Override
@@ -292,7 +293,9 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
             Credit credit = mCreditList.get(i);
             mCreditTotal += credit.getMoney();
         }
-        mTextCreditTotal.setText(String.format(getString(R.string.text_credit), DateUtils.getIntWithSpace(mCreditTotal), DateUtils.getIntWithSpace((int) (incomeTotal * 0.8 - mCreditTotal))));
+        mMaxMoney = (int) (incomeTotal * 0.8 - mCreditTotal);
+        mTextCreditTotal.setText(String.format(getString(R.string.text_credit),
+                DateUtils.getIntWithSpace(mCreditTotal), DateUtils.getIntWithSpace(mMaxMoney)));
     }
 
     @Override
@@ -533,7 +536,10 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
                 }
                 if (DateUtils.future(rep.getDate())) continue;
                 // stavka
-                uStavka += userStavka;
+                if(rep.getHalfSalary())
+                    uStavka+=(userStavka/2);
+                else
+                    uStavka += userStavka;
                 // percent
                 uPercentTotal += rep.total;
                 //Birthdays Mk

@@ -215,7 +215,7 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/card_margin"
+                android:layout_marginBottom="80dp"
                 android:layout_marginTop="@dimen/card_margin"
                 card_view:cardCornerRadius="@dimen/card_radius">
 
@@ -260,7 +260,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clipToPadding="true"
-                        android:paddingBottom="64dp" />
+                        />
 
                 </LinearLayout>
 

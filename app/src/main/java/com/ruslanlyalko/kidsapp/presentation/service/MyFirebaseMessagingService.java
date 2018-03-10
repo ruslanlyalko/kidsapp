@@ -88,7 +88,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String CHANNEL_ID = "my_channel_01";// The id of the channel.
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, "chanel", importance);
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, payload.get("type"), importance);
             if (notificationManager != null) {
                 notificationManager.createNotificationChannel(mChannel);
                 builder.setChannelId(CHANNEL_ID);

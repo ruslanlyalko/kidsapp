@@ -22,8 +22,8 @@ android {
         applicationId "com.ruslanlyalko.kidsapp"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 70
-        versionName "7.0"
+        versionCode 73
+        versionName "7.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 

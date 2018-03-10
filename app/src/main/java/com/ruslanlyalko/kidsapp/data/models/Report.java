@@ -39,6 +39,8 @@ public class Report {
     private double checkedListLatitude;
     private double checkedListLongitude;
 
+    private boolean halfSalary;
+
     public Report() {
     }
 
@@ -179,6 +181,14 @@ public class Report {
         return mkt2;
     }
 
+    public boolean getHalfSalary() {
+        return halfSalary;
+    }
+
+    public void setHalfSalary(final boolean halfSalary) {
+        this.halfSalary = halfSalary;
+    }
+
     public void clearReport(boolean clearMK) {
         r60 = 0;
         r30 = 0;
@@ -202,6 +212,7 @@ public class Report {
         checkedListLatitude = 0;
         checkedListLongitude = 0;
         checkedListDone = false;
+        halfSalary = false;
         checkedListTime = null;
     }
 }

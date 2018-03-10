@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -309,7 +310,13 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             childUpdates.put("showClients", showClients);
             needUpdate = true;
         }
-        if (needUpdate)
+        if (needUpdate) {
+            if (!textName.getText().toString().isEmpty() && !textName.getText().toString().equals(mCurrentUser.getDisplayName())) {
+                UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(textName.getText().toString())
+                        .build();
+                mCurrentUser.updateProfile(profileUpdate);
+            }
             mDatabase.getReference(DefaultConfigurations.DB_USERS).child(mUid).updateChildren(childUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -317,7 +324,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             });
-        else
+        } else
             Toast.makeText(ProfileSettingsActivity.this, R.string.toast_nothing_to_change, Toast.LENGTH_SHORT).show();
     }
 }

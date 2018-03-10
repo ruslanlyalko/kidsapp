@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 public class CreditEditActivity extends BaseActivity {
@@ -37,10 +39,12 @@ public class CreditEditActivity extends BaseActivity {
     @BindView(R.id.edit_title1) EditText mEditTitle1;
     @BindView(R.id.edit_price) EditText mEditPrice;
     @BindView(R.id.text_date) TextView mTextDate;
+    @BindView(R.id.check_box_max) CheckBox mCheckBoxMax;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private Credit mCredit;//= new Credit();
     private boolean mNeedToSave = false;
     private boolean mIsNew = false;
+    private int mMaxMoney;
 
     public static Intent getLaunchIntent(final Activity launchIntent, final Credit expense) {
         Intent intent = new Intent(launchIntent, CreditEditActivity.class);
@@ -48,10 +52,11 @@ public class CreditEditActivity extends BaseActivity {
         return intent;
     }
 
-    public static Intent getLaunchIntent(final Activity launchIntent, String year, String month) {
+    public static Intent getLaunchIntent(final Activity launchIntent, String year, String month, int max) {
         Intent intent = new Intent(launchIntent, CreditEditActivity.class);
         intent.putExtra(Keys.Extras.EXTRA_YEAR, year);
         intent.putExtra(Keys.Extras.EXTRA_MONTH, month);
+        intent.putExtra(Keys.Extras.EXTRA_MAX, max);
         return intent;
     }
 
@@ -68,6 +73,9 @@ public class CreditEditActivity extends BaseActivity {
             mIsNew = mCredit == null;
             if (mIsNew) {
                 mTextDate.setText(DateUtils.toString(new Date(), "d-M-yyyy"));
+                mCheckBoxMax.setVisibility(View.VISIBLE);
+                mMaxMoney = bundle.getInt(Keys.Extras.EXTRA_MAX);
+                mCheckBoxMax.setText(getString(R.string.text_max_money, DateUtils.getIntWithSpace(mMaxMoney)));
                 mCredit = new Credit(0, "", new Date(),
                         bundle.getString(Keys.Extras.EXTRA_MONTH, "1"),
                         bundle.getString(Keys.Extras.EXTRA_YEAR, "2018"));
@@ -139,6 +147,16 @@ public class CreditEditActivity extends BaseActivity {
                     .show();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @OnCheckedChanged(R.id.check_box_max)
+    void onCheckedChanged() {
+        if (mCheckBoxMax.isChecked()) {
+            mEditPrice.setText(String.valueOf(mMaxMoney));
+            mEditPrice.setEnabled(false);
+        } else {
+            mEditPrice.setEnabled(true);
         }
     }
 

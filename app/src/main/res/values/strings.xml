@@ -297,5 +297,9 @@
     <string name="hint_show_clients">Доступ до списку клієнтів</string>
     <string name="text_credit">Аванс %1$s грн. Залишилось %2$s грн</string>
     <string name="hint_money">Сума</string>
+    <string name="text_max_money">Всю суму (%1$s грн)</string>
+    <string name="switch_my_mk">Мій МК</string>
+    <string name="text_0_hrn">0 ГРН</string>
+    <string name="switch_half_salary">Пів дня</string>
 
 </resources>

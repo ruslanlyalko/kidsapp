@@ -297,7 +297,10 @@ public class SalaryActivity extends AppCompatActivity {
         for (Report rep : mReports) {
             if (DateUtils.future(rep.getDate())) continue;
             // stavka
-            stavka += userStavka;
+            if (rep.getHalfSalary())
+                stavka += (userStavka / 2);
+            else
+                stavka += userStavka;
             // percent
             percentTotal += rep.total;
             //Birthdays Mk
