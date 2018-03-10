@@ -82,6 +82,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
         return mDataSource.size();
     }
 
+    public void setData(final List<Message> list) {
+        mDataSource.clear();
+        mDataSource.addAll(list);
+        notifyDataSetChanged();
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.title1) TextView title1;

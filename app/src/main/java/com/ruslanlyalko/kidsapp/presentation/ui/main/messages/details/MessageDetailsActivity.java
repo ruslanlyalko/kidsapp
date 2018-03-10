@@ -107,6 +107,7 @@ public class MessageDetailsActivity extends BaseActivity implements EasyPermissi
         mCommentsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
+                if(isDestroyed())return;
                 mListComments.smoothScrollToPosition(mCommentsAdapter.getItemCount());
             }
         });
@@ -192,8 +193,8 @@ public class MessageDetailsActivity extends BaseActivity implements EasyPermissi
             public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
                 MessageComment messageComment = dataSnapshot.getValue(MessageComment.class);
                 if (messageComment != null) {
-                    mCommentsAdapter.add(messageComment);
                     if (!isDestroyed()) {
+                        mCommentsAdapter.add(messageComment);//todo
                         FirebaseUtils.markNotificationsAsRead(mMessageKey);
                     }
                 }
@@ -269,7 +270,7 @@ public class MessageDetailsActivity extends BaseActivity implements EasyPermissi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_item, menu);
+        getMenuInflater().inflate(R.menu.menu_messages, menu);
         return true;
     }
 

@@ -100,7 +100,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
     public void add(final MessageComment messageComment) {
         if (mDataSource.contains(messageComment)) return;
         mDataSource.add(messageComment);
-        notifyItemInserted(mDataSource.size());
+        notifyItemInserted(mDataSource.size()-1);
     }
 
     public void addAll(final List<MessageComment> messageComments) {

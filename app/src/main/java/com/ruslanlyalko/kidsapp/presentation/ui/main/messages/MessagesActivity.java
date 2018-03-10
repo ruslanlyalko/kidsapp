@@ -72,13 +72,14 @@ public class MessagesActivity extends AppCompatActivity {
                     public void onDataChange(final DataSnapshot dataSnapshot) {
                         List<Message> list = new ArrayList<>();
                         for (DataSnapshot messageSS : dataSnapshot.getChildren()) {
-                            Message message = messageSS.getValue(Message.class);
-                            if (message != null) {
-                                list.add(0, message);
+                            if (FirebaseUtils.isAdmin() || messageSS.child("Members").child(mUser.getUid()).exists()) {
+                                Message message = messageSS.getValue(Message.class);
+                                if (message != null) {
+                                    list.add(0, message);
+                                }
                             }
                         }
-                        mMessagesAdapter.clearAll();
-                        mMessagesAdapter.addAll(list);
+                        mMessagesAdapter.setData(list);
                     }
 
                     @Override
