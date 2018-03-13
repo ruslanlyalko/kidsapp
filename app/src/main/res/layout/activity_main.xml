@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
@@ -39,29 +40,40 @@
 
         <TextView
             android:id="@+id/text_link"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginTop="8dp"
             android:layout_toEndOf="@id/button_profile"
             android:layout_toStartOf="@id/button_events"
+            android:clickable="true"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:gravity="center"
             android:maxLines="1"
-            android:text=""
+            android:text="Доступна нова версія!"
             android:textAlignment="center"
             android:textColor="@color/colorWhite"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/text_link_details"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_link"
             android:layout_toEndOf="@id/button_profile"
             android:layout_toStartOf="@id/button_events"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
             android:maxLines="1"
-            android:text=""
+            android:text="Натисніть тут щоб обновити"
             android:textAlignment="center"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/colorComment"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/text_app_name"

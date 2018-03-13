@@ -1,10 +1,12 @@
-package com.ruslanlyalko.kidsapp.presentation.ui.main.messages;
+package com.ruslanlyalko.kidsapp.presentation.ui.main.messages.edit;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -28,9 +30,13 @@ import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Keys;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Message;
+import com.ruslanlyalko.kidsapp.data.models.User;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.edit.adapter.MembersAdapter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -45,10 +51,13 @@ public class MessageEditActivity extends AppCompatActivity {
     @BindView(R.id.edit_description) EditText textDescription;
     @BindView(R.id.image_view) ImageView imageView;
     @BindView(R.id.checkbox_comments) CheckBox mCheckBoxComments;
+    @BindView(R.id.list_members) RecyclerView mListMembers;
     private boolean isNew = false;
     private boolean needToSave = false;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+    private MembersAdapter mMembersAdapter = new MembersAdapter();
+    private List<String> mMembersIds = new ArrayList<>();
     private Message mMessage = new Message();
     private String notKey;
 
@@ -59,9 +68,11 @@ public class MessageEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_message_edit);
         ButterKnife.bind(this);
         parseExtras();
+        setupRecycler();
         isNew = notKey == null;
         initTextWatchers();
-        loadMkItem();
+        loadData();
+        loadMembers();
         updateUI();
     }
 
@@ -70,6 +81,11 @@ public class MessageEditActivity extends AppCompatActivity {
         if (bundle != null) {
             notKey = bundle.getString(Keys.Extras.EXTRA_ITEM_ID);
         }
+    }
+
+    private void setupRecycler() {
+        mListMembers.setLayoutManager(new LinearLayoutManager(this));
+        mListMembers.setAdapter(mMembersAdapter);
     }
 
     private void initTextWatchers() {
@@ -93,13 +109,19 @@ public class MessageEditActivity extends AppCompatActivity {
         textDescription.addTextChangedListener(watcher);
     }
 
-    private void loadMkItem() {
+    private void loadData() {
         if (isNew) return;
         DatabaseReference ref = database.getReference(DefaultConfigurations.DB_MESSAGES).child(notKey);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mMessage = dataSnapshot.getValue(Message.class);
+                mMembersIds.clear();
+                for (DataSnapshot member : dataSnapshot.child("Members").getChildren()) {
+                    String id = member.getKey();
+                    mMembersIds.add(id);
+                }
+                mMembersAdapter.updateMembers(mMembersIds);
                 updateUI();
             }
 
@@ -107,6 +129,25 @@ public class MessageEditActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    private void loadMembers() {
+        database.getReference(DefaultConfigurations.DB_USERS)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            User user = userSnapshot.getValue(User.class);
+                            if (user != null && !user.getUserIsAdmin())
+                                mMembersAdapter.add(user);
+                        }
+                        mMembersAdapter.updateMembers(mMembersIds);
+                    }
+
+                    @Override
+                    public void onCancelled(final DatabaseError databaseError) {
+                    }
+                });
     }
 
     private void updateUI() {
@@ -121,6 +162,7 @@ public class MessageEditActivity extends AppCompatActivity {
                 textDescription.setText(mMessage.getDescription());
                 mCheckBoxComments.setChecked(mMessage.getCommentsEnabled());
             }
+            //todo
         }
         needToSave = false;
     }
@@ -145,6 +187,7 @@ public class MessageEditActivity extends AppCompatActivity {
                 .child(notKey).setValue(mMessage).addOnCompleteListener(task -> {
             Snackbar.make(imageView, getString(R.string.not_added), Snackbar.LENGTH_SHORT).show();
         });
+        saveMembers();
         needToSave = false;
     }
 
@@ -154,7 +197,23 @@ public class MessageEditActivity extends AppCompatActivity {
                 .child(mMessage.getKey()).setValue(mMessage).addOnCompleteListener(task -> {
             Snackbar.make(imageView, getString(R.string.mk_updated), Snackbar.LENGTH_SHORT).show();
         });
+        saveMembers();
         needToSave = false;
+    }
+
+    private void saveMembers() {
+        List<Boolean> checkedList = mMembersAdapter.getMembers();
+        List<User> users = mMembersAdapter.getUsers();
+        for (int i = 0; i < users.size(); i++) {
+            DatabaseReference ref = database.getReference(DefaultConfigurations.DB_MESSAGES)
+                    .child(mMessage.getKey())
+                    .child("Members")
+                    .child(users.get(i).getUserId());
+            if (checkedList.get(i))
+                ref.setValue(true);
+            else
+                ref.removeValue();
+        }
     }
 
     @Override

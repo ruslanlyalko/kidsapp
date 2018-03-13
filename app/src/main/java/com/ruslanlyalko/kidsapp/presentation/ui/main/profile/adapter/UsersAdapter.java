@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ruslanlyalko.kidsapp.R;
+import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.models.User;
 import com.ruslanlyalko.kidsapp.presentation.widget.OnItemClickListener;
 
@@ -69,6 +70,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
         @BindView(R.id.text_user_name) TextView textUserName;
         @BindView(R.id.text_position_title) TextView textPositionTitle;
         @BindView(R.id.image_user_logo) ImageView imageUserLogo;
+        @BindView(R.id.image_notifications_off) ImageView imageNotificationsOff;
 
         private User mUser;
         private OnItemClickListener mOnItemClickListener;
@@ -83,6 +85,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
             mUser = user;
             textUserName.setText(user.getUserName());
             textPositionTitle.setText(user.getUserPositionTitle());
+            if(FirebaseUtils.isAdmin())
+                imageNotificationsOff.setVisibility(user.getReceiveNotifications() ? View.GONE : View.VISIBLE);
             imageUserLogo.setImageResource(user.getIsOnline() ? R.drawable.ic_user_primary : R.drawable.ic_user_name);
         }
 

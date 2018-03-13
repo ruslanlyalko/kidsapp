@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,8 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.common.Keys;
@@ -81,14 +78,11 @@ public class AboutActivity extends AppCompatActivity {
     @OnClick(R.id.fab)
     void onFabClicked() {
         if (FirebaseUtils.isAdmin())
-            FirebaseDatabase.getInstance().getReference(DefaultConfigurations.DB_ABOUT)
+            FirebaseDatabase.getInstance().getReference(DefaultConfigurations.DB_INFO)
+                    .child("aboutText")
                     .setValue(editAbout.getText().toString().trim())
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(AboutActivity.this, R.string.mk_updated, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    .addOnCompleteListener(task ->
+                            Toast.makeText(AboutActivity.this, R.string.mk_updated, Toast.LENGTH_SHORT).show());
     }
 
     @Override

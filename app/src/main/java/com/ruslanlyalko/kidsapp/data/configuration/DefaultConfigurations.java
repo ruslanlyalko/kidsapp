@@ -16,7 +16,7 @@ public interface DefaultConfigurations {
     String DB_MK = "MK";
     String DB_EXPENSES = "COSTS";
     String DB_COMMENTS = "COMMENTS";
-    String DB_ABOUT = "text_about";
+    String DB_INFO = "APP_INFO";
     String DB_RESULTS = "RESULTS";
     String DB_CREDITS = "CREDITS";
 

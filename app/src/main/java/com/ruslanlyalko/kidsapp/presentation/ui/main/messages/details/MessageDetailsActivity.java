@@ -40,9 +40,9 @@ import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Message;
 import com.ruslanlyalko.kidsapp.data.models.MessageComment;
 import com.ruslanlyalko.kidsapp.presentation.base.BaseActivity;
-import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.MessageEditActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter.CommentsAdapter;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.details.adapter.OnCommentClickListener;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.edit.MessageEditActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.profile.ProfileActivity;
 import com.ruslanlyalko.kidsapp.presentation.widget.PhotoPreviewActivity;
 
@@ -107,7 +107,7 @@ public class MessageDetailsActivity extends BaseActivity implements EasyPermissi
         mCommentsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
-                if(isDestroyed())return;
+                if (isDestroyed()) return;
                 mListComments.smoothScrollToPosition(mCommentsAdapter.getItemCount());
             }
         });
@@ -155,6 +155,7 @@ public class MessageDetailsActivity extends BaseActivity implements EasyPermissi
                         }
                         mCommentsAdapter.setData(list);
                         new Handler().postDelayed(() -> {
+                            if (isDestroyed() || mMessage == null) return;
                             if (mMessage.getCommentsEnabled()) {
                                 loadMoreCommentsFromDB();
                                 mListComments.smoothScrollToPosition(list.size());

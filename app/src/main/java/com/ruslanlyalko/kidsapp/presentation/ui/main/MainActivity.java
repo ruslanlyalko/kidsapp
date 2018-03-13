@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -30,6 +34,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.ruslanlyalko.kidsapp.R;
 import com.ruslanlyalko.kidsapp.data.FirebaseUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
+import com.ruslanlyalko.kidsapp.data.models.AppInfo;
 import com.ruslanlyalko.kidsapp.data.models.Notification;
 import com.ruslanlyalko.kidsapp.data.models.User;
 import com.ruslanlyalko.kidsapp.presentation.base.BaseActivity;
@@ -50,13 +55,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.ruslanlyalko.kidsapp.BuildConfig.DEBUG;
 import static com.ruslanlyalko.kidsapp.common.ViewUtils.viewToDrawable;
 
 public class MainActivity extends BaseActivity {
 
     private static final int MIN_DISTANCE = 150;
-    private static final String mLink = "https://play.google.com/store/apps/details?id=com.ruslanlyalko.kidsapp";
-    private static final String mLinkFb = "https://www.facebook.com/groups/cheburashka.kids/";
 
     @BindView(R.id.text_app_name) TextView mAppNameText;
     @BindView(R.id.text_link) TextView mLinkText;
@@ -70,11 +74,10 @@ public class MainActivity extends BaseActivity {
     boolean mSwipeOpened = false;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-    private boolean mLinkActive = false;
-    private String mAboutText = "";
     private float x1;
     private float y1;
     private List<Notification> mNotifications = new ArrayList<>();
+    private AppInfo mAppInfo = new AppInfo();
 
     public static Intent getLaunchIntent(final AppCompatActivity launchActivity) {
         return new Intent(launchActivity, MainActivity.class);
@@ -115,12 +118,12 @@ public class MainActivity extends BaseActivity {
                     public void onCancelled(final DatabaseError databaseError) {
                     }
                 });
-        mDatabase.getReference(DefaultConfigurations.DB_ABOUT)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.getReference(DefaultConfigurations.DB_INFO)
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() != null)
-                            mAboutText = dataSnapshot.getValue().toString();
+                        mAppInfo = dataSnapshot.getValue(AppInfo.class);
+                        checkVersion();
                     }
 
                     @Override
@@ -207,7 +210,28 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private void checkVersion() {
+        if (isDestroyed()) return;
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        int myVersion = (pInfo != null ? pInfo.versionCode : 0);
+        if (myVersion < mAppInfo.getLatestVersion() || mAppInfo.getShowAnyWay()) {
+            showVersionLink(true);
+        } else {
+            showVersionLink(false);
+            if (myVersion > mAppInfo.getLatestVersion() && !DEBUG) {
+                mDatabase.getReference(DefaultConfigurations.DB_INFO)
+                        .child("latestVersion").setValue(myVersion);
+            }
+        }
+    }
+
     public void redrawCountOfNotifications(int count) {
+        if (isDestroyed()) return;
         if (count == 0) {
             mEventsButton.setImageDrawable(getDrawable(R.drawable.ic_event1));
             return;
@@ -220,6 +244,13 @@ public class MainActivity extends BaseActivity {
         Bitmap bitmap = viewToDrawable(view);
         Drawable icon = new BitmapDrawable(getResources(), bitmap);
         mEventsButton.setImageDrawable(icon);
+    }
+
+    void showVersionLink(boolean show) {
+        mLinkText.setText(mAppInfo.getTitle1());
+        mLinkDetailsText.setText(mAppInfo.getTitle2());
+        mLinkText.setVisibility(show ? View.VISIBLE : View.GONE);
+        mLinkDetailsText.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -237,9 +268,27 @@ public class MainActivity extends BaseActivity {
         new Handler().postDelayed(() -> mDoubleBackToExitPressedOnce = false, 2000);
     }
 
+    void setupShortCuts() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+            if (shortcutManager != null && shortcutManager.isRequestPinShortcutSupported()) {
+                // create ShortcutInfo with details of shortcut
+                // if 'uniqueShortcutId' already existed, we could just access it using the Id
+                if (shortcutManager.getPinnedShortcuts().size() > 0) return;
+                ShortcutInfo shortcutInfo = new ShortcutInfo.Builder(this, "calendarId")
+                        .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
+                        .setShortLabel(getString(R.string.shortcut_calendar_short_label))
+                        .setLongLabel(getString(R.string.shortcut_calendar_long_label))
+                        .setIntent(new Intent(Intent.ACTION_MAIN, Uri.EMPTY, this, CalendarActivity.class))
+                        .build();
+                shortcutManager.requestPinShortcut(shortcutInfo, null);
+            }
+        }
+    }
+
     @OnClick({R.id.text_link, R.id.text_link_details})
     void onTopLinkClicked() {
-        if (mLinkActive) openBrowser(mLink);
+        openBrowser(mAppInfo.getLink());
     }
 
     private void openBrowser(String url) {
@@ -288,12 +337,12 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.button_about)
     void onAboutClicked() {
-        startActivity(AboutActivity.getLaunchIntent(this, mAboutText));
+        startActivity(AboutActivity.getLaunchIntent(this, mAppInfo.getAboutText()));
     }
 
     @OnClick(R.id.button_fb)
     void onFbClicked() {
-        openBrowser(mLinkFb);
+        openBrowser(mAppInfo.getLinkFb());
     }
 
     @OnClick(R.id.button_clients)
@@ -306,7 +355,7 @@ public class MainActivity extends BaseActivity {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-        sendIntent.putExtra(Intent.EXTRA_TEXT, mLink);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, mAppInfo.getLink());
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }

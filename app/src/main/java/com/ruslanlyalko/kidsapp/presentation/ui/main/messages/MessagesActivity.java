@@ -23,6 +23,7 @@ import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Message;
 import com.ruslanlyalko.kidsapp.data.models.Notification;
 import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.adapter.MessagesAdapter;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.messages.edit.MessageEditActivity;
 
 import java.util.ArrayList;
 import java.util.List;

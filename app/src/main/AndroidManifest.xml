@@ -27,6 +27,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
         <activity
             android:name=".presentation.ui.login.LoginActivity"
@@ -71,7 +74,11 @@
             android:label="@string/title_activity_calendar"
             android:parentActivityName=".presentation.ui.main.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".presentation.ui.main.expenses.ExpensesActivity"
             android:label="@string/title_activity_cost"
@@ -144,7 +151,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".presentation.ui.main.messages.MessageEditActivity"
+            android:name=".presentation.ui.main.messages.edit.MessageEditActivity"
             android:parentActivityName=".presentation.ui.main.messages.details.MessageDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Close"
@@ -185,9 +192,9 @@
         <activity
             android:name=".presentation.ui.main.clients.ClientsTabActivity"
             android:label="@string/title_activity_clients_tab"
+            android:launchMode="singleTop"
             android:parentActivityName=".presentation.ui.main.calendar.CalendarActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
@@ -252,13 +259,24 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+        <service
+            android:name=".presentation.service.QuickSettingsTileService"
+            android:icon="@drawable/ic_tile_24dp"
+            android:label="@string/text_tile"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <!--<meta-data android:name="android.service.quicksettings.ACTIVE_TILE"-->
+                       <!--android:value="true" />-->
+        </service>
         <!--
              Set custom default icon. This is used when no icon is set for incoming notification messages.
              See README(https://goo.gl/l4GJaQ) for more.
         -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_stat_default" />
+            android:resource="@drawable/ic_stat_main" />
         <!--
              Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more.

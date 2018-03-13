@@ -16,7 +16,7 @@
         android:src="@drawable/ic_user_name"
         tools:ignore="ContentDescription" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="8dp"
@@ -39,8 +39,20 @@
         <TextView
             android:id="@+id/text_position_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_user_name" />
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/image_notifications_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_notifications_off_30"
+            android:visibility="gone"
+            tools:ignore="ContentDescription"
+            tools:visibility="visible" />
+
+    </RelativeLayout>
 
 </LinearLayout>
