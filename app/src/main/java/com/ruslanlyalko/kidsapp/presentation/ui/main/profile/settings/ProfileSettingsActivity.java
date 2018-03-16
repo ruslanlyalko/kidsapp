@@ -70,6 +70,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     private FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
     private String mNumber = "";
     private String mUid;
+    private boolean isCurrentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +79,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_settings);
         ButterKnife.bind(this);
         parseExtras();
-        boolean isCurrentUser = mUid.equals(mCurrentUser.getUid());
+        isCurrentUser = mUid.equals(mCurrentUser.getUid());
         // user can change only they own emails
         inputEmail.setEnabled(isCurrentUser);
         inputPassword1.setEnabled(isCurrentUser);
@@ -311,7 +312,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             needUpdate = true;
         }
         if (needUpdate) {
-            if (!textName.getText().toString().isEmpty() && !textName.getText().toString().equals(mCurrentUser.getDisplayName())) {
+            if (isCurrentUser && !textName.getText().toString().isEmpty() && !textName.getText().toString().equals(mCurrentUser.getDisplayName())) {
                 UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                         .setDisplayName(textName.getText().toString())
                         .build();
