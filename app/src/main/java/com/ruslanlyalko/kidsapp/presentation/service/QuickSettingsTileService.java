@@ -1,12 +1,10 @@
 package com.ruslanlyalko.kidsapp.presentation.service;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +16,7 @@ import com.ruslanlyalko.kidsapp.common.DateUtils;
 import com.ruslanlyalko.kidsapp.data.configuration.DefaultConfigurations;
 import com.ruslanlyalko.kidsapp.data.models.Report;
 import com.ruslanlyalko.kidsapp.data.models.User;
+import com.ruslanlyalko.kidsapp.presentation.ui.main.report.ReportActivity;
 import com.ruslanlyalko.kidsapp.presentation.ui.splash.SplashActivity;
 
 import java.util.Date;
@@ -41,6 +40,19 @@ public class QuickSettingsTileService extends TileService {
     @Override
     public void onStartListening() {
         super.onStartListening();
+        update();
+    }
+
+    @Override
+    public void onClick() {
+        if (mReport != null)
+            startActivityAndCollapse(ReportActivity.getLaunchIntent(getApplicationContext(),
+                    mReport.getDate(), mReport.getUserName(), mReport.getUserId()));
+        else
+            startActivityAndCollapse(SplashActivity.getLaunchIntent(getApplicationContext()));
+    }
+
+    public void update() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             Tile tile = getQsTile();
             if (tile != null) {
@@ -52,15 +64,15 @@ public class QuickSettingsTileService extends TileService {
         }
         Tile tile = getQsTile();
         if (tile != null) {
-            tile.setIcon(Icon.createWithResource(getApplicationContext(), R.drawable.ic_cloud_download_black_24dp));
+            tile.setIcon(Icon.createWithResource(getApplicationContext(), R.drawable.ic_tile_load_24dp));
             tile.setLabel("Оновлення");
             tile.updateTile();
         }
+        mReport = null;
         mUId = FirebaseAuth.getInstance().getUid();
         mDateDay = DateUtils.toString(new Date(), "d");
         mDateMonth = DateUtils.toString(new Date(), "M");
         mDateYear = DateUtils.toString(new Date(), "yyyy");
-        Toast.makeText(getApplicationContext(), mUId, Toast.LENGTH_SHORT).show();
         FirebaseDatabase.getInstance().getReference(DefaultConfigurations.DB_USERS)
                 .child(mUId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -85,12 +97,6 @@ public class QuickSettingsTileService extends TileService {
                 });
     }
 
-    @Override
-    public void onClick() {
-        Context context = getApplicationContext();
-        startActivityAndCollapse(SplashActivity.getLaunchIntent(context));
-    }
-
     void showReportsData() {
         FirebaseDatabase.getInstance().getReference(DefaultConfigurations.DB_REPORTS)
                 .child(mDateYear).child(mDateMonth).child(mDateDay)
@@ -101,7 +107,7 @@ public class QuickSettingsTileService extends TileService {
                         if (dataSnapshot.getChildrenCount() == 0) {
                             Tile tile = getQsTile();
                             if (tile != null) {
-                                tile.setIcon(Icon.createWithResource(getApplicationContext(), R.drawable.ic_tile_24dp));
+                                tile.setIcon(Icon.createWithResource(getApplicationContext(), R.drawable.ic_tile_empty_24dp));
                                 tile.setState(Tile.STATE_INACTIVE);
                                 tile.setLabel("Немає звітів за сьогодні!");
                                 tile.updateTile();
@@ -109,27 +115,33 @@ public class QuickSettingsTileService extends TileService {
                         } else {
                             int total = 0;
                             Date date = null;
+                            String names = "";
                             for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                                 mReport = dataSnapshot1.getValue(Report.class);
                                 if (mReport != null) {
                                     total += mReport.getTotal();
                                     if (mReport.getCheckedListDone() && mReport.getCheckedListTime() != null)
                                         date = mReport.getCheckedListTime();
+                                    if (!names.isEmpty()) names += " ";
+                                    names += mReport.getUserName();
                                 }
                             }
                             Tile tile = getQsTile();
                             if (tile != null) {
                                 tile.setState(Tile.STATE_ACTIVE);
-                                if (total > 0) {
-                                    tile.setLabel("Виручка: " + total + "грн");
-                                } else {
-                                    if (date != null)
+                                if (total == 0) {
+                                    if (date == null) {
+                                        tile.setLabel("Чек-лист не пройдено (" + names + ")");
+                                        tile.setIcon(Icon.createWithResource(getApplicationContext(), R.drawable.ic_tile_24dp));
+                                    } else {
+                                        tile.setIcon(Icon.createWithResource(getApplicationContext(), R.drawable.ic_tile_check_24dp));
                                         tile.setLabel("Чек-лист: " +
-                                                DateUtils.toString(mReport.getCheckedListTime(), "HH:mm"));
-                                    else
-                                        tile.setLabel("Чек-лист не пройдено");
+                                                DateUtils.toString(mReport.getCheckedListTime(), "HH:mm") + " (" + names + ")");
+                                    }
+                                } else {
+                                    tile.setLabel("Виручка: " + total + "грн (" + names + ")");
+                                    tile.setIcon(Icon.createWithResource(getApplicationContext(), R.drawable.ic_tile_done_24dp));
                                 }
-                                tile.setIcon(Icon.createWithResource(getApplicationContext(), R.drawable.ic_tile_24dp));
                                 tile.updateTile();
                             }
                         }
