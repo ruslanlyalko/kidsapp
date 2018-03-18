@@ -268,7 +268,7 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
             <!--<meta-data android:name="android.service.quicksettings.ACTIVE_TILE"-->
-                       <!--android:value="true" />-->
+            <!--android:value="true" />-->
         </service>
         <!--
              Set custom default icon. This is used when no icon is set for incoming notification messages.
